@@ -10,7 +10,7 @@ import VerifyEmail from "./auth/VerifyEmail";
 import OAuthSuccess from "./auth/OAuthSuccess";
 import Dashboard from "./superadmin/Dashboard";
 import Survey from "./superadmin/Survey";
-import Users from "./superadmin/users";
+// import Users from "./superadmin/users";
 import Addadmin from "./superadmin/Addadmin";
 import CreateSurvey from "./superadmin/createSurvey";
 import UserHome from "./user/UserHome";
@@ -77,7 +77,7 @@ export default function App() {
 >
   <Route index element={<Dashboard />} />
   <Route path="surveys" element={<Survey />} />
-  <Route path="users" element={<Users />} />
+  {/* <Route path="users" element={<Users />} /> */}
   <Route path="add-admin" element={<Addadmin />} />
    <Route path="create-survey" element={<CreateSurvey />} />
    <Route path="responses" element={<Responses />} />
