@@ -100,7 +100,7 @@ alert(error.response?.data?.message);
 
         <button 
         type="button"
-        onClick={() =>window.location.href = `http://localhost:5000/api/auth/google?ref=${ref || ""}`}
+        onClick={() =>window.location.href = `${import.meta.env.VITE_API_URL}/auth/google?ref=${ref || ""}`}
         className="w-full border p-3 mb-2 rounded flex items-center justify-center gap-2">
           Continue with Google
         </button>
