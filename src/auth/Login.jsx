@@ -10,10 +10,10 @@ export default function Login() {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-console.log("LOGIN DATA:", {
-    email,
-    password,
-  });
+// console.log("LOGIN DATA:", {
+//     email,
+//     password,
+//   });
     try {
       const data = await login({ email, password });
 
