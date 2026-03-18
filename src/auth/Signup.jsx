@@ -104,12 +104,10 @@ alert(error.response?.data?.message);
         className="w-full border p-3 mb-2 rounded flex items-center justify-center gap-2">
           Continue with Google
         </button>
+        
 
-        <button
-        type="button"
-        className="w-full border p-3 rounded flex items-center justify-center gap-2">
-          Continue with GitHub
-        </button>
+      <h4>Already Signup ? <button onClick={() => navigate("/login")}>Login</button></h4>
+        
         </form>
       </div>
     </div>

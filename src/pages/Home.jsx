@@ -28,7 +28,7 @@ export default function Home() {
             onClick={() => navigate("/register")}
             className="px-10 py-4 bg-white rounded-2xl border shadow-md hover:shadow-lg transition"
           >
-            Sign In
+            Sign Up
           </button>
 
           <button

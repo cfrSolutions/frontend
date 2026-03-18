@@ -71,7 +71,7 @@ export default function Login() {
 >
   Continue with Google
 </button>
-
+<h4>Not Login ? <button onClick={() => navigate("/login")}>Signup</button></h4>
       </form>
     </div>
   );
