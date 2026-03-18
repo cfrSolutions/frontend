@@ -106,7 +106,12 @@ alert(error.response?.data?.message);
         </button>
         
 
-      <h4>Already Signup ? <button onClick={() => navigate("/login")}>Login</button></h4>
+    <p>
+  Already have an account? 
+  <span onClick={() => navigate("/login")} style={{color:"blue", cursor:"pointer"}}>
+    Login
+  </span>
+</p>
         
         </form>
       </div>
