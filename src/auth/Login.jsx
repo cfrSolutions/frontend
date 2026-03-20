@@ -73,7 +73,7 @@ export default function Login() {
 </button>
 <p>
   Don’t have an account? 
-  <span onClick={() => navigate("/signup")} style={{color:"blue", cursor:"pointer"}}>
+  <span onClick={() => navigate("/register")} style={{color:"blue", cursor:"pointer"}}>
     Sign up
   </span>
 </p>
