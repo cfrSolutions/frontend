@@ -18,7 +18,7 @@ export default function UserStore() {
 
 useEffect(() => {
   api.get("/giftcards").then(res => {
-    console.log("CARDS DATA:", res.data); // 👈 check this
+    // console.log("CARDS DATA:", res.data); 
     setCards(res.data);
   });
 }, []);

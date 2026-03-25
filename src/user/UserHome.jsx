@@ -1090,11 +1090,11 @@ export default function UserHome() {
       api.get("/user-dashboard/stats"),
     ]);
 
-    console.log("Stats from server:", statsRes.data);
+    // console.log("Stats from server:", statsRes.data);
     setWallet(walletRes.data);
     setStats(statsRes.data); 
   } catch (err) {
-    console.error("Dashboard fetch failed", err);
+    // console.error("Dashboard fetch failed", err);
   }
 };
 
@@ -1135,7 +1135,7 @@ useEffect(() => {
 // 2. Specific logic for successful completion (Toast notifications, etc.)
 useEffect(() => {
   if (status === "com") {
-    console.log("Success! Survey marked as complete.");
+    // console.log("Success! Survey marked as complete.");
     // You could trigger a success toast here
   }
 }, [status]);

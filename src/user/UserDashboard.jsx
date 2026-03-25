@@ -763,7 +763,7 @@ useEffect(() => {
       const res = await api.get("/notifications");
       setNotifications(res.data);
     } catch (err) {
-      console.error("Notification fetch error:", err);
+      // console.error("Notification fetch error:", err);
     }
   };
 
