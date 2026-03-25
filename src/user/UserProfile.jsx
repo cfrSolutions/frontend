@@ -1101,14 +1101,14 @@ const handleChange = (e) => {
     await api.put("/users/profile", form);
     setEditMode(false);
 
-    setSuccessMsg("✅ Profile updated successfully");
+    setSuccessMsg("Profile updated successfully");
 
     setTimeout(() => {
       setSuccessMsg("");
     }, 3000);
 
   } catch (err) {
-    setSuccessMsg("❌ Failed to update profile");
+    setSuccessMsg("Failed to update profile");
   }
 };
 
@@ -1146,19 +1146,26 @@ const handleChange = (e) => {
         )}
       </div>
 {successMsg && (
-  <div className="fixed top-6 right-6 z-50">
-    <div className="bg-white border border-green-200 shadow-xl px-6 py-4 rounded-2xl flex items-center gap-3 animate-fade-in">
-      
-      <div className="w-10 h-10 bg-green-100 text-green-600 flex items-center justify-center rounded-full text-xl">
-        ✓
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+
+    <div className="bg-white rounded-2xl shadow-2xl px-14 py-12 text-center animate-scaleIn">
+
+      {/* GREEN CIRCLE */}
+      <div className="w-28 h-28 mx-auto rounded-full border-[10px] border-green-400 flex items-center justify-center">
+        <span className="text-green-500 text-5xl">✓</span>
       </div>
 
-      <div>
-        <p className="font-semibold text-gray-800">{successMsg}</p>
-        <p className="text-xs text-gray-400">Your changes were saved</p>
-      </div>
+      {/* TEXT */}
+      <h2 className="mt-6 text-2xl font-semibold text-gray-700">
+        Success!
+      </h2>
+
+      <p className="text-gray-400 mt-2">
+        {successMsg}
+      </p>
 
     </div>
+
   </div>
 )}
       {/* GRID */}
