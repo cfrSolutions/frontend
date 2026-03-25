@@ -1008,7 +1008,7 @@ export default function UserProfile() {
   const [user, setUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [activeTab, setActiveTab] = useState("core");
-
+  const [successMsg, setSuccessMsg] = useState("");
   // ✅ COUNTRY DATA (npm)
   const countries = CountryList.getAll();
 
@@ -1058,7 +1058,7 @@ export default function UserProfile() {
       }));
 
     } catch (err) {
-      console.error(err);
+      // console.error(err);
     }
   };
 
@@ -1090,11 +1090,27 @@ const handleChange = (e) => {
   }));
 };
 
+  // const handleSave = async () => {
+  //   await api.put("/users/profile", form);
+  //   setEditMode(false);
+  //   alert("Profile updated");
+  // };
+
   const handleSave = async () => {
+  try {
     await api.put("/users/profile", form);
     setEditMode(false);
-    alert("Profile updated");
-  };
+
+    setSuccessMsg("✅ Profile updated successfully");
+
+    setTimeout(() => {
+      setSuccessMsg("");
+    }, 3000);
+
+  } catch (err) {
+    setSuccessMsg("❌ Failed to update profile");
+  }
+};
 
   if (!user) return <div>Loading...</div>;
 // const upload = multer({
@@ -1129,7 +1145,22 @@ const handleChange = (e) => {
           </button>
         )}
       </div>
+{successMsg && (
+  <div className="fixed top-6 right-6 z-50">
+    <div className="bg-white border border-green-200 shadow-xl px-6 py-4 rounded-2xl flex items-center gap-3 animate-fade-in">
+      
+      <div className="w-10 h-10 bg-green-100 text-green-600 flex items-center justify-center rounded-full text-xl">
+        ✓
+      </div>
 
+      <div>
+        <p className="font-semibold text-gray-800">{successMsg}</p>
+        <p className="text-xs text-gray-400">Your changes were saved</p>
+      </div>
+
+    </div>
+  </div>
+)}
       {/* GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
 
