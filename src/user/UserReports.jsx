@@ -45,7 +45,7 @@ export default function UserReports() {
     setStats(statsRes.data);
     }
     catch(err){
-      console.error("Dashboard fetch failed", err);
+      // console.error("Dashboard fetch failed", err);
     }
   };
 
@@ -55,7 +55,7 @@ export default function UserReports() {
       setSurveys(res.data);
     }
     catch(err){
-      console.error(err);
+      // console.error(err);
     }
   };
 
@@ -84,7 +84,7 @@ export default function UserReports() {
       setSurveys(surveysRes.data);
 
     } catch (err) {
-      console.error("Dashboard load failed", err);
+      // console.error("Dashboard load failed", err);
     }
   };
 
@@ -93,7 +93,7 @@ export default function UserReports() {
 
   useEffect(()=>{
     if(status === "com"){
-      console.log("Success! Survey marked as compl")
+      // console.log("Success! Survey marked as compl")
     }
   }, [status]);
   

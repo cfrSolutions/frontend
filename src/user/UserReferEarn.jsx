@@ -22,12 +22,12 @@ useEffect(() => {
     try {
       const meRes = await api.get("/auth/me");
 
-      console.log("ME RESPONSE:", meRes.data); // DEBUG
+      // console.log("ME RESPONSE:", meRes.data); 
 
       const code = meRes.data?.user?.referralCode;
 
       if (!code) {
-        console.log("No referral code found");
+        // console.log("No referral code found");
         return;
       }
 
@@ -41,7 +41,7 @@ useEffect(() => {
   pointsEarned: statsRes.data.pointsEarned || 0
 });
 
-console.log("REFERRAL STATS:", statsRes.data);
+// console.log("REFERRAL STATS:", statsRes.data);
 
     } catch (err) {
       console.error("Referral load error:", err);
