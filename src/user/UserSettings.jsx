@@ -8,19 +8,23 @@ export default function UserSettings() {
     localStorage.getItem("language") || "en"
   );
 
-  const handleDeleteAccount = async () => {
-  const confirmDelete = window.confirm(
-    "Are you sure? You will receive an email to confirm deletion."
-  );
+//   const handleDeleteAccount = async () => {
+//   const confirmDelete = window.confirm(
+//     "Are you sure? You will receive an email to confirm deletion."
+//   );
 
-  if (!confirmDelete) return;
+//   if (!confirmDelete) return;
 
-  try {
-    await api.post("/auth/request-delete");
-    alert("Confirmation email sent. Please check your email.");
-  } catch (err) {
-    alert("Failed to send confirmation email");
-  }
+//   try {
+//     // await api.post("/auth/request-delete");
+//     navigate("/delete-account");
+//   } catch (err) {
+//     alert("Failed to send confirmation email");
+//   }
+// };
+
+const handleDeleteAccount = () => {
+  navigate("/delete-account");
 };
 
   const handleLanguageChange = (e) => {

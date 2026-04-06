@@ -114,7 +114,8 @@ export default function App() {
     </ProtectedRoute>
   }
 />
-<Route path="/confirm-delete/:token" element={<ConfirmDelete />} />
+{/* <Route path="/confirm-delete/:token" element={<ConfirmDelete />} /> */}
+<Route path="/delete-account" element={<ConfirmDelete />} />
 <Route path="/mock-company" element={<MockCompanyForm />} />
 
       </Routes>
