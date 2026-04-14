@@ -1,5 +1,5 @@
 import Footer from "./Footer";
-import Navbar from "./navbar";
+import Navbar from "./Navbar";
 import {  useEffect, useState, useRef } from "react";
 export default function Products(){
 const [active, setActive] = useState(0);

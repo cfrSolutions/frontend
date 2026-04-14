@@ -190,7 +190,7 @@
 
 
 import Footer from "./Footer";
-import Navbar from "./navbar";
+import Navbar from "./Navbar";
 import { useEffect, useState, useRef } from "react";
 export default function Solutions(){
   const section1Ref = useRef(null);

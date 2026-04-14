@@ -52,7 +52,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Linkedin, Youtube, Facebook } from "lucide-react";
 
 import './homeCss.css';
-import Navbar from "./navbar";
+import Navbar from "./Navbar";
 import Footer from "./Footer";
 export default function Home() {
   const navigate = useNavigate();
@@ -99,7 +99,7 @@ const scrollRef = useRef();
     <div className="w-full min-h-screen">
 
      
-      <Navbar/>
+      <Navbar />
       {/* HERO SECTION */}
       <div className="flex items-center justify-center px-6 py-16 bg-gray-100 rounded-4xl">
         <div className="max-w-7xl w-full grid grid-cols-1 md:grid-cols-2 items-center justify-center">

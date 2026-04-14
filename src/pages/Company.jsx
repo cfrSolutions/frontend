@@ -85,8 +85,9 @@
 
 import Footer from "./Footer";
 import { useNavigate } from "react-router-dom";
-import Navbar from "./navbar";
+
 import { useEffect, useRef, useState } from "react";
+import Navbar from "./Navbar";
 export default function Company() {
   const navigate = useNavigate();
   return (
