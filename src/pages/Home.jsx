@@ -388,16 +388,16 @@ const scrollRef = useRef();
 
     
       {/* Forth Section */}
-       <div className="w-full px-6 py-16 bg-white">
+       {/* <div className="w-full px-6 py-16 bg-white">
       
       <div className="max-w-6xl mx-auto bg-gray-100 rounded-2xl p-10 relative">
 
-        {/* TEXT */}
+        
         <p className="text-center text-gray-700 mb-10">
           Trusted by over 4,000 insights-driven companies.
         </p>
 
-        {/* ARROWS */}
+        
         <div className="absolute right-6 top-6 flex gap-3">
           <button
             onClick={() => scroll("left")}
@@ -414,7 +414,7 @@ const scrollRef = useRef();
           </button>
         </div>
 
-        {/* LOGOS */}
+        
         <div
           ref={scrollRef}
           className="flex gap-12 overflow-x-auto scrollbar-hide items-center justify-start"
@@ -430,7 +430,7 @@ const scrollRef = useRef();
         </div>
 
       </div>
-    </div>
+    </div> */}
   <Footer />
     </div>
   );
