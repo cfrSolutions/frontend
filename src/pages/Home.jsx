@@ -88,13 +88,29 @@ const scrollRef = useRef();
   };
 
   const logos = [
-    "/logos/lg.png",
-    "/logos/niq.png",
-    "/logos/tradedesk.png",
-    "/logos/surveymonkey.png",
-    "/logos/gfk.png",
-    "/logos/netflix.png",
+    "/logos/meta.png",
+    "/logos/indianoil.jpg",
+    "/logos/lexus.png",
+    "/logos/cartier.jpg",
+    "/logos/lamborghini.jpg",
   ];
+//   const scrollRef = useRef();
+
+// const scroll = (direction) => {
+//   const container = scrollRef.current;
+
+//   if (direction === "left") {
+//     container.scrollBy({
+//       left: -300,
+//       behavior: "smooth",
+//     });
+//   } else {
+//     container.scrollBy({
+//       left: 300,
+//       behavior: "smooth",
+//     });
+//   }
+// };
   return (
     <div className="w-full min-h-screen">
 
@@ -106,18 +122,18 @@ const scrollRef = useRef();
           
           {/* LEFT */}
           <div className="max-w-xl">
-            <h1 className="text-4xl sm:text-5xl lg:text-8xl font-bold text-gray-900 relative md:left-[80px]">
+            <h1 className="text-4xl sm:text-5xl lg:text-[100px] font-bold text-gray-900 relative lg:left-[50px]">
               Get insights from real people, in real time
             </h1>
 
-            <p className="mt-4 text-gray-600 max-w-md relative md:left-[80px]">
+            <p className="mt-4 text-gray-600 max-w-md relative md:left-[50px]">
               Inputify connects your business with the right audience to deliver accurate, high-quality market research — faster and smarter.
             </p>
 
             <div className="mt-6 flex gap-4">
               <button
                 onClick={() => navigate("/register")}
-                className="px-6 py-3 bg-purple-700 text-white rounded-full shadow hover:bg-purple-800 relative md:left-[80px]"
+                className="px-6 py-3 bg-purple-700 text-white rounded-full shadow hover:bg-purple-800 relative md:left-[50px]"
               >
                 Find out how
               </button>
@@ -388,14 +404,14 @@ const scrollRef = useRef();
 
     
       {/* Forth Section */}
-       {/* <div className="w-full px-6 py-16 bg-white">
+       <div className="w-full px-6 py-16 bg-white">
       
-      <div className="max-w-6xl mx-auto bg-gray-100 rounded-2xl p-10 relative">
+      <div className="max-w-9xl mx-auto bg-white rounded-2xl p-10 relative">
 
         
-        <p className="text-center text-gray-700 mb-10">
+        {/* <p className="text-center text-gray-700 mb-10">
           Trusted by over 4,000 insights-driven companies.
-        </p>
+        </p> */}
 
         
         <div className="absolute right-6 top-6 flex gap-3">
@@ -415,7 +431,7 @@ const scrollRef = useRef();
         </div>
 
         
-        <div
+        {/* <div
           ref={scrollRef}
           className="flex gap-12 overflow-x-auto scrollbar-hide items-center justify-start"
         >
@@ -424,14 +440,33 @@ const scrollRef = useRef();
               key={i}
               src={logo}
               alt="logo"
-              className="h-8 object-contain grayscale hover:grayscale-0 transition"
+              className="h-60 object-contain hover:grayscale-0 transition"
             />
           ))}
-        </div>
+        </div> */}
+
+        <div ref={scrollRef} className="overflow-hidden relative w-full mt-20">
+  <div className="flex gap-12 animate-scroll">
+
+    {[...logos, ...logos].map((logo, i) => (
+      <img
+        key={i}
+        src={logo}
+        alt="logo"
+        className="h-60 object-contain hover:grayscale-0 transition"
+      />
+    ))}
+
+  </div>
+</div>
 
       </div>
-    </div> */}
+    </div>
   <Footer />
     </div>
   );
 }
+
+
+
+
