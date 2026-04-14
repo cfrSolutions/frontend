@@ -25,10 +25,13 @@ import UserStore from "./user/UserStore";
 import SurveyPreview from "./superadmin/SurveyPreview";
 import UserSurveyPlay from "./pages/UserSurveyPlay";
 import MockCompanyForm from "./pages/MockCompanyForm";
+import Solutions from "./pages/Solutions";
 import Responses from "./superadmin/Responses";
 import UserSettings from "./user/UserSettings";
 import ConfirmDelete from "./user/ConfirmDelete";
 import AdminReports from "./superadmin/AdminReports";
+import Products from "./pages/Products";
+import Company from "./pages/Company";
 export default function App() {
   return (
     <BrowserRouter>
@@ -106,6 +109,15 @@ export default function App() {
   path="/user/survey/:surveyId"
   element={<UserSurveyPlay />}
 />
+
+ 
+    
+    <Route path="/why-cfr" element={<Home/>} />
+   <Route path="/solutions" element={<Solutions />} />
+   <Route path="/products" element={<Products />} />
+   <Route path="/company" element={<Company />} />
+   
+  
 <Route
   path="/survey/:id"
   element={
@@ -117,6 +129,7 @@ export default function App() {
 {/* <Route path="/confirm-delete/:token" element={<ConfirmDelete />} /> */}
 <Route path="/delete-account" element={<ConfirmDelete />} />
 <Route path="/mock-company" element={<MockCompanyForm />} />
+
 
       </Routes>
     </BrowserRouter>
