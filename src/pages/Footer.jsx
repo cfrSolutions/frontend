@@ -59,7 +59,7 @@ export default function Footer(){
           <div>
             <h4 className="text-pink-400 font-semibold mb-4">Support</h4>
             <ul className="space-y-2 text-sm text-white/80">
-              <li>Contact Us</li>
+              <li onClick={() => navigate("/company")} className="cursor-pointer hover:text-pink-400">Contact Us</li>
               <li>Terms & Conditions</li>
               <li>Panel Book</li>
               

@@ -567,7 +567,7 @@ const scrollRef = useRef();
           </div>
 
           {/* RIGHT (Hover Card) */}
-          <div className="phone relative mt-10 left-[80px] md:left-[70px] lg:left-[150px] flex justify-center lg:mt-0 w-[300px] sm:w-[300px] md:w-[390px] lg:w-[390px] xl:w-[390px] h-[550px] sm:h-[500px] md:h-[600px] lg:h-[600px] xl:h-[600px]">
+          <div className="phone relative mt-10 left-[10px] md:left-[70px] lg:left-[150px] flex justify-center lg:mt-0 w-[300px] sm:w-[300px] md:w-[390px] lg:w-[390px] xl:w-[390px] h-[550px] sm:h-[500px] md:h-[600px] lg:h-[600px] xl:h-[600px]">
             <div className="notch"></div>
        <div className="card">
 
