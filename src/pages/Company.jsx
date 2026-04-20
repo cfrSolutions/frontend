@@ -104,7 +104,7 @@ export default function Company() {
                About CFR
               </span>
         
-              <h2 className="text-6xl lg:text-8xl font-bold mt-4">
+              <h2 className="text-6xl lg:text-8xl lg:text-8xl font-bold mt-4">
                Building the Future of Market Research
               </h2>
         
@@ -117,12 +117,12 @@ export default function Company() {
             <div className="flex-1">
               <img
                 src="/HomeImage/company.png"
-                className="rounded-xl w-full h-[600px] object-cover"
+                className="rounded-xl w-full h-[400px] lg:h-[600px] object-cover"
               />
             </div>
         
             {/* PURPLE CORNER */}
-            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-600 to-purple-600 rounded-bl-[100px]"></div>
+            <div className="absolute top-0 right-0 w-25 h-25 lg:w-40 lg:h-40 bg-gradient-to-br from-blue-600 to-purple-600 rounded-bl-[100px]"></div>
         
           </div>
         </div>

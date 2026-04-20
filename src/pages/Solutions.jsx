@@ -470,7 +470,7 @@ export default function Solutions(){
         Source respondents
       </span>
 
-      <h2 className="text-8xl font-bold mt-4">
+      <h2 className="text-6xl lg:text-8xl font-bold mt-4">
         Connect with the right people, quickly and efficiently
       </h2>
 
@@ -483,12 +483,12 @@ export default function Solutions(){
     <div className="flex-1">
       <img
         src="/HomeImage/solutions.jpg"
-        className="rounded-xl w-full h-[600px] object-cover"
+        className="rounded-xl w-full h-[400px] lg:h-[600px] object-cover"
       />
     </div>
 
     {/* PURPLE CORNER */}
-    <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-600 to-purple-600 rounded-bl-[100px]"></div>
+    <div className="absolute top-0 right-0 w-25 h-25 lg:w-40 lg:h-40 bg-gradient-to-br from-blue-600 to-purple-600 rounded-bl-[100px]"></div>
 
   </div>
 </div>

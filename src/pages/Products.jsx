@@ -82,7 +82,7 @@ useEffect(() => {
                 Product
               </span>
         
-              <h2 className="text-6xl lg:text-8xl font-bold mt-4">
+              <h2 className="text-6xl lg:text-8xl lg:text-8xl font-bold mt-4">
                 Powerful Market Research Platform for Smarter Decisions
               </h2>
         
@@ -95,12 +95,12 @@ useEffect(() => {
             <div className="flex-1">
               <img
                 src="/HomeImage/product.png"
-                className="rounded-xl w-full h-[600px] object-cover"
+                className="rounded-xl w-full h-[400px] lg:h-[600px] object-cover"
               />
             </div>
         
             {/* PURPLE CORNER */}
-            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-600 to-purple-600 rounded-bl-[100px]"></div>
+            <div className="absolute top-0 right-0 w-25 h-25 lg:w-40 lg:h-40 bg-gradient-to-br from-blue-600 to-purple-600 rounded-bl-[100px]"></div>
         
           </div>
         </div>
@@ -118,7 +118,7 @@ useEffect(() => {
           <button
             key={i}
             onClick={() => setActive(i)}
-            className={`px-6 py-2 rounded-full text-[20px] transition
+            className={`px-2 py-1 lg:px-6 lg:py-2 rounded-full text-[13px] lg:text-[20px] transition
               ${
                 active === i
                   ? "border-2 border-dashed border-purple-500 text-purple-600 bg-purple-50"
