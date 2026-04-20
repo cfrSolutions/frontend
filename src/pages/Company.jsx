@@ -116,7 +116,7 @@ export default function Company() {
             {/* IMAGE */}
             <div className="flex-1">
               <img
-                src="/HomeImage/product.png"
+                src="/HomeImage/company.png"
                 className="rounded-xl w-full h-[600px] object-cover"
               />
             </div>

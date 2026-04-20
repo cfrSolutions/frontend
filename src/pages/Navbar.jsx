@@ -16,9 +16,9 @@ export default function Navbar(){
         
         {/* Logo */}
         <img
-          src="/HomeImage/cfr.png"
+          src="/HomeImage/inputify.png"
           alt="CFR"
-          className="w-30 cursor-pointer relative left-10"
+          className="w-30 lg:w-40 cursor-pointer relative left-3 lg:left-10"
           onClick={() => navigate("/")}
         />
 
@@ -47,7 +47,7 @@ export default function Navbar(){
           </button>
 
           <button
-            onClick={() => navigate("/register")}
+             onClick={() => navigate("/register")}
             className="px-5 py-2 bg-purple-700 text-white rounded-full hover:bg-purple-800"
           >
             Demo
