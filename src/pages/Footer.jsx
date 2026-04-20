@@ -13,7 +13,7 @@ export default function Footer(){
 
           {/* LOGO + SOCIAL */}
           <div>
-            <img src="/HomeImage/cfr.png" className="relative right-[30px] w-[200px] lg:w-[200px] sm:w-[100px]"></img>
+            <img src="/HomeImage/inputify.png" className="relative right-[10px] w-[200px] lg:w-[200px] sm:w-[100px]"></img>
 
             <div className="flex gap-4 text-xl">
               <Linkedin className="cursor-pointer" />

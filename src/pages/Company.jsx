@@ -95,7 +95,7 @@ export default function Company() {
       <Navbar />
 
       {/* 🔥 HERO */}
-                <div className="w-full px-6 py-16 bg-white">
+                <div className="w-full px-6 py-10 bg-white">
           <div className="max-w-7xl mx-auto bg-gray-100 rounded-2xl p-8 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
         
             {/* LEFT TEXT */}
@@ -104,7 +104,7 @@ export default function Company() {
                About CFR
               </span>
         
-              <h2 className="text-6xl lg:text-8xl lg:text-8xl font-bold mt-4">
+              <h2 className="text-6xl lg:text-8xl font-bold mt-4">
                Building the Future of Market Research
               </h2>
         

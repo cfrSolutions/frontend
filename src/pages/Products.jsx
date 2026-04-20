@@ -66,14 +66,10 @@ useEffect(() => {
         <Navbar/>
         
                 {/* firstpart */}
-                <div className="w-full py-2 pb-10 bg-white">
+                <div className="w-full px-6 py-10 bg-white">
           {/* <div className="max-w-7xl mx-auto bg-gray-100 rounded-2xl p-8 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden"> */}
-        <div ref={section1Ref}
-    className={`
-      ${scrolled ? "w-full rounded-2xl px-6" : "max-w-7xl rounded-2xl px-8"}
-      transition-all duration-700
-      mx-auto bg-gray-100 p-8 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden
-    `}
+        <div
+    className="max-w-7xl mx-auto bg-gray-100 rounded-2xl p-8 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden"
   >
 
             {/* LEFT TEXT */}
@@ -82,7 +78,7 @@ useEffect(() => {
                 Product
               </span>
         
-              <h2 className="text-6xl lg:text-8xl lg:text-8xl font-bold mt-4">
+              <h2 className="text-6xl lg:text-8xl font-bold mt-4">
                 Powerful Market Research Platform for Smarter Decisions
               </h2>
         
@@ -100,7 +96,7 @@ useEffect(() => {
             </div>
         
             {/* PURPLE CORNER */}
-            <div className="absolute top-0 right-0 w-25 h-25 lg:w-40 lg:h-40 bg-gradient-to-br from-blue-600 to-purple-600 rounded-bl-[100px]"></div>
+            <div className="absolute top-0 right-0 w-25 h-20 lg:w-40 lg:h-40 bg-gradient-to-br from-blue-600 to-purple-600 rounded-bl-[100px]"></div>
         
           </div>
         </div>

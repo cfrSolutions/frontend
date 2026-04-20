@@ -835,7 +835,7 @@ useEffect(() => {
         <div className="flex items-center lg:justify-between px-6 py-7 border-b border-gray-300 h-[93px]">
           <div className="flex items-center justify-center w-full lg:w-auto">
             <div className={`rounded-lg overflow-hidden transition-all ${collapsed ? "lg:w-8 lg:h-8" : "lg:w-40 lg:h-40"} w-40 h-40`}>
-              <img src="/HomeImage/cfr.png" alt="CFR" className="w-full h-full object-contain" />
+              <img src="/HomeImage/inputify.png" alt="CFR" className="w-full h-full object-contain" />
             </div>
             {/* {(!collapsed || mobileOpen) && <span className="font-semibold text-lg">Survey Panel</span>} */}
           </div>
