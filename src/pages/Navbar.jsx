@@ -17,7 +17,7 @@ export default function Navbar(){
         {/* Logo */}
         <img
           src="/HomeImage/inputify.png"
-          alt="CFR"
+          alt="Inputify"
           className="w-30 lg:w-40 cursor-pointer relative left-3 lg:left-10"
           onClick={() => navigate("/")}
         />
