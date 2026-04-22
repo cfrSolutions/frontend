@@ -181,7 +181,16 @@ export default function Login() {
         >
           Continue with Google
         </button>
-
+        <button
+          type="button"
+          onClick={() =>
+            (window.location.href = `http://localhost:5000/api/auth/google?role=${type === "BUSINESS" ? "BUSINESS" : "USER"}`)
+          }
+          className="border w-full p-2 mt-3 rounded flex items-center justify-center gap-2"
+        >
+          Continue with Google dev
+        </button>
+ 
         <p>
           Don’t have an account?
           <span
