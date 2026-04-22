@@ -136,6 +136,46 @@
 // }
 
 
+// import { useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+// import api from "../services/api";
+
+// export default function OAuthSuccess() {
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     let attempts = 0;
+
+//     const checkAuth = async () => {
+//       try {
+//         const res = await api.get("/auth/me");
+//         const role = res.data.user.role;
+//         localStorage.setItem("role", role);
+
+//         if (role === "ADMIN") navigate("/admin/dashboard");
+//         else if (role === "SUPERADMIN") navigate("/superadmin/dashboard");
+//         else navigate("/user/dashboard");
+//       } catch (err) {
+//         if (attempts < 5) {
+//           attempts++;
+//           console.log(`Attempt ${attempts} failed. Retrying...`);
+//           setTimeout(checkAuth, 1000); // Wait 1 second and try again
+//         } else {
+//           navigate("/login");
+//         }
+//       }
+//     };
+
+//     checkAuth();
+//   }, [navigate]);
+
+//   return (
+//     <div className="h-screen flex items-center justify-center">
+//       <p>Finalizing login... Please wait.</p>
+//     </div>
+//   );
+// }
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
@@ -149,17 +189,26 @@ export default function OAuthSuccess() {
     const checkAuth = async () => {
       try {
         const res = await api.get("/auth/me");
+
         const role = res.data.user.role;
         localStorage.setItem("role", role);
 
-        if (role === "ADMIN") navigate("/admin/dashboard");
-        else if (role === "SUPERADMIN") navigate("/superadmin/dashboard");
-        else navigate("/user/dashboard");
+        // 🔥 ROLE BASED REDIRECT (FIXED)
+        if (role === "ADMIN") {
+          navigate("/admin/dashboard");
+        } else if (role === "SUPERADMIN") {
+          navigate("/superadmin/dashboard");
+        } else if (role === "BUSINESS") {
+          navigate("/business/dashboard"); // ✅ IMPORTANT FIX
+        } else {
+          navigate("/dashboard"); // USER
+        }
+
       } catch (err) {
         if (attempts < 5) {
           attempts++;
           console.log(`Attempt ${attempts} failed. Retrying...`);
-          setTimeout(checkAuth, 1000); // Wait 1 second and try again
+          setTimeout(checkAuth, 1000);
         } else {
           navigate("/login");
         }

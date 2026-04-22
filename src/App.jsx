@@ -32,6 +32,7 @@ import ConfirmDelete from "./user/ConfirmDelete";
 import AdminReports from "./superadmin/AdminReports";
 import Products from "./pages/Products";
 import Company from "./pages/Company";
+import BusinessDashboard from "./business/BusinessDashboard";
 export default function App() {
   return (
     <BrowserRouter>
@@ -130,7 +131,14 @@ export default function App() {
 <Route path="/delete-account" element={<ConfirmDelete />} />
 <Route path="/mock-company" element={<MockCompanyForm />} />
 
-
+<Route
+  path="/business/dashboard"
+  element={
+    <ProtectedRoute allowedRoles={["BUSINESS"]}>
+      <BusinessDashboard />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
     </BrowserRouter>
   );

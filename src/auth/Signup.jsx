@@ -1,21 +1,149 @@
+// import { useState } from "react";
+// import api from "../services/api";
+// import { useNavigate } from "react-router-dom";
+// import ReCAPTCHA from "react-google-recaptcha";
+// import { useSearchParams } from "react-router-dom";
+
+// export default function Signup() {
+//   const navigate = useNavigate();
+// const [params] = useSearchParams();
+// const ref = params.get("ref");
+// const [loading, setLoading] = useState(false);
+
+//   const [form, setForm] = useState({
+//     name: "",
+//     email: "",
+//     password: "",
+//   });
+// const [captcha, setCaptcha] = useState(null);
+
+//   const handleChange = (e) => {
+//     setForm({ ...form, [e.target.name]: e.target.value });
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+// if (loading) return;
+
+//   setLoading(true);
+//     try {
+//       const response = await api.post("/auth/register", {
+//       ...form,
+//       referralCode: ref,
+//       captcha,
+//     });
+
+//       alert(response.data.message); // "Signup successful. Please login."
+//       navigate("/login");
+
+//     } catch (error) {
+//       console.error(error.response?.data);
+// alert(error.response?.data?.message);
+
+
+     
+//     }
+//   };
+
+//   return (
+
+//     <div className="min-h-screen flex items-center justify-center bg-gray-100">
+//       <div className="bg-white p-8 rounded-lg shadow-md w-[400px]">
+//         <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+//         {ref && (
+//   <p className="text-sm text-green-600 mb-3">
+//     Referral applied 🎉
+//   </p>
+// )}
+
+//      <form action="" onSubmit={handleSubmit}>
+//         <input
+//         name="name"
+//           type="text"
+//           placeholder="Name"
+//           value={form.name}
+//           className="w-full border p-3 mb-4 rounded"
+//           onChange={handleChange}
+//         />
+
+//         <input
+//         name="email"
+//           type="email"
+//           placeholder="Email"
+//           value={form.email}
+//           className="w-full border p-3 mb-4 rounded"
+//           onChange={handleChange}
+//         />
+
+//         <input
+//           name="password"
+//           type="password"
+//           placeholder="Password"
+//           value={form.password}
+//           className="w-full border p-3 mb-4 rounded"
+//           onChange={handleChange}
+//         />
+// <ReCAPTCHA
+//   sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+//   onChange={(token) => setCaptcha(token)}
+//   className="mb-4"
+// />
+
+//         <button type="submit" className="w-full bg-black text-white p-3 rounded">
+//           Create Account
+//         </button>
+// <button disabled={loading}>
+//   {loading ? "Creating..." : "Create Account"}
+// </button>
+
+//         <div className="my-4 text-center text-gray-500">OR</div>
+
+//         <button 
+//         type="button"
+//         onClick={() =>window.location.href = `${import.meta.env.VITE_API_URL}/auth/google?ref=${ref || ""}`}
+//         className="w-full border p-3 mb-2 rounded flex items-center justify-center gap-2">
+//           Continue with Google
+//         </button>
+        
+
+//     <p>
+//   Already have an account? 
+//   <span onClick={() => navigate("/login")} style={{color:"blue", cursor:"pointer"}}>
+//     Login
+//   </span>
+// </p>
+        
+//         </form>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+
 import { useState } from "react";
 import api from "../services/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
-import { useSearchParams } from "react-router-dom";
 
 export default function Signup() {
   const navigate = useNavigate();
-const [params] = useSearchParams();
-const ref = params.get("ref");
-const [loading, setLoading] = useState(false);
+  const [params] = useSearchParams();
+  const ref = params.get("ref");
+
+  const [loading, setLoading] = useState(false);
+  const [type, setType] = useState("PERSONAL"); // 🔥 NEW
 
   const [form, setForm] = useState({
     name: "",
+    companyName: "",
     email: "",
     password: "",
   });
-const [captcha, setCaptcha] = useState(null);
+
+  const [captcha, setCaptcha] = useState(null);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -23,99 +151,186 @@ const [captcha, setCaptcha] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-if (loading) return;
+    if (loading) return;
 
-  setLoading(true);
+    setLoading(true);
+
     try {
-      const response = await api.post("/auth/register", {
-      ...form,
-      referralCode: ref,
-      captcha,
-    });
+      const payload =
+        type === "PERSONAL"
+          ? {
+              name: form.name,
+              email: form.email,
+              password: form.password,
+              referralCode: ref,
+              captcha,
+              role: "USER",
+            }
+          : {
+              name: form.companyName,
+              email: form.email,
+              password: form.password,
+              role: "BUSINESS",
+            };
 
-      alert(response.data.message); // "Signup successful. Please login."
-      navigate("/login");
+      const response = await api.post("/auth/register", payload);
 
+      alert(response.data.message);
+
+      navigate(type === "BUSINESS" ? "/business/login" : "/login");
     } catch (error) {
       console.error(error.response?.data);
-alert(error.response?.data?.message);
-
-
-     
+      alert(error.response?.data?.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-[400px]">
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
-        {ref && (
-  <p className="text-sm text-green-600 mb-3">
-    Referral applied 🎉
-  </p>
-)}
 
-     <form action="" onSubmit={handleSubmit}>
-        <input
-        name="name"
-          type="text"
-          placeholder="Name"
-          value={form.name}
-          className="w-full border p-3 mb-4 rounded"
-          onChange={handleChange}
-        />
+        <h2 className="text-2xl font-bold mb-4 text-center">Sign Up</h2>
 
-        <input
-        name="email"
-          type="email"
-          placeholder="Email"
-          value={form.email}
-          className="w-full border p-3 mb-4 rounded"
-          onChange={handleChange}
-        />
+        {/* 🔥 Toggle (small addition, not redesign) */}
+        <div className="flex mb-4 border rounded overflow-hidden">
+          <button
+            type="button"
+            onClick={() => setType("PERSONAL")}
+            className={`flex-1 p-2 ${
+              type === "PERSONAL" ? "bg-black text-white" : ""
+            }`}
+          >
+            Personal
+          </button>
+          <button
+            type="button"
+            onClick={() => setType("BUSINESS")}
+            className={`flex-1 p-2 ${
+              type === "BUSINESS" ? "bg-black text-white" : ""
+            }`}
+          >
+            Business
+          </button>
+        </div>
 
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          className="w-full border p-3 mb-4 rounded"
-          onChange={handleChange}
-        />
-<ReCAPTCHA
-  sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
-  onChange={(token) => setCaptcha(token)}
-  className="mb-4"
-/>
+        {ref && type === "PERSONAL" && (
+          <p className="text-sm text-green-600 mb-3">
+            Referral applied 🎉
+          </p>
+        )}
 
-        <button type="submit" className="w-full bg-black text-white p-3 rounded">
-          Create Account
-        </button>
-<button disabled={loading}>
-  {loading ? "Creating..." : "Create Account"}
+        <form onSubmit={handleSubmit}>
+          
+          {/* 👤 PERSONAL */}
+          {type === "PERSONAL" && (
+            <input
+              name="name"
+              type="text"
+              placeholder="Name"
+              value={form.name}
+              className="w-full border p-3 mb-4 rounded"
+              onChange={handleChange}
+            />
+          )}
+
+          {/* 🏢 BUSINESS */}
+          {type === "BUSINESS" && (
+            <input
+              name="companyName"
+              type="text"
+              placeholder="Company Name"
+              value={form.companyName}
+              className="w-full border p-3 mb-4 rounded"
+              onChange={handleChange}
+            />
+          )}
+
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            value={form.email}
+            className="w-full border p-3 mb-4 rounded"
+            onChange={handleChange}
+          />
+
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={form.password}
+            className="w-full border p-3 mb-4 rounded"
+            onChange={handleChange}
+          />
+
+          {/* 🔐 CAPTCHA only for user */}
+          {type === "PERSONAL" && (
+            <ReCAPTCHA
+              sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+              onChange={(token) => setCaptcha(token)}
+              className="mb-4"
+            />
+          )}
+
+          <button
+            type="submit"
+            className="w-full bg-black text-white p-3 rounded"
+            disabled={loading}
+          >
+            {loading
+              ? "Creating..."
+              : type === "BUSINESS"
+              ? "Create Business Account"
+              : "Create Account"}
+          </button>
+
+          <div className="my-4 text-center text-gray-500">OR</div>
+
+          {/* ❌ Google only for personal */}
+          {/* {type === "PERSONAL" && (
+            <button
+              type="button"
+              onClick={() =>
+                (window.location.href = `${import.meta.env.VITE_API_URL}/auth/google?ref=${ref || ""}`)
+              }
+              className="w-full border p-3 mb-2 rounded flex items-center justify-center gap-2"
+            >
+              Continue with Google
+            </button>
+          )} */}
+          {/* <button
+  type="button"
+  onClick={() =>
+    (window.location.href = `${import.meta.env.VITE_API_URL}/auth/google?role=${type === "BUSINESS" ? "BUSINESS" : "USER"}&ref=${ref || ""}`)
+  }
+  className="w-full border p-3 mb-2 rounded flex items-center justify-center gap-2"
+>
+  Continue with Google
+</button> */}
+ <button
+  type="button"
+  onClick={() =>
+    (window.location.href = `${import.meta.env.VITE_API_URL}/auth/google?role=${type === "BUSINESS" ? "BUSINESS" : "USER"}&ref=${ref || ""}`)
+  }
+  className="w-full border p-3 mb-2 rounded flex items-center justify-center gap-2"
+>
+  Continue with Google
 </button>
 
-        <div className="my-4 text-center text-gray-500">OR</div>
-
-        <button 
-        type="button"
-        onClick={() =>window.location.href = `${import.meta.env.VITE_API_URL}/auth/google?ref=${ref || ""}`}
-        className="w-full border p-3 mb-2 rounded flex items-center justify-center gap-2">
-          Continue with Google
-        </button>
-        
-
-    <p>
-  Already have an account? 
-  <span onClick={() => navigate("/login")} style={{color:"blue", cursor:"pointer"}}>
-    Login
-  </span>
-</p>
-        
+          <p>
+            Already have an account?
+            <span
+              onClick={() =>
+                navigate(type === "BUSINESS" ? "/business/login" : "/login")
+              }
+              style={{ color: "blue", cursor: "pointer" }}
+            >
+              Login
+            </span>
+          </p>
         </form>
       </div>
     </div>
   );
 }
-
