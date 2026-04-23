@@ -114,7 +114,7 @@ export default function BusinessDashboard() {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    api.get("/business/projects").then(res => setProjects(res.data));
+    api.get("/projects").then(res => setProjects(res.data));
   }, []);
 
   const total = projects.length;
