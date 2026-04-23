@@ -112,7 +112,7 @@ export default function Login() {
       } else if (data.role === "BUSINESS") {
         navigate("/business/dashboard");
       } else {
-        navigate("/dashboard");
+        navigate("/user/dashboard");
       }
     } catch (err) {
       console.log("LOGIN ERROR FULL:", err);

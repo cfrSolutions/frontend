@@ -35,6 +35,7 @@ import Company from "./pages/Company";
 import BusinessLayout from "./business/BusinessLayout";
 import BusinessDashboard from "./business/BusinessDashboard";
 import CreateProject from "./business/CreateProject";
+import ProjectStatus from "./business/ProjectStatus";
 export default function App() {
   return (
     <BrowserRouter>
@@ -136,7 +137,12 @@ export default function App() {
 <Route path="/business/dashboard" element={<BusinessLayout />}>
   <Route index element={<BusinessDashboard />} />
   <Route path="/business/dashboard/projects" element={<CreateProject />} />
+  
 </Route>
+<Route
+  path="/business/project/:id/status"
+  element={<ProjectStatus />}
+/>
       </Routes>
     </BrowserRouter>
   );
