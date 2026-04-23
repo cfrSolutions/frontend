@@ -10,6 +10,7 @@ export default function CreateProject() {
     ageTo: 63,
     gender: "All",
     loi: 90,
+    cpi:"",
     incidence: 90,
     timeline: 90,
     openEnded: 2,
@@ -37,14 +38,25 @@ export default function CreateProject() {
   };
 
   const handleSubmit = async () => {
-    try {
-      await api.post("/projects/create", form);
-      alert("✅ Project Created Successfully");
-    } catch (err) {
-      console.log(err);
-      alert("❌ Error creating project");
-    }
-  };
+  try {
+    const token = localStorage.getItem("token"); // 🔥 get token
+    //console.log("TOKEN 👉", token); 
+    await api.post(
+      "/projects/create",
+      form,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // 🔥 SEND TOKEN
+        },
+      }
+    );
+
+    alert("✅ Project Created Successfully");
+  } catch (err) {
+    console.log(err);
+    alert("❌ Error creating project");
+  }
+};
 
   return (
     <div className="bg-white p-6 rounded-xl shadow max-w-5xl mx-auto">
