@@ -10,7 +10,7 @@ export default function CreateProject() {
     ageTo: 63,
     gender: "All",
     loi: 90,
-    cpi:"",
+   cpi: req.body.cpi ? Number(req.body.cpi) : 0,
     incidence: 90,
     timeline: 90,
     openEnded: 2,
