@@ -255,7 +255,7 @@ export default function CreateProject() {
   try {
     const token = localStorage.getItem("token"); // 🔥 get token
     //console.log("TOKEN 👉", token); 
-    await api.post(
+    const res = await api.post(
       "/projects/create",
       form,
       {
