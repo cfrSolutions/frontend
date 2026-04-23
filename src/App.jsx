@@ -134,11 +134,17 @@ export default function App() {
 <Route path="/delete-account" element={<ConfirmDelete />} />
 <Route path="/mock-company" element={<MockCompanyForm />} />
 
-<Route path="/business/dashboard" element={<BusinessLayout />}>
+{/* <Route path="/business/dashboard" element={<BusinessLayout />}>
   <Route index element={<BusinessDashboard />} />
   <Route path="/business/dashboard/projects" element={<CreateProject />} />
   
+</Route> */}
+<Route path="/business/dashboard" element={<BusinessLayout />}>
+  <Route index element={<BusinessDashboard />} />
+  <Route path="projects" element={<CreateProject />} />
+  <Route path="project/:id/status" element={<ProjectStatus />} />
 </Route>
+
 <Route
   path="/business/project/:id/status"
   element={<ProjectStatus />}
