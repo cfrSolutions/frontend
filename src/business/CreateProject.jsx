@@ -50,7 +50,10 @@ export default function CreateProject() {
       }
     );
 
-    alert("✅ Project Created Successfully");
+    // alert("✅ Project Created Successfully");
+         navigate(`/business/project/${res.data._id}/status`, {
+      state: { project: res.data }
+    });
   } catch (err) {
     console.log(err);
     alert("❌ Error creating project");
@@ -263,9 +266,9 @@ export default function CreateProject() {
 //     );
 
 //     // alert("✅ Project Created Successfully");
-//      navigate(`/business/project/${res.data._id}/status`, {
-//       state: { project: res.data }
-//     });
+    //  navigate(`/business/project/${res.data._id}/status`, {
+    //   state: { project: res.data }
+    // });
 //   } catch (err) {
 //     console.log(err);
 //     alert("❌ Error creating project");
