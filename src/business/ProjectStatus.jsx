@@ -1,8 +1,19 @@
 import {useLocation} from "react-router-dom";
-
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../services/api";
 export default function ProjectStatus(){
-    const {state} = useLocation();
-    const project = state?.project;
+   const { id } = useParams();
+const [project, setProject] = useState(null);
+
+useEffect(() => {
+  fetchProject();
+}, []);
+
+const fetchProject = async () => {
+  const res = await api.get(`/projects/${id}`);
+  setProject(res.data);
+};
     const steps = [
         "Project Created",
         "Cost Accepted",
@@ -17,7 +28,7 @@ export default function ProjectStatus(){
             case "DRAFT":
                 return 0;
             case "LIVE":
-                return 3;
+                return 1;
             case "HOLD":
                 return 4;
             case "CLOSED":
