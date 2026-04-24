@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
+import { useNavigate } from "react-router-dom";
+
 
 export default function AdminProjects() {
   const [projects, setProjects] = useState([]);
-
+const navigate = useNavigate();
   useEffect(() => {
     fetchProjects();
   }, []);
@@ -41,7 +43,8 @@ export default function AdminProjects() {
       <h2 className="text-xl font-bold mb-4">Projects Approval</h2>
 
       {projects.map((p) => (
-        <div key={p._id} className="border p-4 rounded mb-4">
+        <div key={p._id}  onClick={() => navigate(`/superadmin/dashboard/project/${p._id}`)}
+  className="border p-4 rounded mb-4 cursor-pointer hover:bg-gray-50">
 
           <div className="flex justify-between">
             <div>
