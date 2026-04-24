@@ -143,8 +143,8 @@ export default function App() {
   <Route path="/business/dashboard/projects" element={<CreateProject />} />
   
 </Route> */}
-<Route path="/business" element={<BusinessLayout />}>
-  <Route path="dashboard" element={<BusinessDashboard />} />
+<Route path="/business/dashboard" element={<BusinessLayout />}>
+  <Route index element={<BusinessDashboard />} />
   <Route path="projects" element={<CreateProject />} />
   <Route path="project/:id/status" element={<ProjectStatus />} />
   {/* <Route

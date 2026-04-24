@@ -266,7 +266,7 @@ export default function CreateProject() {
     );
 
     // alert("✅ Project Created Successfully");
-     navigate(`/business/project/${res.data._id}/status`, {
+     navigate(`/business/dashboard/project/${res.data._id}/status`, {
   state: { project: res.data }
 });
 
