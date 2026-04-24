@@ -147,12 +147,13 @@ export default function App() {
   <Route index element={<BusinessDashboard />} />
   <Route path="projects" element={<CreateProject />} />
   <Route path="project/:id/status" element={<ProjectStatus />} />
-</Route>
-
-<Route
+  {/* <Route
   path="/business/project/:id/status"
   element={<ProjectStatus />}
-/>
+/> */}
+</Route>
+
+
       </Routes>
     </BrowserRouter>
   );
