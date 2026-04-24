@@ -36,7 +36,7 @@ import BusinessLayout from "./business/BusinessLayout";
 import BusinessDashboard from "./business/BusinessDashboard";
 import CreateProject from "./business/CreateProject";
 import ProjectStatus from "./business/ProjectStatus";
-import Project from "./superadmin/AdminProjects";
+import AdminProjects from "./superadmin/AdminProjects";
 export default function App() {
   return (
     <BrowserRouter>
