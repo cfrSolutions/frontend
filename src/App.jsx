@@ -36,7 +36,7 @@ import BusinessLayout from "./business/BusinessLayout";
 import BusinessDashboard from "./business/BusinessDashboard";
 import CreateProject from "./business/CreateProject";
 import ProjectStatus from "./business/ProjectStatus";
-
+import AdminProjects from "./superadmin/AdminProjects";
 export default function App() {
   return (
     <BrowserRouter>
@@ -90,7 +90,7 @@ export default function App() {
    <Route path="create-survey" element={<CreateSurvey />} />
    <Route path="responses" element={<Responses />} />
    <Route path="reports" element={<AdminReports />} />
-   
+   <Route path="projects" element={<AdminProjects />} />
 </Route>
 <Route
   path="/user/dashboard"
