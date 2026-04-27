@@ -108,32 +108,50 @@
 
 import { useEffect, useState } from "react";
 import api from "../services/api";
+import { useLocation } from "react-router-dom";
 import { CheckCircle, PauseCircle, Folder } from "lucide-react";
 
 export default function BusinessDashboard() {
    const [projects, setProjects] = useState([]);
+   const location = useLocation();
 
-  useEffect(() => {
-    fetchProjects();
-  }, []);
-
-  const fetchProjects = async () => {
+   const fetchProjects = async () => {
     try {
       const res = await api.get("/projects");
-      setProjects(res.data); // ✅ store all projects
+      setProjects(res.data); 
     } catch (err) {
       console.log(err);
     }
   };
 
+useEffect(() => {
+  fetchProjects();
+}, [location.pathname]);
+
+const path = location.pathname;
+
+let filter = "ALL";
+
+if (path.includes("/live")) filter = "LIVE";
+if (path.includes("/hold")) filter = "HOLD";
+if (path.includes("/closed")) filter = "CLOSED";
+if (path.includes("/drafts")) filter = "DRAFT";
+
+  
+
+  const filteredProjects =
+  filter === "ALL"
+    ? projects
+    : projects.filter(p => p.status === filter);
+
   const total = projects.length;
   const live = projects.filter(p => p.status === "LIVE").length;
   const hold = projects.filter(p => p.status === "HOLD").length;
   const closed = projects.filter(p => p.status === "CLOSED").length;
-  const draftProjects = projects.filter(p => p.status === "DRAFT");
-const liveProjects = projects.filter(p => p.status === "LIVE");
-const holdProjects = projects.filter(p => p.status === "HOLD");
-const closedProjects = projects.filter(p => p.status === "CLOSED");
+//   const draftProjects = projects.filter(p => p.status === "DRAFT");
+// const liveProjects = projects.filter(p => p.status === "LIVE");
+// const holdProjects = projects.filter(p => p.status === "HOLD");
+// const closedProjects = projects.filter(p => p.status === "CLOSED");
 
   return (
     <div className="space-y-6">
@@ -168,45 +186,50 @@ const closedProjects = projects.filter(p => p.status === "CLOSED");
           <Folder />
         </div>
       </div>
- {/* 🔵 LIVE PROJECTS */}
-<h2 className="text-lg font-semibold mt-6">Live Projects</h2>
-{liveProjects.length === 0 ? (
-  <p className="text-gray-400">No live projects</p>
-) : (
-  liveProjects.map(p => (
-    <ProjectCard key={p._id} p={p} />
-  ))
-)}
+ <h2 className="text-lg font-semibold mt-6">
+  {filter === "ALL" && "All Projects"}
+  {filter === "LIVE" && "Live Projects"}
+  {filter === "DRAFT" && "Draft Projects"}
+  {filter === "HOLD" && "Hold Projects"}
+  {filter === "CLOSED" && "Closed Projects"}
+</h2>
 
-{/* 🟡 DRAFT PROJECTS */}
-<h2 className="text-lg font-semibold mt-6">Draft Projects</h2>
-{draftProjects.length === 0 ? (
-  <p className="text-gray-400">No draft projects</p>
+{filteredProjects.length === 0 ? (
+  <p className="text-gray-400">No projects found</p>
 ) : (
-  draftProjects.map(p => (
+  filteredProjects.map(p => (
     <ProjectCard key={p._id} p={p} />
   ))
 )}
+    </div>
+  );
+}
 
-{/* 🟠 HOLD PROJECTS */}
-<h2 className="text-lg font-semibold mt-6">Hold Projects</h2>
-{holdProjects.length === 0 ? (
-  <p className="text-gray-400">No hold projects</p>
-) : (
-  holdProjects.map(p => (
-    <ProjectCard key={p._id} p={p} />
-  ))
-)}
 
-{/* 🔴 REJECTED PROJECTS */}
-<h2 className="text-lg font-semibold mt-6">Rejected Projects</h2>
-{closedProjects.length === 0 ? (
-  <p className="text-gray-400">No rejected projects</p>
-) : (
-  closedProjects.map(p => (
-    <ProjectCard key={p._id} p={p} />
-  ))
-)}
+function ProjectCard({ p }) {
+  return (
+    <div className="bg-white p-4 rounded-xl shadow mb-3 cursor-pointer hover:shadow-md transition">
+
+      <h3 className="font-semibold">
+        {p.sector} - {p.market}
+      </h3>
+
+      <p className="text-sm text-gray-500">
+        Age: {p.ageFrom} - {p.ageTo}
+      </p>
+
+      <p className="text-sm mt-1">
+        Status:{" "}
+        <span className={`font-semibold ${
+          p.status === "LIVE" ? "text-green-600" :
+          p.status === "DRAFT" ? "text-gray-500" :
+          p.status === "HOLD" ? "text-yellow-500" :
+          "text-red-500"
+        }`}>
+          {p.status}
+        </span>
+      </p>
+
     </div>
   );
 }

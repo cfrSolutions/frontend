@@ -147,6 +147,10 @@ export default function App() {
   <Route index element={<BusinessDashboard />} />
   <Route path="projects" element={<CreateProject />} />
   <Route path="project/:id/status" element={<ProjectStatus />} />
+  <Route path="live" element={<BusinessDashboard />} />
+  <Route path="hold" element={<BusinessDashboard />} />
+  <Route path="closed" element={<BusinessDashboard />} />
+  <Route path="drafts" element={<BusinessDashboard />} />
   {/* <Route
   path="/business/project/:id/status"
   element={<ProjectStatus />}
