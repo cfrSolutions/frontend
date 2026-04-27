@@ -489,3 +489,21 @@ export default function CreateProject() {
     </div>
   );
 }
+
+function ProjectCard({ p }) {
+  return (
+    <div className="bg-white border p-4 rounded-xl shadow mb-3">
+      <h3 className="font-semibold">
+        {p.sector} - {p.market}
+      </h3>
+
+      <p className="text-sm text-gray-500">
+        Age: {p.ageFrom} - {p.ageTo}
+      </p>
+
+      <p className="text-sm mt-1">
+        Status: <span className="font-semibold">{p.status}</span>
+      </p>
+    </div>
+  );
+}

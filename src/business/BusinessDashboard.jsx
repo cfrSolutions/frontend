@@ -111,16 +111,29 @@ import api from "../services/api";
 import { CheckCircle, PauseCircle, Folder } from "lucide-react";
 
 export default function BusinessDashboard() {
-  const [projects, setProjects] = useState([]);
+   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    api.get("/projects").then(res => setProjects(res.data));
+    fetchProjects();
   }, []);
+
+  const fetchProjects = async () => {
+    try {
+      const res = await api.get("/projects");
+      setProjects(res.data); // ✅ store all projects
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const total = projects.length;
   const live = projects.filter(p => p.status === "LIVE").length;
   const hold = projects.filter(p => p.status === "HOLD").length;
   const closed = projects.filter(p => p.status === "CLOSED").length;
+  const draftProjects = projects.filter(p => p.status === "DRAFT");
+const liveProjects = projects.filter(p => p.status === "LIVE");
+const holdProjects = projects.filter(p => p.status === "HOLD");
+const closedProjects = projects.filter(p => p.status === "CLOSED");
 
   return (
     <div className="space-y-6">
@@ -155,7 +168,45 @@ export default function BusinessDashboard() {
           <Folder />
         </div>
       </div>
+ {/* 🔵 LIVE PROJECTS */}
+<h2 className="text-lg font-semibold mt-6">Live Projects</h2>
+{liveProjects.length === 0 ? (
+  <p className="text-gray-400">No live projects</p>
+) : (
+  liveProjects.map(p => (
+    <ProjectCard key={p._id} p={p} />
+  ))
+)}
 
+{/* 🟡 DRAFT PROJECTS */}
+<h2 className="text-lg font-semibold mt-6">Draft Projects</h2>
+{draftProjects.length === 0 ? (
+  <p className="text-gray-400">No draft projects</p>
+) : (
+  draftProjects.map(p => (
+    <ProjectCard key={p._id} p={p} />
+  ))
+)}
+
+{/* 🟠 HOLD PROJECTS */}
+<h2 className="text-lg font-semibold mt-6">Hold Projects</h2>
+{holdProjects.length === 0 ? (
+  <p className="text-gray-400">No hold projects</p>
+) : (
+  holdProjects.map(p => (
+    <ProjectCard key={p._id} p={p} />
+  ))
+)}
+
+{/* 🔴 REJECTED PROJECTS */}
+<h2 className="text-lg font-semibold mt-6">Rejected Projects</h2>
+{closedProjects.length === 0 ? (
+  <p className="text-gray-400">No rejected projects</p>
+) : (
+  closedProjects.map(p => (
+    <ProjectCard key={p._id} p={p} />
+  ))
+)}
     </div>
   );
 }
