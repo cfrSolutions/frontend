@@ -14,7 +14,7 @@ export default function AdminProjectDetail() {
     const res = await api.get(`/admin/project/${id}`);
     setProject(res.data);
   };
-
+ 
   if (!project) return <p>Loading...</p>;
 
   const steps = [
@@ -102,6 +102,19 @@ export default function AdminProjectDetail() {
         </div>
       )}
 
+      {
+        project.surveyLinks && (
+          <div className="mt-6">
+            <p>Test Link: {project.surveyLinks.test}</p>
+            <p>Live Link: {project.surveyLinks.live}</p>
+          </div>
+        )
+      }
+      {
+        project.clientKeysFile && (
+          <a href={`/${project.clientKeysFile}`} target="_blank">Download Link</a>
+        )
+      }
     </div>
   );
 }

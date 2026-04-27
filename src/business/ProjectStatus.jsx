@@ -6,6 +6,26 @@ export default function ProjectStatus(){
    const { id } = useParams();
 const [project, setProject] = useState(null);
 const base = import.meta.env.VITE_API_URL;
+const [test, setTest] = useState("");
+const [live, setLive] = useState("");
+const [file, setFile] = useState(null);
+
+const handleSave = async () => {
+  await api.put(`/projects/${id}/survey-links`, { test, live });
+  alert("Saved");
+};
+
+const handleFile = (e) => {
+  setFile(e.target.files[0]);
+};
+
+const uploadFile = async () => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  await api.put(`/projects/${id}/upload-keys`, formData);
+  alert("Uploaded");
+};
 useEffect(() => {
   fetchProject();
 }, []);
@@ -117,6 +137,40 @@ const fetchProject = async () => {
 
       </div>
     )}
+
+    <div className="mt-10 border p-6 rounded-xl w-[500px]">
+
+  <h3 className="font-semibold mb-4">
+    Insert your Survey Link Below
+  </h3>
+
+  <input
+    placeholder="Insert test link"
+    className="border w-full mb-3 p-2"
+    value={test}
+    onChange={(e) => setTest(e.target.value)}
+  />
+
+  <input
+    placeholder="Insert live link"
+    className="border w-full mb-3 p-2"
+    value={live}
+    onChange={(e) => setLive(e.target.value)}
+  />
+
+  <button
+    onClick={handleSave}
+    className="bg-blue-600 text-white px-4 py-2 rounded"
+  >
+    Submit
+  </button>
+
+  <div className="mt-4">
+    <input type="file" onChange={handleFile} />
+    <button onClick={uploadFile}>Upload</button>
+  </div>
+
+</div>
 
   </div>
 );
