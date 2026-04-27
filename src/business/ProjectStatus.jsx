@@ -5,11 +5,11 @@ import api from "../services/api";
 export default function ProjectStatus(){
    const { id } = useParams();
 const [project, setProject] = useState(null);
-
+const base = import.meta.env.VITE_API_URL;
 useEffect(() => {
   fetchProject();
 }, []);
-
+ 
 const fetchProject = async () => {
   const res = await api.get(`/projects/${id}`);
   setProject(res.data);
@@ -95,22 +95,22 @@ const fetchProject = async () => {
         <h3 className="font-semibold mb-4">
           Redirect Links
         </h3>
-
+         
         <div className="space-y-3">
 
           <LinkBox
             label="Complete"
-            url={`/api/survey/c?tk=${project.redirects.complete?.token}`}
+            url={`${base}/survey/c?tk=${project.redirects.complete?.token}`}
           />
 
           <LinkBox
             label="Disqualified"
-            url={`/api/survey/dq?tk=${project.redirects.disqualified?.token}`}
+            url={`${base}/survey/dq?tk=${project.redirects.disqualified?.token}`}
           />
 
           <LinkBox
             label="Quota Full"
-            url={`/api/survey/qf?tk=${project.redirects.quotaFull?.token}`}
+            url={`${base}/survey/qf?tk=${project.redirects.quotaFull?.token}`}
           />
 
         </div>

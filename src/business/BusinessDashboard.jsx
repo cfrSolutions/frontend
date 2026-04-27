@@ -110,6 +110,7 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import { useLocation } from "react-router-dom";
 import { CheckCircle, PauseCircle, Folder } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function BusinessDashboard() {
    const [projects, setProjects] = useState([]);
@@ -206,10 +207,15 @@ if (path.includes("/drafts")) filter = "DRAFT";
 }
 
 
-function ProjectCard({ p }) {
-  return (
-    <div className="bg-white p-4 rounded-xl shadow mb-3 cursor-pointer hover:shadow-md transition">
 
+function ProjectCard({ p }) {
+  const navigate = useNavigate();
+
+  return (
+    <div
+      onClick={() => navigate(`/business/dashboard/project/${p._id}/status`)}
+      className="bg-white p-4 rounded-xl shadow mb-3 cursor-pointer hover:shadow-md transition"
+    >
       <h3 className="font-semibold">
         {p.sector} - {p.market}
       </h3>
@@ -229,7 +235,6 @@ function ProjectCard({ p }) {
           {p.status}
         </span>
       </p>
-
     </div>
   );
 }

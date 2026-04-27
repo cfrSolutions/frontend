@@ -86,17 +86,17 @@ export default function AdminProjectDetail() {
 
           <LinkBox
             label="Complete"
-            url={`${base}/api/survey/c?tk=${project.redirects.complete?.token}`}
+            url={`${base}/survey/c?tk=${project.redirects.complete?.token}`}
           />
 
           <LinkBox
             label="Disqualified"
-            url={`${base}/api/survey/dq?tk=${project.redirects.disqualified?.token}`}
+            url={`${base}/survey/dq?tk=${project.redirects.disqualified?.token}`}
           />
 
           <LinkBox
             label="Quota Full"
-            url={`${base}/api/survey/qf?tk=${project.redirects.quotaFull?.token}`}
+            url={`${base}/survey/qf?tk=${project.redirects.quotaFull?.token}`}
           />
 
         </div>
