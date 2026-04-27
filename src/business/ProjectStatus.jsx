@@ -10,22 +10,7 @@ const [test, setTest] = useState("");
 const [live, setLive] = useState("");
 const [file, setFile] = useState(null);
 
-const handleSave = async () => {
-  await api.put(`/projects/${id}/survey-links`, { test, live });
-  alert("Saved");
-};
 
-const handleFile = (e) => {
-  setFile(e.target.files[0]);
-};
-
-const uploadFile = async () => {
-  const formData = new FormData();
-  formData.append("file", file);
-
-  await api.put(`/projects/${id}/upload-keys`, formData);
-  alert("Uploaded");
-};
 useEffect(() => {
   fetchProject();
 }, []);
@@ -33,6 +18,8 @@ useEffect(() => {
 const fetchProject = async () => {
   const res = await api.get(`/projects/${id}`);
   setProject(res.data);
+  setTest(res.data?.surveyLinks?.test || "");
+  setLive(res.data?.surveyLinks?.live || "");
 };
     const steps = [
         "Project Created",
@@ -57,16 +44,39 @@ const fetchProject = async () => {
                 return 0;
         }
     };
+const handleSave = async () => {
+  await api.put(`/projects/${id}/survey-links`, { test, live });
+  alert("Saved");
 
+  fetchProject(); 
+};
+
+const handleFile = (e) => {
+  setFile(e.target.files[0]);
+};
+
+const uploadFile = async () => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  await api.put(`/projects/${id}/upload-keys`, formData);
+  alert("Uploaded");
+  fetchProject();
+};
     const activeStep = getStep();
     
     return (
   <div className="p-8">
 
-    <h1 className="text-2xl font-bold mb-2">
-      Congratulations
-    </h1>
-
+   <h1 className="text-2xl font-bold mb-2">
+  {project?.status === "LIVE"
+    ? "Project is Live"
+    : project?.status === "DRAFT"
+    ? "Waiting for Approval"
+    : project?.status === "HOLD"
+    ? "Project On Hold"
+    : "Project Closed"}
+</h1>
     <p className="text-gray-500 mb-8">
       Your project has been successfully sent for review.
     </p>
@@ -167,7 +177,12 @@ const fetchProject = async () => {
 
   <div className="mt-4">
     <input type="file" onChange={handleFile} />
-    <button onClick={uploadFile}>Upload</button>
+    <button
+  onClick={uploadFile}
+  className="bg-green-600 text-white px-4 py-2 rounded mt-2"
+>
+  Upload Keys
+</button>
   </div>
 
 </div>

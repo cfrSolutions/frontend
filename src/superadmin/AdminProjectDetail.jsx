@@ -13,6 +13,7 @@ export default function AdminProjectDetail() {
   const fetchProject = async () => {
     const res = await api.get(`/admin/project/${id}`);
     setProject(res.data);
+    
   };
  
   if (!project) return <p>Loading...</p>;
@@ -110,11 +111,16 @@ export default function AdminProjectDetail() {
           </div>
         )
       }
-      {
-        project.clientKeysFile && (
-          <a href={`/${project.clientKeysFile}`} target="_blank">Download Link</a>
-        )
-      }
+     {project.clientKeysFile && (
+        <a
+          href={project.clientKeysFile}  
+          target="_blank"
+          rel="noreferrer"
+          className="text-blue-600 underline mt-4 block"
+        >
+          Download Client Keys
+        </a>
+      )}
     </div>
   );
 }
