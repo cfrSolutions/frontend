@@ -201,7 +201,7 @@ export default function OAuthSuccess() {
         } else if (role === "BUSINESS") {
           navigate("/business/dashboard"); // ✅ IMPORTANT FIX
         } else {
-          navigate("/dashboard"); // USER
+          navigate("/user/dashboard"); // USER
         }
 
       } catch (err) {
