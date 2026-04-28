@@ -219,7 +219,7 @@ export default function CreateProject() {
   const [form, setForm] = useState({
     sector: "",
     market: "",
-    completes: 90,
+    targetCompletes: 90,
     ageFrom: 18,
     ageTo: 63,
     gender: "All",
@@ -421,7 +421,7 @@ export default function CreateProject() {
           </h3>
 
           {[
-            { label: "Completes", name: "completes", icon: Users },
+            { label: "Target Completes", name: "targetCompletes", icon: Users },
             { label: "LOI (minutes)", name: "loi", icon: Clock },
             { label: "Incidence (%)", name: "incidence", icon: BarChart3 },
             { label: "Timeline (days)", name: "timeline", icon: Calendar },
