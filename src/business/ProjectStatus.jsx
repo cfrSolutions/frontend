@@ -130,17 +130,17 @@ const uploadFile = async () => {
 
           <LinkBox
             label="Complete"
-            url={`${base}/survey/c?tk=${project.redirects.complete?.token}`}
+            url={`${base}/redirect/c?tk=${project.redirects.complete?.token}`}
           />
 
           <LinkBox
             label="Disqualified"
-            url={`${base}/survey/dq?tk=${project.redirects.disqualified?.token}`}
+            url={`${base}/redirect/dq?tk=${project.redirects.disqualified?.token}`}
           />
 
           <LinkBox
             label="Quota Full"
-            url={`${base}/survey/qf?tk=${project.redirects.quotaFull?.token}`}
+            url={`${base}/redirect/qf?tk=${project.redirects.quotaFull?.token}`}
           />
 
         </div>
