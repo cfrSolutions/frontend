@@ -120,7 +120,7 @@ export default function App() {
 
  
     
-    <Route path="/why-cfr" element={<Home/>} />
+    <Route path="/why-inputify" element={<Home/>} />
    <Route path="/solutions" element={<Solutions />} />
    <Route path="/products" element={<Products />} />
    <Route path="/company" element={<Company />} />

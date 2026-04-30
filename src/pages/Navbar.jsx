@@ -6,7 +6,7 @@ export default function Navbar(){
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const menuItems = [
-  { name: "Why CFR?", path: "/why-cfr" },
+  { name: "Why Inputify?", path: "/why-inputify" },
   { name: "Solutions", path: "/solutions" },
   { name: "Products", path: "/products" },
   { name: "Company", path: "/company" },
