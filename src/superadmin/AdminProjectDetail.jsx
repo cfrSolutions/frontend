@@ -158,7 +158,7 @@ export default function AdminProjectDetail() {
     setProject(res.data);
   };
 
-  // ✅ GO LIVE (REAL CONTROL)
+  // 🚀 GO LIVE BUTTON
   const handleGoLive = async () => {
     try {
       await api.put(`/admin/project/${id}/go-live`);
@@ -180,10 +180,13 @@ export default function AdminProjectDetail() {
     "Completed",
   ];
 
+  // ✅ FIXED TIMELINE
   const getStep = () => {
     switch (project.status) {
       case "DRAFT":
         return 0;
+      case "ACCEPTED":
+        return 1;
       case "TESTING":
         return 2;
       case "LIVE":
@@ -233,96 +236,88 @@ export default function AdminProjectDetail() {
         </div>
       </div>
 
-      {/* ✅ GO LIVE BUTTON */}
-      {project.status === "TESTING" && (
-        <button
-          onClick={handleGoLive}
-          className="bg-green-600 text-white px-4 py-2 rounded mb-6"
-        >
-          Go Live
-        </button>
-      )}
+      {/* 🔥 REDIRECTS (AFTER ACCEPT) */}
+      {project.status !== "DRAFT" && project.redirects && (
+        <div className="space-y-2 mb-6">
 
-      {/* 🧪 TESTING VIEW */}
-      {project.status === "TESTING" && project.surveyLinks && (
-        <div className="space-y-3">
-          <h3 className="font-semibold">Testing Setup</h3>
-
-          <LinkBox label="Test Link" url={project.surveyLinks.test} />
+          <h3 className="font-semibold mb-2">Redirect Links</h3>
 
           <LinkBox
-            label="Start Link"
-            url={`${base}/redirect/start?tk=${project.redirects?.complete?.token}`}
+            label="Complete"
+            url={`${base}/redirect/c?tk=${project.redirects.complete?.token}`}
           />
 
-          {/* 🔥 Show redirects also in testing */}
-          {project.redirects && (
-            <>
-              <LinkBox
-                label="Complete"
-                url={`${base}/redirect/c?tk=${project.redirects.complete?.token}`}
-              />
+          <LinkBox
+            label="Disqualified"
+            url={`${base}/redirect/dq?tk=${project.redirects.disqualified?.token}`}
+          />
 
-              <LinkBox
-                label="Disqualified"
-                url={`${base}/redirect/dq?tk=${project.redirects.disqualified?.token}`}
-              />
-
-              <LinkBox
-                label="Quota Full"
-                url={`${base}/redirect/qf?tk=${project.redirects.quotaFull?.token}`}
-              />
-            </>
-          )}
+          <LinkBox
+            label="Quota Full"
+            url={`${base}/redirect/qf?tk=${project.redirects.quotaFull?.token}`}
+          />
         </div>
       )}
 
-      {/* 🚀 LIVE VIEW */}
-      {project.status === "LIVE" && project.surveyLinks && (
-        <div className="space-y-3">
+      {/* 🧪 TESTING PHASE UI */}
+      {project.status === "TESTING" && (
+        <div className="border p-4 rounded mb-6 w-[500px]">
+          <h3 className="font-semibold mb-2">Testing Phase</h3>
 
-          <h3 className="font-semibold">Live Setup</h3>
-
-          <LinkBox label="Live Link" url={project.surveyLinks.live} />
-
-          {project.redirects && (
+          {project.surveyLinks && (
             <>
-              <LinkBox
-                label="Complete"
-                url={`${base}/redirect/c?tk=${project.redirects.complete?.token}`}
-              />
+              <p className="text-sm mb-2">
+                Test Link: {project.surveyLinks.test}
+              </p>
 
-              <LinkBox
-                label="Disqualified"
-                url={`${base}/redirect/dq?tk=${project.redirects.disqualified?.token}`}
-              />
-
-              <LinkBox
-                label="Quota Full"
-                url={`${base}/redirect/qf?tk=${project.redirects.quotaFull?.token}`}
-              />
+              <p className="text-sm mb-2">
+                Live Link: {project.surveyLinks.live}
+              </p>
             </>
           )}
 
-          {/* ✅ COUNTS */}
-          <div className="mt-4 border p-4 rounded bg-gray-50">
-            <p>✅ Completes: {project.completes}</p>
-            <p>❌ Disqualified: {project.disqualified}</p>
-            <p>⚠️ Quota Full: {project.quotaFull}</p>
-          </div>
+          <p className="text-yellow-600 text-sm mb-3">
+            Waiting for admin to make project LIVE
+          </p>
+
+          <button
+            onClick={handleGoLive}
+            className="bg-green-600 text-white px-4 py-2 rounded"
+          >
+            Go Live
+          </button>
         </div>
       )}
 
-      {/* CLIENT FILE */}
+      {/* 🚀 LIVE PHASE */}
+      {project.status === "LIVE" && (
+        <div className="border p-4 rounded bg-gray-50 w-[500px] mb-6">
+          <h3 className="font-semibold mb-2">Live Metrics</h3>
+
+          <p>✅ Completes: {project.completes}</p>
+          <p>❌ Disqualified: {project.disqualified}</p>
+          <p>⚠️ Quota Full: {project.quotaFull}</p>
+        </div>
+      )}
+
+      {/* FILE */}
       {project.clientKeysFile && (
         <a
           href={project.clientKeysFile}
           target="_blank"
           rel="noreferrer"
-          className="text-blue-600 underline mt-6 block"
+          className="text-blue-600 underline mt-4 block"
         >
           Download Client Keys
         </a>
+      )}
+
+      {/* START LINK */}
+      {project.redirects && (
+        <LinkBox
+          label="Start Link (Give to Supplier)"
+          url={`${base}/redirect/start?tk=${project.redirects.complete?.token}`}
+        />
       )}
     </div>
   );
