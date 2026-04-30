@@ -252,8 +252,8 @@ export default function SuperAdminDashboard() {
           <div className="flex items-center justify-center w-full lg:w-auto">
             <div className={`rounded-lg overflow-hidden transition-all ${collapsed ? "lg:w-10 lg:h-10" : "lg:w-40 lg:h-40"}  w-40 h-40`}>
               <img
-                src="/HomeImage/cfr.png"
-                alt="CFR"
+                src="/HomeImage/inputify.png"
+                alt="Inputify"
                 className="w-full h-full object-contain"
               />
             </div>

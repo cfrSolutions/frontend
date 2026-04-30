@@ -30,20 +30,36 @@ const fetchProject = async () => {
         "Completed",
     ];
 
-    const getStep = () =>{
-        switch(project?.status){
-            case "DRAFT":
-                return 0;
-            case "LIVE":
-                return 1;
-            case "HOLD":
-                return 4;
-            case "CLOSED":
-                return 5;
-            default:
-                return 0;
-        }
-    };
+    // const getStep = () =>{
+    //     switch(project?.status){
+    //         case "DRAFT":
+    //             return 0;
+    //         case "LIVE":
+    //             return 1;
+    //         case "HOLD":
+    //             return 4;
+    //         case "CLOSED":
+    //             return 5;
+    //         default:
+    //             return 0;
+    //     }
+    // };
+    const getStep = () => {
+  switch (project?.status) {
+    case "DRAFT":
+      return 0;
+    case "TESTING":
+      return 2;
+    case "LIVE":
+      return 3;
+    case "HOLD":
+      return 4;
+    case "COMPLETED":
+      return 5;
+    default:
+      return 0;
+  }
+};
 const handleSave = async () => {
   await api.put(`/projects/${id}/survey-links`, { test, live });
   alert("Saved");
