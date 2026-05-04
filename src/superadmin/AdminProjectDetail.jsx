@@ -237,11 +237,15 @@ const goLive = async () => {
   return (
     <div className="p-8">
 
-      <h1 className="text-2xl font-bold mb-2">
+      {/* <h1 className="text-2xl font-bold mb-2">
         Project Detail
       </h1>
-
-      {/* TIMELINE */}
+{project.status === "LIVE" && (
+  <button onClick={moveToTesting}>
+    Move to Testing 🚀
+  </button>
+)}
+      
       <div className="flex justify-between mb-10">
         {steps.map((step, i) => (
           <div key={i} className="flex-1 text-center">
@@ -253,8 +257,79 @@ const goLive = async () => {
             <p className="text-xs">{step}</p>
           </div>
         ))}
-      </div>
+      </div> */}
 
+
+<div className="flex items-center justify-between mb-6">
+  <div>
+    <h1 className="text-2xl font-bold flex items-center gap-3">
+      Project Detail
+      <span className="bg-green-100 text-green-700 text-sm px-3 py-1 rounded-full">
+        ● Live
+      </span>
+    </h1>
+    <p className="text-gray-500 text-sm mt-1">
+      Healthcare · United States · Created May 2, 2026
+    </p>
+  </div>
+
+  <div className="flex gap-3">
+    <button className="border px-4 py-2 rounded-lg hover:bg-gray-100">
+      Actions
+    </button>
+
+    {project.status === "LIVE" && (
+      <button
+        onClick={moveToTesting}
+        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+      >
+        Move to Testing ↗
+      </button>
+    )}
+  </div>
+</div>
+<div className="border rounded-xl p-6 bg-white">
+  <div className="flex justify-between items-center mb-4">
+    <h3 className="font-semibold text-lg">Project Lifecycle</h3>
+    <span className="text-sm text-gray-500">
+      Step {activeStep + 1} of {steps.length}
+    </span>
+  </div>
+
+  <div className="flex items-center justify-between">
+    {steps.map((step, i) => (
+      <div key={i} className="flex-1 flex items-center">
+        
+        {/* STEP */}
+        <div className="flex flex-col items-center flex-1">
+          <div
+            className={`w-10 h-10 flex items-center justify-center rounded-full border-2 text-sm font-semibold
+              ${
+                i < activeStep
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : i === activeStep
+                  ? "border-blue-600 text-blue-600"
+                  : "border-gray-300 text-gray-400"
+              }`}
+          >
+            {i < activeStep ? "✓" : i + 1}
+          </div>
+
+          <p className="text-xs mt-2 text-center">{step}</p>
+        </div>
+
+        {/* LINE */}
+        {i !== steps.length - 1 && (
+          <div
+            className={`h-[2px] flex-1 mx-2 ${
+              i < activeStep ? "bg-blue-600" : "bg-gray-300"
+            }`}
+          />
+        )}
+      </div>
+    ))}
+  </div>
+</div>
       {/* SUMMARY */}
       <div className="border rounded-2xl p-6 w-[350px] mb-6">
         <h3 className="font-semibold mb-4">Summary</h3>
@@ -311,11 +386,11 @@ const goLive = async () => {
           Download Client Keys
         </a>
       )}
-{project.status === "LIVE" && (
+{/* {project.status === "LIVE" && (
   <button onClick={moveToTesting}>
     Move to Testing 🚀
   </button>
-)}
+)} */}
       <LinkBox
   label="Start Link (Give to Supplier)"
   url={`${base}/redirect/start?tk=${project.redirects.start?.token}`}

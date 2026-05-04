@@ -186,6 +186,7 @@ import {
   Search,
   ChevronLeft,
   ChevronRight,
+  FolderOutput,
   Menu,
   X,
 } from "lucide-react";
@@ -202,7 +203,7 @@ const mainMenu = [
   { label: "Reports", icon: BarChart3, to: "/superadmin/dashboard/reports" },
   { label: "Add Admin", icon: Users, to: "/superadmin/dashboard/add-admin" },
   { label: "Fraud & Flags", icon: Flag, to: "/superadmin/dashboard/fraud" },
-  { label: "Project", icon: Settings, to: "/superadmin/dashboard/projects" },
+  { label: "Project", icon: FolderOutput, to: "/superadmin/dashboard/projects" },
   { label: "Settings", icon: Settings, to: "/superadmin/dashboard/settings" },
 ];
 
