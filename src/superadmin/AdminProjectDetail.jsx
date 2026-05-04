@@ -148,9 +148,15 @@ export default function AdminProjectDetail() {
   const { id } = useParams();
   const [project, setProject] = useState(null);
 
+  // useEffect(() => {
+  //   fetchProject();
+  // }, [id]);
   useEffect(() => {
-    fetchProject();
-  }, [id]);
+  fetchProject();
+
+  const interval = setInterval(fetchProject, 5000);
+  return () => clearInterval(interval);
+}, [id]);
 
 const moveToTesting = async () => {
   await api.put(`/admin/project/${id}/move-testing`);
@@ -206,10 +212,19 @@ const moveToTesting = async () => {
     }
   };
 
- const goLive = async () => {
+//  const goLive = async () => {
+//   try {
+//     await api.put(`/admin/project/${id}/go-live`);
+//     fetchProject(); 
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+const goLive = async () => {
+  setProject(prev => ({ ...prev, status: "LIVE" }));
+
   try {
     await api.put(`/admin/project/${id}/go-live`);
-    fetchProject(); // refresh UI
   } catch (err) {
     console.error(err);
   }
