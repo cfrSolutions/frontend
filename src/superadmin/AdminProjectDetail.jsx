@@ -318,7 +318,7 @@ const goLive = async () => {
 )}
       <LinkBox
   label="Start Link (Give to Supplier)"
-  url={`${base}/redirect/start?tk=${project.redirects.complete?.token}`}
+  url={`${base}/redirect/start?tk=${project.redirects.start?.token}`}
 />
 {project.status === "TESTING" && (
   <div className="mb-6">

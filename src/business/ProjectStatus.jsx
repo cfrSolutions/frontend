@@ -476,5 +476,3 @@ function LinkBox({ label, url }) {
     </div>
   );
 }
-
-//this one is pending i want this do as per testing purpose 
