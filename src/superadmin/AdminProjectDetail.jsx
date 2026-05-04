@@ -311,7 +311,7 @@ const goLive = async () => {
           Download Client Keys
         </a>
       )}
-{project.status === "DRAFT" && (
+{project.status === "LIVE" && (
   <button onClick={moveToTesting}>
     Move to Testing 🚀
   </button>
