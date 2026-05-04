@@ -221,10 +221,11 @@ const moveToTesting = async () => {
 //   }
 // };
 const goLive = async () => {
-  setProject(prev => ({ ...prev, status: "LIVE" }));
-
   try {
     await api.put(`/admin/project/${id}/go-live`);
+
+    await fetchProject(); 
+
   } catch (err) {
     console.error(err);
   }
@@ -310,12 +311,11 @@ const goLive = async () => {
           Download Client Keys
         </a>
       )}
-<button
-  onClick={moveToTesting}
-  className="bg-blue-600 text-white px-4 py-2 rounded mb-4"
->
-  Move to Testing 🚀
-</button>
+{project.status === "DRAFT" && (
+  <button onClick={moveToTesting}>
+    Move to Testing 🚀
+  </button>
+)}
       <LinkBox
   label="Start Link (Give to Supplier)"
   url={`${base}/redirect/start?tk=${project.redirects.complete?.token}`}
