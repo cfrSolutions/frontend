@@ -624,14 +624,12 @@ const goLive = async () => {
     )}
 
     {project.status === "TESTING" && (
-  <div className="mb-6">
     <button
       onClick={goLive}
-      className="bg-green-600 text-white px-4 py-2 rounded"
+      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
     >
       Move to Live 🚀
     </button>
-  </div>
 )}
   </div>
 </div>

@@ -38,6 +38,7 @@ import CreateProject from "./business/CreateProject";
 import ProjectStatus from "./business/ProjectStatus";
 import AdminProjects from "./superadmin/AdminProjects";
 import AdminProjectDetail from "./superadmin/AdminProjectDetail";
+import SurveyStatusPages from "./business/SurveyStatusPages";
 export default function App() {
   return (
     <BrowserRouter>
@@ -156,7 +157,9 @@ export default function App() {
   element={<ProjectStatus />}
 /> */}
 </Route>
-
+<Route path="/thank-you" element={<SurveyStatusPages />} />
+<Route path="/disqualified" element={<SurveyStatusPages />} />
+<Route path="/quota-full" element={<SurveyStatusPages />} />
 
       </Routes>
     </BrowserRouter>
