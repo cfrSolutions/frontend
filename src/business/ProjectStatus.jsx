@@ -561,7 +561,15 @@ const uploadFile = async () => {
   fetchProject();
 };
     const activeStep = getStep();
-    
+    if (!project) {
+  return (
+    <div className="p-8">
+      <p className="text-gray-500">
+        Loading project...
+      </p>
+    </div>
+  );
+}
     return (
   <div className="p-8">
 
