@@ -701,7 +701,7 @@ const uploadFile = async () => {
 
 </div>
 
-    <div className="border border-gray-300 rounded-2xl p-6 w-[350px]">
+    {/* <div className="border border-gray-300 rounded-2xl p-6 w-[350px]">
       <h3 className="font-semibold mb-4">Summary</h3>
 
       <div className="text-sm space-y-1">
@@ -721,9 +721,9 @@ const uploadFile = async () => {
         <p>Timeline – {project?.timeline} days</p>
         <p>Budget – ${project?.budget}</p>
       </div>
-    </div>
+    </div> */}
 
-<div className="border border-gray-200 rounded-2xl overflow-hidden mb-8 bg-white">
+<div className="border border-gray-200 rounded-2xl overflow-hidden mb-8 mt-8 bg-white">
 
   <div className="px-6 py-5 border-b border-gray-200">
     <h3 className="font-semibold text-lg">Summary</h3>
@@ -784,12 +784,12 @@ const uploadFile = async () => {
       </span>
     </div>
 
-    <div className="flex justify-between px-6 py-4">
+    {/* <div className="flex justify-between px-6 py-4">
       <span className="text-gray-500">Project ID</span>
       <span className="font-semibold">
         {project.projectId || project._id}
       </span>
-    </div>
+    </div> */}
 
   </div>
 </div>
