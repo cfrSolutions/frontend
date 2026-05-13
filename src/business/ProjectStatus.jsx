@@ -701,7 +701,7 @@ const uploadFile = async () => {
 
 </div>
 
-    <div className="border rounded-2xl p-6 w-[350px]">
+    <div className="border border-gray-300 rounded-2xl p-6 w-[350px]">
       <h3 className="font-semibold mb-4">Summary</h3>
 
       <div className="text-sm space-y-1">
@@ -722,6 +722,77 @@ const uploadFile = async () => {
         <p>Budget – ${project?.budget}</p>
       </div>
     </div>
+
+<div className="border border-gray-200 rounded-2xl overflow-hidden mb-8 bg-white">
+
+  <div className="px-6 py-5 border-b border-gray-200">
+    <h3 className="font-semibold text-lg">Summary</h3>
+  </div>
+
+  <div className="divide-y divide-gray-200 text-sm">
+
+    <div className="flex justify-between px-6 py-4">
+      <span className="text-gray-500">Sector</span>
+      <span className="font-semibold">{project?.sector}</span>
+    </div>
+
+    <div className="flex justify-between px-6 py-4">
+      <span className="text-gray-500">Market</span>
+      <span className="font-semibold">{project?.market}</span>
+    </div>
+
+    <div className="flex justify-between px-6 py-4">
+      <span className="text-gray-500">Age Range</span>
+      <span className="font-semibold">
+        {project.ageFrom} – {project?.ageTo}
+      </span>
+    </div>
+
+    <div className="flex justify-between px-6 py-4">
+      <span className="text-gray-500">Gender</span>
+      <span className="font-semibold">{project?.gender}</span>
+    </div>
+
+    <div className="flex justify-between px-6 py-4">
+      <span className="text-gray-500">Target Completes</span>
+      <span className="font-semibold">{project?.targetCompletes}</span>
+    </div>
+
+    <div className="flex justify-between px-6 py-4">
+      <span className="text-gray-500">Incidence</span>
+      <span className="font-semibold">{project?.incidence}%</span>
+    </div>
+
+    <div className="flex justify-between px-6 py-4">
+      <span className="text-gray-500">LOI</span>
+      <span className="font-semibold">{project?.loi} mins</span>
+    </div>
+
+    <div className="flex justify-between px-6 py-4">
+      <span className="text-gray-500">Budget</span>
+      <span className="font-semibold">${project?.budget}</span>
+    </div>
+
+    <div className="flex justify-between px-6 py-4">
+      <span className="text-gray-500">Created</span>
+      <span className="font-semibold">
+        {new Date(project.createdAt).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })}
+      </span>
+    </div>
+
+    <div className="flex justify-between px-6 py-4">
+      <span className="text-gray-500">Project ID</span>
+      <span className="font-semibold">
+        {project.projectId || project._id}
+      </span>
+    </div>
+
+  </div>
+</div>
 
 
     {project?.status === "TESTING" && project?.redirects && (
@@ -796,7 +867,7 @@ const uploadFile = async () => {
   </div>
 )}
 
-    <div className="mt-10 border p-6 rounded-xl w-[500px]">
+    <div className="mt-10 border border-gray-300 p-6 rounded-xl w-[500px]">
 
   <h3 className="font-semibold mb-4">
     Insert your Survey Link Below
@@ -804,14 +875,14 @@ const uploadFile = async () => {
 
   <input
     placeholder="Insert test link"
-    className="border w-full mb-3 p-2"
+    className="border border-gray-300 w-full rounded-xl mb-3 p-2"
     value={test}
     onChange={(e) => setTest(e.target.value)}
   />
 
   <input
     placeholder="Insert live link"
-    className="border w-full mb-3 p-2"
+    className="border border-gray-300 w-full rounded-xl mb-3 p-2"
     value={live}
     onChange={(e) => setLive(e.target.value)}
   />
