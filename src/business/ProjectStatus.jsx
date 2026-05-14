@@ -530,7 +530,7 @@ const sendNegotiation = async () => {
   };
 
   await api.put(
-    `/admin/projects/${id}/negotiate`,
+    `/admin/project/${id}/negotiate`,
     data
   );
 
