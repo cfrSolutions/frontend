@@ -482,8 +482,8 @@ const [offer, setOffer] = useState("");
   useEffect(() => {
   fetchProject();
 
-  const interval = setInterval(fetchProject, 5000);
-  return () => clearInterval(interval);
+  // const interval = setInterval(fetchProject, 5000);
+  // return () => clearInterval(interval);
 }, [id]);
 
 useEffect(() => {
@@ -622,6 +622,53 @@ const moveToTesting = async () => {
 //     console.error(err);
 //   }
 // };
+
+const handleAccept = async () => {
+
+  try {
+
+    await api.put(
+      `/admin/project/${id}/accept`
+    );
+
+    fetchProject();
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const startNegotiation = async () => {
+
+  try {
+
+    await api.put(
+      `/admin/project/${id}/start-negotiation`
+    );
+
+    fetchProject();
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const handleReject = async () => {
+
+  try {
+
+    await api.put(
+      `/admin/project/${id}/reject`
+    );
+
+    fetchProject();
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
 const goLive = async () => {
   try {
     await api.put(`/admin/project/${id}/go-live`);
@@ -686,7 +733,7 @@ const goLive = async () => {
     </p>
   </div>
 
-  <div className="flex gap-3">
+  {/* <div className="flex gap-3">
     <button className="border px-4 py-2 rounded-lg hover:bg-gray-100">
       Actions
     </button>
@@ -708,7 +755,61 @@ const goLive = async () => {
       Move to Live 🚀
     </button>
 )}
-  </div>
+  </div> */}
+
+<div className="flex gap-3">
+
+  {/* DRAFT ACTIONS */}
+  {project.status === "DRAFT" && (
+    <>
+
+      <button
+        onClick={handleAccept}
+        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+      >
+        Accept
+      </button>
+
+      <button
+        onClick={startNegotiation}
+        className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600"
+      >
+        Negotiation
+      </button>
+
+      <button
+        onClick={handleReject}
+        className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+      >
+        Reject
+      </button>
+
+    </>
+  )}
+
+  {/* ACCEPTED */}
+  {project.status === "ACCEPTED" && (
+    <button
+      onClick={moveToTesting}
+      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+    >
+      Move to Testing ↗
+    </button>
+  )}
+
+  {/* TESTING */}
+  {project.status === "TESTING" && (
+    <button
+      onClick={goLive}
+      className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+    >
+      Move to Live 🚀
+    </button>
+  )}
+
+</div>
+
+
 </div>
 <div className="border border-gray-200 rounded-xl p-6 bg-white">
   <div className="flex justify-between items-center mb-4">
