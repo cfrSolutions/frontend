@@ -572,20 +572,48 @@ const fetchProject = async () => {
     //             return 0;
     //     }
     // };
-    const getStep = () => {
+//     const getStep = () => {
+//   switch (project?.status) {
+//     case "DRAFT":
+//       return 0;
+//     case "NEGOTIATION":
+//       return 1;
+//     case "TESTING":
+//       return 2;
+//     case "LIVE":
+//       return 3;
+//     case "HOLD":
+//       return 4;
+//     case "COMPLETED":
+//       return 5;
+//     default:
+//       return 0;
+//   }
+// };
+const getStep = () => {
   switch (project?.status) {
+
     case "DRAFT":
       return 0;
+
     case "NEGOTIATION":
       return 1;
-    case "TESTING":
+
+    case "ACCEPTED":
       return 2;
-    case "LIVE":
+
+    case "TESTING":
       return 3;
-    case "HOLD":
+
+    case "LIVE":
       return 4;
-    case "COMPLETED":
+
+    case "HOLD":
       return 5;
+
+    case "COMPLETED":
+      return 6;
+
     default:
       return 0;
   }
@@ -842,7 +870,9 @@ const uploadFile = async () => {
 
   </div>
 </div>
-<div className="border border-gray-200 rounded-2xl bg-white mt-8">
+
+{project.status === "NEGOTIATION" &&(
+  <div className="border border-gray-200 rounded-2xl bg-white mt-8">
 
   <div className="px-6 py-5 border-b border-gray-200">
     <h3 className="font-semibold text-lg">
@@ -916,6 +946,46 @@ const uploadFile = async () => {
 
 </div>
 
+)}
+
+
+{project.status === "ACCEPTED" && (
+
+  <div className="border border-green-200 bg-green-50 rounded-2xl p-6 mt-8">
+
+    <h3 className="text-lg font-semibold text-green-800 mb-4">
+      Cost Accepted
+    </h3>
+
+    <div className="space-y-3 text-sm">
+
+      <div className="flex justify-between">
+        <span className="text-gray-600">
+          Final Agreed CPI
+        </span>
+
+        <span className="font-bold text-green-700">
+          ₹{project.finalOffer?.amount}
+        </span>
+      </div>
+
+      <div className="flex justify-between">
+        <span className="text-gray-600">
+          Accepted On
+        </span>
+
+        <span className="font-semibold">
+          {new Date(
+            project.finalOffer?.acceptedAt
+          ).toLocaleDateString()}
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
+)}
     {project?.status === "TESTING" && project?.redirects && (
       <div className="mt-8 border rounded-xl p-6 w-[500px]">
 
