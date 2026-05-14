@@ -1071,21 +1071,11 @@ const goLive = async () => {
         </span>
 
         <span className="font-bold text-green-700">
-          ₹{project.finalOffer?.amount}
+          ₹{project.budget}
         </span>
       </div>
 
-      <div className="flex justify-between">
-        <span className="text-gray-600">
-          Accepted On
-        </span>
-
-        <span className="font-semibold">
-          {new Date(
-            project.finalOffer?.acceptedAt
-          ).toLocaleDateString()}
-        </span>
-      </div>
+     
 
     </div>
 
