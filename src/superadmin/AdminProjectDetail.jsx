@@ -497,7 +497,19 @@ useEffect(() => {
 
   socket.on("receive_message", (data) => {
 
-    setMessages((prev) => [...prev, data]);
+     setMessages((prev) => {
+
+    const exists = prev.some(
+      (m) =>
+        m.message === data.message &&
+        m.sender === data.sender &&
+        m.proposedCpi === data.proposedCpi
+    );
+
+    if (exists) return prev;
+
+    return [...prev, data];
+  });
 
   });
 
@@ -523,7 +535,7 @@ const sendNegotiation = async () => {
 
   socket.emit("send_message", data);
 
-  // setMessages((prev) => [...prev, data]);
+  setMessages((prev) => [...prev, data]);
 
   setMessage("");
   setOffer("");
