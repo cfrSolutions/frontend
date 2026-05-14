@@ -137,7 +137,9 @@ if (path.includes("/live")) filter = "LIVE";
 if (path.includes("/hold")) filter = "HOLD";
 if (path.includes("/closed")) filter = "CLOSED";
 if (path.includes("/drafts")) filter = "DRAFT";
-
+if(path.includes("/negotiation")) filter = "NEGOTIATION";
+if (path.includes("/accepted")) filter = "ACCEPTED";
+if (path.includes("/testing")) filter = "TESTING";
   
 
   const filteredProjects =
@@ -193,6 +195,9 @@ if (path.includes("/drafts")) filter = "DRAFT";
   {filter === "DRAFT" && "Draft Projects"}
   {filter === "HOLD" && "Hold Projects"}
   {filter === "CLOSED" && "Closed Projects"}
+  {filter === "NEGOTIATION" && "Negotiation Projects"}
+{filter === "ACCEPTED" && "Accepted Projects"}
+{filter === "TESTING" && "Testing Projects"}
 </h2>
 
 {filteredProjects.length === 0 ? (

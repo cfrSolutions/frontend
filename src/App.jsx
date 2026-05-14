@@ -152,6 +152,7 @@ export default function App() {
   <Route path="hold" element={<BusinessDashboard />} />
   <Route path="closed" element={<BusinessDashboard />} />
   <Route path="drafts" element={<BusinessDashboard />} />
+  <Route path="negotiation" element={<BusinessDashboard />} />
   {/* <Route
   path="/business/project/:id/status"
   element={<ProjectStatus />}

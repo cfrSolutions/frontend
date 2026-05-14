@@ -525,8 +525,8 @@ const sendNegotiation = async () => {
   const data = {
     projectId: id,
     sender: "BUSINESS",
-    text: message,
-    offerAmount: offer,
+    message: message,
+  proposedCpi: offer,
   };
 
   await api.put(
@@ -900,12 +900,12 @@ const uploadFile = async () => {
           {msg.sender}
         </p>
 
-        <p>{msg.text}</p>
+        <p>{msg.message}</p>
 
-        {msg.offerAmount && (
+        {msg.proposedCpi  && (
 
           <p className="mt-2 font-bold">
-            Offer: ₹{msg.offerAmount}
+            Offer: ₹{msg.proposedCpi}
           </p>
 
         )}

@@ -476,6 +476,7 @@ export default function AdminProjectDetail() {
 const [messages, setMessages] = useState([]);
 const [message, setMessage] = useState("");
 const [offer, setOffer] = useState("");
+const [finalAmount, setFinalAmount] = useState("");
   // useEffect(() => {
   //   fetchProject();
   // }, [id]);
@@ -511,8 +512,8 @@ const sendNegotiation = async () => {
   const data = {
     projectId: id,
     sender: "ADMIN",
-    text: message,
-    offerAmount: offer,
+   message: message,
+  proposedCpi: offer,
   };
 
   await api.put(
@@ -527,7 +528,38 @@ const sendNegotiation = async () => {
   setMessage("");
   setOffer("");
 };
+const acceptNegotiation = async () => {
 
+  try {
+
+    await api.put(
+      `/admin/project/${id}/accept-negotiation`,
+      {
+        amount: finalAmount,
+      }
+    );
+
+    fetchProject();
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const rejectNegotiation = async () => {
+
+  try {
+
+    await api.put(
+      `/admin/project/${id}/reject`
+    );
+
+    fetchProject();
+
+  } catch (err) {
+    console.log(err);
+  }
+};
 const moveToTesting = async () => {
   await api.put(`/admin/project/${id}/move-testing`);
   fetchProject();
@@ -935,12 +967,12 @@ const goLive = async () => {
           {msg.sender}
         </p>
 
-        <p>{msg.text}</p>
+        <p>{msg.message}</p>
 
-        {msg.offerAmount && (
+        {msg.proposedCpi  && (
 
           <p className="mt-2 font-bold">
-            Offer: ₹{msg.offerAmount}
+            Offer: ₹{msg.proposedCpi}
           </p>
 
         )}
@@ -978,7 +1010,35 @@ const goLive = async () => {
     </button>
 
   </div>
+<div className="border-t border-gray-200 p-4">
 
+  <div className="flex gap-3">
+
+    <input
+      type="number"
+      placeholder="Final agreed amount"
+      value={finalAmount}
+      onChange={(e) => setFinalAmount(e.target.value)}
+      className="flex-1 border rounded-xl px-4 py-3"
+    />
+
+    <button
+      onClick={acceptNegotiation}
+      className="bg-green-600 text-white px-6 rounded-xl"
+    >
+      Accept Deal
+    </button>
+
+    <button
+      onClick={handleReject}
+      className="bg-red-600 text-white px-6 rounded-xl"
+    >
+      Reject
+    </button>
+
+  </div>
+
+</div>
 </div>
 
 )}
