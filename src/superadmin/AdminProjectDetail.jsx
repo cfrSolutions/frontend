@@ -468,11 +468,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../services/api";
+import socket from "../socket";
 
 export default function AdminProjectDetail() {
   const { id } = useParams();
   const [project, setProject] = useState(null);
-
+const [messages, setMessages] = useState([]);
+const [message, setMessage] = useState("");
+const [offer, setOffer] = useState("");
   // useEffect(() => {
   //   fetchProject();
   // }, [id]);
@@ -483,6 +486,48 @@ export default function AdminProjectDetail() {
   return () => clearInterval(interval);
 }, [id]);
 
+useEffect(() => {
+
+  socket.emit("join_project", id);
+
+}, [id]);
+
+useEffect(() => {
+
+  socket.on("receive_message", (data) => {
+
+    setMessages((prev) => [...prev, data]);
+
+  });
+
+  return () => {
+    socket.off("receive_message");
+  };
+
+}, []);
+
+const sendNegotiation = async () => {
+
+  const data = {
+    projectId: id,
+    sender: "ADMIN",
+    text: message,
+    offerAmount: offer,
+  };
+
+  await api.put(
+    `/admin/project/${id}/negotiate`,
+    data
+  );
+
+  socket.emit("send_message", data);
+
+  // setMessages((prev) => [...prev, data]);
+
+  setMessage("");
+  setOffer("");
+};
+
 const moveToTesting = async () => {
   await api.put(`/admin/project/${id}/move-testing`);
   fetchProject();
@@ -491,13 +536,14 @@ const moveToTesting = async () => {
   const fetchProject = async () => {
     const res = await api.get(`/admin/project/${id}`);
     setProject(res.data);
-    
+    setMessages(res.data.negotiations || []);
   };
  
   if (!project) return <p>Loading...</p>;
 
   const steps = [
     "Project Created",
+    "Negotiation",
     "Cost Accepted",
     "Testing Setup",
     "Live",
@@ -524,6 +570,8 @@ const moveToTesting = async () => {
     switch (project.status) {
       case "DRAFT":
         return 0;
+      case "NEGOTIATION":
+        return 1;
       case "TESTING":
         return 2;
       case "LIVE":
@@ -728,7 +776,79 @@ const goLive = async () => {
 </div>
 
 
+<div className="border border-gray-200 rounded-2xl bg-white mt-8">
 
+  <div className="px-6 py-5 border-b border-gray-200">
+    <h3 className="font-semibold text-lg">
+      Negotiation Chat
+    </h3>
+  </div>
+
+  {/* MESSAGES */}
+  <div className="p-6 space-y-4 max-h-[400px] overflow-y-auto">
+
+    {messages.map((msg, i) => (
+
+      <div
+        key={i}
+        className={`max-w-[70%] p-4 rounded-2xl
+
+        ${
+          msg.sender === "ADMIN"
+            ? "bg-blue-600 text-white ml-auto"
+            : "bg-gray-100 text-gray-800"
+        }`}
+      >
+
+        <p className="text-xs font-semibold mb-1">
+          {msg.sender}
+        </p>
+
+        <p>{msg.text}</p>
+
+        {msg.offerAmount && (
+
+          <p className="mt-2 font-bold">
+            Offer: ₹{msg.offerAmount}
+          </p>
+
+        )}
+
+      </div>
+
+    ))}
+
+  </div>
+
+  {/* INPUT */}
+  <div className="border-t border-gray-200 p-4 flex gap-3">
+
+    <input
+      type="text"
+      placeholder="Type message..."
+      value={message}
+      onChange={(e) => setMessage(e.target.value)}
+      className="flex-1 border rounded-xl px-4 py-3"
+    />
+
+    <input
+      type="number"
+      placeholder="Offer"
+      value={offer}
+      onChange={(e) => setOffer(e.target.value)}
+      className="w-32 border rounded-xl px-4 py-3"
+    />
+
+    <button
+      onClick={sendNegotiation}
+      className="bg-blue-600 text-white px-6 rounded-xl"
+    >
+      Send
+    </button>
+
+  </div>
+
+</div>
 
 
 {/* SURVEY LINKS */}

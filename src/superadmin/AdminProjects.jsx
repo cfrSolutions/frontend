@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function AdminProjects() {
   const [projects, setProjects] = useState([]);
+  const [showChat, setShowChat] = useState(false);
 const navigate = useNavigate();
   useEffect(() => {
     fetchProjects();
@@ -16,6 +17,9 @@ const navigate = useNavigate();
     });
     setProjects(res.data);
   };
+  const openNegotiation = () => {
+  setShowChat(true);
+};
 
   const handleAccept = async (id) => {
     try {
@@ -76,6 +80,12 @@ const navigate = useNavigate();
                   >
                     Reject
                   </button>
+                  <button
+  onClick={openNegotiation}
+  className="bg-yellow-500 text-white px-4 py-2 rounded-lg"
+>
+  Start Negotiation
+</button>
                 </>
               )}
 
