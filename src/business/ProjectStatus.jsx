@@ -990,7 +990,31 @@ const uploadFile = async () => {
 )}
     {project?.status === "TESTING" && project?.redirects && (
       
+      
       <div className="mt-8 border rounded-xl p-6 w-[500px]">
+
+        <h3 className="font-semibold mb-4">
+          Redirect Links
+        </h3>
+         
+        <div className="space-y-3">
+
+          <LinkBox
+            label="Complete"
+            url={`${base}/redirect/c?tk=${project.redirects.complete?.token}`}
+          />
+
+          <LinkBox
+            label="Disqualified"
+            url={`${base}/redirect/dq?tk=${project.redirects.disqualified?.token}`}
+          />
+
+          <LinkBox
+            label="Quota Full"
+            url={`${base}/redirect/qf?tk=${project.redirects.quotaFull?.token}`}
+          />
+
+        </div>
 <div className="mt-10 border border-gray-300 p-6 rounded-xl w-[500px]">
 
   <h3 className="font-semibold mb-4">
@@ -1029,29 +1053,6 @@ const uploadFile = async () => {
   </div>
 
 </div>
-        <h3 className="font-semibold mb-4">
-          Redirect Links
-        </h3>
-         
-        <div className="space-y-3">
-
-          <LinkBox
-            label="Complete"
-            url={`${base}/redirect/c?tk=${project.redirects.complete?.token}`}
-          />
-
-          <LinkBox
-            label="Disqualified"
-            url={`${base}/redirect/dq?tk=${project.redirects.disqualified?.token}`}
-          />
-
-          <LinkBox
-            label="Quota Full"
-            url={`${base}/redirect/qf?tk=${project.redirects.quotaFull?.token}`}
-          />
-
-        </div>
-
       </div>
     )}
 
