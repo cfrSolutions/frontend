@@ -796,7 +796,7 @@ const goLive = async () => {
       onClick={goLive}
       className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
     >
-      Move to Live 🚀
+      Move to Live
     </button>
 )}
   </div> */}
@@ -1221,6 +1221,14 @@ const goLive = async () => {
       </div>
 
     </div>
+     {project.redirects?.start?.token && (
+      <ModernLinkBox
+        label="Start Link — share with supplier"
+        badge="SUPPLIER"
+        badgeColor="bg-gray-100 text-gray-700"
+        url={`${base}/redirect/start?tk=${project.redirects.start?.token}`}
+      />
+    )}
   </div>
 )}
     </div>
