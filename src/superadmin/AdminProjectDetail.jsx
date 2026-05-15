@@ -1083,7 +1083,48 @@ const goLive = async () => {
 
 )}
 
-{/* SURVEY LINKS */}
+
+
+
+
+
+
+{/* REDIRECT LINKS */}
+{project.status === "TESTING" && project.redirects && (
+  <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white mb-8">
+
+    <div className="px-6 py-5 border-b border-gray-200">
+      <h3 className="font-semibold text-lg">
+        Redirect Links
+      </h3>
+    </div>
+
+    <div className="p-6 space-y-6">
+
+      <ModernLinkBox
+        label="Complete Redirect"
+        badge="COMPLETE"
+        badgeColor="bg-green-100 text-green-700"
+        url={`${base}/redirect/c?tk=${project.redirects.complete?.token}`}
+      />
+
+      <ModernLinkBox
+        label="Disqualified Redirect"
+        badge="DQ"
+        badgeColor="bg-red-100 text-red-700"
+        url={`${base}/redirect/dq?tk=${project.redirects.disqualified?.token}`}
+      />
+
+      <ModernLinkBox
+        label="Quota Full Redirect"
+        badge="QF"
+        badgeColor="bg-yellow-100 text-yellow-700"
+        url={`${base}/redirect/qf?tk=${project.redirects.quotaFull?.token}`}
+      />
+
+    </div>
+
+    {/* SURVEY LINKS */}
 <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white mb-8">
 
   <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200">
@@ -1128,45 +1169,6 @@ const goLive = async () => {
 
   </div>
 </div>
-
-
-
-
-
-{/* REDIRECT LINKS */}
-{project.status === "TESTING" && project.redirects && (
-  <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white mb-8">
-
-    <div className="px-6 py-5 border-b border-gray-200">
-      <h3 className="font-semibold text-lg">
-        Redirect Links
-      </h3>
-    </div>
-
-    <div className="p-6 space-y-6">
-
-      <ModernLinkBox
-        label="Complete Redirect"
-        badge="COMPLETE"
-        badgeColor="bg-green-100 text-green-700"
-        url={`${base}/redirect/c?tk=${project.redirects.complete?.token}`}
-      />
-
-      <ModernLinkBox
-        label="Disqualified Redirect"
-        badge="DQ"
-        badgeColor="bg-red-100 text-red-700"
-        url={`${base}/redirect/dq?tk=${project.redirects.disqualified?.token}`}
-      />
-
-      <ModernLinkBox
-        label="Quota Full Redirect"
-        badge="QF"
-        badgeColor="bg-yellow-100 text-yellow-700"
-        url={`${base}/redirect/qf?tk=${project.redirects.quotaFull?.token}`}
-      />
-
-    </div>
   </div>
 )}
 

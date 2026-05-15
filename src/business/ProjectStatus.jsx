@@ -978,21 +978,10 @@ const uploadFile = async () => {
         </span>
 
         <span className="font-bold text-green-700">
-          ₹{project.finalOffer?.amount}
+          ₹{project.budget}
         </span>
       </div>
 
-      <div className="flex justify-between">
-        <span className="text-gray-600">
-          Accepted On
-        </span>
-
-        <span className="font-semibold">
-          {new Date(
-            project.finalOffer?.acceptedAt
-          ).toLocaleDateString()}
-        </span>
-      </div>
 
     </div>
 
@@ -1000,8 +989,46 @@ const uploadFile = async () => {
 
 )}
     {project?.status === "TESTING" && project?.redirects && (
+      
       <div className="mt-8 border rounded-xl p-6 w-[500px]">
+<div className="mt-10 border border-gray-300 p-6 rounded-xl w-[500px]">
 
+  <h3 className="font-semibold mb-4">
+    Insert your Survey Link Below
+  </h3>
+
+  <input
+    placeholder="Insert test link"
+    className="border border-gray-300 w-full rounded-xl mb-3 p-2"
+    value={test}
+    onChange={(e) => setTest(e.target.value)}
+  />
+
+  <input
+    placeholder="Insert live link"
+    className="border border-gray-300 w-full rounded-xl mb-3 p-2"
+    value={live}
+    onChange={(e) => setLive(e.target.value)}
+  />
+
+  <button
+    onClick={handleSave}
+    className="bg-blue-600 text-white px-4 py-2 rounded"
+  >
+    Submit
+  </button>
+
+  <div className="mt-4">
+    <input type="file" onChange={handleFile} />
+    <button
+  onClick={uploadFile}
+  className="bg-green-600 text-white px-4 py-2 rounded mt-2"
+>
+  Upload Keys
+</button>
+  </div>
+
+</div>
         <h3 className="font-semibold mb-4">
           Redirect Links
         </h3>
@@ -1071,44 +1098,7 @@ const uploadFile = async () => {
   </div>
 )}
 
-    <div className="mt-10 border border-gray-300 p-6 rounded-xl w-[500px]">
-
-  <h3 className="font-semibold mb-4">
-    Insert your Survey Link Below
-  </h3>
-
-  <input
-    placeholder="Insert test link"
-    className="border border-gray-300 w-full rounded-xl mb-3 p-2"
-    value={test}
-    onChange={(e) => setTest(e.target.value)}
-  />
-
-  <input
-    placeholder="Insert live link"
-    className="border border-gray-300 w-full rounded-xl mb-3 p-2"
-    value={live}
-    onChange={(e) => setLive(e.target.value)}
-  />
-
-  <button
-    onClick={handleSave}
-    className="bg-blue-600 text-white px-4 py-2 rounded"
-  >
-    Submit
-  </button>
-
-  <div className="mt-4">
-    <input type="file" onChange={handleFile} />
-    <button
-  onClick={uploadFile}
-  className="bg-green-600 text-white px-4 py-2 rounded mt-2"
->
-  Upload Keys
-</button>
-  </div>
-
-</div>
+    
 
   </div>
 );
