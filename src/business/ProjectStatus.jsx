@@ -990,7 +990,6 @@ const uploadFile = async () => {
 )}
     {project?.status === "TESTING" && project?.redirects && (
       
-      
       <div className="mt-8 border rounded-xl p-6 w-[500px]">
 
         <h3 className="font-semibold mb-4">
@@ -1015,7 +1014,11 @@ const uploadFile = async () => {
           />
 
         </div>
-<div className="mt-10 border border-gray-300 p-6 rounded-xl w-[500px]">
+
+      </div>
+    )}
+{project.status === "TESTING" && (
+  <div className="mt-10 border border-gray-300 p-6 rounded-xl w-[500px]">
 
   <h3 className="font-semibold mb-4">
     Insert your Survey Link Below
@@ -1053,9 +1056,7 @@ const uploadFile = async () => {
   </div>
 
 </div>
-      </div>
-    )}
-
+)}
 {project.status === "LIVE" && (
   <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white">
 
