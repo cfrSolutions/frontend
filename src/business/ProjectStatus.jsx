@@ -990,7 +990,7 @@ const uploadFile = async () => {
 )}
     {project?.status === "TESTING" && project?.redirects && (
       
-      <div className="mt-8 border rounded-xl p-6 w-[500px]">
+      <div className="mt-8 border border-gray-300 rounded-xl p-6 w-[500px]">
 
         <h3 className="font-semibold mb-4">
           Redirect Links
