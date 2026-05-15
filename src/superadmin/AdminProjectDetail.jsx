@@ -1181,8 +1181,30 @@ const goLive = async () => {
 </div>
 )}
 {project.status === "LIVE" && (
-  <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white">
-  {project.redirects?.start?.token && (
+  <div className="p-6 space-y-6">
+
+    {/* TEST LINK */}
+    {project.surveyLinks?.test && (
+      <ModernLinkBox
+        label="Test Link"
+        badge="TEST"
+        badgeColor="bg-blue-100 text-blue-700"
+        url={project.surveyLinks.test}
+      />
+    )}
+
+    {/* LIVE LINK */}
+    {project.surveyLinks?.live && (
+      <ModernLinkBox
+        label="Live Link"
+        badge="LIVE"
+        badgeColor="bg-green-100 text-green-700"
+        url={project.surveyLinks.live}
+      />
+    )}
+
+    {/* START LINK */}
+    {project.redirects?.start?.token && (
       <ModernLinkBox
         label="Start Link — share with supplier"
         badge="SUPPLIER"
@@ -1190,7 +1212,8 @@ const goLive = async () => {
         url={`${base}/redirect/start?tk=${project.redirects.start?.token}`}
       />
     )}
-    </div>
+
+  </div>
 )}
 {project.status === "LIVE" && (
   <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white">
