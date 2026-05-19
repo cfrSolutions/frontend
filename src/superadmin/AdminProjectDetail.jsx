@@ -1593,7 +1593,7 @@ const goLive = async () => {
   const base = import.meta.env.VITE_API_URL;
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-full overflow-x-hidden">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-full">
 
       {/* <h1 className="text-2xl font-bold mb-2">
         Project Detail
@@ -1742,7 +1742,7 @@ const goLive = async () => {
     {steps.map((step, i) => (
       <div key={i} className="flex-1 flex items-center">
         
-       
+        
         <div className="flex flex-col items-center flex-1">
           <div
             className={`w-10 h-10 flex items-center justify-center rounded-full border-2 text-sm font-semibold
@@ -1760,7 +1760,7 @@ const goLive = async () => {
           <p className="text-[11px] mt-2 text-center whitespace-nowrap">{step}</p>
         </div>
 
-        
+       
         {i !== steps.length - 1 && (
           <div
             className={`h-[2px] flex-1 mx-2 ${
@@ -1773,35 +1773,30 @@ const goLive = async () => {
   </div>
   </div>
 </div> */}
-
 <div className="border border-gray-200 rounded-xl p-4 sm:p-6 bg-white">
-  
+
   <div className="flex justify-between items-center mb-4">
     <h3 className="font-semibold text-lg">
       Project Lifecycle
     </h3>
 
-    <span className="text-sm text-gray-500 whitespace-nowrap">
+    <span className="text-sm text-gray-500">
       Step {activeStep + 1} of {steps.length}
     </span>
   </div>
 
-  {/* SCROLL AREA */}
-  <div className="overflow-x-auto pb-2">
+  <div className="w-full overflow-x-scroll">
     
-    <div className="min-w-[750px] flex items-start">
-      
+    <div className="flex items-center w-max min-w-[900px] pb-2">
+
       {steps.map((step, i) => (
-        <div
-          key={i}
-          className="flex items-center flex-1"
-        >
+        <div key={i} className="flex items-center">
 
           {/* STEP */}
-          <div className="flex flex-col items-center min-w-[90px]">
+          <div className="flex flex-col items-center w-[110px] shrink-0">
 
             <div
-              className={`w-10 h-10 flex items-center justify-center rounded-full border-2 text-sm font-semibold shrink-0
+              className={`w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-semibold
               ${
                 i < activeStep
                   ? "bg-blue-600 text-white border-blue-600"
@@ -1822,7 +1817,7 @@ const goLive = async () => {
           {/* LINE */}
           {i !== steps.length - 1 && (
             <div
-              className={`h-[2px] flex-1 min-w-[40px] mx-2
+              className={`w-16 h-[2px]
               ${
                 i < activeStep
                   ? "bg-blue-600"
