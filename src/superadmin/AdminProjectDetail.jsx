@@ -1729,7 +1729,7 @@ const goLive = async () => {
 
 
 </div>
-{/* <div className="border border-gray-200 rounded-xl p-6 bg-white">
+<div className="border border-gray-200 rounded-xl p-6 bg-white">
   <div className="flex justify-between items-center mb-4">
     <h3 className="font-semibold text-lg">Project Lifecycle</h3>
     <span className="text-sm text-gray-500">
@@ -1772,8 +1772,8 @@ const goLive = async () => {
     ))}
   </div>
   </div>
-</div> */}
-<div className="border border-gray-200 rounded-xl p-4 bg-white">
+</div>
+{/* <div className="border border-gray-200 rounded-xl p-4 bg-white">
 
   <div className="flex items-center justify-between mb-4">
     <h3 className="font-semibold text-lg">
@@ -1840,7 +1840,7 @@ const goLive = async () => {
 
   </div>
 
-</div>
+</div> */}
       {/* SUMMARY CARD */}
 <div className="border border-gray-200 rounded-2xl overflow-hidden mb-8 bg-white">
 
