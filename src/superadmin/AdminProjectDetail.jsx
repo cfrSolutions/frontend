@@ -1729,7 +1729,7 @@ const goLive = async () => {
 
 
 </div>
-<div className="border border-gray-200 rounded-xl p-6 bg-white">
+{/* <div className="border border-gray-200 rounded-xl p-6 bg-white">
   <div className="flex justify-between items-center mb-4">
     <h3 className="font-semibold text-lg">Project Lifecycle</h3>
     <span className="text-sm text-gray-500">
@@ -1772,39 +1772,24 @@ const goLive = async () => {
     ))}
   </div>
   </div>
-</div>
-{/* <div className="border border-gray-200 rounded-xl p-4 bg-white">
-
-  <div className="flex items-center justify-between mb-4">
-    <h3 className="font-semibold text-lg">
-      Project Lifecycle
-    </h3>
-
-    <span className="text-sm text-gray-500 whitespace-nowrap">
+</div> */}
+<div className="border border-gray-200 rounded-xl p-6 bg-white">
+  <div className="flex justify-between items-center mb-4">
+    <h3 className="font-semibold text-lg">Project Lifecycle</h3>
+    <span className="text-sm text-gray-500">
       Step {activeStep + 1} of {steps.length}
     </span>
   </div>
 
-  <div
-    className="overflow-x-scroll touch-pan-x"
-    style={{
-      WebkitOverflowScrolling: "touch",
-       touchAction: "pan-x",
-    }}
-  >
-
-   <div className="flex items-center pb-2 w-[1200px] md:w-full">
-
-      {steps.map((step, i) => (
-        <div
-          key={i}
-          className="flex items-center shrink-0"
-        >
-
-          <div className="flex flex-col items-center min-w-[140px]">
-
-            <div
-              className={`w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-semibold
+  <div className="overflow-x-auto md:overflow-visible">
+  <div className="flex items-start min-w-[900px] md:min-w-0">
+    {steps.map((step, i) => (
+      <div key={i} className="flex-1 flex items-center">
+        
+        
+        <div className="flex flex-col items-center flex-1">
+          <div
+            className={`w-10 h-10 flex items-center justify-center rounded-full border-2 text-sm font-semibold
               ${
                 i < activeStep
                   ? "bg-blue-600 text-white border-blue-600"
@@ -1812,35 +1797,26 @@ const goLive = async () => {
                   ? "border-blue-600 text-blue-600"
                   : "border-gray-300 text-gray-400"
               }`}
-            >
-              {i < activeStep ? "✓" : i + 1}
-            </div>
-
-            <p className="text-xs mt-2 whitespace-nowrap">
-              {step}
-            </p>
-
+          >
+            {i < activeStep ? "✓" : i + 1}
           </div>
 
-          {i !== steps.length - 1 && (
-            <div
-              className={`w-16 h-[2px]
-              ${
-                i < activeStep
-                  ? "bg-blue-600"
-                  : "bg-gray-300"
-              }`}
-            />
-          )}
-
+          <p className="text-[11px] mt-2 text-center whitespace-nowrap">{step}</p>
         </div>
-      ))}
 
-    </div>
-
+        
+        {i !== steps.length - 1 && (
+          <div
+            className={`h-[2px] flex-1 mx-2 ${
+              i < activeStep ? "bg-blue-600" : "bg-gray-300"
+            }`}
+          />
+        )}
+      </div>
+    ))}
   </div>
-
-</div> */}
+  </div>
+</div>
       {/* SUMMARY CARD */}
 <div className="border border-gray-200 rounded-2xl overflow-hidden mb-8 bg-white">
 
