@@ -1781,14 +1781,14 @@ const goLive = async () => {
     </span>
   </div>
 
- <div className="overflow-x-auto pb-2">
-  <div className="flex items-start min-w-max">
+ <div className="overflow-x-auto w-full">
+  <div className="flex items-start w-max min-w-[900px] px-2">
     {steps.map((step, i) => (
       <div
         key={i}
-        className="flex items-center shrink-0 min-w-[120px]"
+        className="flex items-center shrink-0"
       >
-        <div className="flex flex-col items-center shrink-0">
+        <div className="flex flex-col items-center w-[110px] shrink-0">
           <div
             className={`w-10 h-10 flex items-center justify-center rounded-full border-2 text-sm font-semibold
               ${
@@ -1809,8 +1809,10 @@ const goLive = async () => {
 
         {i !== steps.length - 1 && (
           <div
-            className={`h-[2px] flex-1 mx-2 ${
-              i < activeStep ? "bg-blue-600" : "bg-gray-300"
+            className={`w-16 h-[2px] mx-2 ${
+              i < activeStep
+                ? "bg-blue-600"
+                : "bg-gray-300"
             }`}
           />
         )}
