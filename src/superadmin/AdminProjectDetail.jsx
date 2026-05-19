@@ -1789,10 +1789,11 @@ const goLive = async () => {
     className="overflow-x-scroll touch-pan-x"
     style={{
       WebkitOverflowScrolling: "touch",
+       touchAction: "pan-x",
     }}
   >
 
-    <div className="flex w-max min-w-max items-center pb-2">
+    <div className="flex items-center pb-2" style={{ width: "1200px" }}>
 
       {steps.map((step, i) => (
         <div
