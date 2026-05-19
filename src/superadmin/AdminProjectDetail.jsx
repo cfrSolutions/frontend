@@ -1773,27 +1773,27 @@ const goLive = async () => {
   </div>
   </div>
 </div> */}
-<div className="border border-gray-200 rounded-xl p-4 sm:p-6 bg-white">
+<div className="border border-gray-200 rounded-xl p-4 bg-white">
 
-  <div className="flex justify-between items-center mb-5">
+  <div className="flex items-center justify-between mb-4">
     <h3 className="font-semibold text-lg">
       Project Lifecycle
     </h3>
 
-    <span className="text-sm text-gray-500 whitespace-nowrap">
+    <span className="text-sm text-gray-500">
       Step {activeStep + 1} of {steps.length}
     </span>
   </div>
 
-  {/* MOBILE SCROLL */}
+  {/* HORIZONTAL SCROLL */}
   <div
-    className="overflow-x-auto no-scrollbar"
+    className="overflow-x-auto overflow-y-hidden"
     style={{
       WebkitOverflowScrolling: "touch",
     }}
   >
 
-    <div className="flex items-center min-w-[900px] pb-2">
+    <div className="inline-flex min-w-max items-center pb-2">
 
       {steps.map((step, i) => (
         <div
@@ -1802,10 +1802,10 @@ const goLive = async () => {
         >
 
           {/* STEP */}
-          <div className="w-[120px] flex flex-col items-center shrink-0">
+          <div className="flex flex-col items-center px-4 shrink-0">
 
             <div
-              className={`w-11 h-11 rounded-full border-2 flex items-center justify-center text-sm font-semibold
+              className={`w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-semibold
               ${
                 i < activeStep
                   ? "bg-blue-600 text-white border-blue-600"
@@ -1817,7 +1817,7 @@ const goLive = async () => {
               {i < activeStep ? "✓" : i + 1}
             </div>
 
-            <p className="text-xs mt-3 whitespace-nowrap text-center">
+            <p className="text-xs mt-2 whitespace-nowrap">
               {step}
             </p>
 
