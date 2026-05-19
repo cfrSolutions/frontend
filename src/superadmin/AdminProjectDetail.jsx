@@ -1793,7 +1793,7 @@ const goLive = async () => {
     }}
   >
 
-    <div className="flex items-center pb-2" style={{ width: "1200px" }}>
+   <div className="flex items-center pb-2 w-[1200px] md:w-full">
 
       {steps.map((step, i) => (
         <div
