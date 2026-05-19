@@ -1780,29 +1780,27 @@ const goLive = async () => {
       Project Lifecycle
     </h3>
 
-    <span className="text-sm text-gray-500">
+    <span className="text-sm text-gray-500 whitespace-nowrap">
       Step {activeStep + 1} of {steps.length}
     </span>
   </div>
 
-  {/* HORIZONTAL SCROLL */}
   <div
-    className="overflow-x-auto overflow-y-hidden"
+    className="overflow-x-scroll touch-pan-x"
     style={{
       WebkitOverflowScrolling: "touch",
     }}
   >
 
-    <div className="inline-flex min-w-max items-center pb-2">
+    <div className="flex w-max min-w-max items-center pb-2">
 
       {steps.map((step, i) => (
         <div
           key={i}
-          className="flex items-center"
+          className="flex items-center shrink-0"
         >
 
-          {/* STEP */}
-          <div className="flex flex-col items-center px-4 shrink-0">
+          <div className="flex flex-col items-center min-w-[140px]">
 
             <div
               className={`w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-semibold
@@ -1823,7 +1821,6 @@ const goLive = async () => {
 
           </div>
 
-          {/* LINE */}
           {i !== steps.length - 1 && (
             <div
               className={`w-16 h-[2px]
