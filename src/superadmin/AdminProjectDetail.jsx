@@ -1729,7 +1729,7 @@ const goLive = async () => {
 
 
 </div>
-<div className="border border-gray-200 rounded-xl p-6 bg-white">
+{/* <div className="border border-gray-200 rounded-xl p-6 bg-white">
   <div className="flex justify-between items-center mb-4">
     <h3 className="font-semibold text-lg">Project Lifecycle</h3>
     <span className="text-sm text-gray-500">
@@ -1742,7 +1742,7 @@ const goLive = async () => {
     {steps.map((step, i) => (
       <div key={i} className="flex-1 flex items-center">
         
-        {/* STEP */}
+        
         <div className="flex flex-col items-center flex-1">
           <div
             className={`w-10 h-10 flex items-center justify-center rounded-full border-2 text-sm font-semibold
@@ -1760,7 +1760,7 @@ const goLive = async () => {
           <p className="text-[11px] mt-2 text-center whitespace-nowrap">{step}</p>
         </div>
 
-        {/* LINE */}
+        
         {i !== steps.length - 1 && (
           <div
             className={`h-[2px] flex-1 mx-2 ${
@@ -1772,6 +1772,79 @@ const goLive = async () => {
     ))}
   </div>
   </div>
+</div> */}
+<div className="border border-gray-200 rounded-xl p-4 sm:p-6 bg-white overflow-hidden">
+
+  <div className="flex justify-between items-center mb-5">
+    <h3 className="font-semibold text-lg">
+      Project Lifecycle
+    </h3>
+
+    <span className="text-sm text-gray-500 whitespace-nowrap">
+      Step {activeStep + 1} of {steps.length}
+    </span>
+  </div>
+
+  {/* SCROLL CONTAINER */}
+  <div
+    className="
+      overflow-x-auto
+      overflow-y-hidden
+      scrollbar-hide
+      [-ms-overflow-style:none]
+      [scrollbar-width:none]
+    "
+  >
+    
+    <div className="flex items-center w-max min-w-max pr-6">
+
+      {steps.map((step, i) => (
+        <div
+          key={i}
+          className="flex items-center"
+        >
+
+          {/* STEP */}
+          <div className="flex flex-col items-center w-[120px] shrink-0">
+
+            <div
+              className={`w-11 h-11 rounded-full border-2 flex items-center justify-center text-sm font-semibold
+              ${
+                i < activeStep
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : i === activeStep
+                  ? "border-blue-600 text-blue-600"
+                  : "border-gray-300 text-gray-400"
+              }`}
+            >
+              {i < activeStep ? "✓" : i + 1}
+            </div>
+
+            <p className="text-xs mt-3 text-center whitespace-nowrap">
+              {step}
+            </p>
+
+          </div>
+
+          {/* LINE */}
+          {i !== steps.length - 1 && (
+            <div
+              className={`w-14 h-[2px]
+              ${
+                i < activeStep
+                  ? "bg-blue-600"
+                  : "bg-gray-300"
+              }`}
+            />
+          )}
+
+        </div>
+      ))}
+
+    </div>
+
+  </div>
+
 </div>
       {/* SUMMARY CARD */}
 <div className="border border-gray-200 rounded-2xl overflow-hidden mb-8 bg-white">
@@ -2165,26 +2238,26 @@ function ModernLinkBox({
         </span>
       </div>
 
-      <div className="flex flex-col md:flex-row border border-gray-200 rounded-xl overflow-hidden">
+      <div className="flex flex-col md:flex-row border border-gray-200 rounded-xl overflow-hidden w-full">
 
         <input
           value={url}
           readOnly
-          className="flex-1 px-4 py-3 outline-none text-sm min-w-0"
+          className="flex-1 px-4 py-3 outline-none text-sm min-w-0 w-full overflow-hidden text-ellipsis"
         />
 
         <a
           href={url}
           target="_blank"
           rel="noreferrer"
-          className="px-4 py-3 flex items-center justify-center border-t md:border-t-0 md:border-l border-gray-200 hover:bg-gray-50"
+          className="px-4 py-3 flex items-center justify-center border-t md:border-t-0 md:border-l border-gray-200 hover:bg-gray-50 shrink-0"
         >
           ↗
         </a>
 
         <button
           onClick={copyLink}
-          className="px-4 py-3 flex items-center justify-center border-t md:border-t-0 md:border-l border-gray-200 hover:bg-gray-50"
+         className="px-4 py-3 flex items-center justify-center border-t md:border-t-0 md:border-l border-gray-200 hover:bg-gray-50 shrink-0"
         >
           Copy
         </button>
