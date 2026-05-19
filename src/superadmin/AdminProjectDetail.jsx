@@ -1593,7 +1593,7 @@ const goLive = async () => {
   const base = import.meta.env.VITE_API_URL;
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-full">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-full overflow-x-hidden">
 
       {/* <h1 className="text-2xl font-bold mb-2">
         Project Detail
@@ -1737,13 +1737,13 @@ const goLive = async () => {
     </span>
   </div>
 
-  <div className="overflow-x-scroll">
-  <div className="flex items-center min-w-[900px]">
+  <div className="overflow-x-auto touch-pan-x w-full">
+  <div className="inline-flex items-start min-w-max pb-2">
     {steps.map((step, i) => (
-      <div key={i} className="flex items-center flex-1">
+      <div key={i} className="flex items-center">
         
         {/* STEP */}
-        <div className="flex flex-col items-center min-w-[120px]">
+        <div className="flex flex-col items-center min-w-[120px] px-2">
           <div
             className={`w-10 h-10 flex items-center justify-center rounded-full border-2 text-sm font-semibold
               ${
@@ -1757,13 +1757,13 @@ const goLive = async () => {
             {i < activeStep ? "✓" : i + 1}
           </div>
 
-          <p className="text-xs mt-2 text-center whitespace-nowrap">{step}</p>
+          <p className="text-[11px] mt-2 text-center whitespace-nowrap">{step}</p>
         </div>
 
         {/* LINE */}
         {i !== steps.length - 1 && (
           <div
-            className={`h-[2px] flex-1 mx-2 ${
+            className={`h-[2px] w-16 mx-2 flex-shrink-0 ${
               i < activeStep ? "bg-blue-600" : "bg-gray-300"
             }`}
           />
