@@ -1729,7 +1729,7 @@ const goLive = async () => {
 
 
 </div>
-<div className="border border-gray-200 rounded-xl p-6 bg-white">
+{/* <div className="border border-gray-200 rounded-xl p-6 bg-white">
   <div className="flex justify-between items-center mb-4">
     <h3 className="font-semibold text-lg">Project Lifecycle</h3>
     <span className="text-sm text-gray-500">
@@ -1742,7 +1742,7 @@ const goLive = async () => {
     {steps.map((step, i) => (
       <div key={i} className="flex-1 flex items-center">
         
-        {/* STEP */}
+       
         <div className="flex flex-col items-center flex-1">
           <div
             className={`w-10 h-10 flex items-center justify-center rounded-full border-2 text-sm font-semibold
@@ -1760,7 +1760,7 @@ const goLive = async () => {
           <p className="text-[11px] mt-2 text-center whitespace-nowrap">{step}</p>
         </div>
 
-        {/* LINE */}
+        
         {i !== steps.length - 1 && (
           <div
             className={`h-[2px] flex-1 mx-2 ${
@@ -1772,6 +1772,72 @@ const goLive = async () => {
     ))}
   </div>
   </div>
+</div> */}
+
+<div className="border border-gray-200 rounded-xl p-4 sm:p-6 bg-white">
+  
+  <div className="flex justify-between items-center mb-4">
+    <h3 className="font-semibold text-lg">
+      Project Lifecycle
+    </h3>
+
+    <span className="text-sm text-gray-500 whitespace-nowrap">
+      Step {activeStep + 1} of {steps.length}
+    </span>
+  </div>
+
+  {/* SCROLL AREA */}
+  <div className="overflow-x-auto pb-2">
+    
+    <div className="min-w-[750px] flex items-start">
+      
+      {steps.map((step, i) => (
+        <div
+          key={i}
+          className="flex items-center flex-1"
+        >
+
+          {/* STEP */}
+          <div className="flex flex-col items-center min-w-[90px]">
+
+            <div
+              className={`w-10 h-10 flex items-center justify-center rounded-full border-2 text-sm font-semibold shrink-0
+              ${
+                i < activeStep
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : i === activeStep
+                  ? "border-blue-600 text-blue-600"
+                  : "border-gray-300 text-gray-400"
+              }`}
+            >
+              {i < activeStep ? "✓" : i + 1}
+            </div>
+
+            <p className="text-[11px] mt-2 text-center whitespace-nowrap">
+              {step}
+            </p>
+
+          </div>
+
+          {/* LINE */}
+          {i !== steps.length - 1 && (
+            <div
+              className={`h-[2px] flex-1 min-w-[40px] mx-2
+              ${
+                i < activeStep
+                  ? "bg-blue-600"
+                  : "bg-gray-300"
+              }`}
+            />
+          )}
+
+        </div>
+      ))}
+
+    </div>
+
+  </div>
+
 </div>
       {/* SUMMARY CARD */}
 <div className="border border-gray-200 rounded-2xl overflow-hidden mb-8 bg-white">
