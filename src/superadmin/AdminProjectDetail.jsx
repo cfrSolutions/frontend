@@ -728,7 +728,7 @@ const goLive = async () => {
   const base = import.meta.env.VITE_API_URL;
 
   return (
-    <div className="p-8">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-full overflow-x-hidden">
 
       {/* <h1 className="text-2xl font-bold mb-2">
         Project Detail
@@ -753,7 +753,7 @@ const goLive = async () => {
       </div> */}
 
 
-<div className="flex items-center justify-between mb-6">
+<div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
   <div>
     <h1 className="text-2xl font-bold flex items-center gap-3">
       Project Detail
@@ -801,7 +801,7 @@ const goLive = async () => {
 )}
   </div> */}
 
-<div className="flex gap-3">
+<div className="flex flex-wrap gap-3 w-full lg:w-auto">
 
   {/* DRAFT ACTIONS */}
   {project.status === "DRAFT" && (
@@ -872,7 +872,8 @@ const goLive = async () => {
     </span>
   </div>
 
-  <div className="flex items-center justify-between">
+  <div className="overflow-x-auto">
+  <div className="flex items-start min-w-[700px]">
     {steps.map((step, i) => (
       <div key={i} className="flex-1 flex items-center">
         
@@ -891,7 +892,7 @@ const goLive = async () => {
             {i < activeStep ? "✓" : i + 1}
           </div>
 
-          <p className="text-xs mt-2 text-center">{step}</p>
+          <p className="text-[11px] mt-2 text-center whitespace-nowrap">{step}</p>
         </div>
 
         {/* LINE */}
@@ -905,6 +906,7 @@ const goLive = async () => {
       </div>
     ))}
   </div>
+  </div>
 </div>
       {/* SUMMARY CARD */}
 <div className="border border-gray-200 rounded-2xl overflow-hidden mb-8 bg-white">
@@ -915,29 +917,29 @@ const goLive = async () => {
 
   <div className="divide-y divide-gray-200 text-sm">
 
-    <div className="flex justify-between px-6 py-4">
+    <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
       <span className="text-gray-500">Sector</span>
       <span className="font-semibold">{project.sector}</span>
     </div>
 
-    <div className="flex justify-between px-6 py-4">
+    <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
       <span className="text-gray-500">Market</span>
       <span className="font-semibold">{project.market}</span>
     </div>
 
-    <div className="flex justify-between px-6 py-4">
+    <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
       <span className="text-gray-500">Age Range</span>
       <span className="font-semibold">
         {project.ageFrom} – {project.ageTo}
       </span>
     </div>
 
-    <div className="flex justify-between px-6 py-4">
+    <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
       <span className="text-gray-500">Target Completes</span>
       <span className="font-semibold">{project.targetCompletes}</span>
     </div>
 
-    <div className="flex justify-between px-6 py-4">
+    <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
       <span className="text-gray-500">Created</span>
       <span className="font-semibold">
         {new Date(project.createdAt).toLocaleDateString("en-US", {
@@ -948,7 +950,7 @@ const goLive = async () => {
       </span>
     </div>
 
-    <div className="flex justify-between px-6 py-4">
+    <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
       <span className="text-gray-500">Project ID</span>
       <span className="font-semibold">
         {project.projectId || project._id}
@@ -1005,7 +1007,7 @@ const goLive = async () => {
   </div>
 
   {/* INPUT */}
-  <div className="border-t border-gray-200 p-4 flex gap-3">
+  <div className="border-t border-gray-200 p-4 flex flex-col md:flex-row gap-3">
 
     <input
       type="text"
@@ -1020,12 +1022,12 @@ const goLive = async () => {
       placeholder="Offer"
       value={offer}
       onChange={(e) => setOffer(e.target.value)}
-      className="w-32 border rounded-xl px-4 py-3"
+      className="w-full md:w-32 border rounded-xl px-4 py-3"
     />
 
     <button
       onClick={sendNegotiation}
-      className="bg-blue-600 text-white px-6 rounded-xl"
+      className="bg-blue-600 text-white px-6 py-3 rounded-xl w-full md:w-auto"
     >
       Send
     </button>
@@ -1033,7 +1035,7 @@ const goLive = async () => {
   </div>
 <div className="border-t border-gray-200 p-4">
 
-  <div className="flex gap-3">
+  <div className="flex flex-wrap gap-3 w-full lg:w-auto">
 
     <input
       type="number"
@@ -1226,28 +1228,28 @@ const goLive = async () => {
 
     <div className="divide-y divide-gray-200 text-sm">
 
-      <div className="flex justify-between px-6 py-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
         <span className="text-gray-500">Total Responses</span>
         <span className="font-semibold">
           {project.totalResponses}
         </span>
       </div>
 
-      <div className="flex justify-between px-6 py-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
         <span className="text-gray-500">Completes</span>
         <span className="font-semibold">
           {project.completes}
         </span>
       </div>
 
-      <div className="flex justify-between px-6 py-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
         <span className="text-gray-500">Disqualified</span>
         <span className="font-semibold">
           {project.disqualified}
         </span>
       </div>
 
-      <div className="flex justify-between px-6 py-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
         <span className="text-gray-500">Quota Full</span>
         <span className="font-semibold">
           {project.quotaFull}
@@ -1298,26 +1300,26 @@ function ModernLinkBox({
         </span>
       </div>
 
-      <div className="flex border border-gray-200 rounded-xl overflow-hidden">
+      <div className="flex flex-col md:flex-row border border-gray-200 rounded-xl overflow-hidden">
 
         <input
           value={url}
           readOnly
-          className="flex-1 px-4 py-3 outline-none text-sm"
+          className="flex-1 px-4 py-3 outline-none text-sm min-w-0"
         />
 
         <a
           href={url}
           target="_blank"
           rel="noreferrer"
-          className="px-4 flex items-center border-l border-gray-200 hover:bg-gray-50"
+          className="px-4 py-3 flex items-center justify-center border-t md:border-t-0 md:border-l border-gray-200 hover:bg-gray-50"
         >
           ↗
         </a>
 
         <button
           onClick={copyLink}
-          className="px-4 border-l border-gray-200 hover:bg-gray-50"
+          className="px-4 py-3 flex items-center justify-center border-t md:border-t-0 md:border-l border-gray-200 hover:bg-gray-50"
         >
           Copy
         </button>
