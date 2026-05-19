@@ -1784,10 +1784,10 @@ const goLive = async () => {
   <div className="overflow-x-auto md:overflow-visible">
   <div className="flex items-start min-w-[900px] md:min-w-0">
     {steps.map((step, i) => (
-      <div key={i} className="flex-1 flex items-center">
+      <div key={i} className="flex items-center shrink-0">
         
         
-        <div className="flex flex-col items-center flex-1">
+        <div className="flex flex-col items-center min-w-[120px] shrink-0">
           <div
             className={`w-10 h-10 flex items-center justify-center rounded-full border-2 text-sm font-semibold
               ${
