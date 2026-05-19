@@ -856,7 +856,7 @@ const goLive = async () => {
       onClick={goLive}
       className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
     >
-      Move to Live 🚀
+      Move to Live ↗
     </button>
   )}
 
@@ -872,8 +872,8 @@ const goLive = async () => {
     </span>
   </div>
 
-  <div className="overflow-x-auto">
-  <div className="flex items-start min-w-[700px]">
+  <div className="overflow-x-auto pb-2 scrollbar-thin touch-pan-x">
+  <div className="flex items-start min-w-[980px] px-2">
     {steps.map((step, i) => (
       <div key={i} className="flex-1 flex items-center">
         
