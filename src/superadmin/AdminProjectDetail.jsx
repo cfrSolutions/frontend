@@ -728,7 +728,7 @@ const goLive = async () => {
   const base = import.meta.env.VITE_API_URL;
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-full overflow-x-hidden">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-full">
 
       {/* <h1 className="text-2xl font-bold mb-2">
         Project Detail
@@ -872,8 +872,8 @@ const goLive = async () => {
     </span>
   </div>
 
-  <div className="overflow-x-auto pb-2 scrollbar-thin touch-pan-x">
-  <div className="flex items-start min-w-[980px] px-2">
+  <div className="overflow-x-auto w-full pb-2">
+  <div className="flex items-start min-w-[900px] px-2">
     {steps.map((step, i) => (
       <div key={i} className="flex-1 flex items-center">
         
@@ -1287,44 +1287,103 @@ function ModernLinkBox({
   };
 
   return (
-    <div>
-      <div className="flex items-center gap-2 mb-2">
-        <p className="text-sm font-medium text-gray-700">
-          {label}
-        </p>
+  <div>
+    <div className="flex items-center gap-2 mb-2 flex-wrap">
+      <p className="text-sm font-medium text-gray-700">
+        {label}
+      </p>
 
-        <span
-          className={`text-[10px] px-2 py-1 rounded font-semibold ${badgeColor}`}
-        >
-          {badge}
-        </span>
+      <span
+        className={`text-[10px] px-2 py-1 rounded font-semibold ${badgeColor}`}
+      >
+        {badge}
+      </span>
+    </div>
+
+    <div className="border border-gray-200 rounded-xl overflow-hidden bg-white">
+
+      {/* URL */}
+      <div className="px-4 py-3 border-b border-gray-200 overflow-x-auto">
+        <p className="text-sm whitespace-nowrap">
+          {url}
+        </p>
       </div>
 
-      <div className="flex flex-col md:flex-row border border-gray-200 rounded-xl overflow-hidden">
-
-        <input
-          value={url}
-          readOnly
-          className="flex-1 px-4 py-3 outline-none text-sm min-w-0"
-        />
+      {/* ACTIONS */}
+      <div className="grid grid-cols-2">
 
         <a
           href={url}
           target="_blank"
           rel="noreferrer"
-          className="px-4 py-3 flex items-center justify-center border-t md:border-t-0 md:border-l border-gray-200 hover:bg-gray-50"
+          className="py-3 flex items-center justify-center hover:bg-gray-50 border-r border-gray-200"
         >
           ↗
         </a>
 
         <button
           onClick={copyLink}
-          className="px-4 py-3 flex items-center justify-center border-t md:border-t-0 md:border-l border-gray-200 hover:bg-gray-50"
+          className="py-3 hover:bg-gray-50"
         >
           Copy
         </button>
 
       </div>
+
     </div>
-  );
+  </div>
+);
 }
+
+// function ModernLinkBox({
+//   label,
+//   badge,
+//   badgeColor,
+//   url,
+// }) {
+//   const copyLink = () => {
+//     navigator.clipboard.writeText(url);
+//   };
+
+//   return (
+//     <div>
+//       <div className="flex items-center gap-2 mb-2">
+//         <p className="text-sm font-medium text-gray-700">
+//           {label}
+//         </p>
+
+//         <span
+//           className={`text-[10px] px-2 py-1 rounded font-semibold ${badgeColor}`}
+//         >
+//           {badge}
+//         </span>
+//       </div>
+
+//       <div className="flex flex-col md:flex-row border border-gray-200 rounded-xl overflow-hidden">
+
+//         <input
+//           value={url}
+//           readOnly
+//           className="flex-1 px-4 py-3 outline-none text-sm min-w-0"
+//         />
+
+//         <a
+//           href={url}
+//           target="_blank"
+//           rel="noreferrer"
+//           className="px-4 py-3 flex items-center justify-center border-t md:border-t-0 md:border-l border-gray-200 hover:bg-gray-50"
+//         >
+//           ↗
+//         </a>
+
+//         <button
+//           onClick={copyLink}
+//           className="px-4 py-3 flex items-center justify-center border-t md:border-t-0 md:border-l border-gray-200 hover:bg-gray-50"
+//         >
+//           Copy
+//         </button>
+
+//       </div>
+//     </div>
+//   );
+// }
