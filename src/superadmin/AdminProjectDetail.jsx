@@ -1773,7 +1773,7 @@ const goLive = async () => {
   </div>
   </div>
 </div> */}
-<div className="border border-gray-200 rounded-xl p-4 sm:p-6 bg-white overflow-hidden">
+<div className="border border-gray-200 rounded-xl p-4 sm:p-6 bg-white">
 
   <div className="flex justify-between items-center mb-5">
     <h3 className="font-semibold text-lg">
@@ -1785,18 +1785,15 @@ const goLive = async () => {
     </span>
   </div>
 
-  {/* SCROLL CONTAINER */}
+  {/* MOBILE SCROLL */}
   <div
-    className="
-      overflow-x-auto
-      overflow-y-hidden
-      scrollbar-hide
-      [-ms-overflow-style:none]
-      [scrollbar-width:none]
-    "
+    className="overflow-x-auto no-scrollbar"
+    style={{
+      WebkitOverflowScrolling: "touch",
+    }}
   >
-    
-    <div className="flex items-center w-max min-w-max pr-6">
+
+    <div className="flex items-center min-w-[900px] pb-2">
 
       {steps.map((step, i) => (
         <div
@@ -1805,7 +1802,7 @@ const goLive = async () => {
         >
 
           {/* STEP */}
-          <div className="flex flex-col items-center w-[120px] shrink-0">
+          <div className="w-[120px] flex flex-col items-center shrink-0">
 
             <div
               className={`w-11 h-11 rounded-full border-2 flex items-center justify-center text-sm font-semibold
@@ -1820,7 +1817,7 @@ const goLive = async () => {
               {i < activeStep ? "✓" : i + 1}
             </div>
 
-            <p className="text-xs mt-3 text-center whitespace-nowrap">
+            <p className="text-xs mt-3 whitespace-nowrap text-center">
               {step}
             </p>
 
@@ -1829,7 +1826,7 @@ const goLive = async () => {
           {/* LINE */}
           {i !== steps.length - 1 && (
             <div
-              className={`w-14 h-[2px]
+              className={`w-16 h-[2px]
               ${
                 i < activeStep
                   ? "bg-blue-600"
