@@ -1781,8 +1781,9 @@ const goLive = async () => {
     </span>
   </div>
 
-  <div className="overflow-x-auto md:overflow-visible">
-  <div className="flex items-start min-w-[900px] md:min-w-0">
+  <div className="overflow-x-auto md:overflow-visible"
+  style={{ WebkitOverflowScrolling: "touch" }}>
+  <div className="flex items-start w-max md:w-full min-w-[900px]">
     {steps.map((step, i) => (
       <div key={i} className="flex items-center shrink-0">
         
