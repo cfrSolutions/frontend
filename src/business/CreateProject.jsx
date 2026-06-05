@@ -228,6 +228,8 @@ export default function CreateProject() {
     timeline: 90,
     openEnded: 2,
     budget: 18,
+    cpi: 0, 
+    totalCost: 0,
     description: "",
     devices: {
       mobile: true,
@@ -250,11 +252,57 @@ export default function CreateProject() {
     });
   };
 
+useEffect(() => {
+
+  async function fetchCPI() {
+
+    try {
+
+      const res = await api.post(
+        "/projects/calculate-cpi",
+        {
+          country: form.market,
+          ir: Number(form.incidence),
+          loi: Number(form.loi),
+        }
+      );
+
+      const cpi = res.data.cpi;
+
+      setForm(prev => ({
+        ...prev,
+        cpi,
+        totalCost:
+          cpi * prev.targetCompletes,
+      }));
+
+    } catch(err){
+
+      console.log(err);
+
+    }
+  }
+
+  if(
+    form.market &&
+    form.incidence &&
+    form.loi
+  ){
+    fetchCPI();
+  }
+
+}, [
+  form.market,
+  form.incidence,
+  form.loi,
+  form.targetCompletes
+]);
+
   const navigate = useNavigate();
   const handleSubmit = async () => {
   try {
     const token = localStorage.getItem("token"); // 🔥 get token
-    //console.log("TOKEN 👉", token); 
+    
     const res = await api.post(
       "/projects/create",
       form,
