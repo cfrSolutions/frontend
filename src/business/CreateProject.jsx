@@ -202,6 +202,7 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 import {
   Briefcase,
   Globe,
@@ -256,40 +257,26 @@ useEffect(() => {
 
   async function fetchCPI() {
 
-    try {
+    const res = await api.post(
+      "/projects/calculate-cpi",
+      {
+        country: form.market,
+        ir: Number(form.incidence),
+        loi: Number(form.loi),
+      }
+    );
 
-      const res = await api.post(
-        "/projects/calculate-cpi",
-        {
-          country: form.market,
-          ir: Number(form.incidence),
-          loi: Number(form.loi),
-        }
-      );
+    const cpi = res.data.cpi;
 
-      const cpi = res.data.cpi;
-
-      setForm(prev => ({
-        ...prev,
-        cpi,
-        totalCost:
-          cpi * prev.targetCompletes,
-      }));
-
-    } catch(err){
-
-      console.log(err);
-
-    }
+    setForm(prev => ({
+      ...prev,
+      cpi,
+      totalCost:
+        cpi * prev.targetCompletes,
+    }));
   }
 
-  if(
-    form.market &&
-    form.incidence &&
-    form.loi
-  ){
-    fetchCPI();
-  }
+  fetchCPI();
 
 }, [
   form.market,
@@ -515,25 +502,72 @@ useEffect(() => {
       </div>
 
       {/* FOOTER */}
-      <div className="flex justify-between items-center mt-6">
-        <div>
-          <label>Budget ($)</label>
-          <input
-            type="number"
-            name="budget"
-            value={form.budget}
-            onChange={handleChange}
-            className="border rounded px-3 py-2 ml-3 w-24 mt-1"
-          />
-        </div>
+      <div className="flex justify-between items-center mt-8 border-t pt-6">
 
-        <button
-          onClick={handleSubmit}
-          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
-        >
-          Submit
-        </button>
-      </div>
+  <div className="flex gap-10">
+
+    <div>
+      <p className="text-sm text-gray-500">
+        CPI
+      </p>
+
+      <h2 className="text-3xl font-bold text-blue-600">
+        ${form.cpi || 0}
+      </h2>
+    </div>
+
+    <div>
+      <p className="text-sm text-gray-500">
+        Total Cost
+      </p>
+
+      <h2 className="text-3xl font-bold text-green-600">
+        ${form.totalCost || 0}
+      </h2>
+    </div>
+
+  </div>
+
+  <button
+    onClick={handleSubmit}
+    className="
+      bg-blue-600
+      hover:bg-blue-700
+      text-white
+      px-8
+      py-3
+      rounded-xl
+      font-medium
+    "
+  >
+    Launch Project
+  </button>
+
+</div>
+
+      <div className="flex gap-10 mt-8">
+
+  <div>
+    <p className="text-sm text-gray-500">
+      CPI
+    </p>
+
+    <h2 className="text-3xl font-bold text-blue-600">
+      ${form.cpi}
+    </h2>
+  </div>
+
+  <div>
+    <p className="text-sm text-gray-500">
+      Total Cost
+    </p>
+
+    <h2 className="text-3xl font-bold text-green-600">
+      ${form.totalCost}
+    </h2>
+  </div>
+
+</div>
     </div>
   );
 }
