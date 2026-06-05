@@ -68,6 +68,8 @@ function ThankYouPage() {
         <p className="text-sm text-green-700 leading-relaxed">
           Your survey entry has been securely recorded in our system.
         </p>
+
+        <a href="https://inputify.io/user/dashboard?st=com">click here</a>
       </div>
     </Layout>
   );
