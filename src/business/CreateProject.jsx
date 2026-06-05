@@ -200,6 +200,9 @@
 
 
 
+
+
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -214,23 +217,7 @@ import {
   Monitor,
   Tablet,
 } from "lucide-react";
-
 import api from "../services/api";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-
-import {
-  Briefcase,
-  Globe,
-  Users,
-  Clock,
-  BarChart3,
-  Calendar,
-  Smartphone,
-  Monitor,
-  Tablet,
-} from "lucide-react";
-
 
 const countries = [
   { code: "US", name: "United States" },
