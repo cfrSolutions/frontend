@@ -538,6 +538,8 @@ useEffect(() => {
                 name={name}
                 value={form[name]}
                 onChange={handleChange}
+                min={1}
+                max={name === "loi" ? 45 : 100}
                 className="border rounded-lg px-3 py-2 w-full"
               />
             </div>
