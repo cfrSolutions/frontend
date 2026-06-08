@@ -274,7 +274,6 @@ export default function CreateProject() {
     incidence: 90,
     timeline: 90,
     openEnded: 2,
-    budget: 18,
     cpi: 0, 
     totalCost: 0,
     description: "",

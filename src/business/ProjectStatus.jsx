@@ -978,7 +978,7 @@ const uploadFile = async () => {
         </span>
 
         <span className="font-bold text-green-700">
-          ₹{project.budget}
+          ₹{project.totalCost}
         </span>
       </div>
 
