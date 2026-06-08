@@ -860,7 +860,7 @@ const uploadFile = async () => {
 
     <div className="flex justify-between px-6 py-4">
       <span className="text-gray-500">Budget</span>
-      <span className="font-semibold">${project?.budget}</span>
+      <span className="font-semibold">${project?.totalCost}</span>
     </div>
 
     <div className="flex justify-between px-6 py-4">
