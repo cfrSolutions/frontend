@@ -206,6 +206,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatInTimeZone } from "date-fns-tz";
+import ct from "countries-and-timezones";
 import {
   Briefcase,
   Globe,
@@ -265,15 +266,15 @@ const countries = [
 export default function CreateProject() {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const timezones = Intl.supportedValuesOf("timeZone");
-  const countryTimezones = {
-  US: "America/New_York",
-  IN: "Asia/Kolkata",
-  GB: "Europe/London",
-  CA: "America/Toronto",
-  AU: "Australia/Sydney",
-  SG: "Asia/Singapore",
-  JP: "Asia/Tokyo",
-};
+//   const countryTimezones = {
+//   US: "America/Chicago",
+//   IN: "Asia/Kolkata",
+//   GB: "Europe/London",
+//   CA: "America/Toronto",
+//   AU: "Australia/Canberra",
+//   SG: "Asia/Singapore",
+//   JP: "Asia/Tokyo",
+// };
 
 
 
@@ -304,12 +305,26 @@ export default function CreateProject() {
     },
   });
 
+// useEffect(() => {
+//   if (form.market) {
+//     setForm(prev => ({
+//       ...prev,
+//       timezone:
+//         countryTimezones[form.market] || "UTC"
+//     }));
+//   }
+// }, [form.market]);
+
 useEffect(() => {
-  if (form.market) {
+  if (!form.market) return;
+
+  const zones =
+    ct.getCountry(form.market)?.timezones || [];
+
+  if (zones.length) {
     setForm(prev => ({
       ...prev,
-      timezone:
-        countryTimezones[form.market] || "UTC"
+      timezone: zones[0],
     }));
   }
 }, [form.market]);
@@ -319,7 +334,8 @@ useEffect(() => {
   };
 
 const marketTimezone =
-  countryTimezones[form.market] || "UTC";
+  ct.getCountry(form.market)?.timezones?.[0] ||
+  "UTC";
 
 let convertedStart = "";
 let convertedEnd = "";
@@ -403,6 +419,10 @@ useEffect(() => {
   form.loi,
   form.targetCompletes
 ]);
+const availableTimezones =
+  form.market
+    ? ct.getCountry(form.market)?.timezones || []
+    : [];
 
   const navigate = useNavigate();
   const handleSubmit = async () => {
@@ -748,6 +768,7 @@ useEffect(() => {
             TIMEZONE
           </label>
 
+
           <select
   value={form.timezone}
   onChange={(e) =>
@@ -757,7 +778,9 @@ useEffect(() => {
     })
   }
 >
-            {timezones.map((tz) => (
+            
+
+   {availableTimezones.map((tz) => (
     <option key={tz} value={tz}>
       {tz}
     </option>
