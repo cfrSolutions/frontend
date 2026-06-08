@@ -940,6 +940,21 @@ const goLive = async () => {
     </div>
 
     <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
+      <span className="text-gray-500">IR</span>
+      <span className="font-semibold">{project.incidence}</span>
+    </div>
+
+     <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
+      <span className="text-gray-500">LOI</span>
+      <span className="font-semibold">{project.loi}</span>
+    </div>
+
+    <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
+      <span className="text-gray-500">Total Cost</span>
+      <span className="font-semibold">{project.totalCost}</span>
+    </div>
+
+    <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
       <span className="text-gray-500">Created</span>
       <span className="font-semibold">
         {new Date(project.createdAt).toLocaleDateString("en-US", {

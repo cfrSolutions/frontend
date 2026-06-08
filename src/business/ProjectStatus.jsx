@@ -569,6 +569,7 @@ const fetchProject = async () => {
         "Live",
         "Hold",
         "Completed",
+        "Rejected",
     ];
 
     // const getStep = () =>{
@@ -679,6 +680,8 @@ const uploadFile = async () => {
           ? "Waiting for Approval"
           : project?.status === "HOLD"
           ? "Project On Hold"
+          : project?.status === "Rejected"
+          ? "project Rejected"
           : "Project Completed"}
 
       </h1>
