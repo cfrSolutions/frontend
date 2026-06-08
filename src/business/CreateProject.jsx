@@ -309,11 +309,11 @@ useEffect(() => {
     setForm(prev => ({
       ...prev,
       timezone:
-        countryTimezones[prev.market] ||
-        "UTC"
+        countryTimezones[form.market] || "UTC"
     }));
   }
 }, [form.market]);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -543,6 +543,7 @@ useEffect(() => {
                 { key: "tablet", icon: Tablet },
               ].map(({ key, icon: Icon }) => (
                 <button
+                 type="button"
                   key={key}
                   onClick={() => handleDevice(key)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm capitalize transition
