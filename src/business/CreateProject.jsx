@@ -303,26 +303,37 @@ useEffect(() => {
 
   async function fetchCPI() {
 
-    const res = await api.post(
-      "/projects/calculate-cpi",
-      {
-        country: form.market,
-        ir: Number(form.incidence),
-        loi: Number(form.loi),
-      }
-    );
+    try {
 
-    const cpi = res.data.cpi;
+      const res = await api.post(
+        "/projects/calculate-cpi",
+        {
+          country: form.market,
+          ir: Number(form.incidence),
+          loi: Number(form.loi),
+        }
+      );
 
-    setForm(prev => ({
-      ...prev,
-      cpi,
-      totalCost:
-        cpi * prev.targetCompletes,
-    }));
+      const cpi = res.data.cpi;
+
+      setForm(prev => ({
+        ...prev,
+        cpi,
+        totalCost: cpi * prev.targetCompletes,
+      }));
+
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  fetchCPI();
+  if (
+    form.market &&
+    form.incidence &&
+    form.loi
+  ) {
+    fetchCPI();
+  }
 
 }, [
   form.market,
@@ -601,7 +612,7 @@ useEffect(() => {
 
 </div>
 
-      <div className="flex gap-10 mt-8">
+      {/* <div className="flex gap-10 mt-8">
 
   <div>
     <p className="text-sm text-gray-500">
@@ -623,7 +634,7 @@ useEffect(() => {
     </h2>
   </div>
 
-</div>
+</div> */}
     </div>
   );
 }
