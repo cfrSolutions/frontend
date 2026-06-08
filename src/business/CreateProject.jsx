@@ -205,7 +205,7 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { formatInTimeZone } from "date-fns-tz";
 import {
   Briefcase,
   Globe,
@@ -264,6 +264,20 @@ const countries = [
 
 export default function CreateProject() {
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const timezones = Intl.supportedValuesOf("timeZone");
+  const countryTimezones = {
+  US: "America/New_York",
+  IN: "Asia/Kolkata",
+  GB: "Europe/London",
+  CA: "America/Toronto",
+  AU: "Australia/Sydney",
+  SG: "Asia/Singapore",
+  JP: "Asia/Tokyo",
+};
+
+
+
+
   const [form, setForm] = useState({
     sector: "",
     market: "",
@@ -290,9 +304,21 @@ export default function CreateProject() {
     },
   });
 
+useEffect(() => {
+  if (form.market) {
+    setForm(prev => ({
+      ...prev,
+      timezone:
+        countryTimezones[prev.market] ||
+        "UTC"
+    }));
+  }
+}, [form.market]);
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+const marketTimezone =
+  countryTimezones[form.market];
 
   const handleDevice = (type) => {
     setForm({
@@ -626,12 +652,12 @@ useEffect(() => {
 
      {showAdvanced && (
  <>
-  {showAdvanced && (
+  
     <div
       onClick={() => setShowAdvanced(false)}
       className="fixed inset-0 bg-black/30 z-40"
     />
-  )}
+ 
 
   <div
     className={`
@@ -698,9 +724,11 @@ useEffect(() => {
     })
   }
 >
-            <option>Asia/Kolkata</option>
-            <option>America/Chicago</option>
-            <option>Europe/London</option>
+            {timezones.map((tz) => (
+    <option key={tz} value={tz}>
+      {tz}
+    </option>
+  ))}
           </select>
         </div>
 
@@ -740,7 +768,31 @@ useEffect(() => {
   }
 />
           </div>
+<h3>Convert timezone</h3>
 
+<table className="w-full mt-4">
+  <thead>
+    <tr>
+      <th></th>
+      <th>{form.timezone}</th>
+      <th>{marketTimezone}</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>Start</td>
+      <td>{form.startTime}</td>
+      <td>Converted Time</td>
+    </tr>
+
+    <tr>
+      <td>End</td>
+      <td>{form.endTime}</td>
+      <td>Converted Time</td>
+    </tr>
+  </tbody>
+</table>
         </div>
 
         {/* Footer */}
