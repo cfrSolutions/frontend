@@ -317,28 +317,40 @@ useEffect(() => {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
 const marketTimezone =
   countryTimezones[form.market] || "UTC";
 
+let convertedStart = "";
+let convertedEnd = "";
+
+if (
+  form.startDate &&
+  form.startTime &&
+  form.endDate &&
+  form.endTime
+) {
   const startDateTime = new Date(
-  `${form.startDate}T${form.startTime}`
-);
+    `${form.startDate}T${form.startTime}`
+  );
 
-const convertedStart = formatInTimeZone(
-  startDateTime,
-  marketTimezone,
-  "MMM d, yyyy hh:mm a"
-);
+  const endDateTime = new Date(
+    `${form.endDate}T${form.endTime}`
+  );
 
-const endDateTime = new Date(
-  `${form.endDate}T${form.endTime}`
-);
+  convertedStart = formatInTimeZone(
+    startDateTime,
+    marketTimezone,
+    "MMM d, yyyy hh:mm a"
+  );
 
-const convertedEnd = formatInTimeZone(
-  endDateTime,
-  marketTimezone,
-  "MMM d, yyyy hh:mm a"
-);
+  convertedEnd = formatInTimeZone(
+    endDateTime,
+    marketTimezone,
+    "MMM d, yyyy hh:mm a"
+  );
+}
+
   const handleDevice = (type) => {
     setForm({
       ...form,
@@ -805,13 +817,13 @@ useEffect(() => {
     <tr>
       <td>Start</td>
       <td>{form.startTime}</td>
-      <td>{convertedStart}</td>
+      <td>{convertedStart || "-"}</td>
     </tr>
 
     <tr>
       <td>End</td>
       <td>{form.endTime}</td>
-      <td>{convertedEnd}</td>
+     <td>{convertedEnd || "-"}</td>
     </tr>
   </tbody>
 </table>
