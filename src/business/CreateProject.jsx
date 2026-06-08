@@ -263,6 +263,7 @@ const countries = [
 
 
 export default function CreateProject() {
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [form, setForm] = useState({
     sector: "",
     market: "",
@@ -276,6 +277,11 @@ export default function CreateProject() {
     openEnded: 2,
     cpi: 0, 
     totalCost: 0,
+    timezone: "Asia/Kolkata",
+  startTime: "09:00",
+  endTime: "18:00",
+  startDate: "",
+  endDate: "",
     description: "",
     devices: {
       mobile: true,
@@ -595,7 +601,12 @@ useEffect(() => {
     </div>
 
   </div>
-
+<button
+  onClick={() => setShowAdvanced(true)}
+  className="border border-purple-600 text-purple-600 px-4 py-2 rounded-lg"
+>
+  Advanced
+</button>
   <button
     onClick={handleSubmit}
     className="
@@ -613,29 +624,162 @@ useEffect(() => {
 
 </div>
 
-      {/* <div className="flex gap-10 mt-8">
+     {showAdvanced && (
+ <>
+  {showAdvanced && (
+    <div
+      onClick={() => setShowAdvanced(false)}
+      className="fixed inset-0 bg-black/30 z-40"
+    />
+  )}
 
-  <div>
-    <p className="text-sm text-gray-500">
-      CPI
-    </p>
+  <div
+    className={`
+      fixed top-0 right-0 h-screen w-[650px]
+      bg-white z-50 shadow-2xl overflow-y-auto
+      transition-transform duration-300 ease-in-out
+      ${showAdvanced ? "translate-x-0" : "translate-x-full"}
+    `}
+  >
+      <div className="p-8">
 
-    <h2 className="text-3xl font-bold text-blue-600">
-      ${form.cpi}
-    </h2>
-  </div>
+        <h2 className="text-4xl font-bold text-purple-800 mb-10">
+          Advanced Calendar
+        </h2>
 
-  <div>
-    <p className="text-sm text-gray-500">
-      Total Cost
-    </p>
+        {/* Date Range */}
+        <div className="mb-8">
+          <label className="block text-sm font-medium mb-2">
+            Start Date
+          </label>
 
-    <h2 className="text-3xl font-bold text-green-600">
-      ${form.totalCost}
-    </h2>
-  </div>
+          <input
+            type="date"
+            value={form.startDate}
+  onChange={(e) =>
+    setForm({
+      ...form,
+      startDate: e.target.value,
+    })
+  }
+            className="w-full border-b py-2"
+          />
+        </div>
 
-</div> */}
+          <div className="mb-8">
+          <label className="block text-sm font-medium mb-2">
+            End Date
+          </label>
+
+          <input
+  type="date"
+  value={form.endDate}
+  onChange={(e) =>
+    setForm({
+      ...form,
+      endDate: e.target.value,
+    })
+  }
+/>
+        </div>
+
+        {/* Timezone */}
+        <div className="mb-8">
+          <label className="block text-sm font-medium mb-2">
+            TIMEZONE
+          </label>
+
+          <select
+  value={form.timezone}
+  onChange={(e) =>
+    setForm({
+      ...form,
+      timezone: e.target.value,
+    })
+  }
+>
+            <option>Asia/Kolkata</option>
+            <option>America/Chicago</option>
+            <option>Europe/London</option>
+          </select>
+        </div>
+
+        {/* Start / End Time */}
+        <div className="grid grid-cols-2 gap-6 mb-8">
+
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              START TIME
+            </label>
+
+            <input
+  type="time"
+  value={form.startTime}
+  onChange={(e) =>
+    setForm({
+      ...form,
+      startTime: e.target.value,
+    })
+  }
+/>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              END TIME
+            </label>
+
+           <input
+  type="time"
+  value={form.endTime}
+  onChange={(e) =>
+    setForm({
+      ...form,
+      endTime: e.target.value,
+    })
+  }
+/>
+          </div>
+
+        </div>
+
+        {/* Footer */}
+        <div className="flex justify-end gap-4 mt-20">
+
+          <button
+          type="button"
+            onClick={() => setShowAdvanced(false)}
+            className="
+              border
+              border-purple-700
+              px-6
+              py-3
+              rounded
+            "
+          >
+            Cancel
+          </button>
+
+          <button
+          type="button"
+            onClick={() => setShowAdvanced(false)}
+            className="
+              bg-purple-700
+              text-white
+              px-6
+              py-3
+              rounded
+            "
+          >
+            Save
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+  </>
+)}
     </div>
   );
 }

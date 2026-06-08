@@ -951,7 +951,7 @@ const goLive = async () => {
 
     <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
       <span className="text-gray-500">Total Cost</span>
-      <span className="font-semibold">{project.totalCost}</span>
+      <span className="font-semibold">$ {project.totalCost}</span>
     </div>
 
     <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
@@ -965,12 +965,12 @@ const goLive = async () => {
       </span>
     </div>
 
-    <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
+    {/* <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
       <span className="text-gray-500">Project ID</span>
       <span className="font-semibold">
         {project.projectId || project._id}
       </span>
-    </div>
+    </div> */}
 
   </div>
 </div>
