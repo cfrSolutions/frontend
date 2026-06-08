@@ -318,8 +318,27 @@ useEffect(() => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 const marketTimezone =
-  countryTimezones[form.market];
+  countryTimezones[form.market] || "UTC";
 
+  const startDateTime = new Date(
+  `${form.startDate}T${form.startTime}`
+);
+
+const convertedStart = formatInTimeZone(
+  startDateTime,
+  marketTimezone,
+  "MMM d, yyyy hh:mm a"
+);
+
+const endDateTime = new Date(
+  `${form.endDate}T${form.endTime}`
+);
+
+const convertedEnd = formatInTimeZone(
+  endDateTime,
+  marketTimezone,
+  "MMM d, yyyy hh:mm a"
+);
   const handleDevice = (type) => {
     setForm({
       ...form,
@@ -628,6 +647,7 @@ useEffect(() => {
 
   </div>
 <button
+  type="button"
   onClick={() => setShowAdvanced(true)}
   className="border border-purple-600 text-purple-600 px-4 py-2 rounded-lg"
 >
@@ -768,6 +788,8 @@ useEffect(() => {
   }
 />
           </div>
+
+        </div>
 <h3>Convert timezone</h3>
 
 <table className="w-full mt-4">
@@ -783,18 +805,16 @@ useEffect(() => {
     <tr>
       <td>Start</td>
       <td>{form.startTime}</td>
-      <td>Converted Time</td>
+      <td>{convertedStart}</td>
     </tr>
 
     <tr>
       <td>End</td>
       <td>{form.endTime}</td>
-      <td>Converted Time</td>
+      <td>{convertedEnd}</td>
     </tr>
   </tbody>
 </table>
-        </div>
-
         {/* Footer */}
         <div className="flex justify-end gap-4 mt-20">
 
