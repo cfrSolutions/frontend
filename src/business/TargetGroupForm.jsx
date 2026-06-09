@@ -165,7 +165,11 @@ useEffect(() => {
       `/projects/${projectId}/target-group/${targetGroupId}`
     )
     .then((res) => {
-      setForm(res.data);
+      // setForm(res.data);
+      setForm(prev => ({
+  ...prev,
+  ...res.data
+}));
     });
 }, []);
 
@@ -234,26 +238,38 @@ useEffect(() => {
   const navigate = useNavigate();
   const handleSubmit = async () => {
   try {
-    const token = localStorage.getItem("token"); // 🔥 get token
-    
-    const res = await api.post(
-      `/projects/${projectId}/target-groups`,
-      form,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, // 🔥 SEND TOKEN
-        },
-      }
-    );
+    const token = localStorage.getItem("token");
 
-    // alert("✅ Project Created Successfully");
-     navigate(`/business/dashboard/project/${projectId}/status`, {
-  state: { project: res.data }
-});
+    let res;
+
+    if (targetGroupId) {
+      res = await api.put(
+        `/projects/${projectId}/target-group/${targetGroupId}`,
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } else {
+      res = await api.post(
+        `/projects/${projectId}/target-groups`,
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    }
+
+    navigate(
+      `/business/dashboard/project/${projectId}/status`
+    );
 
   } catch (err) {
     console.log(err);
-    alert("❌ Error creating project");
   }
 };
 
@@ -287,6 +303,7 @@ useEffect(() => {
               </label>
               <select
                 name="sector"
+                value={form.sector}
                 onChange={handleChange}
                 className="border rounded-lg px-3 py-2 w-full text-sm"
               >
@@ -353,6 +370,7 @@ useEffect(() => {
             </label>
             <select
               name="gender"
+              value={form.gender}
               onChange={handleChange}
               className="border rounded-lg px-3 py-2 w-full text-sm"
             >
@@ -380,7 +398,7 @@ useEffect(() => {
                   onClick={() => handleDevice(key)}
                   className={`flex items-center gap-2 px-4 py-3 rounded-xl border transition-all
                     ${
-                      form.devices[key]
+                      form.devices?.[key]
                         ? "bg-orange-50 border-orange-500 text-orange-600"
                         : "bg-white border-slate-200 text-slate-500"
                     }`}
@@ -454,6 +472,7 @@ useEffect(() => {
 
         <textarea
           name="description"
+          value={form.description}
           maxLength={1000}
           placeholder="Describe your target audience, key characteristics, behaviors..."
           onChange={handleChange}
@@ -461,7 +480,7 @@ useEffect(() => {
         />
 
         <p className="text-right text-xs text-gray-400">
-          {form.description.length}/1000
+         {form.description?.length || 0}/1000
         </p>
       </div>
 
@@ -564,6 +583,7 @@ sm:mb-10">
 
           <input
             type="date"
+              
              className="
   w-full
   rounded-xl
@@ -590,6 +610,7 @@ sm:mb-10">
 
           <input
   type="date"
+   
    className="
   w-full
   rounded-xl
