@@ -40,6 +40,7 @@ import AdminProjects from "./superadmin/AdminProjects";
 import AdminProjectDetail from "./superadmin/AdminProjectDetail";
 import SurveyStatusPages from "./business/SurveyStatusPages";
 import CreateProjects from "./business/createProjects";
+import ProjectDetail from "./business/ProjectDetail";
 export default function App() {
   return (
     <BrowserRouter>
@@ -148,7 +149,15 @@ export default function App() {
 <Route path="/business/dashboard" element={<BusinessLayout />}>
   <Route index element={<BusinessDashboard />} />
   {/* <Route path="projects" element={<CreateProject />} /> */}
-   <Route path="projects" element={<CreateProjects />} />
+  <Route path="projects" element={<CreateProjects />} />
+  <Route
+  path="project/:id"
+  element={<ProjectDetail />}
+/>
+ <Route
+    path="project/:id/status"
+    element={<ProjectStatus />}
+  />
   <Route path="project/:id/status" element={<ProjectStatus />} />
   <Route path="live" element={<BusinessDashboard />} />
   <Route path="hold" element={<BusinessDashboard />} />
