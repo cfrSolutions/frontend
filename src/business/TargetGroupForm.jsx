@@ -235,7 +235,7 @@ useEffect(() => {
     );
 
     // alert("✅ Project Created Successfully");
-     navigate(`/business/dashboard/project/${res.data._id}/status`, {
+     navigate(`/business/dashboard/project/${projectId}/status`, {
   state: { project: res.data }
 });
 
