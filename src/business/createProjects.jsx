@@ -249,7 +249,7 @@ return(
               : "›"}
           </span>
 
-          <div>
+          {/* <div>
             <h3 className="font-bold text-xl text-purple-900">
               {project.name}
             </h3>
@@ -274,8 +274,37 @@ return(
 
             </div>
 
-          </div>
+          </div> */}
+<div>
+  <h3
+    onClick={(e) => {
+      e.stopPropagation();
 
+      navigate(
+        `/business/dashboard/project/${project._id}`
+      );
+    }}
+    className="
+    font-bold
+    text-xl
+    text-purple-900
+    cursor-pointer
+    hover:underline
+    "
+  >
+    {project.name}
+  </h3>
+
+  <div className="flex items-center gap-3 mt-1">
+    <span className="text-xs px-3 py-1 border rounded-full">
+      Inactive
+    </span>
+
+    <span className="text-slate-500 text-sm">
+      {project.surveyId}
+    </span>
+  </div>
+</div>
         </div>
 
         {/* LAST ACTIVITY */}
@@ -322,9 +351,9 @@ return(
         </div>
 
         {/* STATISTICS */}
-        <div className="text-2xl">
+        {/* <div className="text-2xl">
           📊
-        </div>
+        </div> */}
 
       </div>
 
