@@ -58,7 +58,7 @@ const countries = [
 ];
 
 
-export default function CreateProject() {
+export default function TargetGroupForm() {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const timezones = Intl.supportedValuesOf("timeZone");
   const [marketTimezone, setMarketTimezone] = useState("");
