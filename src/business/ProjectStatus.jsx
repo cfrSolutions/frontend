@@ -487,7 +487,7 @@ import socket from "../socket";
 
 export default function ProjectStatus(){
    const { id } = useParams();
-const [project, setProject] = useState(null);
+
 const base = import.meta.env.VITE_API_URL;
 const [test, setTest] = useState("");
 const [live, setLive] = useState("");
