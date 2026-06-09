@@ -65,9 +65,45 @@ const navigate = useNavigate();
 
       ) : (
 
+          <div className="mt-8 bg-white rounded-xl overflow-hidden">
+
+    <div className="grid grid-cols-8 px-6 py-4 border-b text-xs font-semibold uppercase">
+      <div>Target Group</div>
+      <div>Status</div>
+      <div>Progress</div>
+      <div>CPI</div>
+      <div>CR</div>
+      <div>IR</div>
+      <div>LOI</div>
+      <div>DOR</div>
+    </div>
+
+    {project.targetGroups.map((group) => (
+      <div
+        key={group._id}
+        className="grid grid-cols-8 px-6 py-5 border-b"
+      >
+        <div>{group.name}</div>
+
+        <div>{group.status}</div>
+
         <div>
-          Target groups table here
+          0 / {group.targetCompletes}
         </div>
+
+        <div>${group.cpi}</div>
+
+        <div>-</div>
+
+        <div>{group.incidence}%</div>
+
+        <div>{group.loi} min</div>
+
+        <div>-</div>
+      </div>
+    ))}
+
+  </div>
 
       )}
 
