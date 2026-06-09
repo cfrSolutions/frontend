@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 export default function ProjectDetail() {
- const navigation = useNavigate();
+const navigate = useNavigate();
   const { id } = useParams();
 
   const [project, setProject] =

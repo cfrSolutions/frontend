@@ -41,6 +41,7 @@ import AdminProjectDetail from "./superadmin/AdminProjectDetail";
 import SurveyStatusPages from "./business/SurveyStatusPages";
 import CreateProjects from "./business/createProjects";
 import ProjectDetail from "./business/ProjectDetail";
+import TargetGroupForm from "./business/TargetGroupForm";
 export default function App() {
   return (
     <BrowserRouter>
@@ -154,6 +155,12 @@ export default function App() {
   path="project/:id"
   element={<ProjectDetail />}
 />
+
+ <Route
+    path="project/:id/target-group/new"
+    element={<TargetGroupForm />}
+  />
+
  <Route
     path="project/:id/status"
     element={<ProjectStatus />}
