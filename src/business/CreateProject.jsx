@@ -1138,16 +1138,21 @@ useEffect(() => {
 };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow max-w-5xl mx-auto">
+    <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
 
       {/* HEADER */}
-      <h1 className="text-2xl font-bold mb-2">Create New Project</h1>
-      <p className="text-gray-500 mb-6">
-        Fill details to create your research project
-      </p>
+      <div className="mb-8">
+  <h1 className="text-3xl sm:text-4xl font-bold text-slate-900">
+    Create Project
+  </h1>
+
+  <p className="text-slate-500 mt-2">
+    Configure your research project and audience requirements.
+  </p>
+</div>
 
       {/* GRID */}
-      <div className="grid md:grid-cols-2 gap-6">
+     <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
 
         {/* LEFT */}
         <div className="space-y-4">
@@ -1253,11 +1258,11 @@ useEffect(() => {
                  type="button"
                   key={key}
                   onClick={() => handleDevice(key)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm capitalize transition
+                  className={`flex items-center gap-2 px-4 py-3 rounded-xl border transition-all
                     ${
                       form.devices[key]
-                        ? "bg-blue-50 border-blue-500 text-blue-600"
-                        : "border-gray-300"
+                        ? "bg-orange-50 border-orange-500 text-orange-600"
+                        : "bg-white border-slate-200 text-slate-500"
                     }`}
                 >
                   <Icon size={14} />
@@ -1343,46 +1348,56 @@ useEffect(() => {
       {/* FOOTER */}
       <div className="flex justify-between items-center mt-8 border-t pt-6">
 
-  <div className="flex gap-10">
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-    <div>
-      <p className="text-sm text-gray-500">
+    <div className="rounded-2xl bg-slate-50 p-6">
+      <p className="text-slate-500 text-sm">
         CPI
       </p>
 
-      <h2 className="text-3xl font-bold text-blue-600">
+      <h2 className="text-4xl font-bold text-slate-900 mt-2">
         ${form.cpi || 0}
       </h2>
     </div>
 
-    <div>
-      <p className="text-sm text-gray-500">
+    <div className="rounded-2xl bg-orange-50 p-6">
+      <p className="text-orange-700 text-sm">
         Total Cost
       </p>
 
-      <h2 className="text-3xl font-bold text-green-600">
+      <h2 className="text-4xl font-bold text-orange-600 mt-2">
         ${form.totalCost || 0}
       </h2>
     </div>
 
   </div>
+
+  
 <button
   type="button"
   onClick={() => setShowAdvanced(true)}
-  className="border border-purple-600 text-purple-600 px-4 py-2 rounded-lg"
+  className="h-12
+px-6
+rounded-xl
+border
+border-slate-300
+text-slate-700
+font-medium"
 >
   Advanced
 </button>
   <button
     onClick={handleSubmit}
     className="
-      bg-blue-600
-      hover:bg-blue-700
-      text-white
-      px-8
-      py-3
-      rounded-xl
-      font-medium
+     h-12
+px-8
+rounded-xl
+bg-orange-500
+hover:bg-orange-600
+text-white
+font-semibold
+shadow-lg
+shadow-orange-200
     "
   >
     Launch Project
@@ -1401,7 +1416,7 @@ useEffect(() => {
 
   <div
     className={`
-      fixed top-0 right-0 h-screen w-[650px]
+      fixed top-0 right-0 h-screen w-full sm:w-[650px] p-5 sm:p-8
       bg-white z-50 shadow-2xl overflow-y-auto
       transition-transform duration-300 ease-in-out
       ${showAdvanced ? "translate-x-0" : "translate-x-full"}
@@ -1409,7 +1424,7 @@ useEffect(() => {
   >
       <div className="p-8">
 
-        <h2 className="text-4xl font-bold text-purple-800 mb-10">
+        <h2 className="text-4xl font-bold text-slate-900 mb-10">
           Advanced Calendar
         </h2>
 
@@ -1522,7 +1537,19 @@ useEffect(() => {
     onChange={(e) =>
       setMarketTimezone(e.target.value)
     }
-    className="w-full border rounded-lg px-3 py-2"
+    className="w-full
+rounded-xl
+border
+border-slate-200
+bg-white
+px-4
+py-3
+text-sm
+focus:border-orange-500
+focus:ring-4
+focus:ring-orange-100
+outline-none
+transition"
   >
     {marketTimezones.length === 0 ? (
       <option value="">
