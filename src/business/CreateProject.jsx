@@ -1372,7 +1372,7 @@ useEffect(() => {
 
   </div>
 
-  
+<div className="flex flex-col sm:flex-row gap-3 mt-6">
 <button
   type="button"
   onClick={() => setShowAdvanced(true)}
@@ -1402,7 +1402,7 @@ shadow-orange-200
   >
     Launch Project
   </button>
-
+</div>
 </div>
 
      {showAdvanced && (
