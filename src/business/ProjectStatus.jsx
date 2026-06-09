@@ -635,7 +635,7 @@ const uploadFile = async () => {
   alert("Uploaded");
   fetchProject();
 };
-    const activeStep = getStep();
+    // const activeStep = getStep();
     if (!project) {
   return (
     <div className="p-8">
