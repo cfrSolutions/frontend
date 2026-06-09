@@ -63,6 +63,7 @@ export default function TargetGroupForm() {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const timezones = Intl.supportedValuesOf("timeZone");
   const [marketTimezone, setMarketTimezone] = useState("");
+  const { projectId, targetGroupId } = useParams();
   const { id: projectId } = useParams();
 //   const countryTimezones = {
 //   US: "America/Chicago",
@@ -156,6 +157,17 @@ if (
     );
 }
 
+useEffect(() => {
+  if (!targetGroupId) return;
+
+  api
+    .get(
+      `/projects/${projectId}/target-group/${targetGroupId}`
+    )
+    .then((res) => {
+      setForm(res.data);
+    });
+}, []);
 
 useEffect(() => {
   const zones =

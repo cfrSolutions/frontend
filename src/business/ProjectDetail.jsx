@@ -79,11 +79,37 @@ const navigate = useNavigate();
     </div>
 
     {project.targetGroups.map((group) => (
-      <div
-        key={group._id}
-        className="grid grid-cols-8 px-6 py-5 border-b"
-      >
-        <div>{group.name}</div>
+     <div
+  key={group._id}
+  onClick={() =>
+    navigate(
+      `/business/dashboard/project/${project._id}/target-group/${group._id}`
+    )
+  }
+  className="
+    grid
+    grid-cols-8
+    px-6
+    py-5
+    border-b
+    cursor-pointer
+    hover:bg-slate-50
+  "
+>
+        <div
+  onClick={() =>
+    navigate(
+      `/business/dashboard/project/${project._id}/target-group/${group._id}`
+    )
+  }
+  className="
+  cursor-pointer
+  text-purple-700
+  hover:underline
+  "
+>
+  {group.name}
+</div>
 
         <div>{group.status}</div>
 

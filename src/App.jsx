@@ -161,6 +161,15 @@ export default function App() {
     element={<TargetGroupForm />}
   />
 
+  <Route
+  path="project/:projectId/target-group/new"
+  element={<TargetGroupForm />}
+/>
+
+<Route
+  path="project/:projectId/target-group/:targetGroupId"
+  element={<TargetGroupForm />}
+/>
  <Route
     path="project/:id/status"
     element={<ProjectStatus />}
