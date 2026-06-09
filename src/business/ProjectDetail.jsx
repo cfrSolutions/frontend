@@ -1,9 +1,10 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 export default function ProjectDetail() {
-
+ const navigation = useNavigate();
   const { id } = useParams();
 
   const [project, setProject] =
@@ -44,6 +45,11 @@ export default function ProjectDetail() {
           </h2>
 
           <button
+           onClick={() =>
+    navigate(
+      `/business/dashboard/project/${project._id}/target-group/new`
+    )
+  }
             className="
             bg-purple-700
             text-white
