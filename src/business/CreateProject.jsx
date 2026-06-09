@@ -1416,15 +1416,23 @@ shadow-orange-200
 
   <div
     className={`
-      fixed top-0 right-0 h-screen w-full sm:w-[650px] p-5 sm:p-8
-      bg-white z-50 shadow-2xl overflow-y-auto
+     fixed top-0 right-0
+h-dvh
+w-full
+sm:max-w-[650px] p-5 sm:p-8
+      bg-white z-50 shadow-2xl overflow-y-auto overscroll-contain
       transition-transform duration-300 ease-in-out
       ${showAdvanced ? "translate-x-0" : "translate-x-full"}
     `}
   >
-      <div className="p-8">
+      <div>
 
-        <h2 className="text-4xl font-bold text-slate-900 mb-10">
+        <h2 className="text-2xl
+sm:text-4xl
+font-bold
+text-slate-900
+mb-6
+sm:mb-10">
           Advanced Calendar
         </h2>
 
@@ -1436,6 +1444,14 @@ shadow-orange-200
 
           <input
             type="date"
+             className="
+  w-full
+  rounded-xl
+  border
+  border-slate-200
+  px-4
+  py-3
+  "
             value={form.startDate}
   onChange={(e) =>
     setForm({
@@ -1454,6 +1470,14 @@ shadow-orange-200
 
           <input
   type="date"
+   className="
+  w-full
+  rounded-xl
+  border
+  border-slate-200
+  px-4
+  py-3
+  "
   value={form.endDate}
   onChange={(e) =>
     setForm({
@@ -1488,7 +1512,12 @@ shadow-orange-200
         </div>
 
         {/* Start / End Time */}
-        <div className="grid grid-cols-2 gap-6 mb-8">
+        <div className="grid
+grid-cols-1
+sm:grid-cols-2
+gap-4
+sm:gap-6
+mb-8">
 
           <div>
             <label className="block text-sm font-medium mb-2">
@@ -1497,6 +1526,14 @@ shadow-orange-200
 
             <input
   type="time"
+  className="
+  w-full
+  rounded-xl
+  border
+  border-slate-200
+  px-4
+  py-3
+  "
   value={form.startTime}
   onChange={(e) =>
     setForm({
@@ -1514,6 +1551,14 @@ shadow-orange-200
 
            <input
   type="time"
+  className="
+  w-full
+  rounded-xl
+  border
+  border-slate-200
+  px-4
+  py-3
+  "
   value={form.endTime}
   onChange={(e) =>
     setForm({
@@ -1527,7 +1572,7 @@ shadow-orange-200
         </div>
        
 
-<div className="mb-8">
+<div className="mb-6 sm:mb-8">
   <label className="block text-sm font-medium mb-2">
     MARKET TIMEZONE
   </label>
@@ -1571,8 +1616,16 @@ transition"
     Timezone used for the selected market country
   </p>
 </div>
-<h3>Convert timezone</h3>
+<h3 className="
+text-lg
+font-semibold
+text-slate-900
+mb-4
+">
+  Timezone Conversion
+</h3>
 
+<div className="overflow-x-auto mt-4">
 <table className="w-full mt-4">
   <thead>
     <tr>
@@ -1600,8 +1653,14 @@ transition"
     </tr>
   </tbody>
 </table>
+</div>
         {/* Footer */}
-        <div className="flex justify-end gap-4 mt-20">
+        <div className="flex
+  flex-col-reverse
+  sm:flex-row
+  justify-end
+  gap-3
+  mt-10">
 
           <button
           type="button"
