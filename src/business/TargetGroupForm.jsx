@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { formatInTimeZone, fromZonedTime } from "date-fns-tz";
 import ct from "countries-and-timezones";
 import {
@@ -62,7 +63,7 @@ export default function TargetGroupForm() {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const timezones = Intl.supportedValuesOf("timeZone");
   const [marketTimezone, setMarketTimezone] = useState("");
-  
+  const { id: projectId } = useParams();
 //   const countryTimezones = {
 //   US: "America/Chicago",
 //   IN: "Asia/Kolkata",
@@ -224,7 +225,7 @@ useEffect(() => {
     const token = localStorage.getItem("token"); // 🔥 get token
     
     const res = await api.post(
-      `/projects/${projectId}/target-group`,
+      `/projects/${projectId}/target-groups`,
       form,
       {
         headers: {
