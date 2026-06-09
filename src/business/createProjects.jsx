@@ -10,6 +10,7 @@ const [projectForm, setProjectForm] = useState({
   name: "",
   description: "",
 });
+
 const createProject = async () => {
   try {
     const token =
@@ -38,6 +39,17 @@ const createProject = async () => {
     console.log(err);
   }
 };
+
+const [projects, setProjects] = useState([]);
+
+const fetchProjects = async () => {
+  const res = await api.get("/projects");
+  setProjects(res.data);
+};
+
+useEffect(() => {
+  fetchProjects();
+}, []);
 return(
      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
         <button
@@ -172,6 +184,38 @@ return(
     </div>
   </>
 )}
+
+{projects.map((project) => (
+  <div key={project._id}>
+
+    <div
+      className="flex items-center gap-3 cursor-pointer"
+      onClick={() => toggleProject(project._id)}
+    >
+      <span>
+        {expanded === project._id ? "▼" : "▶"}
+      </span>
+
+      <h3>{project.name}</h3>
+    </div>
+
+    {expanded === project._id && (
+      <div className="ml-8 mt-4">
+
+        {project.targetGroups.map((group) => (
+          <div
+            key={group._id}
+            className="py-3 border-b"
+          >
+            {group.name}
+          </div>
+        ))}
+
+      </div>
+    )}
+
+  </div>
+))}
      </div>
 )
 }
