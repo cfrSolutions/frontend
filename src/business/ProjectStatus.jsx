@@ -495,11 +495,12 @@ const [file, setFile] = useState(null);
 const [messages, setMessages] = useState([]);
 const [message, setMessage] = useState("");
 const [offer, setOffer] = useState("");
+const [project, setProject] = useState(null);
 
 useEffect(() => {
   fetchProject();
 }, []);
-
+const group = project?.targetGroups?.[0];
 useEffect(() => {
 
   socket.emit("join_project", id);
@@ -561,16 +562,16 @@ const fetchProject = async () => {
   setTest(res.data?.surveyLinks?.test || "");
   setLive(res.data?.surveyLinks?.live || "");
 };
-    const steps = [
-        "Project Created",
-        "Negotiation",
-        "Cost Accepted",
-        "Testing Setup",
-        "Live",
-        "Hold",
-        "Completed",
-        "Rejected",
-    ];
+    // const steps = [
+    //     "Project Created",
+    //     "Negotiation",
+    //     "Cost Accepted",
+    //     "Testing Setup",
+    //     "Live",
+    //     "Hold",
+    //     "Completed",
+    //     "Rejected",
+    // ];
 
     // const getStep = () =>{
     //     switch(project?.status){
@@ -586,52 +587,35 @@ const fetchProject = async () => {
     //             return 0;
     //     }
     // };
-//     const getStep = () => {
+
+// const getStep = () => {
 //   switch (project?.status) {
+
 //     case "DRAFT":
 //       return 0;
+
 //     case "NEGOTIATION":
 //       return 1;
-//     case "TESTING":
+
+//     case "ACCEPTED":
 //       return 2;
-//     case "LIVE":
+
+//     case "TESTING":
 //       return 3;
-//     case "HOLD":
+
+//     case "LIVE":
 //       return 4;
-//     case "COMPLETED":
+
+//     case "HOLD":
 //       return 5;
+
+//     case "COMPLETED":
+//       return 6;
+
 //     default:
 //       return 0;
 //   }
 // };
-const getStep = () => {
-  switch (project?.status) {
-
-    case "DRAFT":
-      return 0;
-
-    case "NEGOTIATION":
-      return 1;
-
-    case "ACCEPTED":
-      return 2;
-
-    case "TESTING":
-      return 3;
-
-    case "LIVE":
-      return 4;
-
-    case "HOLD":
-      return 5;
-
-    case "COMPLETED":
-      return 6;
-
-    default:
-      return 0;
-  }
-};
 const handleSave = async () => {
   await api.put(`/projects/${id}/survey-links`, { test, live });
   alert("Saved");
@@ -670,7 +654,7 @@ const uploadFile = async () => {
   <div>
     <div className="flex items-center gap-3 mb-2">
 
-      <h1 className="text-3xl font-bold text-gray-900">
+      {/* <h1 className="text-3xl font-bold text-gray-900">
 
         {project?.status === "LIVE"
           ? "Project is Live"
@@ -684,7 +668,12 @@ const uploadFile = async () => {
           ? "project Rejected"
           : "Project Completed"}
 
-      </h1>
+      </h1> */}
+      
+      <h1 className="text-3xl font-bold text-gray-900">
+  {project.name}
+</h1>
+
 
       <span
         className={`text-sm px-3 py-1 rounded-full capitalize font-medium
@@ -705,9 +694,12 @@ const uploadFile = async () => {
 
     </div>
 
-    <p className="text-gray-500">
+    {/* <p className="text-gray-500">
       Your project has been successfully sent for review.
-    </p>
+    </p> */}
+    <p className="text-gray-500">
+  Project Details
+</p>
   </div>
 
 </div>
@@ -715,7 +707,7 @@ const uploadFile = async () => {
 
 
 {/* TIMELINE */}
-<div className="border border-gray-200 rounded-2xl p-8 bg-white mb-10">
+{/* <div className="border border-gray-200 rounded-2xl p-8 bg-white mb-10">
 
   <div className="flex justify-between items-center mb-8">
 
@@ -738,7 +730,7 @@ const uploadFile = async () => {
         className="flex items-center flex-1"
       >
 
-        {/* STEP */}
+        
         <div className="flex flex-col items-center flex-1">
 
           <div
@@ -771,7 +763,7 @@ const uploadFile = async () => {
 
         </div>
 
-        {/* LINE */}
+
         {i !== steps.length - 1 && (
 
           <div
@@ -792,7 +784,7 @@ const uploadFile = async () => {
 
   </div>
 
-</div>
+</div> */}
 
     {/* <div className="border border-gray-300 rounded-2xl p-6 w-[350px]">
       <h3 className="font-semibold mb-4">Summary</h3>
@@ -826,44 +818,44 @@ const uploadFile = async () => {
 
     <div className="flex justify-between px-6 py-4">
       <span className="text-gray-500">Sector</span>
-      <span className="font-semibold">{project?.sector}</span>
+      <span className="font-semibold">{group?.sector}</span>
     </div>
 
     <div className="flex justify-between px-6 py-4">
       <span className="text-gray-500">Market</span>
-      <span className="font-semibold">{project?.market}</span>
+      <span className="font-semibold">{group?.market}</span>
     </div>
 
     <div className="flex justify-between px-6 py-4">
       <span className="text-gray-500">Age Range</span>
       <span className="font-semibold">
-        {project.ageFrom} – {project?.ageTo}
+        {group.ageFrom} – {group?.ageTo}
       </span>
     </div>
 
     <div className="flex justify-between px-6 py-4">
       <span className="text-gray-500">Gender</span>
-      <span className="font-semibold">{project?.gender}</span>
+      <span className="font-semibold">{group?.gender}</span>
     </div>
 
     <div className="flex justify-between px-6 py-4">
       <span className="text-gray-500">Target Completes</span>
-      <span className="font-semibold">{project?.targetCompletes}</span>
+      <span className="font-semibold">{group?.targetCompletes}</span>
     </div>
 
     <div className="flex justify-between px-6 py-4">
       <span className="text-gray-500">Incidence</span>
-      <span className="font-semibold">{project?.incidence}%</span>
+      <span className="font-semibold">{group?.incidence}%</span>
     </div>
 
     <div className="flex justify-between px-6 py-4">
       <span className="text-gray-500">LOI</span>
-      <span className="font-semibold">{project?.loi} mins</span>
+      <span className="font-semibold">{group?.loi} mins</span>
     </div>
 
     <div className="flex justify-between px-6 py-4">
       <span className="text-gray-500">Budget</span>
-      <span className="font-semibold">${project?.totalCost}</span>
+      <span className="font-semibold">${group?.totalCost}</span>
     </div>
 
     <div className="flex justify-between px-6 py-4">
@@ -887,7 +879,7 @@ const uploadFile = async () => {
   </div>
 </div>
 
-{project.status === "NEGOTIATION" &&(
+{/* {project.status === "NEGOTIATION" &&(
   <div className="border border-gray-200 rounded-2xl bg-white mt-8">
 
   <div className="px-6 py-5 border-b border-gray-200">
@@ -896,7 +888,7 @@ const uploadFile = async () => {
     </h3>
   </div>
 
-  {/* MESSAGES */}
+ 
   <div className="p-6 space-y-4 max-h-[400px] overflow-y-auto">
 
     {messages.map((msg, i) => (
@@ -932,7 +924,7 @@ const uploadFile = async () => {
 
   </div>
 
-  {/* INPUT */}
+ 
   <div className="border-t border-gray-200 p-4 flex gap-3">
 
     <input
@@ -962,10 +954,10 @@ const uploadFile = async () => {
 
 </div>
 
-)}
+)} */}
 
 
-{project.status === "ACCEPTED" && (
+{/* {project.status === "ACCEPTED" && (
 
   <div className="border border-green-200 bg-green-50 rounded-2xl p-6 mt-8">
 
@@ -990,7 +982,8 @@ const uploadFile = async () => {
 
   </div>
 
-)}
+)} */}
+
     {project?.status === "TESTING" && project?.redirects && (
       
       <div className="mt-8 border border-gray-300 rounded-xl p-6 w-[500px]">
