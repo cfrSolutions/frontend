@@ -62,7 +62,7 @@ export default function CreateProject() {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const timezones = Intl.supportedValuesOf("timeZone");
   const [marketTimezone, setMarketTimezone] = useState("");
-  const navigation = useNavigate();
+  const navigate = useNavigate();
 //   const countryTimezones = {
 //   US: "America/Chicago",
 //   IN: "Asia/Kolkata",
