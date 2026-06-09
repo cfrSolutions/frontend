@@ -50,6 +50,16 @@ const fetchProjects = async () => {
 useEffect(() => {
   fetchProjects();
 }, []);
+const [expanded, setExpanded] = useState(null);
+
+const toggleProject = (projectId) => {
+  setExpanded(
+    expanded === projectId
+      ? null
+      : projectId
+  );
+};
+
 return(
      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
         <button
