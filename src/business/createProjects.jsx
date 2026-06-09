@@ -195,37 +195,254 @@ return(
   </>
 )}
 
-{projects.map((project) => (
-  <div key={project._id}>
+<div className="mt-10 bg-white rounded-xl overflow-hidden">
 
+  {/* HEADER */}
+  <div
+    className="
+    grid
+    grid-cols-5
+    px-6
+    py-4
+    text-xs
+    font-semibold
+    uppercase
+    text-slate-500
+    border-b
+    "
+  >
+    <div>Project</div>
+    <div>Last Activity</div>
+    <div>Completes</div>
+    <div>Prescreens</div>
+    <div>Statistics</div>
+  </div>
+
+  {projects.map((project) => (
     <div
-      className="flex items-center gap-3 cursor-pointer"
-      onClick={() => toggleProject(project._id)}
+      key={project._id}
+      className="border-b border-slate-200"
     >
-      <span>
-        {expanded === project._id ? "▼" : "▶"}
-      </span>
 
-      <h3>{project.name}</h3>
-    </div>
+      {/* PROJECT ROW */}
+      <div
+        onClick={() =>
+          toggleProject(project._id)
+        }
+        className="
+        grid
+        grid-cols-5
+        items-center
+        px-6
+        py-6
+        cursor-pointer
+        hover:bg-slate-50
+        "
+      >
 
-    {expanded === project._id && (
-      <div className="ml-8 mt-4">
+        {/* PROJECT */}
+        <div className="flex items-center gap-4">
 
-        {project.targetGroups.map((group) => (
-          <div
-            key={group._id}
-            className="py-3 border-b"
-          >
-            {group.name}
+          <span className="text-xl">
+            {expanded === project._id
+              ? "⌄"
+              : "›"}
+          </span>
+
+          <div>
+            <h3 className="font-bold text-xl text-purple-900">
+              {project.name}
+            </h3>
+
+            <div className="flex items-center gap-3 mt-1">
+
+              <span
+                className="
+                text-xs
+                px-3
+                py-1
+                border
+                rounded-full
+                "
+              >
+                Inactive
+              </span>
+
+              <span className="text-slate-500 text-sm">
+                {project.surveyId}
+              </span>
+
+            </div>
+
           </div>
-        ))}
+
+        </div>
+
+        {/* LAST ACTIVITY */}
+        <div className="text-slate-400">
+          —
+        </div>
+
+        {/* COMPLETES */}
+        <div>
+
+          <div className="h-2 bg-purple-100 rounded-full mb-2">
+            <div
+              className="h-2 bg-purple-700 rounded-full"
+              style={{
+                width: "0%",
+              }}
+            />
+          </div>
+
+          <div className="font-semibold">
+            {project.completes || 0}
+            /
+            {project.targetCompletes || 0}
+          </div>
+
+        </div>
+
+        {/* PRESCREENS */}
+        <div>
+
+          <div className="h-2 bg-purple-100 rounded-full mb-2">
+            <div
+              className="h-2 bg-purple-700 rounded-full"
+              style={{
+                width: "0%",
+              }}
+            />
+          </div>
+
+          <div className="font-semibold">
+            0 / 0
+          </div>
+
+        </div>
+
+        {/* STATISTICS */}
+        <div className="text-2xl">
+          📊
+        </div>
 
       </div>
-    )}
 
-  </div>
-))}
+      {/* TARGET GROUPS */}
+      {expanded === project._id && (
+
+        <div className="bg-slate-50 px-8 py-6">
+
+          <div
+            className="
+            grid
+            grid-cols-8
+            text-xs
+            uppercase
+            text-slate-500
+            pb-4
+            border-b
+            "
+          >
+            <div>Target Group</div>
+            <div>Status</div>
+            <div>Progress</div>
+            <div>CPI</div>
+            <div>CR</div>
+            <div>IR</div>
+            <div>LOI</div>
+            <div>DOR</div>
+          </div>
+
+          {project.targetGroups?.length > 0 ? (
+
+            project.targetGroups.map(
+              (group) => (
+
+                <div
+                  key={group._id}
+                  className="
+                  grid
+                  grid-cols-8
+                  py-5
+                  items-center
+                  border-b
+                  "
+                >
+
+                  <div>
+
+                    <div className="font-semibold">
+                      {group.name}
+                    </div>
+
+                    <div className="text-sm text-slate-500">
+                      {group._id?.slice(-6)}
+                    </div>
+
+                  </div>
+
+                  <div>
+
+                    <span
+                      className="
+                      px-3
+                      py-1
+                      border
+                      rounded-full
+                      text-xs
+                      "
+                    >
+                      {group.status ||
+                        "Draft"}
+                    </span>
+
+                  </div>
+
+                  <div>
+                    0 /
+                    {group.targetCompletes ||
+                      0}
+                  </div>
+
+                  <div>
+                    {group.cpi || "-"}
+                  </div>
+
+                  <div>-</div>
+
+                  <div>
+                    {group.incidence ||
+                      "-"}
+                  </div>
+
+                  <div>
+                    {group.loi || "-"}
+                  </div>
+
+                  <div>-</div>
+
+                </div>
+
+              )
+            )
+
+          ) : (
+
+            <div className="py-6 text-slate-500">
+              No target groups
+            </div>
+
+          )}
+
+        </div>
+
+      )}
+
+    </div>
+  ))}
+
+</div>
      </div>
 )
 }
