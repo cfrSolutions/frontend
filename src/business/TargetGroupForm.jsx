@@ -62,7 +62,7 @@ export default function TargetGroupForm() {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const timezones = Intl.supportedValuesOf("timeZone");
   const [marketTimezone, setMarketTimezone] = useState("");
-  const navigate = useNavigate();
+  
 //   const countryTimezones = {
 //   US: "America/Chicago",
 //   IN: "Asia/Kolkata",
