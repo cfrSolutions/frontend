@@ -391,6 +391,7 @@ const handleSubmit = async () => {
         `/projects/${projectId}/target-group/${targetGroupId}`,
         {
           ...form,
+          profiles: selectedProfiles,
           status: "LIVE",
         }
       );
@@ -448,6 +449,7 @@ const handleSaveDraft = async () => {
         `/projects/${projectId}/target-group/${targetGroupId}`,
         {
           ...form,
+          profiles: selectedProfiles,
           status: "DRAFT",
         },
         {
