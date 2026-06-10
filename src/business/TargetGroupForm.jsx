@@ -451,6 +451,8 @@ const handleSaveDraft = async () => {
 </select>
             </div>
           </div>
+          console.log("Market:", form.market);
+console.log("Languages:", langs);
 <select
   name="language"
   value={form.language}
