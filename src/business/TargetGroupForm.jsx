@@ -91,16 +91,8 @@ export default function TargetGroupForm() {
   const timezones = Intl.supportedValuesOf("timeZone");
   const [marketTimezone, setMarketTimezone] = useState("");
   const { projectId, targetGroupId } = useParams();
- 
-//   const countryTimezones = {
-//   US: "America/Chicago",
-//   IN: "Asia/Kolkata",
-//   GB: "Europe/London",
-//   CA: "America/Toronto",
-//   AU: "Australia/Canberra",
-//   SG: "Asia/Singapore",
-//   JP: "Asia/Tokyo",
-// };
+
+
 
   const [form, setForm] = useState({
     sector: "",
@@ -127,9 +119,14 @@ export default function TargetGroupForm() {
       desktop: true,
       tablet: true,
     },
+    containsPII: false,
   });
 
+ const [showProfiles, setShowProfiles] =
+  useState(false);
 
+const [selectedProfiles, setSelectedProfiles] =
+  useState([]);
 // const languages =
 //   countryLanguage.getCountryLanguages("IN");
 
@@ -146,22 +143,22 @@ const languages =
   getLanguagesByCountry(
     form.market
   );
-console.log(result);
+// console.log(result);
 
-useEffect(() => {
-  console.log("Market:", form.market);
+// useEffect(() => {
+//   console.log("Market:", form.market);
 
-  console.log(
-    countryLanguage.getCountryLanguages(
-      form.market
-    )
-  );
-}, [form.market]);
+//   console.log(
+//     countryLanguage.getCountryLanguages(
+//       form.market
+//     )
+//   );
+// }, [form.market]);
 
-console.log(
-  "Languages:",
-  languages
-);
+// console.log(
+//   "Languages:",
+//   languages
+// );
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -668,6 +665,26 @@ const handleSaveDraft = async () => {
         </p>
       </div>
 
+      <div className="mt-4">
+  <label className="flex items-center gap-3 cursor-pointer">
+    <input
+      type="checkbox"
+      checked={form.containsPII}
+      onChange={(e) =>
+        setForm({
+          ...form,
+          containsPII: e.target.checked,
+        })
+      }
+      className="w-4 h-4"
+    />
+
+    <span className="text-sm">
+      This survey collects personally identifiable information (PII)
+    </span>
+  </label>
+</div>
+
       {/* FOOTER */}
       <div className="flex justify-between items-center mt-8 border-t pt-6">
 
@@ -1036,6 +1053,79 @@ mb-4
       </div>
     </div>
   </>
+)}
+
+<div className="flex justify-between items-center">
+
+  <h2 className="text-2xl font-semibold">
+    Profiling
+  </h2>
+<div className="mt-4 space-y-2">
+
+  {selectedProfiles.map((profile) => (
+
+    <div
+      key={profile.id}
+      className="border p-3 rounded-lg"
+    >
+      {profile.question}
+    </div>
+
+  ))}
+
+</div>
+  <button
+    onClick={() =>
+      setShowProfiles(true)
+    }
+    className="
+    bg-purple-700
+    text-white
+    px-4
+    py-2
+    rounded
+    "
+  >
+    Add Profiling
+  </button>
+
+</div>
+ {showProfiles && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
+    <div className="bg-white p-6 rounded-xl w-[600px]">
+
+      <h2 className="text-xl font-bold mb-4">
+        Profile Library
+      </h2>
+
+      <button
+        onClick={() =>
+          setSelectedProfiles([
+            ...selectedProfiles,
+            {
+              id: 1,
+              question: "AGE"
+            }
+          ])
+        }
+        className="border px-4 py-2 rounded"
+      >
+        AGE
+      </button>
+
+      <button
+        onClick={() =>
+          setShowProfiles(false)
+        }
+        className="ml-4 bg-purple-700 text-white px-4 py-2 rounded"
+      >
+        Close
+      </button>
+
+    </div>
+
+  </div>
 )}
     </div>
   );
