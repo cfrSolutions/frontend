@@ -84,36 +84,36 @@ const countries = [
 ];
 
 
-const profileLibrary = [
-  {
-    id: 1,
-    category: "Demographic",
-    code: "AGE",
-    question: "What is your age?",
-    type: "range"
-  },
-  {
-    id: 2,
-    category: "Demographic",
-    code: "GENDER",
-    question: "Are you...?",
-    type: "single punch"
-  },
-  {
-    id: 3,
-    category: "Demographic",
-    code: "MARITAL_STATUS",
-    question: "What is your marital status?",
-    type: "single punch"
-  },
-  {
-    id: 4,
-    category: "Automotive",
-    code: "CAR_OWNER",
-    question: "Do you own a car?",
-    type: "single punch"
-  }
-];
+// const profileLibrary = [
+//   {
+//     id: 1,
+//     category: "Demographic",
+//     code: "AGE",
+//     question: "What is your age?",
+//     type: "range"
+//   },
+//   {
+//     id: 2,
+//     category: "Demographic",
+//     code: "GENDER",
+//     question: "Are you...?",
+//     type: "single punch"
+//   },
+//   {
+//     id: 3,
+//     category: "Demographic",
+//     code: "MARITAL_STATUS",
+//     question: "What is your marital status?",
+//     type: "single punch"
+//   },
+//   {
+//     id: 4,
+//     category: "Automotive",
+//     code: "CAR_OWNER",
+//     question: "Do you own a car?",
+//     type: "single punch"
+//   }
+// ];
 
 export default function TargetGroupForm() {
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -121,6 +121,8 @@ export default function TargetGroupForm() {
   const [marketTimezone, setMarketTimezone] = useState("");
   const { projectId, targetGroupId } = useParams();
   const [search, setSearch] = useState("");
+  const [profileLibrary, setProfileLibrary] =
+  useState([]);
   const filteredProfiles =
   profileLibrary.filter(profile =>
     profile.code
@@ -330,6 +332,14 @@ useEffect(() => {
   form.targetCompletes
 ]);
 
+useEffect(() => {
+  api
+    .get("/profiles")
+    .then((res) => {
+      setProfileLibrary(res.data);
+    })
+    .catch(console.error);
+}, []);
   const navigate = useNavigate();
 
 //   const handleSubmit = async () => {
@@ -1124,7 +1134,7 @@ mb-4
   {selectedProfiles.map(profile => (
 
     <div
-      key={profile.id}
+      key={profile._id}
       className="
       border
       rounded-xl
@@ -1162,13 +1172,13 @@ mb-4
   {profileLibrary.map((profile) => (
 
     <div
-      key={profile.id}
+      key={profile._id}
       onClick={() => {
         setSelectedProfiles(prev => {
 
-          const exists = prev.find(
-            p => p.id === profile.id
-          );
+         const exists = prev.find(
+  p => p._id === profile._id
+);
 
           if (exists) return prev;
 
