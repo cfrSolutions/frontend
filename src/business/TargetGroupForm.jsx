@@ -59,6 +59,33 @@ const countries = [
   { code: "ZA", name: "South Africa" },
 ];
 
+console.log("Market:", form.market);
+
+console.log(
+  countryLanguage.getCountryLanguages(
+    form.market
+  )
+);
+
+export const getLanguagesByCountry = (
+  countryCode
+) => {
+  const result =
+    countryLanguage.getCountryLanguages(
+      countryCode
+    );
+
+  if (
+    !result ||
+    !result.languages
+  ) {
+    return [];
+  }
+
+  return result.languages.map(
+    (lang) => lang.name
+  );
+};
 
 export default function TargetGroupForm() {
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -103,13 +130,15 @@ export default function TargetGroupForm() {
     },
   });
 
-const languages =
-  countryLanguage.getCountryLanguages("IN");
+// const languages =
+//   countryLanguage.getCountryLanguages("IN");
 
-  const langs =
-  countryLanguage.getCountryLanguages(
-    form.market
-  ) || [];
+//   const langs =
+//   countryLanguage.getCountryLanguages(
+//     form.market
+//   ) || [];
+
+const langs = getLanguagesByCountry(form.market);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -451,12 +480,11 @@ const handleSaveDraft = async () => {
 </select>
             </div>
           </div>
-          console.log("Market:", form.market);
-console.log("Languages:", langs);
+          
 <select
-  name="language"
   value={form.language}
   onChange={handleChange}
+  name="language"
 >
   <option value="">
     Select Language
@@ -464,10 +492,10 @@ console.log("Languages:", langs);
 
   {langs.map((lang) => (
     <option
-      key={lang.iso639_1}
-      value={lang.name}
+      key={lang}
+      value={lang}
     >
-      {lang.name}
+      {lang}
     </option>
   ))}
 </select>
