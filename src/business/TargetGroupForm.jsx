@@ -124,6 +124,16 @@ export default function TargetGroupForm() {
   const [expandedProfile, setExpandedProfile] = useState(null);
   const [profileLibrary, setProfileLibrary] =
   useState([]);
+  const [activeProfile, setActiveProfile] =
+  useState(null);
+const [profileCondition, setProfileCondition] =
+  useState({
+    min: "",
+    max: ""
+  });
+const [showProfileCondition,
+  setShowProfileCondition] =
+  useState(false);
   const filteredProfiles =
   profileLibrary.filter(profile =>
     profile.code
@@ -1235,17 +1245,12 @@ mb-4
     <div
       key={profile._id}
       onClick={() => {
-        setSelectedProfiles(prev => {
 
-         const exists = prev.find(
-  p => p._id === profile._id
-);
+  setActiveProfile(profile);
 
-          if (exists) return prev;
+  setShowProfileCondition(true);
 
-          return [...prev, profile];
-        });
-      }}
+}}
       className="
       border
       rounded-lg
@@ -1293,6 +1298,92 @@ mb-4
     </div>
 
   </div>
+)}
+
+{showProfileCondition && activeProfile && (
+
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
+    <div className="bg-white p-6 rounded-xl w-[500px]">
+
+      <h2 className="text-xl font-bold mb-4">
+        {activeProfile.code}
+      </h2>
+
+      <p className="text-gray-500 mb-6">
+        {activeProfile.question}
+      </p>
+
+      {activeProfile.answerType === "range" && (
+
+        <div className="space-y-4">
+
+         <input
+  type="number"
+  placeholder="Minimum"
+  value={profileCondition.min}
+  onChange={(e) =>
+    setProfileCondition({
+      ...profileCondition,
+      min: e.target.value
+    })
+  }
+/>
+
+<input
+  type="number"
+  placeholder="Maximum"
+  value={profileCondition.max}
+  onChange={(e) =>
+    setProfileCondition({
+      ...profileCondition,
+      max: e.target.value
+    })
+  }
+/>
+
+        </div>
+
+      )}
+<button
+  onClick={() => {
+
+    setSelectedProfiles(prev => [
+      ...prev,
+      {
+        ...activeProfile,
+        condition: {
+          min: profileCondition.min,
+          max: profileCondition.max
+        }
+      }
+    ]);
+
+    setShowProfileCondition(false);
+
+    setProfileCondition({
+      min: "",
+      max: ""
+    });
+
+  }}
+  className="bg-green-600 text-white px-4 py-2 rounded"
+>
+  Save
+</button>
+      <button
+        onClick={() =>
+          setShowProfileCondition(false)
+        }
+        className="mt-6 bg-purple-700 text-white px-4 py-2 rounded"
+      >
+        Close
+      </button>
+
+    </div>
+
+  </div>
+
 )}
     </div>
   );
