@@ -109,7 +109,12 @@ const languages =
   const langs =
   countryLanguage
     .getCountryLanguages(form.market)
-    ?.map(l => l.name[0]) || [];
+    ?.map((l) =>
+      Array.isArray(l.name)
+        ? l.name[0]
+        : l.name
+    )
+    .filter(Boolean) || [];
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
