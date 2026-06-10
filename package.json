@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^1.13.2",
     "countries-and-timezones": "^3.9.0",
+    "country-language": "^0.1.7",
     "country-list-with-dial-code-and-flag": "^5.1.1",
     "date-fns-tz": "^3.2.0",
     "dompurify": "^3.3.1",
