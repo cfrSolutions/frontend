@@ -16,7 +16,31 @@ import {
   Tablet,
 } from "lucide-react";
 import api from "../services/api";
+import langs from "langs";
 
+export const getLanguagesByCountry = (
+  countryCode
+) => {
+
+  const result =
+    countryLanguage.getCountryLanguages(
+      countryCode
+    );
+
+  if (!result) return [];
+
+  return result.map((lang) => {
+
+    const language =
+      langs.where(
+        "1",
+        lang.iso639_1
+      );
+
+    return language?.name;
+  });
+
+};
 const countries = [
   { code: "US", name: "United States" },
   { code: "CA", name: "Canada" },
@@ -60,25 +84,7 @@ const countries = [
 ];
 
 
-export const getLanguagesByCountry = (
-  countryCode
-) => {
-  const result =
-    countryLanguage.getCountryLanguages(
-      countryCode
-    );
 
-  if (
-    !result ||
-    !result.languages
-  ) {
-    return [];
-  }
-
-  return result.languages.map(
-    (lang) => lang.name
-  );
-};
 
 export default function TargetGroupForm() {
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -132,8 +138,15 @@ export default function TargetGroupForm() {
 //     form.market
 //   ) || [];
 
-const langs = getLanguagesByCountry(form.market);
-console.log("Market:", form.market);
+const result =
+  countryLanguage.getCountryLanguages(
+    form.market
+  );
+const languages =
+  getLanguagesByCountry(
+    form.market
+  );
+console.log(result);
 
 useEffect(() => {
   console.log("Market:", form.market);
@@ -145,7 +158,10 @@ useEffect(() => {
   );
 }, [form.market]);
 
-console.log("Languages:", langs);
+console.log(
+  "Languages:",
+  languages
+);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -492,12 +508,13 @@ const handleSaveDraft = async () => {
   value={form.language}
   onChange={handleChange}
   name="language"
+  className="border rounded-lg px-3 py-2 w-full text-sm"
 >
   <option value="">
-     Language
+    Select Language
   </option>
 
-  {langs.map((lang) => (
+  {languages.map((lang) => (
     <option
       key={lang}
       value={lang}
