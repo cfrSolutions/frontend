@@ -160,6 +160,7 @@ export default function TargetGroupForm() {
       tablet: true,
     },
     containsPII: false,
+    profiles: [],   
   });
 
  const [showProfiles, setShowProfiles] =
@@ -335,6 +336,7 @@ useEffect(() => {
   form.targetCompletes
 ]);
 
+
 useEffect(() => {
   api
     .get("/profiles")
@@ -386,7 +388,13 @@ const handleSubmit = async () => {
   try {
 
     if (targetGroupId) {
+console.log("SAVING PROFILES", selectedProfiles);
 
+console.log({
+  ...form,
+  profiles: selectedProfiles,
+  status: "DRAFT",
+});
       await api.put(
         `/projects/${projectId}/target-group/${targetGroupId}`,
         {
@@ -486,6 +494,15 @@ const handleSaveDraft = async () => {
   } catch (err) {
     console.log(err);
   }
+};
+
+
+
+const saveDraft = async () => {
+  await api.put(
+    `/projects/${projectId}/target-group/${targetGroupId}`,
+    form
+  );
 };
 
   return (
