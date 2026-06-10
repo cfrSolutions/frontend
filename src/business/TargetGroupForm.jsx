@@ -121,6 +121,7 @@ export default function TargetGroupForm() {
   const [marketTimezone, setMarketTimezone] = useState("");
   const { projectId, targetGroupId } = useParams();
   const [search, setSearch] = useState("");
+  const [expandedProfile, setExpandedProfile] = useState(null);
   const [profileLibrary, setProfileLibrary] =
   useState([]);
   const filteredProfiles =
@@ -1156,49 +1157,64 @@ mb-4
   {/* Selected Profiles */}
  <div className="space-y-4">
 
-  {selectedProfiles.map(profile => (
-
+  {selectedProfiles.map((profile) => (
+  <div
+    key={profile._id}
+    className="bg-gray-50 border rounded-xl mb-4"
+  >
+    {/* Header */}
     <div
-      key={profile._id}
-      className="
-      bg-gray-50
-      rounded-xl
-      p-6
-      flex
-      justify-between
-      items-center
-      "
+      onClick={() =>
+        setExpandedProfile(
+          expandedProfile === profile._id
+            ? null
+            : profile._id
+        )
+      }
+      className="flex justify-between items-center p-5 cursor-pointer"
     >
-
       <div>
-
-        <h3 className="font-semibold text-purple-700">
+        <h3 className="font-semibold text-lg text-purple-800">
           {profile.code}
         </h3>
 
         <p className="text-gray-600">
           {profile.question}
         </p>
-
       </div>
 
-      <button
-        onClick={() =>
-          setSelectedProfiles(
-            prev =>
-              prev.filter(
-                p => p._id !== profile._id
-              )
-          )
-        }
-        className="text-red-500"
-      >
-        Remove
-      </button>
-
+      <span className="text-xl">
+        {expandedProfile === profile._id
+          ? "▼"
+          : "▶"}
+      </span>
     </div>
 
-  ))}
+    {/* Options */}
+    {expandedProfile === profile._id && (
+      <div className="border-t p-5">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {(profile.options || []).map(
+            (option, index) => (
+              <div
+                key={index}
+                className="
+                  border
+                  rounded-lg
+                  px-4
+                  py-3
+                  bg-white
+                "
+              >
+                {option}
+              </div>
+            )
+          )}
+        </div>
+      </div>
+    )}
+  </div>
+))}
 
 </div>
 
