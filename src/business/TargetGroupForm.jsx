@@ -65,13 +65,7 @@ export default function TargetGroupForm() {
   const timezones = Intl.supportedValuesOf("timeZone");
   const [marketTimezone, setMarketTimezone] = useState("");
   const { projectId, targetGroupId } = useParams();
- const languages =
-  countryLanguage.getCountryLanguages("IN");
-
-  const langs =
-  countryLanguage
-    .getCountryLanguages(form.market)
-    ?.map(l => l.name[0]) || [];
+ 
 //   const countryTimezones = {
 //   US: "America/Chicago",
 //   IN: "Asia/Kolkata",
@@ -109,7 +103,13 @@ export default function TargetGroupForm() {
     },
   });
 
+const languages =
+  countryLanguage.getCountryLanguages("IN");
 
+  const langs =
+  countryLanguage
+    .getCountryLanguages(form.market)
+    ?.map(l => l.name[0]) || [];
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
