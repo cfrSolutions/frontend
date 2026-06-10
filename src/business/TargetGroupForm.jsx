@@ -424,6 +424,23 @@ const handleSaveDraft = async () => {
               </select>
             </div>
 
+<select
+  name="language"
+  value={form.language}
+  onChange={handleChange}
+  className="border rounded-lg px-3 py-2 w-full text-sm"
+>
+  <option value="">
+    Select Language
+  </option>
+
+  {langs.map((lang) => (
+    <option key={lang} value={lang}>
+      {lang}
+    </option>
+  ))}
+</select>
+
             <div className="w-full">
               <label className="text-xs text-gray-500 flex items-center gap-1 mb-1">
                 <Globe size={14} /> Market
