@@ -107,14 +107,9 @@ const languages =
   countryLanguage.getCountryLanguages("IN");
 
   const langs =
-  countryLanguage
-    .getCountryLanguages(form.market)
-    ?.map((l) =>
-      Array.isArray(l.name)
-        ? l.name[0]
-        : l.name
-    )
-    .filter(Boolean) || [];
+  countryLanguage.getCountryLanguages(
+    form.market
+  ) || [];
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -429,22 +424,7 @@ const handleSaveDraft = async () => {
               </select>
             </div>
 
-<select
-  name="language"
-  value={form.language}
-  onChange={handleChange}
-  className="border rounded-lg px-3 py-2 w-full text-sm"
->
-  <option value="">
-    Select Language
-  </option>
 
-  {langs.map((lang) => (
-    <option key={lang} value={lang}>
-      {lang}
-    </option>
-  ))}
-</select>
 
             <div className="w-full">
               <label className="text-xs text-gray-500 flex items-center gap-1 mb-1">
@@ -471,7 +451,24 @@ const handleSaveDraft = async () => {
 </select>
             </div>
           </div>
+<select
+  name="language"
+  value={form.language}
+  onChange={handleChange}
+>
+  <option value="">
+    Select Language
+  </option>
 
+  {langs.map((lang) => (
+    <option
+      key={lang.iso639_1}
+      value={lang.name}
+    >
+      {lang.name}
+    </option>
+  ))}
+</select>
           <div className="mb-4">
             <label className="text-xs text-gray-500 mb-1 block">
               Age range
