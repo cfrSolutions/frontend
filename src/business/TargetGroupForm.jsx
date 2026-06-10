@@ -84,15 +84,53 @@ const countries = [
 ];
 
 
-
+const profileLibrary = [
+  {
+    id: 1,
+    category: "Demographic",
+    code: "AGE",
+    question: "What is your age?",
+    type: "range"
+  },
+  {
+    id: 2,
+    category: "Demographic",
+    code: "GENDER",
+    question: "Are you...?",
+    type: "single punch"
+  },
+  {
+    id: 3,
+    category: "Demographic",
+    code: "MARITAL_STATUS",
+    question: "What is your marital status?",
+    type: "single punch"
+  },
+  {
+    id: 4,
+    category: "Automotive",
+    code: "CAR_OWNER",
+    question: "Do you own a car?",
+    type: "single punch"
+  }
+];
 
 export default function TargetGroupForm() {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const timezones = Intl.supportedValuesOf("timeZone");
   const [marketTimezone, setMarketTimezone] = useState("");
   const { projectId, targetGroupId } = useParams();
+  const [search, setSearch] = useState("");
+  const filteredProfiles =
+  profileLibrary.filter(profile =>
+    profile.code
+      .toLowerCase()
+      .includes(search.toLowerCase()) ||
 
-
+    profile.question
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  );
 
   const [form, setForm] = useState({
     sector: "",
@@ -1055,39 +1093,59 @@ mb-4
   </>
 )}
 
-<div className="flex justify-between items-center">
+<div className="mt-12">
 
-  <h2 className="text-2xl font-semibold">
-    Profiling
-  </h2>
-<div className="mt-4 space-y-2">
+  <div className="flex justify-between items-center">
 
-  {selectedProfiles.map((profile) => (
+    <h2 className="text-2xl font-semibold">
+      Profiling
+    </h2>
+
+    <button
+      onClick={() => setShowProfiles(true)}
+      className="bg-purple-700 text-white px-4 py-2 rounded"
+    >
+      Add Profiling
+    </button>
+
+  </div>
+
+<input
+  value={search}
+  onChange={(e) =>
+    setSearch(e.target.value)
+  }
+  placeholder="Search profiles"
+  className="w-full border p-3 rounded-lg mb-4"
+/>
+  {/* Selected Profiles */}
+ <div className="grid gap-3 mt-4">
+
+  {selectedProfiles.map(profile => (
 
     <div
       key={profile.id}
-      className="border p-3 rounded-lg"
+      className="
+      border
+      rounded-xl
+      p-4
+      bg-white
+      "
     >
-      {profile.question}
+
+      <div className="font-semibold text-purple-700">
+        {profile.code}
+      </div>
+
+      <div className="text-sm text-gray-600">
+        {profile.question}
+      </div>
+
     </div>
 
   ))}
 
 </div>
-  <button
-    onClick={() =>
-      setShowProfiles(true)
-    }
-    className="
-    bg-purple-700
-    text-white
-    px-4
-    py-2
-    rounded
-    "
-  >
-    Add Profiling
-  </button>
 
 </div>
  {showProfiles && (
@@ -1099,20 +1157,58 @@ mb-4
         Profile Library
       </h2>
 
-      <button
-        onClick={() =>
-          setSelectedProfiles([
-            ...selectedProfiles,
-            {
-              id: 1,
-              question: "AGE"
-            }
-          ])
-        }
-        className="border px-4 py-2 rounded"
-      >
-        AGE
-      </button>
+      <div className="space-y-3 max-h-[400px] overflow-y-auto">
+
+  {profileLibrary.map((profile) => (
+
+    <div
+      key={profile.id}
+      onClick={() => {
+        setSelectedProfiles(prev => {
+
+          const exists = prev.find(
+            p => p.id === profile.id
+          );
+
+          if (exists) return prev;
+
+          return [...prev, profile];
+        });
+      }}
+      className="
+      border
+      rounded-lg
+      p-4
+      cursor-pointer
+      hover:bg-gray-50
+      "
+    >
+
+      <div className="flex justify-between">
+
+        <div>
+
+          <h3 className="font-semibold text-purple-700">
+            {profile.code}
+          </h3>
+
+          <p className="text-sm text-gray-600">
+            {profile.question}
+          </p>
+
+        </div>
+
+        <span className="text-xs text-gray-400">
+          {profile.type}
+        </span>
+
+      </div>
+
+    </div>
+
+  ))}
+
+</div>
 
       <button
         onClick={() =>
