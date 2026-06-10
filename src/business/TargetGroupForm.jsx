@@ -236,36 +236,139 @@ useEffect(() => {
 ]);
 
   const navigate = useNavigate();
-  const handleSubmit = async () => {
-  try {
-    const token = localStorage.getItem("token");
 
-    let res;
+//   const handleSubmit = async () => {
+//   try {
+//     const token = localStorage.getItem("token");
+
+//     let res;
+
+//     if (targetGroupId) {
+//       res = await api.put(
+//         `/projects/${projectId}/target-group/${targetGroupId}`,
+//         form,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//           },
+//         }
+//       );
+//     } else {
+//       res = await api.post(
+//         `/projects/${projectId}/target-groups`,
+//         form,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//           },
+//         }
+//       );
+//     }
+
+//     navigate(
+//       `/business/dashboard/project/${projectId}/status`
+//     );
+
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
+
+const handleSubmit = async () => {
+  try {
 
     if (targetGroupId) {
-      res = await api.put(
+
+      await api.put(
         `/projects/${projectId}/target-group/${targetGroupId}`,
-        form,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          ...form,
+          status: "LIVE",
         }
       );
+
     } else {
-      res = await api.post(
+
+      await api.post(
         `/projects/${projectId}/target-groups`,
-        form,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          ...form,
+          status: "LIVE",
         }
       );
+
     }
 
     navigate(
       `/business/dashboard/project/${projectId}/status`
+    );
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const saveAdvancedSettings = async () => {
+  try {
+    await api.put(
+      `/projects/${projectId}/target-group/${targetGroupId}`,
+      {
+        startDate: form.startDate,
+        endDate: form.endDate,
+        startTime: form.startTime,
+        endTime: form.endTime,
+        timezone: form.timezone,
+      }
+    );
+
+    setShowAdvanced(false);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const handleSaveDraft = async () => {
+  try {
+
+    const token =
+      localStorage.getItem("token");
+
+    if (targetGroupId) {
+
+      await api.put(
+        `/projects/${projectId}/target-group/${targetGroupId}`,
+        {
+          ...form,
+          status: "DRAFT",
+        },
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+    } else {
+
+      await api.post(
+        `/projects/${projectId}/target-groups`,
+        {
+          ...form,
+          status: "DRAFT",
+        },
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+    }
+
+    navigate(
+      `/business/dashboard/project/${projectId}`
     );
 
   } catch (err) {
@@ -525,6 +628,22 @@ font-medium"
 >
   Advanced
 </button>
+
+ <button
+    onClick={handleSaveDraft}
+    className="
+      h-12
+      px-8
+      rounded-xl
+      border
+      border-slate-300
+      bg-white
+      font-semibold
+    "
+  >
+    Save Draft
+  </button>
+
   <button
     onClick={handleSubmit}
     className="
@@ -819,7 +938,7 @@ mb-4
 
           <button
           type="button"
-            onClick={() => setShowAdvanced(false)}
+            onClick={saveAdvancedSettings}
             className="
               bg-purple-700
               text-white
