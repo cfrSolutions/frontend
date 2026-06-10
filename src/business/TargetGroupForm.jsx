@@ -129,7 +129,9 @@ export default function TargetGroupForm() {
 const [profileCondition, setProfileCondition] =
   useState({
     min: "",
-    max: ""
+    max: "",
+    value: "",
+    values: []
   });
 const [showProfileCondition,
   setShowProfileCondition] =
@@ -1172,6 +1174,32 @@ mb-4
     key={profile._id}
     className="bg-gray-50 border rounded-xl mb-4"
   >
+    <button
+  onClick={(e) => {
+    e.stopPropagation();
+
+    setSelectedProfiles(prev =>
+      prev.filter(
+        p =>
+          !(
+            p._id === profile._id &&
+            JSON.stringify(
+              p.condition
+            ) ===
+            JSON.stringify(
+              profile.condition
+            )
+          )
+      )
+    );
+  }}
+  className="
+    text-red-600
+    font-semibold
+  "
+>
+  Delete
+</button>
     {/* Header */}
     <div
       onClick={() =>
@@ -1188,9 +1216,18 @@ mb-4
           {profile.code}
         </h3>
 
-        <p className="text-gray-600">
-          {profile.question}
-        </p>
+       <p className="text-gray-600">
+
+  {profile.condition?.min &&
+    `${profile.condition.min}
+     to
+     ${profile.condition.max}`}
+
+  {profile.condition?.value}
+
+  {profile.condition?.values?.join(", ")}
+
+</p>
       </div>
 
       <span className="text-xl">
@@ -1240,7 +1277,7 @@ mb-4
 
       <div className="space-y-3 max-h-[400px] overflow-y-auto">
 
-  {profileLibrary.map((profile) => (
+  {filteredProfiles.map((profile) => (
 
     <div
       key={profile._id}
@@ -1314,50 +1351,146 @@ mb-4
         {activeProfile.question}
       </p>
 
-      {activeProfile.answerType === "range" && (
+     {activeProfile.answerType === "range" && (
+  <div className="space-y-4">
 
-        <div className="space-y-4">
+    <input
+      type="number"
+      placeholder="Min"
+      value={profileCondition.min}
+      onChange={(e)=>
+        setProfileCondition({
+          ...profileCondition,
+          min:e.target.value
+        })
+      }
+    />
 
-         <input
-  type="number"
-  placeholder="Minimum"
-  value={profileCondition.min}
-  onChange={(e) =>
-    setProfileCondition({
-      ...profileCondition,
-      min: e.target.value
-    })
-  }
-/>
+    <input
+      type="number"
+      placeholder="Max"
+      value={profileCondition.max}
+      onChange={(e)=>
+        setProfileCondition({
+          ...profileCondition,
+          max:e.target.value
+        })
+      }
+    />
 
-<input
-  type="number"
-  placeholder="Maximum"
-  value={profileCondition.max}
-  onChange={(e) =>
-    setProfileCondition({
-      ...profileCondition,
-      max: e.target.value
-    })
-  }
-/>
+  </div>
+)}
+{activeProfile.answerType === "single" && (
 
-        </div>
+  <div className="space-y-3">
 
-      )}
+    {activeProfile.options?.map(option => (
+
+      <label
+        key={option}
+        className="flex items-center gap-2"
+      >
+        <input
+          type="radio"
+          name="singleAnswer"
+          checked={
+            profileCondition.value === option
+          }
+          onChange={() =>
+            setProfileCondition({
+              ...profileCondition,
+              value: option
+            })
+          }
+        />
+
+        {option}
+
+      </label>
+
+    ))}
+
+  </div>
+
+)}
+
+{activeProfile.answerType === "multi" && (
+
+  <div className="space-y-3">
+
+    {activeProfile.options?.map(option => (
+
+      <label
+        key={option}
+        className="flex items-center gap-2"
+      >
+        <input
+          type="checkbox"
+          checked={
+            profileCondition.values.includes(
+              option
+            )
+          }
+          onChange={(e) => {
+
+            if (e.target.checked) {
+
+              setProfileCondition({
+                ...profileCondition,
+                values: [
+                  ...profileCondition.values,
+                  option
+                ]
+              });
+
+            } else {
+
+              setProfileCondition({
+                ...profileCondition,
+                values:
+                  profileCondition.values.filter(
+                    v => v !== option
+                  )
+              });
+
+            }
+
+          }}
+        />
+
+        {option}
+
+      </label>
+
+    ))}
+
+  </div>
+
+)}
 <button
   onClick={() => {
 
-    setSelectedProfiles(prev => [
-      ...prev,
-      {
-        ...activeProfile,
-        condition: {
-          min: profileCondition.min,
-          max: profileCondition.max
-        }
+   const condition =
+  activeProfile.answerType === "range"
+    ? {
+        min: profileCondition.min,
+        max: profileCondition.max
       }
-    ]);
+    : activeProfile.answerType === "single"
+    ? {
+        value: profileCondition.value
+      }
+    : {
+        values: profileCondition.values
+      };
+
+setSelectedProfiles(prev => [
+  ...prev,
+  {
+    ...activeProfile,
+    condition
+  }
+]);
 
     setShowProfileCondition(false);
 
@@ -1385,6 +1518,8 @@ mb-4
   </div>
 
 )}
+
+
     </div>
   );
 }
