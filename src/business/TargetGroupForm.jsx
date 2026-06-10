@@ -494,7 +494,7 @@ const handleSaveDraft = async () => {
   name="language"
 >
   <option value="">
-    Select Language
+     Language
   </option>
 
   {langs.map((lang) => (
