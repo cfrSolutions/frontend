@@ -267,6 +267,9 @@ useEffect(() => {
   ...prev,
   ...res.data
 }));
+ setSelectedProfiles(
+    res.data.profiles || []
+  );
     });
 }, []);
 
@@ -395,12 +398,13 @@ const handleSubmit = async () => {
     } else {
 
       await api.post(
-        `/projects/${projectId}/target-groups`,
-        {
-          ...form,
-          status: "LIVE",
-        }
-      );
+  `/projects/${projectId}/target-groups`,
+  {
+    ...form,
+    profiles: selectedProfiles,
+    status: "LIVE",
+  }
+);
 
     }
 
@@ -460,7 +464,8 @@ const handleSaveDraft = async () => {
         `/projects/${projectId}/target-groups`,
         {
           ...form,
-          status: "DRAFT",
+    profiles: selectedProfiles,
+    status: "DRAFT",
         },
         {
           headers: {
@@ -1129,27 +1134,47 @@ mb-4
   className="w-full border p-3 rounded-lg mb-4"
 />
   {/* Selected Profiles */}
- <div className="grid gap-3 mt-4">
+ <div className="space-y-4">
 
   {selectedProfiles.map(profile => (
 
     <div
       key={profile._id}
       className="
-      border
+      bg-gray-50
       rounded-xl
-      p-4
-      bg-white
+      p-6
+      flex
+      justify-between
+      items-center
       "
     >
 
-      <div className="font-semibold text-purple-700">
-        {profile.code}
+      <div>
+
+        <h3 className="font-semibold text-purple-700">
+          {profile.code}
+        </h3>
+
+        <p className="text-gray-600">
+          {profile.question}
+        </p>
+
       </div>
 
-      <div className="text-sm text-gray-600">
-        {profile.question}
-      </div>
+      <button
+        onClick={() =>
+          setSelectedProfiles(
+            prev =>
+              prev.filter(
+                p => p._id !== profile._id
+              )
+          )
+        }
+        className="text-red-500"
+      >
+        Remove
+      </button>
 
     </div>
 
