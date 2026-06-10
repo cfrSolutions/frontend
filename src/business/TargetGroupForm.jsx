@@ -59,13 +59,6 @@ const countries = [
   { code: "ZA", name: "South Africa" },
 ];
 
-console.log("Market:", form.market);
-
-console.log(
-  countryLanguage.getCountryLanguages(
-    form.market
-  )
-);
 
 export const getLanguagesByCountry = (
   countryCode
@@ -130,6 +123,7 @@ export default function TargetGroupForm() {
     },
   });
 
+
 // const languages =
 //   countryLanguage.getCountryLanguages("IN");
 
@@ -139,6 +133,19 @@ export default function TargetGroupForm() {
 //   ) || [];
 
 const langs = getLanguagesByCountry(form.market);
+console.log("Market:", form.market);
+
+useEffect(() => {
+  console.log("Market:", form.market);
+
+  console.log(
+    countryLanguage.getCountryLanguages(
+      form.market
+    )
+  );
+}, [form.market]);
+
+console.log("Languages:", langs);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
