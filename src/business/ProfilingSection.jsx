@@ -7,8 +7,8 @@ export default function ProfilingSection({
   selectedProfiles,
   setSelectedProfiles,
 }) {
-    const [selectedProfiles, setSelectedProfiles] =
-  useState([]);
+//     const [selectedProfiles, setSelectedProfiles] =
+//   useState([]);
 
 const [showProfiles, setShowProfiles] =
   useState(false);
@@ -128,14 +128,7 @@ const filteredProfiles =
       .includes(search.toLowerCase())
   );
 
-  if (
-  selectedProfiles.some(
-    p => p.code === activeProfile.code
-  )
-) {
-  alert("Profile already added");
-  return;
-}
+ 
 
     return(
         <div>
@@ -530,48 +523,52 @@ const filteredProfiles =
 <button
   onClick={() => {
 
-   const condition =
-  activeProfile.answerType === "range"
-    ? {
-        min: profileCondition.min,
-        max: profileCondition.max
-      }
-    : activeProfile.answerType === "single"
-    ? {
-        value: profileCondition.value
-      }
-    : {
-        values: profileCondition.values
-      };
+    if (
+      selectedProfiles.some(
+        p => p.code === activeProfile.code
+      )
+    ) {
+      alert("Profile already added");
+      return;
+    }
 
-setSelectedProfiles(prev => [
+    const condition =
+      activeProfile.answerType === "range"
+        ? {
+            min: profileCondition.min,
+            max: profileCondition.max
+          }
+        : activeProfile.answerType === "single"
+        ? {
+            value: profileCondition.value
+          }
+        : {
+            values: profileCondition.values
+          };
 
-  ...prev,
-
-  {
-    ...activeProfile,
-
-    conditions: [
+    setSelectedProfiles(prev => [
+      ...prev,
       {
-        ...condition,
-        quota: 100
+        ...activeProfile,
+        conditions: [
+          {
+            ...condition,
+            quota: 100
+          }
+        ]
       }
-    ]
-  }
-
-]);
+    ]);
 
     setShowProfileCondition(false);
 
-   setProfileCondition({
-  min: "",
-  max: "",
-  value: "",
-  values: []
-});
+    setProfileCondition({
+      min: "",
+      max: "",
+      value: "",
+      values: []
+    });
 
   }}
-  className="bg-green-600 text-white px-4 py-2 rounded"
 >
   Save
 </button>
@@ -583,6 +580,12 @@ setSelectedProfiles(prev => [
       >
         Close
       </button>
+
+    </div>
+
+  </div>
+
+)}
 <button
   onClick={() => {
 
@@ -595,12 +598,6 @@ setSelectedProfiles(prev => [
 >
   Next
 </button>
-    </div>
-
-  </div>
-
-)}
-
 
         </div>
     )
