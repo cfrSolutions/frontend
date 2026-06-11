@@ -1,4 +1,5 @@
 export default function ProfilingSection() {
+    const [search, setSearch] = useState("");
     const updateQuota = (
   profileId,
   conditionIndex,
