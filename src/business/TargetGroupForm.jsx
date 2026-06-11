@@ -137,6 +137,15 @@ setConditions] = useState([
     quota:100
   }
 ]);
+
+const [user, setUser] = useState(null);
+
+useEffect(() => {
+  api.get("/auth/me")
+    .then((res) => {
+      setUser(res.data.user);
+    });
+}, []);
 const [openBuilder, setOpenBuilder] =
   useState(false);
 
