@@ -319,6 +319,7 @@
 
 
 import { useState, useMemo } from "react";
+import { useEffect } from "react";
 
 const URL_VARIABLES = [
   { label: "Response ID", param: "RID" },
@@ -374,6 +375,18 @@ const LOCKOUT_OPTIONS = [
 export default function BuildSurvey({
   user, onApply,
 }) {
+
+
+    const [form, setForm] = useState({
+  targetGroupName: "",
+  projectManager: user?.name || "",
+  industry: "Other",
+  industryLockout: "No Lock Out",
+  securityClient: "",
+
+  liveUrl: "",
+  testUrl: "",
+});
   const [open, setOpen] =
     useState(false);
 
@@ -430,6 +443,15 @@ export default function BuildSurvey({
 
     return `${baseUrl}${separator}${params}`;
   }, [baseUrl, variables]);
+
+  useEffect(() => {
+  if (user?.name) {
+    setForm((prev) => ({
+      ...prev,
+      projectManager: user.name,
+    }));
+  }
+}, [user]);
 
   return (
     <>

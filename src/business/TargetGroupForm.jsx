@@ -1188,6 +1188,7 @@ mb-4
   </label>
 
   <BuildSurvey
+  user={user}
     onApply={(url) =>
       setForm(prev => ({
         ...prev,
