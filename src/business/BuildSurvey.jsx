@@ -838,7 +838,26 @@ onApply?.(finalUrl);
             </div>
           </div>
         </div>
+        
       )}
+      {project?.redirects && (
+  <>
+    <LinkBox
+      label="Complete"
+      url={`${base}/redirect/c?tk=${project.redirects.complete?.token}`}
+    />
+
+    <LinkBox
+      label="Disqualified"
+      url={`${base}/redirect/dq?tk=${project.redirects.disqualified?.token}`}
+    />
+
+    <LinkBox
+      label="Quota Full"
+      url={`${base}/redirect/qf?tk=${project.redirects.quotaFull?.token}`}
+    />
+  </>
+)}
     </>
   );
 }
