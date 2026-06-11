@@ -321,7 +321,6 @@
 import { useState, useMemo } from "react";
 import { useEffect } from "react";
 import api from "../services/api";
-import LinkBox from "./LinkBox";
 import { useParams } from "react-router-dom";
 
 const URL_VARIABLES = [
@@ -874,5 +873,24 @@ onApply?.(finalUrl);
   </>
 )}
     </>
+  );
+}
+
+export default function LinkBox({
+  label,
+  url,
+}) {
+  return (
+    <div className="border rounded-lg p-4 mb-3">
+      <div className="font-medium mb-2">
+        {label}
+      </div>
+
+      <input
+        value={url}
+        readOnly
+        className="w-full border p-2 rounded"
+      />
+    </div>
   );
 }
