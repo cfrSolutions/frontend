@@ -18,6 +18,8 @@ import {
 import api from "../services/api";
 import langs from "langs";
 import ProfilingSection from "./ProfilingSection";
+import BuildSurvey from "./BuildSurvey";
+
 
 export const getLanguagesByCountry = (
   countryCode
@@ -135,6 +137,10 @@ setConditions] = useState([
     quota:100
   }
 ]);
+const [openBuilder, setOpenBuilder] =
+  useState(false);
+
+const [surveyUrl, setSurveyUrl] = useState("");
 const [showProfileCondition,
   setShowProfileCondition] =
   useState(false);
@@ -1174,6 +1180,28 @@ mb-4
   selectedProfiles={selectedProfiles}
   setSelectedProfiles={setSelectedProfiles}
 />
+
+
+<div className="mt-6">
+  <label className="text-sm font-medium">
+    Survey URL Builder
+  </label>
+
+  <BuildSurvey
+    onApply={(url) =>
+      setForm(prev => ({
+        ...prev,
+        surveyUrl: url,
+      }))
+    }
+  />
+
+  <textarea
+    value={form.surveyUrl || ""}
+    readOnly
+    className="w-full border rounded-lg p-3 mt-3"
+  />
+</div>
     </div>
   );
 }
