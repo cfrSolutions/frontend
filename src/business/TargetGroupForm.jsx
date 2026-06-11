@@ -945,7 +945,7 @@ sm:mb-10">
       startDate: e.target.value,
     })
   }
-            className="w-full border-b py-2"
+            
           />
         </div>
 
