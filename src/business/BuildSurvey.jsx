@@ -876,21 +876,30 @@ onApply?.(finalUrl);
   );
 }
 
-export default function LinkBox({
-  label,
-  url,
-}) {
-  return (
-    <div className="border rounded-lg p-4 mb-3">
-      <div className="font-medium mb-2">
-        {label}
-      </div>
+function LinkBox({ label, url }) {
+  const copy = () => {
+    navigator.clipboard.writeText(url);
+    alert("Copied!");
+  };
 
-      <input
-        value={url}
-        readOnly
-        className="w-full border p-2 rounded"
-      />
+  return (
+    <div className="flex justify-between items-center border p-2 rounded">
+      <span className="text-sm">{label}</span>
+
+      <div className="flex gap-2">
+        <input
+          value={url}
+          readOnly
+          className="text-xs w-[260px] border px-2"
+        />
+
+        <button
+          onClick={copy}
+          className="bg-black text-white px-3 py-1 text-xs"
+        >
+          Copy
+        </button>
+      </div>
     </div>
   );
 }
