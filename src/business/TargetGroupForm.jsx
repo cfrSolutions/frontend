@@ -1197,6 +1197,11 @@ mb-4
   </label>
 
   <BuildSurvey
+   targetGroupName={
+    targetGroupId
+      ? form.name
+      : "Target Group 1"
+  }
   user={user}
     onApply={(url) =>
       setForm(prev => ({

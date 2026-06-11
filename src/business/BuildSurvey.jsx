@@ -373,7 +373,7 @@ const LOCKOUT_OPTIONS = [
 ];
 
 export default function BuildSurvey({
-  user, onApply,
+  targetGroupName, user, onApply,
 }) {
 
 
@@ -463,16 +463,11 @@ export default function BuildSurvey({
       Target Group Name
     </label>
 
-    <input
-      value={form.targetGroupName}
-      onChange={(e) =>
-        setForm({
-          ...form,
-          targetGroupName: e.target.value,
-        })
-      }
-      className="w-full border-b pb-2 outline-none"
-    />
+   <input
+  value={targetGroupName || ""}
+  readOnly
+  className="w-full border-b pb-2"
+/>
   </div>
 
   <div className="grid md:grid-cols-2 gap-6">
