@@ -88,7 +88,7 @@ const validateQuotas = () => {
   ) {
 
     const total =
-      profile.conditions.reduce(
+      (profile.conditions || []).reduce(
         (sum, c) =>
           sum +
           Number(c.quota || 0),
@@ -295,12 +295,12 @@ const filteredProfiles =
 
       <div>
 
-        {profile.conditions.reduce(
-          (sum, c) =>
-            sum +
-            Number(c.quota || 0),
-          0
-        )}
+       {(profile.conditions || []).reduce(
+  (sum, c) =>
+    sum +
+    Number(c.quota || 0),
+  0
+)}
         %
 
       </div>
