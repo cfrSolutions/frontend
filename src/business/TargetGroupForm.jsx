@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import api from "../services/api";
 import langs from "langs";
+import ProfilingSection from "./ProfilingSection";
 
 export const getLanguagesByCountry = (
   countryCode
@@ -1168,7 +1169,7 @@ mb-4
   </>
 )}
 
-
+<ProfilingSection/>
     </div>
   );
 }
