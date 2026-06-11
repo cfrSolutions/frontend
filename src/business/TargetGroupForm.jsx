@@ -126,13 +126,14 @@ export default function TargetGroupForm() {
   useState([]);
   const [activeProfile, setActiveProfile] =
   useState(null);
-const [profileCondition, setProfileCondition] =
-  useState({
-    min: "",
-    max: "",
-    value: "",
-    values: []
-  });
+const [conditions,
+setConditions] = useState([
+  {
+    min:"",
+    max:"",
+    quota:100
+  }
+]);
 const [showProfileCondition,
   setShowProfileCondition] =
   useState(false);
@@ -510,7 +511,33 @@ const handleSaveDraft = async () => {
   }
 };
 
+const updateQuota = (
+  profileId,
+  conditionIndex,
+  quota
+) => {
 
+  setSelectedProfiles(prev =>
+    prev.map(profile => {
+
+      if(profile._id !== profileId)
+        return profile;
+
+      const updated =
+        [...profile.conditions];
+
+      updated[conditionIndex].quota =
+        quota;
+
+      return {
+        ...profile,
+        conditions: updated
+      };
+
+    })
+  );
+
+};
 
 const saveDraft = async () => {
   await api.put(
@@ -1139,384 +1166,6 @@ mb-4
       </div>
     </div>
   </>
-)}
-
-<div className="mt-12">
-
-  <div className="flex justify-between items-center">
-
-    <h2 className="text-2xl font-semibold">
-      Profiling
-    </h2>
-
-    <button
-      onClick={() => setShowProfiles(true)}
-      className="bg-purple-700 text-white px-4 py-2 rounded"
-    >
-      Add Profiling
-    </button>
-
-  </div>
-
-<input
-  value={search}
-  onChange={(e) =>
-    setSearch(e.target.value)
-  }
-  placeholder="Search profiles"
-  className="w-full border p-3 rounded-lg mb-4"
-/>
-  {/* Selected Profiles */}
- <div className="space-y-4">
-
-  {selectedProfiles.map((profile) => (
-  <div
-    key={profile._id}
-    className="bg-gray-50 border rounded-xl mb-4"
-  >
-    <button
-  onClick={(e) => {
-    e.stopPropagation();
-
-    setSelectedProfiles(prev =>
-      prev.filter(
-        p =>
-          !(
-            p._id === profile._id &&
-            JSON.stringify(
-              p.condition
-            ) ===
-            JSON.stringify(
-              profile.condition
-            )
-          )
-      )
-    );
-  }}
-  className="
-    text-red-600
-    font-semibold
-  "
->
-  Delete
-</button>
-    {/* Header */}
-    <div
-      onClick={() =>
-        setExpandedProfile(
-          expandedProfile === profile._id
-            ? null
-            : profile._id
-        )
-      }
-      className="flex justify-between items-center p-5 cursor-pointer"
-    >
-      <div>
-        <h3 className="font-semibold text-lg text-purple-800">
-          {profile.code}
-        </h3>
-
-       <p className="text-gray-600">
-
-  {profile.condition?.min &&
-    `${profile.condition.min}
-     to
-     ${profile.condition.max}`}
-
-  {profile.condition?.value}
-
-  {profile.condition?.values?.join(", ")}
-
-</p>
-      </div>
-
-      <span className="text-xl">
-        {expandedProfile === profile._id
-          ? "▼"
-          : "▶"}
-      </span>
-    </div>
-
-    {/* Options */}
-    {expandedProfile === profile._id && (
-      <div className="border-t p-5">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {(profile.options || []).map(
-            (option, index) => (
-              <div
-                key={index}
-                className="
-                  border
-                  rounded-lg
-                  px-4
-                  py-3
-                  bg-white
-                "
-              >
-                {option}
-              </div>
-            )
-          )}
-        </div>
-      </div>
-    )}
-  </div>
-))}
-
-</div>
-
-</div>
- {showProfiles && (
-  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-
-    <div className="bg-white p-6 rounded-xl w-[600px]">
-
-      <h2 className="text-xl font-bold mb-4">
-        Profile Library
-      </h2>
-
-      <div className="space-y-3 max-h-[400px] overflow-y-auto">
-
-  {filteredProfiles.map((profile) => (
-
-    <div
-      key={profile._id}
-      onClick={() => {
-
-  setActiveProfile(profile);
-
-  setShowProfileCondition(true);
-
-}}
-      className="
-      border
-      rounded-lg
-      p-4
-      cursor-pointer
-      hover:bg-gray-50
-      "
-    >
-
-      <div className="flex justify-between">
-
-        <div>
-
-          <h3 className="font-semibold text-purple-700">
-            {profile.code}
-          </h3>
-
-          <p className="text-sm text-gray-600">
-            {profile.question}
-          </p>
-
-        </div>
-
-        <span className="text-xs text-gray-400">
-          {profile.type}
-        </span>
-
-      </div>
-
-    </div>
-
-  ))}
-
-</div>
-
-      <button
-        onClick={() =>
-          setShowProfiles(false)
-        }
-        className="ml-4 bg-purple-700 text-white px-4 py-2 rounded"
-      >
-        Close
-      </button>
-
-    </div>
-
-  </div>
-)}
-
-{showProfileCondition && activeProfile && (
-
-  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-
-    <div className="bg-white p-6 rounded-xl w-[500px]">
-
-      <h2 className="text-xl font-bold mb-4">
-        {activeProfile.code}
-      </h2>
-
-      <p className="text-gray-500 mb-6">
-        {activeProfile.question}
-      </p>
-
-     {activeProfile.answerType === "range" && (
-  <div className="space-y-4">
-
-    <input
-      type="number"
-      placeholder="Min"
-      value={profileCondition.min}
-      onChange={(e)=>
-        setProfileCondition({
-          ...profileCondition,
-          min:e.target.value
-        })
-      }
-    />
-
-    <input
-      type="number"
-      placeholder="Max"
-      value={profileCondition.max}
-      onChange={(e)=>
-        setProfileCondition({
-          ...profileCondition,
-          max:e.target.value
-        })
-      }
-    />
-
-  </div>
-)}
-{activeProfile.answerType === "single" && (
-
-  <div className="space-y-3">
-
-    {activeProfile.options?.map(option => (
-
-      <label
-        key={option}
-        className="flex items-center gap-2"
-      >
-        <input
-          type="radio"
-          name="singleAnswer"
-          checked={
-            profileCondition.value === option
-          }
-          onChange={() =>
-            setProfileCondition({
-              ...profileCondition,
-              value: option
-            })
-          }
-        />
-
-        {option}
-
-      </label>
-
-    ))}
-
-  </div>
-
-)}
-
-{activeProfile.answerType === "multi" && (
-
-  <div className="space-y-3">
-
-    {activeProfile.options?.map(option => (
-
-      <label
-        key={option}
-        className="flex items-center gap-2"
-      >
-        <input
-          type="checkbox"
-          checked={
-            profileCondition.values.includes(
-              option
-            )
-          }
-          onChange={(e) => {
-
-            if (e.target.checked) {
-
-              setProfileCondition({
-                ...profileCondition,
-                values: [
-                  ...profileCondition.values,
-                  option
-                ]
-              });
-
-            } else {
-
-              setProfileCondition({
-                ...profileCondition,
-                values:
-                  profileCondition.values.filter(
-                    v => v !== option
-                  )
-              });
-
-            }
-
-          }}
-        />
-
-        {option}
-
-      </label>
-
-    ))}
-
-  </div>
-
-)}
-<button
-  onClick={() => {
-
-   const condition =
-  activeProfile.answerType === "range"
-    ? {
-        min: profileCondition.min,
-        max: profileCondition.max
-      }
-    : activeProfile.answerType === "single"
-    ? {
-        value: profileCondition.value
-      }
-    : {
-        values: profileCondition.values
-      };
-
-setSelectedProfiles(prev => [
-  ...prev,
-  {
-    ...activeProfile,
-    condition
-  }
-]);
-
-    setShowProfileCondition(false);
-
-    setProfileCondition({
-      min: "",
-      max: ""
-    });
-
-  }}
-  className="bg-green-600 text-white px-4 py-2 rounded"
->
-  Save
-</button>
-      <button
-        onClick={() =>
-          setShowProfileCondition(false)
-        }
-        className="mt-6 bg-purple-700 text-white px-4 py-2 rounded"
-      >
-        Close
-      </button>
-
-    </div>
-
-  </div>
-
 )}
 
 
