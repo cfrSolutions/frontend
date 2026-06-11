@@ -320,6 +320,9 @@
 
 import { useState, useMemo } from "react";
 import { useEffect } from "react";
+import api from "../services/api";
+import LinkBox from "./LinkBox";
+import { useParams } from "react-router-dom";
 
 const URL_VARIABLES = [
   { label: "Response ID", param: "RID" },
@@ -402,6 +405,18 @@ export default function BuildSurvey({
     ]);
 
     const [surveyUrl, setSurveyUrl] = useState("");
+const [project, setProject] = useState(null);
+const { id } = useParams();
+const base = import.meta.env.VITE_API_URL;
+
+useEffect(() => {
+  const fetchProject = async () => {
+    const res = await api.get(`/projects/${id}`);
+    setProject(res.data);
+  };
+
+  fetchProject();
+}, [id]);
 
   const addVariable = (item) => {
     const exists = variables.find(
