@@ -2,7 +2,55 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
-export default function ProfilingSection() {
+export default function ProfilingSection({
+  targetCompletes,
+  selectedProfiles,
+  setSelectedProfiles,
+}) {
+    const [selectedProfiles, setSelectedProfiles] =
+  useState([]);
+
+const [showProfiles, setShowProfiles] =
+  useState(false);
+
+const [showProfileCondition,
+  setShowProfileCondition] =
+  useState(false);
+
+const [activeProfile,
+  setActiveProfile] =
+  useState(null);
+
+const [expandedProfile,
+  setExpandedProfile] =
+  useState(null);
+
+const [profileCondition,
+  setProfileCondition] =
+  useState({
+    min: "",
+    max: "",
+    value: "",
+    values: []
+  });
+
+
+const [conditions, setConditions] =
+  useState([
+    {
+      min: "",
+      max: "",
+      quota: 100
+    }
+  ]);
+const [profiles, setProfiles] = useState([]);
+
+
+useEffect(() => {
+  fetch("http://localhost:5000/api/profiles")
+    .then(res => res.json())
+    .then(data => setProfiles(data));
+}, []);
     const [search, setSearch] = useState("");
     const updateQuota = (
   profileId,
@@ -47,7 +95,7 @@ const validateQuotas = () => {
         0
       );
 
-    if (total !== 100) {
+   if (Number(total) !== 100) {
 
       alert(
         `${profile.code} quota must equal 100%`
@@ -63,14 +111,32 @@ const validateQuotas = () => {
 
 };
 
-const getFeasibility = quota => {
+const getFeasibility = (quota) => {
 
   return Math.round(
-    (form.targetCompletes * quota) /
-    100
+    (targetCompletes * quota) / 100
   );
 
 };
+const handleNext = () => {
+  console.log("Next clicked");
+};
+const filteredProfiles =
+  profiles.filter(profile =>
+    profile.code
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  );
+
+  if (
+  selectedProfiles.some(
+    p => p.code === activeProfile.code
+  )
+) {
+  alert("Profile already added");
+  return;
+}
+
     return(
         <div>
             <div className="mt-12">
@@ -113,6 +179,9 @@ const getFeasibility = quota => {
     p-6
   "
 >
+    <button>
+  Add Condition
+</button>
 
   <div className="flex justify-between">
 
@@ -163,7 +232,7 @@ const getFeasibility = quota => {
       <div>FEASIBILITY</div>
     </div>
 
-    {profile.conditions.map(
+    {(profile.conditions || []).map(
       (condition, index) => (
 
         <div
@@ -176,13 +245,13 @@ const getFeasibility = quota => {
           "
         >
 
-          <div>
-
-            {condition.min
-              ? `${condition.min} to ${condition.max} years old`
-              : condition.value}
-
-          </div>
+         <div>
+  {condition.min
+    ? `${condition.min} to ${condition.max} years old`
+    : condition.value
+    ? condition.value
+    : condition.values?.join(", ")}
+</div>
 
           <div>
 
@@ -244,7 +313,7 @@ const getFeasibility = quota => {
       </div>
 
       <div>
-        {form.targetCompletes}
+        {targetCompletes}
       </div>
 
     </div>
@@ -494,10 +563,12 @@ setSelectedProfiles(prev => [
 
     setShowProfileCondition(false);
 
-    setProfileCondition({
-      min: "",
-      max: ""
-    });
+   setProfileCondition({
+  min: "",
+  max: "",
+  value: "",
+  values: []
+});
 
   }}
   className="bg-green-600 text-white px-4 py-2 rounded"

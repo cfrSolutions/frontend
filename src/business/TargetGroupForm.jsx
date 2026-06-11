@@ -1169,7 +1169,11 @@ mb-4
   </>
 )}
 
-<ProfilingSection/>
+<ProfilingSection
+  targetCompletes={form.targetCompletes}
+  selectedProfiles={selectedProfiles}
+  setSelectedProfiles={setSelectedProfiles}
+/>
     </div>
   );
 }
