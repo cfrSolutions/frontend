@@ -1,3 +1,7 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
 export default function ProfilingSection() {
     const [search, setSearch] = useState("");
     const updateQuota = (
