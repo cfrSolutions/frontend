@@ -418,27 +418,6 @@ useEffect(() => {
 }, [projectId]);
 
 
-router.put(
-  "/:projectId/survey-links",
-  async (req, res) => {
-    const { projectId } = req.params;
-    const { live, test } = req.body;
-
-    const project =
-      await Project.findByIdAndUpdate(
-        projectId,
-        {
-          surveyLinks: {
-            live,
-            test,
-          },
-        },
-        { new: true }
-      );
-
-    res.json(project);
-  }
-);
 
 
 useEffect(() => {
@@ -451,10 +430,8 @@ useEffect(() => {
 
     setForm((prev) => ({
       ...prev,
-      liveUrl:
-        res.data.surveyLinks?.live || "",
-      testUrl:
-        res.data.surveyLinks?.test || "",
+      liveUrl: res.data.surveyLinks?.live || "",
+      testUrl: res.data.surveyLinks?.test || "",
     }));
   };
 
@@ -876,16 +853,28 @@ useEffect(() => {
               </button>
 
               <button
-                onClick={() => {
-                setForm((prev) => ({
-  ...prev,
-  liveUrl: finalUrl,
-}));
+               onClick={async () => {
+  try {
+    await api.put(
+      `/projects/${projectId}/survey-links`,
+      {
+        live: finalUrl,
+        test: form.testUrl,
+      }
+    );
 
-onApply?.(finalUrl);
+    setForm((prev) => ({
+      ...prev,
+      liveUrl: finalUrl,
+    }));
 
-                  setOpen(false);
-                }}
+    onApply?.(finalUrl);
+
+    setOpen(false);
+  } catch (err) {
+    console.error(err);
+  }
+}}
                 className="
                   bg-purple-700
                   text-white
