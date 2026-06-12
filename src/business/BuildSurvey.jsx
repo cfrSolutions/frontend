@@ -415,7 +415,7 @@ useEffect(() => {
   };
 
   fetchProject();
-}, [id]);
+}, [projectId]);
 
   const addVariable = (item) => {
     const exists = variables.find(
