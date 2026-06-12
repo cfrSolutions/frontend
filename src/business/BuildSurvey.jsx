@@ -417,6 +417,50 @@ useEffect(() => {
   fetchProject();
 }, [projectId]);
 
+
+router.put(
+  "/:projectId/survey-links",
+  async (req, res) => {
+    const { projectId } = req.params;
+    const { live, test } = req.body;
+
+    const project =
+      await Project.findByIdAndUpdate(
+        projectId,
+        {
+          surveyLinks: {
+            live,
+            test,
+          },
+        },
+        { new: true }
+      );
+
+    res.json(project);
+  }
+);
+
+
+useEffect(() => {
+  const fetchProject = async () => {
+    const res = await api.get(
+      `/projects/${projectId}`
+    );
+
+    setProject(res.data);
+
+    setForm((prev) => ({
+      ...prev,
+      liveUrl:
+        res.data.surveyLinks?.live || "",
+      testUrl:
+        res.data.surveyLinks?.test || "",
+    }));
+  };
+
+  fetchProject();
+}, [projectId]);
+
   const addVariable = (item) => {
     const exists = variables.find(
       (v) => v.param === item.param
