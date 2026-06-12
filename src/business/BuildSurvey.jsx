@@ -820,7 +820,7 @@ useEffect(() => {
               </div>
             </div>
 
-            <div className="border-t mt-10 pt-8">
+            {/* <div className="border-t mt-10 pt-8">
               <h3 className="text-2xl mb-4">
                 Final URL
               </h3>
@@ -836,7 +836,7 @@ useEffect(() => {
                   rounded-lg
                 "
               />
-            </div>
+            </div> */}
 
             <div className="flex justify-end gap-4 mt-8">
               <button
@@ -907,7 +907,79 @@ useEffect(() => {
     />
   </>
 )}
+
+{project && (
+  <div className="mt-8">
+    <h3 className="text-lg font-semibold mb-4">
+      Project Statistics
+    </h3>
+
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+
+      <div className="bg-white border rounded-lg p-4">
+        <p className="text-xs text-gray-500 uppercase">
+          Target Completes
+        </p>
+        <p className="text-2xl font-bold">
+          {project.targetCompletes || 0}
+        </p>
+      </div>
+
+      <div className="bg-white border rounded-lg p-4">
+        <p className="text-xs text-gray-500 uppercase">
+          Completes
+        </p>
+        <p className="text-2xl font-bold text-green-600">
+          {project.completes || 0}
+        </p>
+      </div>
+
+      <div className="bg-white border rounded-lg p-4">
+        <p className="text-xs text-gray-500 uppercase">
+          Remaining
+        </p>
+        <p className="text-2xl font-bold text-orange-500">
+          {Math.max(
+            (project.targetCompletes || 0) -
+            (project.completes || 0),
+            0
+          )}
+        </p>
+      </div>
+
+      <div className="bg-white border rounded-lg p-4">
+        <p className="text-xs text-gray-500 uppercase">
+          DQ
+        </p>
+        <p className="text-2xl font-bold text-red-500">
+          {project.disqualified || 0}
+        </p>
+      </div>
+
+      <div className="bg-white border rounded-lg p-4">
+        <p className="text-xs text-gray-500 uppercase">
+          QF
+        </p>
+        <p className="text-2xl font-bold text-yellow-600">
+          {project.quotaFull || 0}
+        </p>
+      </div>
+
+      <div className="bg-white border rounded-lg p-4">
+        <p className="text-xs text-gray-500 uppercase">
+          Total Responses
+        </p>
+        <p className="text-2xl font-bold">
+          {project.totalResponses || 0}
+        </p>
+      </div>
+
+    </div>
+  </div>
+)}
     </>
+
+    
   );
 }
 
