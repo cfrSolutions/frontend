@@ -405,12 +405,12 @@ export default function BuildSurvey({
 
     const [surveyUrl, setSurveyUrl] = useState("");
 const [project, setProject] = useState(null);
-const { id } = useParams();
+const { projectId } = useParams();
 const base = import.meta.env.VITE_API_URL;
 
 useEffect(() => {
   const fetchProject = async () => {
-    const res = await api.get(`/projects/${id}`);
+    const res = await api.get(`/projects/${projectId}`);
     setProject(res.data);
   };
 
@@ -449,10 +449,8 @@ useEffect(() => {
         : "?";
 
 
-        const params = useParams();
-
-console.log(params);
-     params = variables
+        
+    const params = variables
       .map(
         (v) =>
           `${v.param}=[%${v.param}%]`
