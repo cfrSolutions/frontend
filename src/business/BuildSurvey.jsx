@@ -891,6 +891,10 @@ useEffect(() => {
       )}
       {project?.redirects && (
   <>
+  <LinkBox
+  label="Start URL"
+  url={`${base}/redirect/start?tk=${project.redirects.start?.token}&PID=[[PANELIST IDENTIFIER]]`}
+/>
     <LinkBox
       label="Complete"
       url={`${base}/redirect/c?tk=${project.redirects.complete?.token}&RID={RID}`}
