@@ -448,7 +448,11 @@ useEffect(() => {
         ? "&"
         : "?";
 
-    const params = variables
+
+        const params = useParams();
+
+console.log(params);
+     params = variables
       .map(
         (v) =>
           `${v.param}=[%${v.param}%]`

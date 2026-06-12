@@ -47,7 +47,7 @@ const [profiles, setProfiles] = useState([]);
 
 
 useEffect(() => {
-  fetch("http://localhost:5000/api/profiles")
+  fetch("https://api.inputify.io/api/profiles")
     .then(res => res.json())
     .then(data => setProfiles(data));
 }, []);
