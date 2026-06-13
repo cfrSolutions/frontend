@@ -460,11 +460,6 @@
 
 
 
-
-
-
-
-
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../services/api";
@@ -473,246 +468,66 @@ import socket from "../socket";
 export default function AdminProjectDetail() {
   const { id } = useParams();
   const [project, setProject] = useState(null);
-const [messages, setMessages] = useState([]);
-const [message, setMessage] = useState("");
-const [offer, setOffer] = useState("");
-const [finalAmount, setFinalAmount] = useState("");
-  // useEffect(() => {
-  //   fetchProject();
-  // }, [id]);
+
+
   useEffect(() => {
   fetchProject();
 
-  // const interval = setInterval(fetchProject, 5000);
-  // return () => clearInterval(interval);
+  
 }, [id]);
 
-useEffect(() => {
+const steps = [
+  "Created",
+  "Testing",
+  "Live",
+  "Hold",
+  "Completed",
+];
 
-  socket.emit("join_project", id);
-
-}, [id]);
-
-useEffect(() => {
-
-  socket.on("receive_message", (data) => {
-
-     setMessages((prev) => {
-
-    const exists = prev.some(
-      (m) =>
-        m.message === data.message &&
-        m.sender === data.sender &&
-        m.proposedCpi === data.proposedCpi
-    );
-
-    if (exists) return prev;
-
-    return [...prev, data];
-  });
-
-  });
-
-  return () => {
-    socket.off("receive_message");
-  };
-
-}, []);
-
-const sendNegotiation = async () => {
-
-  const data = {
-    projectId: id,
-    sender: "ADMIN",
-   message: message,
-  proposedCpi: offer,
-  };
-
-  await api.put(
-    `/admin/project/${id}/negotiate`,
-    data
-  );
-
-  socket.emit("send_message", data);
-
-  setMessages((prev) => [...prev, data]);
-
-  setMessage("");
-  setOffer("");
-};
-const acceptNegotiation = async () => {
-
-  try {
-
-    await api.put(
-      `/admin/project/${id}/accept-negotiation`,
-      {
-        amount: finalAmount,
-      }
-    );
-
-    fetchProject();
-
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const rejectNegotiation = async () => {
-
-  try {
-
-    await api.put(
-      `/admin/project/${id}/reject`
-    );
-
-    fetchProject();
-
-  } catch (err) {
-    console.log(err);
-  }
-};
-const moveToTesting = async () => {
-  await api.put(`/admin/project/${id}/move-testing`);
-  fetchProject();
-};
-
-  const fetchProject = async () => {
-    const res = await api.get(`/admin/project/${id}`);
-    setProject(res.data);
-    setMessages(res.data.negotiations || []);
-  };
- 
-  if (!project) return <p>Loading...</p>;
-
-  const steps = [
-    "Project Created",
-    "Negotiation",
-    "Cost Accepted",
-    "Testing Setup",
-    "Live",
-    "Hold",
-    "Completed",
-  ];
-
-  // const getStep = () => {
-  //   switch (project.status) {
-  //     case "DRAFT":
-  //       return 0;
-  //     case "LIVE":
-  //       return 1; // 
-  //     case "HOLD":
-  //       return 4;
-  //     case "CLOSED":
-  //       return 5;
-  //     default:
-  //       return 0;
-  //   }
-  // };
-
-  // const getStep = () => {
-  //   switch (project.status) {
-  //     case "DRAFT":
-  //       return 0;
-  //     case "NEGOTIATION":
-  //       return 1;
-  //     case "TESTING":
-  //       return 2;
-  //     case "LIVE":
-  //       return 3;
-  //     case "HOLD":
-  //       return 4;
-  //     case "COMPLETED":
-  //       return 5;
-  //     default:
-  //       return 0;
-  //   }
-  // };
-
-  const getStep = () => {
-  switch (project.status) {
-
+const getStep = () => {
+  switch (project?.status) {
     case "DRAFT":
       return 0;
 
-    case "NEGOTIATION":
+    case "TESTING":
       return 1;
 
-    case "ACCEPTED":
+    case "LIVE":
       return 2;
 
-    case "TESTING":
+    case "HOLD":
       return 3;
 
-    case "LIVE":
-      return 4;
-
-    case "HOLD":
-      return 5;
-
     case "COMPLETED":
-      return 6;
+      return 4;
 
     default:
       return 0;
   }
 };
 
-//  const goLive = async () => {
-//   try {
-//     await api.put(`/admin/project/${id}/go-live`);
-//     fetchProject(); 
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };
+const [vendorLinks, setVendorLinks] = useState({
+  vendorName: "",
+  capture: "",
+  complete: "",
+  disqualified: "",
+  quotaFull: "",
+});
 
-const handleAccept = async () => {
-
-  try {
-
-    await api.put(
-      `/admin/project/${id}/accept`
-    );
-
-    fetchProject();
-
-  } catch (err) {
-    console.log(err);
-  }
+const moveToTesting = async () => {
+  await api.put(`/admin/project/${id}/testing`);
+  fetchProject();
 };
 
-const startNegotiation = async () => {
-
-  try {
-
-    await api.put(
-      `/admin/project/${id}/start-negotiation`
-    );
-
-    fetchProject();
-
-  } catch (err) {
-    console.log(err);
-  }
+const moveToHold = async () => {
+  await api.put(`/admin/project/${id}/hold`);
+  fetchProject();
 };
 
-const handleReject = async () => {
-
-  try {
-
-    await api.put(
-      `/admin/project/${id}/reject`
-    );
-
-    fetchProject();
-
-  } catch (err) {
-    console.log(err);
-  }
+const completeProject = async () => {
+  await api.put(`/admin/project/${id}/complete`);
+  fetchProject();
 };
-
-
 const goLive = async () => {
   try {
     await api.put(`/admin/project/${id}/go-live`);
@@ -723,34 +538,24 @@ const goLive = async () => {
     console.error(err);
   }
 };
+
+const saveVendorLinks = async () => {
+  await api.put(
+    `/admin/project/${id}/vendor-links`,
+    vendorLinks
+  );
+
+  alert("Vendor links saved");
+
+  fetchProject();
+};
+
   const activeStep = getStep();
 
   const base = import.meta.env.VITE_API_URL;
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-full overflow-x-hidden">
-
-      {/* <h1 className="text-2xl font-bold mb-2">
-        Project Detail
-      </h1>
-{project.status === "LIVE" && (
-  <button onClick={moveToTesting}>
-    Move to Testing 🚀
-  </button>
-)}
-      
-      <div className="flex justify-between mb-10">
-        {steps.map((step, i) => (
-          <div key={i} className="flex-1 text-center">
-            <div
-              className={`w-4 h-4 mx-auto rounded-full mb-2 ${
-                i <= activeStep ? "bg-blue-600" : "bg-gray-300"
-              }`}
-            />
-            <p className="text-xs">{step}</p>
-          </div>
-        ))}
-      </div> */}
 
 
 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
@@ -776,90 +581,83 @@ const goLive = async () => {
       {new Date(project.createdAt).toLocaleDateString()}
     </p>
   </div>
-
-  {/* <div className="flex gap-3">
-    <button className="border px-4 py-2 rounded-lg hover:bg-gray-100">
-      Actions
-    </button>
-
-    {project.status === "LIVE" && (
-      <button
-        onClick={moveToTesting}
-        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-      >
-        Move to Testing ↗
-      </button>
-    )}
-
-    {project.status === "TESTING" && (
-    <button
-      onClick={goLive}
-      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-    >
-      Move to Live
-    </button>
-)}
-  </div> */}
-
 <div className="flex flex-wrap gap-3 w-full lg:w-auto">
 
-  {/* DRAFT ACTIONS */}
-  {project.status === "DRAFT" && (
-    <>
-
-      <button
-        onClick={handleAccept}
-        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
-      >
-        Accept
-      </button>
-
-      <button
-        onClick={startNegotiation}
-        className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600"
-      >
-        Negotiation
-      </button>
-
-      <button
-        onClick={handleReject}
-        className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
-      >
-        Reject
-      </button>
-
-    </>
-  )}
 
   {/* ACCEPTED */}
-  {project.status === "ACCEPTED" && (
+  <div className="flex flex-wrap gap-3">
+
+  {project.status === "DRAFT" && (
     <button
       onClick={moveToTesting}
-      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+      className="
+        bg-blue-600
+        text-white
+        px-4 py-2
+        rounded-lg
+      "
     >
-      Move to Testing ↗
+      Move To Testing
+    </button>
+  )}
+
+  {project.status === "TESTING" && (
+    <button
+      onClick={goLive}
+      className="
+        bg-green-600
+        text-white
+        px-4 py-2
+        rounded-lg
+      "
+    >
+      Move To Live
     </button>
   )}
 
   {project.status === "LIVE" && (
     <button
-      onClick={moveToTesting}
-      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+      onClick={moveToHold}
+      className="
+        bg-yellow-500
+        text-white
+        px-4 py-2
+        rounded-lg
+      "
     >
-      Move to Testing ↗
+      Hold Project
     </button>
   )}
 
-  {/* TESTING */}
-  {project.status === "TESTING" && (
-    <button
-      onClick={goLive}
-      className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
-    >
-      Move to Live
-    </button>
+  {project.status === "HOLD" && (
+    <>
+      <button
+        onClick={goLive}
+        className="
+          bg-green-600
+          text-white
+          px-4 py-2
+          rounded-lg
+        "
+      >
+        Resume Live
+      </button>
+
+      <button
+        onClick={completeProject}
+        className="
+          bg-blue-600
+          text-white
+          px-4 py-2
+          rounded-lg
+        "
+      >
+        Complete Project
+      </button>
+    </>
   )}
 
+</div>
 </div>
 
 
@@ -965,154 +763,95 @@ const goLive = async () => {
       </span>
     </div>
 
-    {/* <div className="flex flex-col sm:flex-row sm:justify-between gap-2 px-4 sm:px-6 py-4">
-      <span className="text-gray-500">Project ID</span>
-      <span className="font-semibold">
-        {project.projectId || project._id}
-      </span>
-    </div> */}
+  
 
   </div>
 </div>
 
 
-{project.status === "NEGOTIATION" &&(
-  <div className="border border-gray-200 rounded-2xl bg-white mt-8">
+<div className="border rounded-2xl bg-white p-6 mb-8">
 
-  <div className="px-6 py-5 border-b border-gray-200">
-    <h3 className="font-semibold text-lg">
-      Negotiation Chat
-    </h3>
-  </div>
+  <h3 className="text-lg font-semibold mb-6">
+    Vendor Integration
+  </h3>
 
-  {/* MESSAGES */}
-  <div className="p-6 space-y-4 max-h-[400px] overflow-y-auto">
-
-    {messages.map((msg, i) => (
-
-      <div
-        key={i}
-        className={`max-w-[70%] p-4 rounded-2xl
-
-        ${
-          msg.sender === "ADMIN"
-            ? "bg-blue-600 text-white ml-auto"
-            : "bg-gray-100 text-gray-800"
-        }`}
-      >
-
-        <p className="text-xs font-semibold mb-1">
-          {msg.sender}
-        </p>
-
-        <p>{msg.message}</p>
-
-        {msg.proposedCpi  && (
-
-          <p className="mt-2 font-bold">
-            Offer: ₹{msg.proposedCpi}
-          </p>
-
-        )}
-
-      </div>
-
-    ))}
-
-  </div>
-
-  {/* INPUT */}
-  <div className="border-t border-gray-200 p-4 flex flex-col md:flex-row gap-3">
+  <div className="space-y-4">
 
     <input
-      type="text"
-      placeholder="Type message..."
-      value={message}
-      onChange={(e) => setMessage(e.target.value)}
-      className="flex-1 border rounded-xl px-4 py-3"
+    value={vendorLinks.vendorName}
+onChange={(e) =>
+  setVendorLinks({
+    ...vendorLinks,
+    vendorName: e.target.value,
+  })
+}
+      placeholder="Vendor Name"
+      className="w-full border rounded-xl p-3"
     />
 
     <input
-      type="number"
-      placeholder="Offer"
-      value={offer}
-      onChange={(e) => setOffer(e.target.value)}
-      className="w-full md:w-32 border rounded-xl px-4 py-3"
+    value={vendorLinks.vendorName}
+onChange={(e) =>
+  setVendorLinks({
+    ...vendorLinks,
+    capture: e.target.value,
+  })
+}
+      placeholder="Capture URL"
+      className="w-full border rounded-xl p-3"
     />
-
-    <button
-      onClick={sendNegotiation}
-      className="bg-blue-600 text-white px-6 py-3 rounded-xl w-full md:w-auto"
-    >
-      Send
-    </button>
-
-  </div>
-<div className="border-t border-gray-200 p-4">
-
-  <div className="flex flex-wrap gap-3 w-full lg:w-auto">
 
     <input
-      type="number"
-      placeholder="Final agreed amount"
-      value={finalAmount}
-      onChange={(e) => setFinalAmount(e.target.value)}
-      className="flex-1 border rounded-xl px-4 py-3"
+    value={vendorLinks.vendorName}
+onChange={(e) =>
+  setVendorLinks({
+    ...vendorLinks,
+    complete: e.target.value,
+  })
+}
+      placeholder="Complete URL"
+      className="w-full border rounded-xl p-3"
+    />
+
+    <input
+    value={vendorLinks.vendorName}
+onChange={(e) =>
+  setVendorLinks({
+    ...vendorLinks,
+    disqualified: e.target.value,
+  })
+}
+      placeholder="Disqualified URL"
+      className="w-full border rounded-xl p-3"
+    />
+
+    <input
+    value={vendorLinks.vendorName}
+onChange={(e) =>
+  setVendorLinks({
+    ...vendorLinks,
+    quotaFull: e.target.value,
+  })
+}
+      placeholder="Quota Full URL"
+      className="w-full border rounded-xl p-3"
     />
 
     <button
-      onClick={acceptNegotiation}
-      className="bg-green-600 text-white px-6 rounded-xl"
+      className="
+        bg-blue-600
+        text-white
+        px-5 py-3
+        rounded-xl
+      "
+      onClick={saveVendorLinks}
     >
-      Accept Deal
-    </button>
-
-    <button
-      onClick={handleReject}
-      className="bg-red-600 text-white px-6 rounded-xl"
-    >
-      Reject
+      Save Vendor Integration
     </button>
 
   </div>
 
 </div>
-</div>
-
-)}
-
-{project.status === "ACCEPTED" && (
-
-  <div className="border border-green-200 bg-green-50 rounded-2xl p-6 mt-8">
-
-    <h3 className="text-lg font-semibold text-green-800 mb-4">
-      Cost Accepted
-    </h3>
-
-    <div className="space-y-3 text-sm">
-
-      <div className="flex justify-between">
-        <span className="text-gray-600">
-          Final Agreed CPI
-        </span>
-
-        <span className="font-bold text-green-700">
-          ₹{project.budget}
-        </span>
-      </div>
-
-     
-
-    </div>
-
-  </div>
-
-)}
-
-
-
-
-
 
 
 {/* REDIRECT LINKS */}
@@ -1151,6 +890,8 @@ const goLive = async () => {
     </div>
   </div>
 )}
+
+
 {project.status === "TESTING" && (
 <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white mb-8">
 

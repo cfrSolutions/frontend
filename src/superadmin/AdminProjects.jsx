@@ -132,37 +132,7 @@ export default function AdminProjects() {
     setProjects(res.data);
   };
 
-  const openNegotiation = (e) => {
-    e.stopPropagation();
-    setShowChat(true);
-  };
 
-  const handleAccept = async (e, id) => {
-    e.stopPropagation();
-
-    try {
-      await api.put(`/admin/project/${id}/accept`);
-
-      alert("✅ Project Accepted");
-      fetchProjects();
-    } catch (err) {
-      console.log(err);
-      alert("❌ Error");
-    }
-  };
-
-  const handleReject = async (e, id) => {
-    e.stopPropagation();
-
-    try {
-      await api.put(`/admin/project/${id}/reject`);
-
-      alert("❌ Project Rejected");
-      fetchProjects();
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   return (
     <div className="w-full p-3 sm:p-6">
@@ -208,69 +178,15 @@ export default function AdminProjects() {
 
               {/* RIGHT SIDE */}
               <div className="flex flex-wrap gap-2 w-full lg:w-auto">
-                {p.status === "DRAFT" && (
-                  <>
-                    <button
-                      onClick={(e) => handleAccept(e, p._id)}
-                      className="
-                        flex-1 sm:flex-none
-                        bg-green-600
-                        hover:bg-green-700
-                        text-white
-                        px-4
-                        py-2
-                        rounded-lg
-                        text-sm
-                      "
-                    >
-                      Accept
-                    </button>
-
-                    <button
-                      onClick={(e) => handleReject(e, p._id)}
-                      className="
-                        flex-1 sm:flex-none
-                        bg-red-600
-                        hover:bg-red-700
-                        text-white
-                        px-4
-                        py-2
-                        rounded-lg
-                        text-sm
-                      "
-                    >
-                      Reject
-                    </button>
-
-                    <button
-                      onClick={(e) => openNegotiation(e)}
-                      className="
-                        w-full sm:w-auto
-                        bg-yellow-500
-                        hover:bg-yellow-600
-                        text-white
-                        px-4
-                        py-2
-                        rounded-lg
-                        text-sm
-                      "
-                    >
-                      Start Negotiation
-                    </button>
-                  </>
-                )}
-
-                {p.status === "LIVE" && (
-                  <span className="text-green-600 font-semibold text-sm">
-                    Approved
-                  </span>
-                )}
-
-                {p.status === "CLOSED" && (
-                  <span className="text-red-600 font-semibold text-sm">
-                    Rejected
-                  </span>
-                )}
+               <button
+  onClick={(e) => {
+    e.stopPropagation();
+    navigate(`/superadmin/dashboard/project/${p._id}`);
+  }}
+  className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+>
+  Manage Project
+</button>
               </div>
             </div>
           </div>
