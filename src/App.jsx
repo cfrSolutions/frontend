@@ -156,10 +156,10 @@ export default function App() {
   element={<ProjectDetail />}
 />
 
- <Route
+ {/* <Route
     path="project/:id/target-group/new"
     element={<TargetGroupForm />}
-  />
+  /> */}
 
   <Route
   path="project/:projectId/target-group/new"
