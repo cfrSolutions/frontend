@@ -485,6 +485,7 @@ const steps = [
 ];
 
 const getStep = () => {
+  const activeStep = getStep();
   switch (project?.status) {
     case "DRAFT":
       return 0;
@@ -550,7 +551,15 @@ const saveVendorLinks = async () => {
   fetchProject();
 };
 
-  const activeStep = getStep();
+if (!project) {
+  return (
+    <div className="p-6">
+      Loading...
+    </div>
+  );
+}
+
+  // const activeStep = getStep();
 
   const base = import.meta.env.VITE_API_URL;
 
