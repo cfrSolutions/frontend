@@ -1107,6 +1107,7 @@ export default function AdminProjectDetail() {
 
   const [vendorLinks, setVendorLinks] =
     useState({
+      vendorName: "",
       capture: "",
       complete: "",
       disqualified: "",
@@ -1120,6 +1121,21 @@ export default function AdminProjectDetail() {
       );
 
       setProject(res.data);
+
+if (res.data.vendorLinks) {
+  setVendorLinks({
+    vendorName:
+    res.data.vendorLinks.vendorName || "",
+    capture:
+      res.data.vendorLinks.capture || "",
+    complete:
+      res.data.vendorLinks.complete || "",
+    disqualified:
+      res.data.vendorLinks.disqualified || "",
+    quotaFull:
+      res.data.vendorLinks.quotaFull || "",
+  });
+}
     } catch (err) {
       console.log(err);
     }
@@ -1137,18 +1153,34 @@ export default function AdminProjectDetail() {
     fetchProject();
   };
 
-  await api.put(
-  `/admin/project/${id}/vendor-links`,
-  {
-    vendorName: "SBO",
-    capture: vendorLinks.capture,
-    complete: vendorLinks.complete,
-    disqualified:
-      vendorLinks.disqualified,
-    quotaFull:
-      vendorLinks.quotaFull,
+  const saveVendorLinks = async () => {
+  try {
+
+    await api.put(
+      `/admin/project/${id}/vendor-links`,
+      {
+        vendorName:  vendorLinks.vendorName,
+        capture: vendorLinks.capture,
+        complete: vendorLinks.complete,
+        disqualified:
+          vendorLinks.disqualified,
+        quotaFull:
+          vendorLinks.quotaFull,
+      }
+    );
+
+    alert("Vendor links saved");
+
+    fetchProject();
+
+  } catch (err) {
+
+    console.log(err);
+
+    alert("Failed to save vendor links");
+
   }
-);
+};
 
   const moveLive = async () => {
     await api.put(
@@ -1209,6 +1241,17 @@ export default function AdminProjectDetail() {
           Vendor Redirects
         </h2>
 
+<input
+  placeholder="Vendor Name"
+  className="border p-3 w-full mb-3"
+  value={vendorLinks.vendorName || ""}
+  onChange={(e) =>
+    setVendorLinks({
+      ...vendorLinks,
+      vendorName: e.target.value,
+    })
+  }
+/>
         <input
           placeholder="Capture URL"
           className="border p-3 w-full mb-3"
