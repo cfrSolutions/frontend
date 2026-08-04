@@ -40,6 +40,7 @@ import AdminProjects from "./superadmin/AdminProjects";
 import AdminProjectDetail from "./superadmin/AdminProjectDetail";
 import SurveyStatusPages from "./business/SurveyStatusPages";
 import CreateProjects from "./business/createProjects";
+import SurveyBuilder from "./business/SurveyBuilder";
 import ProjectDetail from "./business/ProjectDetail";
 import TargetGroupForm from "./business/TargetGroupForm";
 export default function App() {
@@ -180,11 +181,16 @@ export default function App() {
   <Route path="closed" element={<BusinessDashboard />} />
   <Route path="drafts" element={<BusinessDashboard />} />
   <Route path="negotiation" element={<BusinessDashboard />} />
+   <Route
+    path="survey-builder"
+    element={<SurveyBuilder />}
+/>
   {/* <Route
   path="/business/project/:id/status"
   element={<ProjectStatus />}
 /> */}
 </Route>
+
 <Route path="/thank-you" element={<SurveyStatusPages />} />
 <Route path="/disqualified" element={<SurveyStatusPages />} />
 <Route path="/quota-full" element={<SurveyStatusPages />} />

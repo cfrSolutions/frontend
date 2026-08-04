@@ -178,6 +178,7 @@ const mainMenu = [
   { label: "Hold Projects", icon: PauseCircle, to: "/business/dashboard/hold" },
   { label: "Closed Projects", icon: FileText, to: "/business/dashboard/closed" },
   { label: "Draft Projects", icon: FileText, to: "/business/dashboard/drafts" },
+  { label: "Survey Builder", icon: FileText, to: "/business/dashboard/survey-builder" },
 ];
 
 const bottomMenu = [
