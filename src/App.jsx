@@ -45,6 +45,7 @@ import SurveyForms from "./business/SurveyForms";
 import ProjectDetail from "./business/ProjectDetail";
 import TargetGroupForm from "./business/TargetGroupForm";
 import SurveyRunner from "./business/SurveyRunner";
+import SurveyResponses from "./business/SurveyResponses";
 export default function App() {
   return (
     <BrowserRouter>
@@ -200,6 +201,10 @@ export default function App() {
 <Route
     path="survey-builder/:id"
     element={<SurveyBuilder />}
+/>
+<Route
+  path="survey-responses/:id"
+  element={<SurveyResponses />}
 />
 
   {/* <Route
