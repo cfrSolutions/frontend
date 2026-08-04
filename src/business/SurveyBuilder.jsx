@@ -223,7 +223,16 @@ const loadSurvey = async () => {
       quotaFullUrl: data.quotaFullUrl,
     });
 
-    setQuestions(data.questions);
+    setQuestions(
+  data.questions.map((question, qIndex) => ({
+    ...question,
+    id: question.id || `q-${qIndex}-${Date.now()}`,
+    conditions: (question.conditions || []).map((condition, cIndex) => ({
+      ...condition,
+      id: condition.id || `c-${qIndex}-${cIndex}-${Date.now()}`
+    }))
+  }))
+);
 
   } catch (err) {
 
@@ -405,7 +414,7 @@ const loadSurvey = async () => {
 
   {questions.map((question, qIndex) => (
     <div
-      key={question.id}
+      key={question.id || question._id}
       className="border rounded-xl p-5 mb-5 bg-slate-50"
     >
       <div className="flex justify-between items-center mb-4">
@@ -536,7 +545,7 @@ const loadSurvey = async () => {
   {question.conditions.map((condition) => (
 
     <div
-      key={condition.id}
+       key={condition.id || condition._id}
       className="border rounded-lg p-4 mt-4 bg-white"
     >
 
