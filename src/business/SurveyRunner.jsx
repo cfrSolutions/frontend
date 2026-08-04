@@ -24,6 +24,8 @@ export default function SurveyRunner() {
 );
 
 setSurvey(data);
+console.log("SURVEY:", data);
+console.log("QUESTIONS:", data.questions);
 
     } catch (err) {
 
@@ -109,7 +111,8 @@ const answer = answers[questionKey];
     for (const condition of question.conditions) {
 
       let matched = false;
-
+console.log("Answer:", answer);
+console.log("Condition:", condition);
      switch (condition.operator) {
 
   case "equals":
