@@ -99,7 +99,9 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const data = await login({ email, password });
+      const data = await login({ email, password, role: type === "BUSINESS" ? "BUSINESS" : "USER", });
+      console.log(data);
+console.log("Role:", data.role);
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
