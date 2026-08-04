@@ -798,7 +798,7 @@ const evaluateConditions = () => {
       </div>
     );
   }
-    const submitSurvey = () => {
+    const submitSurvey = async () => {
 
     for (const q of survey.questions) {
 
@@ -835,6 +835,7 @@ const evaluateConditions = () => {
     }
 
     const action = evaluateConditions();
+    try {
     await api.post(
   `/survey-builder/submit/${token}`,
   {
@@ -848,6 +849,11 @@ const evaluateConditions = () => {
         : "COMPLETE",
   }
 );
+ } catch (err) {
+    console.error("Failed to save survey response", err);
+    alert("Unable to save survey response.");
+    return;
+  }
 
     if (
       action === "disqualify" &&
