@@ -5,8 +5,6 @@ import {
   Plus,
   Save,
 } from "lucide-react";
-import MainLayout from "../components/layout/MainLayout";
-import "../../styles/module.css";
 
 export default function SurveyBuilder() {
   const [survey, setSurvey] = useState({
@@ -18,10 +16,10 @@ export default function SurveyBuilder() {
   });
 
   const handleChange = (e) => {
-    setSurvey({
-      ...survey,
+    setSurvey((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   const handleSave = () => {
@@ -30,160 +28,174 @@ export default function SurveyBuilder() {
   };
 
   return (
-    <MainLayout>
-      <div className="container-fluid py-4">
+    <div className="container mx-auto px-6 py-8">
 
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <div>
-            <h2 className="fw-bold mb-1">Survey Builder</h2>
-            <p className="text-muted mb-0">
-              Create your own survey with custom logic.
-            </p>
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold">Survey Builder</h1>
+          <p className="text-gray-500 mt-1">
+            Create your own survey with custom logic.
+          </p>
+        </div>
+
+        <button
+          onClick={handleSave}
+          className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-lg"
+        >
+          <Save size={18} />
+          Save & Continue
+        </button>
+      </div>
+
+      {/* Survey Information */}
+
+      <div className="bg-white rounded-xl shadow border mb-8">
+
+        <div className="border-b px-6 py-4">
+          <h2 className="flex items-center gap-2 font-semibold text-lg">
+            <FileText size={18} />
+            Survey Information
+          </h2>
+        </div>
+
+        <div className="p-6">
+
+          <div className="mb-5">
+            <label className="block mb-2 font-medium">
+              Survey Name
+            </label>
+
+            <input
+              type="text"
+              name="name"
+              value={survey.name}
+              onChange={handleChange}
+              placeholder="Customer Banking Survey"
+              className="w-full border rounded-lg px-4 py-3"
+            />
           </div>
+
+          <div className="mb-5">
+            <label className="block mb-2 font-medium">
+              Description
+            </label>
+
+            <textarea
+              rows={4}
+              name="description"
+              value={survey.description}
+              onChange={handleChange}
+              placeholder="Survey description..."
+              className="w-full border rounded-lg px-4 py-3"
+            />
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-5">
+
+            <div>
+              <label className="block mb-2 font-medium">
+                Complete URL
+              </label>
+
+              <div className="flex items-center border rounded-lg overflow-hidden">
+
+                <div className="px-3 bg-gray-100">
+                  <Link size={16} />
+                </div>
+
+                <input
+                  type="text"
+                  name="completeUrl"
+                  value={survey.completeUrl}
+                  onChange={handleChange}
+                  placeholder="https://..."
+                  className="w-full px-3 py-3 outline-none"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block mb-2 font-medium">
+                Disqualify URL
+              </label>
+
+              <div className="flex items-center border rounded-lg overflow-hidden">
+
+                <div className="px-3 bg-gray-100">
+                  <Link size={16} />
+                </div>
+
+                <input
+                  type="text"
+                  name="disqualifyUrl"
+                  value={survey.disqualifyUrl}
+                  onChange={handleChange}
+                  placeholder="https://..."
+                  className="w-full px-3 py-3 outline-none"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block mb-2 font-medium">
+                Quota Full URL
+              </label>
+
+              <div className="flex items-center border rounded-lg overflow-hidden">
+
+                <div className="px-3 bg-gray-100">
+                  <Link size={16} />
+                </div>
+
+                <input
+                  type="text"
+                  name="quotaFullUrl"
+                  value={survey.quotaFullUrl}
+                  onChange={handleChange}
+                  placeholder="https://..."
+                  className="w-full px-3 py-3 outline-none"
+                />
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      {/* Questions */}
+
+      <div className="bg-white rounded-xl shadow border">
+
+        <div className="flex justify-between items-center border-b px-6 py-4">
+
+          <h2 className="font-semibold text-lg">
+            Questions
+          </h2>
 
           <button
-            className="btn btn-primary"
-            onClick={handleSave}
+            className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg"
           >
-            <Save size={16} className="me-2" />
-            Save & Continue
+            <Plus size={18} />
+            Add Question
           </button>
+
         </div>
 
-        <div className="card shadow-sm border-0 mb-4">
-          <div className="card-header bg-white">
-            <h5 className="mb-0">
-              <FileText size={18} className="me-2" />
-              Survey Information
-            </h5>
-          </div>
+        <div className="text-center py-20">
 
-          <div className="card-body">
+          <h3 className="text-xl font-semibold">
+            No Questions Added
+          </h3>
 
-            <div className="mb-3">
-              <label className="form-label">
-                Survey Name
-              </label>
-
-              <input
-                className="form-control"
-                name="name"
-                value={survey.name}
-                onChange={handleChange}
-                placeholder="Customer Banking Survey"
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">
-                Description
-              </label>
-
-              <textarea
-                rows="3"
-                className="form-control"
-                name="description"
-                value={survey.description}
-                onChange={handleChange}
-                placeholder="Survey description..."
-              />
-            </div>
-
-            <div className="row">
-
-              <div className="col-md-4 mb-3">
-                <label className="form-label">
-                  Complete URL
-                </label>
-
-                <div className="input-group">
-                  <span className="input-group-text">
-                    <Link size={16} />
-                  </span>
-
-                  <input
-                    className="form-control"
-                    name="completeUrl"
-                    value={survey.completeUrl}
-                    onChange={handleChange}
-                    placeholder="https://..."
-                  />
-                </div>
-              </div>
-
-              <div className="col-md-4 mb-3">
-                <label className="form-label">
-                  Disqualify URL
-                </label>
-
-                <div className="input-group">
-                  <span className="input-group-text">
-                    <Link size={16} />
-                  </span>
-
-                  <input
-                    className="form-control"
-                    name="disqualifyUrl"
-                    value={survey.disqualifyUrl}
-                    onChange={handleChange}
-                    placeholder="https://..."
-                  />
-                </div>
-              </div>
-
-              <div className="col-md-4 mb-3">
-                <label className="form-label">
-                  Quota Full URL
-                </label>
-
-                <div className="input-group">
-                  <span className="input-group-text">
-                    <Link size={16} />
-                  </span>
-
-                  <input
-                    className="form-control"
-                    name="quotaFullUrl"
-                    value={survey.quotaFullUrl}
-                    onChange={handleChange}
-                    placeholder="https://..."
-                  />
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-
-        <div className="card shadow-sm border-0">
-
-          <div className="card-header bg-white d-flex justify-content-between align-items-center">
-
-            <h5 className="mb-0">
-              Questions
-            </h5>
-
-            <button className="btn btn-primary">
-              <Plus size={16} className="me-2" />
-              Add Question
-            </button>
-
-          </div>
-
-          <div className="card-body text-center py-5">
-
-            <h5>No Questions Added</h5>
-
-            <p className="text-muted">
-              Click "Add Question" to begin building your survey.
-            </p>
-
-          </div>
+          <p className="text-gray-500 mt-2">
+            Click "Add Question" to begin building your survey.
+          </p>
 
         </div>
 
       </div>
-    </MainLayout>
+
+    </div>
   );
 }
