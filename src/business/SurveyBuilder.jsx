@@ -5,7 +5,7 @@ import {
   Plus,
   Save,
 } from "lucide-react";
-import MainLayout from "../../components/layout/MainLayout";
+import MainLayout from "../components/layout/MainLayout";
 import "../../styles/module.css";
 
 export default function SurveyBuilder() {
