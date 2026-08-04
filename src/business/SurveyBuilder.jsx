@@ -15,12 +15,83 @@ export default function SurveyBuilder() {
     quotaFullUrl: "",
   });
 
+  const [questions, setQuestions] = useState([]);
+
   const handleChange = (e) => {
     setSurvey((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
+
+  const addQuestion = () => {
+  setQuestions((prev) => [
+    ...prev,
+    {
+      id: Date.now(),
+      title: "",
+      type: "radio",
+      required: false,
+      options: ["Option 1", "Option 2"],
+    },
+  ]);
+};
+
+const updateQuestion = (id, field, value) => {
+  setQuestions((prev) =>
+    prev.map((q) =>
+      q.id === id ? { ...q, [field]: value } : q
+    )
+  );
+};
+
+const deleteQuestion = (id) => {
+  setQuestions((prev) =>
+    prev.filter((q) => q.id !== id)
+  );
+};
+
+const addOption = (id) => {
+  setQuestions((prev) =>
+    prev.map((q) =>
+      q.id === id
+        ? {
+            ...q,
+            options: [...q.options, `Option ${q.options.length + 1}`],
+          }
+        : q
+    )
+  );
+};
+
+const updateOption = (questionId, index, value) => {
+  setQuestions((prev) =>
+    prev.map((q) => {
+      if (q.id !== questionId) return q;
+
+      const options = [...q.options];
+      options[index] = value;
+
+      return {
+        ...q,
+        options,
+      };
+    })
+  );
+};
+
+const removeOption = (questionId, index) => {
+  setQuestions((prev) =>
+    prev.map((q) => {
+      if (q.id !== questionId) return q;
+
+      return {
+        ...q,
+        options: q.options.filter((_, i) => i !== index),
+      };
+    })
+  );
+};
 
   const handleSave = () => {
     console.log(survey);
@@ -174,25 +245,148 @@ export default function SurveyBuilder() {
           </h2>
 
           <button
-            className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg"
-          >
+    onClick={addQuestion}
+    className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg"
+>
             <Plus size={18} />
             Add Question
           </button>
 
         </div>
 
-        <div className="text-center py-20">
+        <div className="p-6">
 
-          <h3 className="text-xl font-semibold">
-            No Questions Added
-          </h3>
+  {questions.length === 0 && (
+    <div className="text-center py-12">
+      <h3 className="text-xl font-semibold">
+        No Questions Added
+      </h3>
 
-          <p className="text-gray-500 mt-2">
-            Click "Add Question" to begin building your survey.
-          </p>
+      <p className="text-gray-500 mt-2">
+        Click Add Question.
+      </p>
+    </div>
+  )}
 
-        </div>
+  {questions.map((question, qIndex) => (
+    <div
+      key={question.id}
+      className="border rounded-xl p-5 mb-5 bg-slate-50"
+    >
+      <div className="flex justify-between items-center mb-4">
+
+        <h4 className="font-semibold">
+          Question {qIndex + 1}
+        </h4>
+
+        <button
+          onClick={() => deleteQuestion(question.id)}
+          className="text-red-600"
+        >
+          Delete
+        </button>
+
+      </div>
+
+      <input
+        className="w-full border rounded-lg px-3 py-2 mb-4"
+        placeholder="Question title"
+        value={question.title}
+        onChange={(e) =>
+          updateQuestion(
+            question.id,
+            "title",
+            e.target.value
+          )
+        }
+      />
+
+      <select
+        className="w-full border rounded-lg px-3 py-2 mb-4"
+        value={question.type}
+        onChange={(e) =>
+          updateQuestion(
+            question.id,
+            "type",
+            e.target.value
+          )
+        }
+      >
+        <option value="radio">Single Choice</option>
+        <option value="checkbox">Multiple Choice</option>
+        <option value="dropdown">Dropdown</option>
+        <option value="text">Text</option>
+        <option value="textarea">Textarea</option>
+        <option value="number">Number</option>
+        <option value="email">Email</option>
+        <option value="date">Date</option>
+      </select>
+
+      <label className="flex items-center gap-2 mb-4">
+
+        <input
+          type="checkbox"
+          checked={question.required}
+          onChange={(e) =>
+            updateQuestion(
+              question.id,
+              "required",
+              e.target.checked
+            )
+          }
+        />
+
+        Required
+
+      </label>
+
+      {(question.type === "radio" ||
+        question.type === "checkbox" ||
+        question.type === "dropdown") && (
+        <>
+          {question.options.map((option, index) => (
+            <div
+              key={index}
+              className="flex gap-2 mb-2"
+            >
+              <input
+                className="flex-1 border rounded-lg px-3 py-2"
+                value={option}
+                onChange={(e) =>
+                  updateOption(
+                    question.id,
+                    index,
+                    e.target.value
+                  )
+                }
+              />
+
+              <button
+                onClick={() =>
+                  removeOption(question.id, index)
+                }
+                className="text-red-600"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+
+          <button
+            onClick={() =>
+              addOption(question.id)
+            }
+            className="mt-2 text-orange-600 font-medium"
+          >
+            + Add Option
+          </button>
+        </>
+      )}
+
+    </div>
+  ))}
+
+</div>
 
       </div>
 
