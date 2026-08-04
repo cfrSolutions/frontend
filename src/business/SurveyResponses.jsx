@@ -95,6 +95,12 @@ export default function SurveyResponses() {
     const row = {
       "Sr No": index + 1,
       Status: response.status,
+      Date: response.completedAt
+    ? new Date(response.completedAt).toLocaleDateString()
+    : "",
+  Time: response.completedAt
+    ? new Date(response.completedAt).toLocaleTimeString()
+    : "",
     };
 
     survey.questions.forEach((q) => {
@@ -175,6 +181,8 @@ export default function SurveyResponses() {
               <th className="border p-3">#</th>
 
               <th className="border p-3">Status</th>
+              <th className="border p-3">Date</th>
+              <th className="border p-3">Time</th>
 
               {survey.questions.map((q) => (
 
@@ -204,7 +212,18 @@ export default function SurveyResponses() {
                 <td className="border p-3">
                   {response.status}
                 </td>
+                
+                <td className="border p-3">
+  {response.completedAt
+    ? new Date(response.completedAt).toLocaleDateString()
+    : "-"}
+</td>
 
+<td className="border p-3">
+  {response.completedAt
+    ? new Date(response.completedAt).toLocaleTimeString()
+    : "-"}
+</td>
                 {survey.questions.map((q) => {
 
                  const key = q._id;
