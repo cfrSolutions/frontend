@@ -52,11 +52,34 @@ const submitSurvey = () => {
    const questionKey = question._id || question.id;
 const answer = answers[questionKey];
 
+    if (question.type === "matrix") {
+
     if (
-      answer === undefined ||
-      answer === "" ||
-      (Array.isArray(answer) && answer.length === 0)
+        !answer ||
+        Object.keys(answer).length !== question.rows.length
     ) {
+
+        alert(`${question.title} is required`);
+
+        return;
+    }
+
+}
+else if (
+
+    answer === undefined ||
+
+    answer === "" ||
+
+    (Array.isArray(answer) && answer.length === 0)
+
+) {
+
+    alert(`${question.title} is required`);
+
+    return;
+
+} {
 
       alert(`${question.title} is required`);
 
@@ -411,6 +434,94 @@ return (
 
     )}
 
+{/* MATRIX */}
+
+{question.type === "matrix" && (
+
+<div className="overflow-x-auto">
+
+<table className="w-full border border-gray-300">
+
+<thead>
+
+<tr className="bg-gray-100">
+
+<th className="border p-3 text-left">
+Statement
+</th>
+
+{question.columns.map((column) => (
+
+<th
+    key={column}
+    className="border p-3 text-center"
+>
+    {column}
+</th>
+
+))}
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{question.rows.map((row) => (
+
+<tr key={row}>
+
+<td className="border p-3">
+{row}
+</td>
+
+{question.columns.map((column) => (
+
+<td
+    key={column}
+    className="border text-center"
+>
+
+<input
+    type="radio"
+    name={`${questionKey}-${row}`}
+    checked={
+        answers[questionKey]?.[row] === column
+    }
+    onChange={() =>
+
+        setAnswers({
+
+            ...answers,
+
+            [questionKey]: {
+
+                ...(answers[questionKey] || {}),
+
+                [row]: column,
+
+            },
+
+        })
+
+    }
+/>
+
+</td>
+
+))}
+
+</tr>
+
+))}
+
+</tbody>
+
+</table>
+
+</div>
+
+)}
   </div>
 );
 

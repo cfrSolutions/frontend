@@ -43,6 +43,17 @@ const { id } = useParams();
       type: "radio",
       required: false,
       options: ["Option 1", "Option 2"],
+      rows: [
+  "Statement 1",
+  "Statement 2",
+],
+columns: [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+],
       conditions: [],
     },
   ]);
@@ -163,6 +174,90 @@ const removeOption = (questionId, index) => {
       return {
         ...q,
         options: q.options.filter((_, i) => i !== index),
+      };
+    })
+  );
+};
+
+const updateRow = (questionId, index, value) => {
+  setQuestions((prev) =>
+    prev.map((q) => {
+      if (q.id !== questionId) return q;
+
+      const rows = [...q.rows];
+      rows[index] = value;
+
+      return {
+        ...q,
+        rows,
+      };
+    })
+  );
+};
+
+const addRow = (questionId) => {
+  setQuestions((prev) =>
+    prev.map((q) =>
+      q.id === questionId
+        ? {
+            ...q,
+            rows: [...q.rows, `Statement ${q.rows.length + 1}`],
+          }
+        : q
+    )
+  );
+};
+
+const removeRow = (questionId, index) => {
+  setQuestions((prev) =>
+    prev.map((q) => {
+      if (q.id !== questionId) return q;
+
+      return {
+        ...q,
+        rows: q.rows.filter((_, i) => i !== index),
+      };
+    })
+  );
+};
+
+const updateColumn = (questionId, index, value) => {
+  setQuestions((prev) =>
+    prev.map((q) => {
+      if (q.id !== questionId) return q;
+
+      const columns = [...q.columns];
+      columns[index] = value;
+
+      return {
+        ...q,
+        columns,
+      };
+    })
+  );
+};
+
+const addColumn = (questionId) => {
+  setQuestions((prev) =>
+    prev.map((q) =>
+      q.id === questionId
+        ? {
+            ...q,
+            columns: [...q.columns, `${q.columns.length + 1}`],
+          }
+        : q
+    )
+  );
+};
+
+const removeColumn = (questionId, index) => {
+  setQuestions((prev) =>
+    prev.map((q) => {
+      if (q.id !== questionId) return q;
+
+      return {
+        ...q,
+        columns: q.columns.filter((_, i) => i !== index),
       };
     })
   );
@@ -464,6 +559,7 @@ const loadSurvey = async () => {
         <option value="number">Number</option>
         <option value="email">Email</option>
         <option value="date">Date</option>
+        <option value="matrix">Matrix</option>
       </select>
 
       <label className="flex items-center gap-2 mb-4">
@@ -488,6 +584,7 @@ const loadSurvey = async () => {
         question.type === "checkbox" ||
         question.type === "dropdown") && (
         <>
+        
           {question.options.map((option, index) => (
             <div
               key={index}
@@ -515,6 +612,8 @@ const loadSurvey = async () => {
               </button>
             </div>
           ))}
+
+          
 
           <button
             onClick={() =>
@@ -678,6 +777,199 @@ const loadSurvey = async () => {
 </div>
         </>
       )}
+
+      {question.type === "matrix" && (
+
+<div className="mt-5">
+
+<h3 className="font-semibold text-lg mb-4">
+Matrix Builder
+</h3>
+
+{/* ROWS */}
+
+<div className="mb-6">
+
+<div className="flex justify-between items-center mb-3">
+
+<h4 className="font-medium">
+Rows
+</h4>
+
+<button
+type="button"
+onClick={() => addRow(question.id)}
+className="text-orange-600"
+>
++ Add Row
+</button>
+
+</div>
+
+{question.rows.map((row, index) => (
+
+<div
+key={index}
+className="flex gap-2 mb-2"
+>
+
+<input
+className="flex-1 border rounded-lg px-3 py-2"
+value={row}
+onChange={(e)=>
+updateRow(
+question.id,
+index,
+e.target.value
+)
+}
+/>
+
+<button
+type="button"
+onClick={() =>
+removeRow(
+question.id,
+index
+)
+}
+className="text-red-600"
+>
+✕
+</button>
+
+</div>
+
+))}
+
+</div>
+
+{/* COLUMNS */}
+
+<div className="mb-6">
+
+<div className="flex justify-between items-center mb-3">
+
+<h4 className="font-medium">
+Columns
+</h4>
+
+<button
+type="button"
+onClick={() => addColumn(question.id)}
+className="text-orange-600"
+>
++ Add Column
+</button>
+
+</div>
+
+{question.columns.map((column,index)=>(
+
+<div
+key={index}
+className="flex gap-2 mb-2"
+>
+
+<input
+className="flex-1 border rounded-lg px-3 py-2"
+value={column}
+onChange={(e)=>
+updateColumn(
+question.id,
+index,
+e.target.value
+)
+}
+/>
+
+<button
+type="button"
+onClick={()=>
+removeColumn(
+question.id,
+index
+)
+}
+className="text-red-600"
+>
+✕
+</button>
+
+</div>
+
+))}
+
+</div>
+
+{/* PREVIEW */}
+
+<div className="border rounded-xl overflow-hidden">
+
+<table className="w-full">
+
+<thead>
+
+<tr className="bg-gray-100">
+
+<th className="border p-3 text-left">
+Statements
+</th>
+
+{question.columns.map((column,index)=>(
+
+<th
+key={index}
+className="border p-3 text-center"
+>
+{column}
+</th>
+
+))}
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{question.rows.map((row,rowIndex)=>(
+
+<tr key={rowIndex}>
+
+<td className="border p-3">
+{row}
+</td>
+
+{question.columns.map((column,columnIndex)=>(
+
+<td
+key={columnIndex}
+className="border p-3 text-center"
+>
+
+<input
+type="radio"
+disabled
+/>
+
+</td>
+
+))}
+
+</tr>
+
+))}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+)}
 
     </div>
   ))}
