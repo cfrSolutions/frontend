@@ -58,56 +58,110 @@ export default function SurveyForms() {
 
       <div className="space-y-5">
 
-        {surveys.map((survey) => (
+       {surveys.map((survey) => (
 
-          <div
-            key={survey._id}
-            className="border rounded-xl p-5 bg-white shadow"
-          >
+  <div
+    key={survey._id}
+    className="border rounded-xl p-5 bg-white shadow"
+  >
 
-            <h2 className="text-xl font-semibold">
-              {survey.name}
-            </h2>
+    <h2 className="text-xl font-semibold">
+      {survey.name}
+    </h2>
 
-            <p className="text-gray-500">
+    <p className="text-gray-500 mt-1">
+      {survey.description}
+    </p>
 
-              {survey.description}
+    <p className="mt-2">
+      {survey.questions} Questions
+    </p>
 
-            </p>
+    {/* Survey Link */}
 
-            <p className="mt-2">
+    <div className="mt-5">
 
-              {survey.questions} Questions
+      <label className="block text-sm font-medium mb-2">
+        Survey Link
+      </label>
 
-            </p>
+      <div className="flex gap-2">
 
-            <div className="flex gap-3 mt-4">
+        <input
+          readOnly
+          value={`${window.location.origin}/survey/run/${survey.publicToken}`}
+          className="
+            flex-1
+            border
+            rounded-lg
+            px-3
+            py-2
+            bg-gray-50
+          "
+        />
 
-              <button
-                onClick={() =>
-                  navigate(
-                    `/business/dashboard/survey-builder/${survey._id}`
-                  )
-                }
-                className="text-blue-600"
-              >
-                Edit
-              </button>
+        <button
+          onClick={() =>
+            navigator.clipboard.writeText(
+  `${window.location.origin}/survey/run/${survey.publicToken}`
+)
+          }
+          className="
+            bg-orange-500
+            hover:bg-orange-600
+            text-white
+            px-4
+            rounded-lg
+          "
+        >
+          Copy
+        </button>
 
-              <button
-                onClick={() =>
-                  remove(survey._id)
-                }
-                className="text-red-600"
-              >
-                Delete
-              </button>
+      </div>
 
-            </div>
+    </div>
 
-          </div>
+    {/* Actions */}
 
-        ))}
+    <div className="flex gap-4 mt-5">
+
+      <button
+        onClick={() =>
+          window.open(
+  `/survey/run/${survey.publicToken}`,
+  "_blank"
+)
+        }
+        className="text-green-600 font-medium"
+      >
+        Preview
+      </button>
+
+      <button
+        onClick={() =>
+          navigate(
+            `/business/dashboard/survey-builder/${survey._id}`
+          )
+        }
+        className="text-blue-600 font-medium"
+      >
+        Edit
+      </button>
+
+      <button
+        onClick={() =>
+          remove(survey._id)
+        }
+        className="text-red-600 font-medium"
+      >
+        Delete
+      </button>
+
+    </div>
+
+  </div>
+
+))}
 
       </div>
 

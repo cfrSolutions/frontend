@@ -44,6 +44,7 @@ import SurveyBuilder from "./business/SurveyBuilder";
 import SurveyForms from "./business/SurveyForms";
 import ProjectDetail from "./business/ProjectDetail";
 import TargetGroupForm from "./business/TargetGroupForm";
+import SurveyRunner from "./business/SurveyRunner";
 export default function App() {
   return (
     <BrowserRouter>
@@ -206,6 +207,11 @@ export default function App() {
   element={<ProjectStatus />}
 /> */}
 </Route>
+
+<Route
+  path="/survey/run/:token"
+  element={<SurveyRunner />}
+/>
 
 <Route path="/thank-you" element={<SurveyStatusPages />} />
 <Route path="/disqualified" element={<SurveyStatusPages />} />
