@@ -57,10 +57,11 @@ const addCondition = (questionId) => {
             conditions: [
               ...q.conditions,
               {
-                id: Date.now(),
-                value: "",
-                action: "continue",
-              },
+    id: Date.now(),
+    operator: "equals",
+    value: "",
+    action: "continue",
+}
             ],
           }
         : q
@@ -543,9 +544,149 @@ const loadSurvey = async () => {
 
         <div>
 
-          <label className="text-sm font-medium">
-            IF Answer Is
-          </label>
+         <div>
+
+    <label className="text-sm font-medium">
+        IF
+    </label>
+
+    <div className="grid grid-cols-3 gap-3 mt-2">
+
+        {/* Operator */}
+
+        <select
+            className="border rounded-lg p-2"
+            value={condition.operator}
+            onChange={(e)=>
+                updateCondition(
+                    question.id,
+                    condition.id,
+                    "operator",
+                    e.target.value
+                )
+            }
+        >
+
+            <option value="equals">
+                Equals
+            </option>
+
+            <option value="not_equals">
+                Not Equals
+            </option>
+
+            <option value="greater_than">
+                Greater Than
+            </option>
+
+            <option value="greater_equal">
+                Greater Than or Equal
+            </option>
+
+            <option value="less_than">
+                Less Than
+            </option>
+
+            <option value="less_equal">
+                Less Than or Equal
+            </option>
+
+            <option value="contains">
+                Contains
+            </option>
+
+        </select>
+
+        {/* Value */}
+
+        {(
+            question.type === "radio" ||
+            question.type === "checkbox" ||
+            question.type === "dropdown"
+        ) ? (
+
+            <select
+                className="border rounded-lg p-2"
+                value={condition.value}
+                onChange={(e)=>
+                    updateCondition(
+                        question.id,
+                        condition.id,
+                        "value",
+                        e.target.value
+                    )
+                }
+            >
+
+                <option value="">
+                    Select Value
+                </option>
+
+                {question.options.map((option)=>(
+                    <option
+                        key={option}
+                        value={option}
+                    >
+                        {option}
+                    </option>
+                ))}
+
+            </select>
+
+        ) : (
+
+            <input
+                className="border rounded-lg p-2"
+                placeholder="Enter value"
+                value={condition.value}
+                onChange={(e)=>
+                    updateCondition(
+                        question.id,
+                        condition.id,
+                        "value",
+                        e.target.value
+                    )
+                }
+            />
+
+        )}
+
+        {/* Action */}
+
+        <select
+            className="border rounded-lg p-2"
+            value={condition.action}
+            onChange={(e)=>
+                updateCondition(
+                    question.id,
+                    condition.id,
+                    "action",
+                    e.target.value
+                )
+            }
+        >
+
+            <option value="continue">
+                Continue
+            </option>
+
+            <option value="complete">
+                Complete
+            </option>
+
+            <option value="disqualify">
+                Disqualify
+            </option>
+
+            <option value="quota">
+                Quota Full
+            </option>
+
+        </select>
+
+    </div>
+
+</div>
 
           <select
             className="w-full border rounded-lg mt-1 p-2"
