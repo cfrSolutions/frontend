@@ -62,6 +62,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 import api from "../services/api";
 
 export default function SurveyResponses() {
@@ -87,6 +89,55 @@ export default function SurveyResponses() {
     setResponses(data.responses);
   };
 
+
+  const downloadExcel = () => {
+  const rows = responses.map((response, index) => {
+    const row = {
+      "Sr No": index + 1,
+      Status: response.status,
+    };
+
+    survey.questions.forEach((q) => {
+      const key = q._id;
+      const value = response.answers[key];
+
+      if (Array.isArray(value)) {
+        row[q.title] = value.join(", ");
+      } else if (value && typeof value === "object") {
+        row[q.title] = Object.entries(value)
+          .map(([r, a]) => `${r}: ${a}`)
+          .join(" | ");
+      } else {
+        row[q.title] = value || "";
+      }
+    });
+
+    return row;
+  });
+
+  const worksheet = XLSX.utils.json_to_sheet(rows);
+
+  const workbook = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(
+    workbook,
+    worksheet,
+    "Responses"
+  );
+
+  const excelBuffer = XLSX.write(workbook, {
+    bookType: "xlsx",
+    type: "array",
+  });
+
+  const file = new Blob([excelBuffer], {
+    type:
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+
+  saveAs(file, `${survey.name}-Responses.xlsx`);
+};
+
   if (!survey) return <div>Loading...</div>;
 
   const totalPages = Math.ceil(responses.length / PER_PAGE);
@@ -99,10 +150,20 @@ export default function SurveyResponses() {
   return (
     <div className="p-8">
 
-      <h1 className="text-3xl font-bold mb-6">
-        Survey Responses
-      </h1>
+     <div className="flex justify-between items-center mb-6">
 
+  <h1 className="text-3xl font-bold">
+    Survey Responses
+  </h1>
+
+  <button
+    onClick={downloadExcel}
+    className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg"
+  >
+    Download Excel
+  </button>
+
+</div>
       <div className="overflow-auto border rounded-lg">
 
         <table className="min-w-full">
