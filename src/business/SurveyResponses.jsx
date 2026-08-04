@@ -35,9 +35,23 @@ export default function SurveyResponses() {
             <b>Status:</b> {response.status}
           </p>
 
-          <pre>
-            {JSON.stringify(response.answers, null, 2)}
-          </pre>
+          <div className="mt-4 space-y-2">
+  {response.survey.questions.map((q) => {
+    const key = q._id || q.id;
+
+    return (
+      <div key={key} className="border-b pb-2">
+        <p className="font-semibold">{q.title}</p>
+
+        <p className="text-gray-700">
+          {Array.isArray(response.answers[key])
+            ? response.answers[key].join(", ")
+            : response.answers[key] || "-"}
+        </p>
+      </div>
+    );
+  })}
+</div>
         </div>
       ))}
 
