@@ -41,6 +41,7 @@ import AdminProjectDetail from "./superadmin/AdminProjectDetail";
 import SurveyStatusPages from "./business/SurveyStatusPages";
 import CreateProjects from "./business/createProjects";
 import SurveyBuilder from "./business/SurveyBuilder";
+import SurveyForms from "./business/SurveyForms";
 import ProjectDetail from "./business/ProjectDetail";
 import TargetGroupForm from "./business/TargetGroupForm";
 export default function App() {
@@ -183,8 +184,23 @@ export default function App() {
   <Route path="negotiation" element={<BusinessDashboard />} />
    <Route
     path="survey-builder"
+    element={<SurveyBuilder />}/>
+
+  <Route
+    path="survey-forms"
+    element={<SurveyForms />}
+/>
+
+<Route
+    path="survey-builder"
     element={<SurveyBuilder />}
 />
+
+<Route
+    path="survey-builder/:id"
+    element={<SurveyBuilder />}
+/>
+
   {/* <Route
   path="/business/project/:id/status"
   element={<ProjectStatus />}

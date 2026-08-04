@@ -1,4 +1,11 @@
 import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
+import {
+  createSurvey,
+  updateSurvey,
+  getSurvey,
+} from "../services/surveyBuilderApi";
 import {
   FileText,
   Link,
@@ -7,6 +14,9 @@ import {
 } from "lucide-react";
 
 export default function SurveyBuilder() {
+  const navigate = useNavigate();
+
+const { id } = useParams();
   const [survey, setSurvey] = useState({
     name: "",
     description: "",
@@ -157,10 +167,70 @@ const removeOption = (questionId, index) => {
   );
 };
 
-  const handleSave = () => {
-    console.log(survey);
-    alert("Survey information saved.");
-  };
+ const handleSave = async () => {
+  try {
+
+    const payload = {
+      ...survey,
+      questions,
+    };
+
+    if (id) {
+
+      await updateSurvey(id, payload);
+
+      alert("Survey updated.");
+
+    } else {
+
+      await createSurvey(payload);
+
+      alert("Survey created.");
+
+    }
+
+    navigate("/business/dashboard/survey-forms");
+
+  } catch (err) {
+
+    console.log(err);
+
+    alert("Unable to save survey.");
+
+  }
+};
+
+useEffect(() => {
+
+  if (!id) return;
+
+  loadSurvey();
+
+}, [id]);
+
+const loadSurvey = async () => {
+
+  try {
+
+    const { data } = await getSurvey(id);
+
+    setSurvey({
+      name: data.name,
+      description: data.description,
+      completeUrl: data.completeUrl,
+      disqualifyUrl: data.disqualifyUrl,
+      quotaFullUrl: data.quotaFullUrl,
+    });
+
+    setQuestions(data.questions);
+
+  } catch (err) {
+
+    console.log(err);
+
+  }
+
+};
 
   return (
     <div className="container mx-auto px-6 py-8">
