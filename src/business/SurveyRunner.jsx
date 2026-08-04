@@ -653,6 +653,74 @@ export default function SurveyRunner() {
       </div>
     );
   }
+const evaluateConditions = () => {
+
+  for (const q of survey.questions) {
+
+    const key = q._id || q.id;
+
+    const answer = answers[key];
+
+    if (!q.conditions) continue;
+
+    for (const condition of q.conditions) {
+
+      let matched = false;
+
+      switch (condition.operator) {
+
+        case "equals":
+          matched = Array.isArray(answer)
+            ? answer.includes(condition.value)
+            : String(answer) === String(condition.value);
+          break;
+
+        case "not_equals":
+          matched = Array.isArray(answer)
+            ? !answer.includes(condition.value)
+            : String(answer) !== String(condition.value);
+          break;
+
+        case "greater_than":
+          matched = Number(answer) > Number(condition.value);
+          break;
+
+        case "greater_equal":
+          matched = Number(answer) >= Number(condition.value);
+          break;
+
+        case "less_than":
+          matched = Number(answer) < Number(condition.value);
+          break;
+
+        case "less_equal":
+          matched = Number(answer) <= Number(condition.value);
+          break;
+
+        case "contains":
+          matched = String(answer || "")
+            .toLowerCase()
+            .includes(
+              String(condition.value).toLowerCase()
+            );
+          break;
+
+        default:
+          matched = false;
+
+      }
+
+      if (matched) {
+        return condition.action;
+      }
+
+    }
+
+  }
+
+  return "complete";
+
+};
 
   const question =
     survey.questions[currentQuestion];
@@ -1273,72 +1341,5 @@ export default function SurveyRunner() {
       </div>
       </div>
   );
-  const evaluateConditions = () => {
-
-  for (const q of survey.questions) {
-
-    const key = q._id || q.id;
-
-    const answer = answers[key];
-
-    if (!q.conditions) continue;
-
-    for (const condition of q.conditions) {
-
-      let matched = false;
-
-      switch (condition.operator) {
-
-        case "equals":
-          matched = Array.isArray(answer)
-            ? answer.includes(condition.value)
-            : String(answer) === String(condition.value);
-          break;
-
-        case "not_equals":
-          matched = Array.isArray(answer)
-            ? !answer.includes(condition.value)
-            : String(answer) !== String(condition.value);
-          break;
-
-        case "greater_than":
-          matched = Number(answer) > Number(condition.value);
-          break;
-
-        case "greater_equal":
-          matched = Number(answer) >= Number(condition.value);
-          break;
-
-        case "less_than":
-          matched = Number(answer) < Number(condition.value);
-          break;
-
-        case "less_equal":
-          matched = Number(answer) <= Number(condition.value);
-          break;
-
-        case "contains":
-          matched = String(answer || "")
-            .toLowerCase()
-            .includes(
-              String(condition.value).toLowerCase()
-            );
-          break;
-
-        default:
-          matched = false;
-
-      }
-
-      if (matched) {
-        return condition.action;
-      }
-
-    }
-
-  }
-
-  return "complete";
-
-};
+  
 }
