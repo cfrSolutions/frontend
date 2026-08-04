@@ -157,6 +157,17 @@ export default function SurveyForms() {
         Delete
       </button>
 
+      <button
+  onClick={() =>
+    navigate(
+      `/business/dashboard/survey-responses/${survey._id}`
+    )
+  }
+  className="text-purple-600 font-medium"
+>
+  Responses
+</button>
+
     </div>
 
   </div>

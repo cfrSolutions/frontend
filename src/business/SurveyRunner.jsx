@@ -835,6 +835,19 @@ const evaluateConditions = () => {
     }
 
     const action = evaluateConditions();
+    await api.post(
+  `/survey-builder/submit/${token}`,
+  {
+    answers,
+
+    status:
+      action === "disqualify"
+        ? "DISQUALIFIED"
+        : action === "quota"
+        ? "QUOTA"
+        : "COMPLETE",
+  }
+);
 
     if (
       action === "disqualify" &&
