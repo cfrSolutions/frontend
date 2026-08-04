@@ -146,20 +146,31 @@ export default function SurveyResponses() {
 
                 {survey.questions.map((q) => {
 
-                  const key = q._id;
+                 const key = q._id;
 
-                  const value = response.answers[key];
+const value = response.answers[key];
 
-                  return (
-                    <td
-                      key={key}
-                      className="border p-3"
-                    >
-                      {Array.isArray(value)
-                        ? value.join(", ")
-                        : value || "-"}
-                    </td>
-                  );
+return (
+  <td
+    key={key}
+    className="border p-3 align-top"
+  >
+    {Array.isArray(value) ? (
+      value.join(", ")
+    ) : value && typeof value === "object" ? (
+      <div className="space-y-1">
+        {Object.entries(value).map(([row, answer]) => (
+          <div key={row}>
+            <span className="font-semibold">{row}:</span>{" "}
+            {answer}
+          </div>
+        ))}
+      </div>
+    ) : (
+      value || "-"
+    )}
+  </td>
+);
                 })}
 
               </tr>
