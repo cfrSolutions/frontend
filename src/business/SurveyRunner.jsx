@@ -11,11 +11,9 @@ export default function SurveyRunner() {
 
   const [answers, setAnswers] = useState({});
 
-  useEffect(() => {
-
-    loadSurvey();
-
-  }, []);
+ useEffect(() => {
+  loadSurvey();
+}, [token]);
 
   const loadSurvey = async () => {
 
@@ -49,7 +47,8 @@ const submitSurvey = () => {
 
     if (!question.required) continue;
 
-    const answer = answers[question.id];
+   const questionKey = question._id || question.id;
+const answer = answers[questionKey];
 
     if (
       answer === undefined ||
@@ -102,7 +101,8 @@ const evaluateConditions = () => {
 
   for (const question of survey.questions) {
 
-    const answer = answers[question.id];
+    const questionKey = question._id || question.id;
+const answer = answers[questionKey];
 
     if (!question.conditions) continue;
 
@@ -110,49 +110,56 @@ const evaluateConditions = () => {
 
       let matched = false;
 
-      switch (condition.operator) {
+     switch (condition.operator) {
 
-        case "equals":
-          matched = answer == condition.value;
-          break;
+  case "equals":
+    matched = Array.isArray(answer)
+      ? answer.includes(condition.value)
+      : String(answer) === String(condition.value);
+    break;
 
-        case "not_equals":
-          matched = answer != condition.value;
-          break;
+  case "not_equals":
+    matched = Array.isArray(answer)
+      ? !answer.includes(condition.value)
+      : String(answer) !== String(condition.value);
+    break;
 
-        case "greater_than":
-          matched =
-            Number(answer) > Number(condition.value);
-          break;
+  case "greater_than":
+    matched =
+      Number(answer) >
+      Number(condition.value);
+    break;
 
-        case "greater_equal":
-          matched =
-            Number(answer) >= Number(condition.value);
-          break;
+  case "greater_equal":
+    matched =
+      Number(answer) >=
+      Number(condition.value);
+    break;
 
-        case "less_than":
-          matched =
-            Number(answer) < Number(condition.value);
-          break;
+  case "less_than":
+    matched =
+      Number(answer) <
+      Number(condition.value);
+    break;
 
-        case "less_equal":
-          matched =
-            Number(answer) <= Number(condition.value);
-          break;
+  case "less_equal":
+    matched =
+      Number(answer) <=
+      Number(condition.value);
+    break;
 
-        case "contains":
-          matched =
-            String(answer)
-              .toLowerCase()
-              .includes(
-                String(condition.value).toLowerCase()
-              );
-          break;
+  case "contains":
+    matched = String(answer || "")
+      .toLowerCase()
+      .includes(
+        String(condition.value)
+          .toLowerCase()
+      );
+    break;
 
-        default:
-          matched = false;
-
-      }
+  default:
+    matched = false;
+}
 
       if (matched) {
 
@@ -183,10 +190,15 @@ const evaluateConditions = () => {
 
       </p>
 
-     {survey.questions.map((question) => (
+     {survey.questions.map((question) => {
+
+const questionKey =
+  question._id || question.id;
+
+return (
 
   <div
-    key={question.id || question._id}
+    key={questionKey}
     className="mb-8 border rounded-xl p-6 bg-white"
   >
 
@@ -209,13 +221,13 @@ const evaluateConditions = () => {
         >
           <input
             type="radio"
-            name={question.id}
+            name={questionKey}
             value={option}
-            checked={answers[question.id] === option}
+            checked={answers[questionKey] === option}
             onChange={(e) =>
               setAnswers({
                 ...answers,
-                [question.id]: e.target.value,
+                [questionKey]: e.target.value,
               })
             }
           />
@@ -238,25 +250,25 @@ const evaluateConditions = () => {
           <input
             type="checkbox"
             checked={
-              answers[question.id]?.includes(option) || false
+             answers[questionKey]?.includes(option) || false
             }
             onChange={(e) => {
 
               const current =
-                answers[question.id] || [];
+                answers[questionKey] || [];
 
               if (e.target.checked) {
 
                 setAnswers({
                   ...answers,
-                  [question.id]: [...current, option],
+                  [questionKey]: [...current, option],
                 });
 
               } else {
 
                 setAnswers({
                   ...answers,
-                  [question.id]:
+                  [questionKey]:
                     current.filter(
                       (item) => item !== option
                     ),
@@ -279,11 +291,11 @@ const evaluateConditions = () => {
 
       <select
         className="w-full border rounded-lg p-3"
-        value={answers[question.id] || ""}
+        value={answers[questionKey] || ""}
         onChange={(e) =>
           setAnswers({
             ...answers,
-            [question.id]: e.target.value,
+            [questionKey]: e.target.value,
           })
         }
       >
@@ -313,11 +325,11 @@ const evaluateConditions = () => {
       <input
         type="text"
         className="w-full border rounded-lg p-3"
-        value={answers[question.id] || ""}
+        value={answers[questionKey] || ""}
         onChange={(e) =>
           setAnswers({
             ...answers,
-            [question.id]: e.target.value,
+            [questionKey]: e.target.value,
           })
         }
       />
@@ -331,11 +343,11 @@ const evaluateConditions = () => {
       <textarea
         rows={4}
         className="w-full border rounded-lg p-3"
-        value={answers[question.id] || ""}
+        value={answers[questionKey] || ""}
         onChange={(e) =>
           setAnswers({
             ...answers,
-            [question.id]: e.target.value,
+            [questionKey]: e.target.value,
           })
         }
       />
@@ -349,11 +361,11 @@ const evaluateConditions = () => {
       <input
         type="number"
         className="w-full border rounded-lg p-3"
-        value={answers[question.id] || ""}
+        value={answers[questionKey] || ""}
         onChange={(e) =>
           setAnswers({
             ...answers,
-            [question.id]: e.target.value,
+            [questionKey]: e.target.value,
           })
         }
       />
@@ -367,11 +379,11 @@ const evaluateConditions = () => {
       <input
         type="email"
         className="w-full border rounded-lg p-3"
-        value={answers[question.id] || ""}
+        value={answers[questionKey] || ""}
         onChange={(e) =>
           setAnswers({
             ...answers,
-            [question.id]: e.target.value,
+            [questionKey]: e.target.value,
           })
         }
       />
@@ -385,11 +397,11 @@ const evaluateConditions = () => {
       <input
         type="date"
         className="w-full border rounded-lg p-3"
-        value={answers[question.id] || ""}
+        value={answers[questionKey] || ""}
         onChange={(e) =>
           setAnswers({
             ...answers,
-            [question.id]: e.target.value,
+            [questionKey]: e.target.value,
           })
         }
       />
@@ -397,8 +409,10 @@ const evaluateConditions = () => {
     )}
 
   </div>
+);
 
-))}
+})}
+
 <div className="mt-8 flex justify-end">
 
   <button
