@@ -33,8 +33,72 @@ export default function SurveyBuilder() {
       type: "radio",
       required: false,
       options: ["Option 1", "Option 2"],
+      conditions: [],
     },
   ]);
+};
+
+const addCondition = (questionId) => {
+  setQuestions((prev) =>
+    prev.map((q) =>
+      q.id === questionId
+        ? {
+            ...q,
+            conditions: [
+              ...q.conditions,
+              {
+                id: Date.now(),
+                value: "",
+                action: "continue",
+              },
+            ],
+          }
+        : q
+    )
+  );
+};
+
+const updateCondition = (
+  questionId,
+  conditionId,
+  field,
+  value
+) => {
+  setQuestions((prev) =>
+    prev.map((q) => {
+      if (q.id !== questionId) return q;
+
+      return {
+        ...q,
+        conditions: q.conditions.map((c) =>
+          c.id === conditionId
+            ? {
+                ...c,
+                [field]: value,
+              }
+            : c
+        ),
+      };
+    })
+  );
+};
+
+const deleteCondition = (
+  questionId,
+  conditionId
+) => {
+  setQuestions((prev) =>
+    prev.map((q) => {
+      if (q.id !== questionId) return q;
+
+      return {
+        ...q,
+        conditions: q.conditions.filter(
+          (c) => c.id !== conditionId
+        ),
+      };
+    })
+  );
 };
 
 const updateQuestion = (id, field, value) => {
@@ -380,6 +444,133 @@ const removeOption = (questionId, index) => {
           >
             + Add Option
           </button>
+
+          <div className="mt-6 border-t pt-5">
+
+  <div className="flex justify-between items-center">
+
+    <h4 className="font-semibold text-gray-700">
+      Conditions
+    </h4>
+
+    <button
+      onClick={() => addCondition(question.id)}
+      className="text-orange-600 font-medium"
+    >
+      + Condition
+    </button>
+
+  </div>
+
+  {question.conditions.map((condition) => (
+
+    <div
+      key={condition.id}
+      className="border rounded-lg p-4 mt-4 bg-white"
+    >
+
+      <div className="grid md:grid-cols-3 gap-4">
+
+        <div>
+
+          <label className="text-sm font-medium">
+            IF Answer Is
+          </label>
+
+          <select
+            className="w-full border rounded-lg mt-1 p-2"
+            value={condition.value}
+            onChange={(e) =>
+              updateCondition(
+                question.id,
+                condition.id,
+                "value",
+                e.target.value
+              )
+            }
+          >
+
+            <option value="">
+              Select Answer
+            </option>
+
+            {question.options.map((opt) => (
+
+              <option
+                key={opt}
+                value={opt}
+              >
+                {opt}
+              </option>
+
+            ))}
+
+          </select>
+
+        </div>
+
+        <div>
+
+          <label className="text-sm font-medium">
+            THEN
+          </label>
+
+          <select
+            className="w-full border rounded-lg mt-1 p-2"
+            value={condition.action}
+            onChange={(e) =>
+              updateCondition(
+                question.id,
+                condition.id,
+                "action",
+                e.target.value
+              )
+            }
+          >
+
+            <option value="continue">
+              Continue
+            </option>
+
+            <option value="complete">
+              Complete
+            </option>
+
+            <option value="disqualify">
+              Disqualify
+            </option>
+
+            <option value="quota">
+              Quota Full
+            </option>
+
+          </select>
+
+        </div>
+
+        <div className="flex items-end">
+
+          <button
+            onClick={() =>
+              deleteCondition(
+                question.id,
+                condition.id
+              )
+            }
+            className="text-red-600"
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  ))}
+
+</div>
         </>
       )}
 
