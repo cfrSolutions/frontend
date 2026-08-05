@@ -378,7 +378,8 @@ export default function SurveyResponses() {
     const worksheet =
       XLSX.utils.json_to_sheet(rows);
 
-    const workbook = XLSX.utils.book_new();
+    const workbook =
+      XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(
       workbook,
@@ -386,25 +387,26 @@ export default function SurveyResponses() {
       "Responses"
     );
 
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
-    });
-
-    const file = new Blob([excelBuffer], {
-      type:
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
+    const excelBuffer = XLSX.write(
+      workbook,
+      {
+        bookType: "xlsx",
+        type: "array",
+      }
+    );
 
     saveAs(
-      file,
+      new Blob([excelBuffer], {
+        type:
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      }),
       `${survey.name}-Responses.xlsx`
     );
   };
 
   if (!survey) {
     return (
-      <div className="flex justify-center items-center h-96">
+      <div className="flex items-center justify-center h-96 text-lg font-medium">
         Loading...
       </div>
     );
@@ -440,21 +442,23 @@ export default function SurveyResponses() {
   return (
     <div className="space-y-6">
 
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+      <div className="flex items-center justify-between">
 
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+
+          <h1 className="text-3xl font-bold">
             Survey Responses
           </h1>
 
           <p className="text-gray-500 mt-1">
-            {responses.length} total responses
+            {responses.length} Total Responses
           </p>
+
         </div>
 
         <button
           onClick={downloadExcel}
-          className="mt-4 md:mt-0 flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-xl shadow"
+          className="flex items-center gap-2 rounded-lg bg-green-600 px-5 py-3 text-white hover:bg-green-700"
         >
           <Download size={18} />
           Download Excel
@@ -462,244 +466,190 @@ export default function SurveyResponses() {
 
       </div>
 
-      {/* TABLE STARTS HERE */}
-      <div className="bg-white rounded-2xl shadow border">
+      {/* TABLE CARD */}
 
-  <div
-    className="overflow-auto"
-    style={{
-      maxHeight: "75vh",
-      maxWidth: "100%",
-    }}
-  >
+      <div className="rounded-xl border bg-white shadow">
 
-    <table
-      className="border-collapse text-sm"
-      style={{
-        width: "max-content",
-        minWidth: `${520 + survey.questions.length * 240}px`,
-      }}
-    >
+        {/* HORIZONTAL + VERTICAL SCROLL */}
 
-      <thead className="sticky top-0 z-30 bg-gray-100">
+        <div
+  className="overflow-x-auto overflow-y-auto"
+  style={{
+    maxHeight: "72vh",
+  }}
+>
 
-        <tr>
+<table
+  className="table-auto border-collapse"
+  style={{
+    minWidth: `${700 + survey.questions.length * 250}px`,
+  }}
+>
+  <thead className="sticky top-0 bg-gray-100 z-20">
+    <tr>
+      <th className="border px-4 py-3 min-w-[70px] font-semibold">
+        #
+      </th>
 
-          <th className="sticky left-0 z-40 bg-gray-100 border px-4 py-3 min-w-[70px]">
-            #
-          </th>
+      <th className="border px-4 py-3 min-w-[140px] font-semibold">
+        Status
+      </th>
 
-          <th className="sticky left-[70px] z-40 bg-gray-100 border px-4 py-3 min-w-[140px]">
-            Status
-          </th>
+      <th className="border px-4 py-3 min-w-[130px] font-semibold">
+        Date
+      </th>
 
-          <th className="sticky left-[210px] z-40 bg-gray-100 border px-4 py-3 min-w-[130px]">
-            Date
-          </th>
+      <th className="border px-4 py-3 min-w-[150px] font-semibold">
+        Time
+      </th>
 
-          <th className="sticky left-[340px] z-40 bg-gray-100 border px-4 py-3 min-w-[180px]">
-            Time
-          </th>
+      {survey.questions.map((q) => (
+        <th
+          key={q.id}
+          className="border px-5 py-3 font-semibold text-gray-700 bg-gray-100"
+          style={{
+            minWidth: 250,
+          }}
+        >
+          {q.title}
+        </th>
+      ))}
+    </tr>
+  </thead>
 
-          {survey.questions.map((q) => (
-            <th
+  <tbody>
+    {current.map((response, index) => (
+      <tr
+        key={response._id}
+        className="hover:bg-orange-50 transition-colors"
+      >
+        <td className="border px-4 py-3">
+          {(page - 1) * PER_PAGE + index + 1}
+        </td>
+
+        <td className="border px-4 py-3">
+          <span
+            className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${statusColor(
+              response.status
+            )}`}
+          >
+            {response.status}
+          </span>
+        </td>
+
+        <td className="border px-4 py-3 whitespace-nowrap">
+          {response.completedAt
+            ? new Date(
+                response.completedAt
+              ).toLocaleDateString()
+            : "-"}
+        </td>
+
+        <td className="border px-4 py-3 whitespace-nowrap">
+          {response.completedAt
+            ? new Date(
+                response.completedAt
+              ).toLocaleTimeString()
+            : "-"}
+        </td>
+
+        {survey.questions.map((q) => {
+          const value = response.answers?.[q.id];
+
+          return (
+            <td
               key={q.id}
-              className="border px-5 py-3 font-semibold text-gray-700"
+              className="border px-4 py-3 align-top"
               style={{
-                minWidth: 240,
+                minWidth: 250,
               }}
             >
-              {q.title}
-            </th>
+              {Array.isArray(value) ? (
+                value.join(", ")
+              ) : value &&
+                typeof value === "object" ? (
+                <div className="space-y-1">
+                  {Object.entries(value).map(
+                    ([row, answer]) => (
+                      <div
+                        key={row}
+                        className="rounded bg-gray-100 px-2 py-1"
+                      >
+                        <span className="font-semibold">
+                          {row}
+                        </span>
+                        {" : "}
+                        {answer}
+                      </div>
+                    )
+                  )}
+                </div>
+              ) : (
+                value || "-"
+              )}
+            </td>
+          );
+        })}
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+
+        <p className="text-sm text-gray-500">
+          Showing{" "}
+          {(page - 1) * PER_PAGE + 1}
+          {" - "}
+          {Math.min(
+            page * PER_PAGE,
+            responses.length
+          )}{" "}
+          of {responses.length} responses
+        </p>
+
+        <div className="flex gap-2">
+
+          <button
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            className="rounded-lg border px-4 py-2 disabled:opacity-40"
+          >
+            Previous
+          </button>
+
+          {Array.from(
+            { length: totalPages },
+            (_, i) => i + 1
+          ).map((p) => (
+            <button
+              key={p}
+              onClick={() => setPage(p)}
+              className={`h-10 w-10 rounded-lg ${
+                page === p
+                  ? "bg-orange-500 text-white"
+                  : "border"
+              }`}
+            >
+              {p}
+            </button>
           ))}
 
-        </tr>
-
-      </thead>
-
-      <tbody>
-
-        {current.map((response, index) => (
-
-          <tr
-            key={response._id}
-            className="hover:bg-gray-50"
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage(page + 1)}
+            className="rounded-lg border px-4 py-2 disabled:opacity-40"
           >
+            Next
+          </button>
 
-            <td className="sticky left-0 bg-white border px-4 py-3 font-medium">
-              {(page - 1) * PER_PAGE + index + 1}
-            </td>
+        </div>
 
-            <td className="sticky left-[70px] bg-white border px-4 py-3">
+      </div>
 
-              <span
-                className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColor(
-                  response.status
-                )}`}
-              >
-                {response.status}
-              </span>
-
-            </td>
-
-            <td className="sticky left-[210px] bg-white border px-4 py-3">
-
-              {response.completedAt
-                ? new Date(
-                    response.completedAt
-                  ).toLocaleDateString()
-                : "-"}
-
-            </td>
-
-            <td className="sticky left-[340px] bg-white border px-4 py-3">
-
-              {response.completedAt
-                ? new Date(
-                    response.completedAt
-                  ).toLocaleTimeString()
-                : "-"}
-
-            </td>
-
-            {survey.questions.map((q) => {
-
-              const key = q.id;
-
-              const value =
-                response.answers?.[key];
-
-              return (
-
-                <td
-                  key={key}
-                  className="border px-4 py-3 align-top"
-                  style={{
-                    minWidth: 240,
-                    whiteSpace: "normal",
-                    verticalAlign: "top",
-                  }}
-                >
-
-                  {Array.isArray(value) ? (
-
-                    value.join(", ")
-
-                  ) : value &&
-                    typeof value ===
-                      "object" ? (
-
-                    <div className="space-y-1">
-
-                      {Object.entries(value).map(
-                        ([row, answer]) => (
-
-                          <div
-                            key={row}
-                            className="rounded bg-gray-50 px-2 py-1"
-                          >
-                            <span className="font-semibold">
-                              {row}
-                            </span>
-
-                            {" : "}
-
-                            {answer}
-                          </div>
-
-                        )
-                      )}
-
-                    </div>
-
-                  ) : (
-
-                    value || "-"
-
-                  )}
-
-                </td>
-
-              );
-
-            })}
-
-          </tr>
-
-        ))}
-
-      </tbody>
-
-    </table>
-
-  </div>
-
-</div>
-
-<div className="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
-
-  <p className="text-gray-500 text-sm">
-    Showing {(page - 1) * PER_PAGE + 1} -
-    {" "}
-    {Math.min(
-      page * PER_PAGE,
-      responses.length
-    )}
-    {" "}
-    of
-    {" "}
-    {responses.length}
-    {" "}
-    responses
-  </p>
-
-  <div className="flex items-center gap-2">
-
-    <button
-      disabled={page === 1}
-      onClick={() =>
-        setPage(page - 1)
-      }
-      className="px-4 py-2 rounded-lg border hover:bg-gray-100 disabled:opacity-50"
-    >
-      Previous
-    </button>
-
-    {Array.from(
-      { length: totalPages },
-      (_, i) => i + 1
-    ).map((p) => (
-
-      <button
-        key={p}
-        onClick={() => setPage(p)}
-        className={`w-10 h-10 rounded-lg font-medium transition ${
-          p === page
-            ? "bg-orange-500 text-white"
-            : "border hover:bg-gray-100"
-        }`}
-      >
-        {p}
-      </button>
-
-    ))}
-
-    <button
-      disabled={
-        page === totalPages
-      }
-      onClick={() =>
-        setPage(page + 1)
-      }
-      className="px-4 py-2 rounded-lg border hover:bg-gray-100 disabled:opacity-50"
-    >
-      Next
-    </button>
-
-  </div>
-
-</div>
-
-</div>
+    </div>
   );
 }
