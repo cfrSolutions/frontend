@@ -207,7 +207,7 @@ export default function OAuthSuccess() {
       } catch (err) {
         if (attempts < 5) {
           attempts++;
-          console.log(`Attempt ${attempts} failed. Retrying...`);
+          // console.log(`Attempt ${attempts} failed. Retrying...`);
           setTimeout(checkAuth, 1000);
         } else {
           navigate("/login");

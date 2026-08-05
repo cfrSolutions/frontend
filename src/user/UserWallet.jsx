@@ -180,7 +180,7 @@ export default function UserWallet() {
         setTransactions(txRes.data);
         setWalletNumber(meRes.data.user.walletNumber || "0000");
       } catch (err) {
-        console.error("Failed to fetch wallet data", err);
+        console.error("Failed to fetch wallet data");
       }
     };
 

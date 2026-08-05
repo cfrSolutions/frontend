@@ -418,14 +418,14 @@ const handleSubmit = async () => {
   try {
 
     if (targetGroupId) {
-console.log("SAVING PROFILES", selectedProfiles);
+// console.log("SAVING PROFILES", selectedProfiles);
 
-console.log({
-  ...form,
-  profiles: selectedProfiles,
-  status: "DRAFT",
-});
-console.log("selectedProfiles", selectedProfiles);
+// console.log({
+//   ...form,
+//   profiles: selectedProfiles,
+//   status: "DRAFT",
+// });
+// console.log("selectedProfiles", selectedProfiles);
       await api.put(
         `/projects/${projectId}/target-group/${targetGroupId}`,
         {

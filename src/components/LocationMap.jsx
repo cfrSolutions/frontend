@@ -122,7 +122,7 @@ useEffect(() => {
         });
 
       } catch (err) {
-        console.error("Location fetch error", err);
+        // console.error("Location fetch error", err);
       }
     },
     (err) => console.error("Geolocation error", err)

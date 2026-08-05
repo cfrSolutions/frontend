@@ -44,7 +44,7 @@ useEffect(() => {
 // console.log("REFERRAL STATS:", statsRes.data);
 
     } catch (err) {
-      console.error("Referral load error:", err);
+      console.error("Referral load error:");
     }
   };
 

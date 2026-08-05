@@ -19,7 +19,7 @@ export default function VerifyEmail() {
       })
       .catch((err) => {
         // If it's already verified, just send them to login
-        console.log("Verification error:", err.response?.data);
+        // console.log("Verification error:", err.response?.data);
         alert(err.response?.data?.message || "Verification failed");
         navigate("/login");
       });

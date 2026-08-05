@@ -100,8 +100,8 @@ export default function Login() {
 
     try {
       const data = await login({ email, password, role: type === "BUSINESS" ? "BUSINESS" : "USER", });
-      console.log(data);
-console.log("Role:", data.role);
+//       console.log(data);
+// console.log("Role:", data.role);
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
@@ -117,7 +117,7 @@ console.log("Role:", data.role);
         navigate("/user/dashboard");
       }
     } catch (err) {
-      console.log("LOGIN ERROR FULL:", err);
+      // console.log("LOGIN ERROR FULL:", err);
     }
   };
 

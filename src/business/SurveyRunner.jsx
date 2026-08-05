@@ -850,7 +850,7 @@ const evaluateConditions = () => {
   }
 );
  } catch (err) {
-    console.error("Failed to save survey response", err);
+    // console.error("Failed to save survey response", err);
     alert("Unable to save survey response.");
     return;
   }

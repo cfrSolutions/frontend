@@ -119,7 +119,7 @@ const getFeasibility = (quota) => {
 
 };
 const handleNext = () => {
-  console.log("Next clicked");
+  // console.log("Next clicked");
 };
 const filteredProfiles =
   profiles.filter(profile =>

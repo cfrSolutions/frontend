@@ -289,7 +289,7 @@ const removeColumn = (questionId, index) => {
 
   } catch (err) {
 
-    console.log(err);
+    // console.log(err);
 
     alert("Unable to save survey.");
 

@@ -1132,7 +1132,7 @@ useEffect(() => {
 });
 
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     alert("❌ Error creating project");
   }
 };

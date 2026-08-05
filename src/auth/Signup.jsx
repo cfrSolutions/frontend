@@ -179,7 +179,7 @@ export default function Signup() {
 
       navigate(type === "BUSINESS" ? "/business/login" : "/login");
     } catch (error) {
-      console.error(error.response?.data);
+      // console.error(error.response?.data);
       alert(error.response?.data?.message);
     } finally {
       setLoading(false);

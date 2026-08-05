@@ -1448,7 +1448,7 @@ const startSurvey = async (survey) => {
 
     window.open(redirectUrl, "_blank");
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     alert("Failed to start survey");
   }
 };
