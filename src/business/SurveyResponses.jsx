@@ -104,7 +104,7 @@ export default function SurveyResponses() {
     };
 
     survey.questions.forEach((q) => {
-      const key = q._id;
+      const key = q.id;
       const value = response.answers[key];
 
       if (Array.isArray(value)) {
@@ -226,7 +226,7 @@ export default function SurveyResponses() {
 </td>
                 {survey.questions.map((q) => {
 
-                 const key = q._id;
+                 const key = q.id;
 
 const value = response.answers[key];
 
