@@ -727,7 +727,7 @@ const evaluateConditions = () => {
 
   const current = survey.questions[currentQuestion];
 
-  const key = current._id || current.id;
+  const key = current.id;
 
   const answer = answers[key];
 
@@ -777,6 +777,7 @@ const evaluateConditions = () => {
         matched = false;
 
     }
+    console.log("Matched condition:", condition);
 
     if (matched) {
       return condition;
@@ -1005,7 +1006,7 @@ const evaluateConditions = () => {
 
       if (!q.required) continue;
 
-      const key = q._id || q.id;
+      const key = q.id;
 
       const answer = answers[key];
 
