@@ -170,10 +170,20 @@ export default function SurveyResponses() {
   </button>
 
 </div>
-     <div className="w-full overflow-x-auto overflow-y-auto max-h-[75vh] border rounded-xl shadow-sm">
+     <div className="relative w-full">
+  <div
+    className="overflow-x-scroll overflow-y-auto border rounded-xl shadow-sm"
+    style={{ maxHeight: "75vh" }}
+  >
         
 
-        <table className="min-w-max w-full border-collapse whitespace-nowrap">
+       <table
+  className="border-collapse whitespace-nowrap"
+  style={{
+    width: "max-content",
+    minWidth: `${survey.questions.length * 250 + 500}px`,
+  }}
+>
 
           <thead className="bg-gray-100">
 
@@ -197,10 +207,11 @@ export default function SurveyResponses() {
 
               {survey.questions.map((q) => (
 
-                <th
-                  key={q._id}
-                  className="border p-3 min-w-[220px]"
-                >
+               <th
+  key={q.id}
+  className="border p-3"
+  style={{ minWidth: 250 }}
+>
                   {q.title}
                 </th>
 
@@ -242,10 +253,11 @@ export default function SurveyResponses() {
 const value = response.answers[key];
 
 return (
-  <td
-    key={key}
-    className="border p-3 align-top min-w-[220px]"
-  >
+ <td
+  key={key}
+  className="border p-3 align-top"
+  style={{ minWidth: 250 }}
+>
     {Array.isArray(value) ? (
       value.join(", ")
     ) : value && typeof value === "object" ? (
@@ -271,7 +283,7 @@ return (
           </tbody>
 
         </table>
-
+      </div>
       </div>
 
       <div className="flex justify-center gap-2 mt-6">
