@@ -791,8 +791,7 @@ const evaluateConditions = () => {
   const question =
     survey.questions[currentQuestion];
 
-  const questionKey =
-    question._id || question.id;
+  const questionKey = question.id;
 
   const progress =
     ((currentQuestion + 1) /
@@ -886,7 +885,7 @@ const evaluateConditions = () => {
 
       const index = survey.questions.findIndex(
         (q) =>
-          (q._id || q.id) === condition.skipTo
+          (q.id) === condition.skipTo
       );
 
       if (index !== -1) {
