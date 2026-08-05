@@ -468,19 +468,18 @@ export default function SurveyResponses() {
 
       {/* TABLE CARD */}
 
-      <div className="rounded-xl border bg-white shadow w-full overflow-hidden">
+      <div className="rounded-xl border bg-white shadow w-full">
 
  <div
-  className="overflow-x-auto overflow-y-auto"
+  className="w-full overflow-x-scroll overflow-y-auto"
   style={{
-    width: "100%",
     maxHeight: "72vh",
   }}
 >
 <table
   className="border-collapse"
   style={{
-    width: "max-content",
+    minWidth: `${700 + survey.questions.length * 250}px`,
   }}
 >
   <thead className="sticky top-0 bg-gray-100 z-20">
