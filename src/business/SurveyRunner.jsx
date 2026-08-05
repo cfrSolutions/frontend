@@ -653,72 +653,138 @@ export default function SurveyRunner() {
       </div>
     );
   }
+
+// const evaluateConditions = () => {
+
+//   for (const q of survey.questions) {
+
+//     const key = q._id || q.id;
+
+//     const answer = answers[key];
+
+//     if (!q.conditions) continue;
+
+//     for (const condition of q.conditions) {
+
+//       let matched = false;
+
+//       switch (condition.operator) {
+
+//         case "equals":
+//           matched = Array.isArray(answer)
+//             ? answer.includes(condition.value)
+//             : String(answer) === String(condition.value);
+//           break;
+
+//         case "not_equals":
+//           matched = Array.isArray(answer)
+//             ? !answer.includes(condition.value)
+//             : String(answer) !== String(condition.value);
+//           break;
+
+//         case "greater_than":
+//           matched = Number(answer) > Number(condition.value);
+//           break;
+
+//         case "greater_equal":
+//           matched = Number(answer) >= Number(condition.value);
+//           break;
+
+//         case "less_than":
+//           matched = Number(answer) < Number(condition.value);
+//           break;
+
+//         case "less_equal":
+//           matched = Number(answer) <= Number(condition.value);
+//           break;
+
+//         case "contains":
+//           matched = String(answer || "")
+//             .toLowerCase()
+//             .includes(
+//               String(condition.value).toLowerCase()
+//             );
+//           break;
+
+//         default:
+//           matched = false;
+
+//       }
+
+//       if (matched) {
+//         return condition.action;
+//       }
+
+//     }
+
+//   }
+
+//   return "complete";
+
+// };
+
 const evaluateConditions = () => {
 
-  for (const q of survey.questions) {
+  const current = survey.questions[currentQuestion];
 
-    const key = q._id || q.id;
+  const key = current._id || current.id;
 
-    const answer = answers[key];
+  const answer = answers[key];
 
-    if (!q.conditions) continue;
+  for (const condition of current.conditions || []) {
 
-    for (const condition of q.conditions) {
+    let matched = false;
 
-      let matched = false;
+    switch (condition.operator) {
 
-      switch (condition.operator) {
+      case "equals":
+        matched = Array.isArray(answer)
+          ? answer.includes(condition.value)
+          : String(answer) === String(condition.value);
+        break;
 
-        case "equals":
-          matched = Array.isArray(answer)
-            ? answer.includes(condition.value)
-            : String(answer) === String(condition.value);
-          break;
+      case "not_equals":
+        matched = Array.isArray(answer)
+          ? !answer.includes(condition.value)
+          : String(answer) !== String(condition.value);
+        break;
 
-        case "not_equals":
-          matched = Array.isArray(answer)
-            ? !answer.includes(condition.value)
-            : String(answer) !== String(condition.value);
-          break;
+      case "greater_than":
+        matched = Number(answer) > Number(condition.value);
+        break;
 
-        case "greater_than":
-          matched = Number(answer) > Number(condition.value);
-          break;
+      case "greater_equal":
+        matched = Number(answer) >= Number(condition.value);
+        break;
 
-        case "greater_equal":
-          matched = Number(answer) >= Number(condition.value);
-          break;
+      case "less_than":
+        matched = Number(answer) < Number(condition.value);
+        break;
 
-        case "less_than":
-          matched = Number(answer) < Number(condition.value);
-          break;
+      case "less_equal":
+        matched = Number(answer) <= Number(condition.value);
+        break;
 
-        case "less_equal":
-          matched = Number(answer) <= Number(condition.value);
-          break;
+      case "contains":
+        matched = String(answer || "")
+          .toLowerCase()
+          .includes(
+            String(condition.value).toLowerCase()
+          );
+        break;
 
-        case "contains":
-          matched = String(answer || "")
-            .toLowerCase()
-            .includes(
-              String(condition.value).toLowerCase()
-            );
-          break;
+      default:
+        matched = false;
 
-        default:
-          matched = false;
+    }
 
-      }
-
-      if (matched) {
-        return condition.action;
-      }
-
+    if (matched) {
+      return condition;
     }
 
   }
 
-  return "complete";
+  return null;
 
 };
 
@@ -798,7 +864,143 @@ const evaluateConditions = () => {
       </div>
     );
   }
-    const submitSurvey = async () => {
+
+
+  const handleNext = async () => {
+
+  const condition = evaluateConditions();
+
+  // No condition matched
+  if (!condition) {
+    setCurrentQuestion(currentQuestion + 1);
+    return;
+  }
+
+  switch (condition.action) {
+
+    case "continue":
+      setCurrentQuestion(currentQuestion + 1);
+      break;
+
+    case "skip": {
+
+      const index = survey.questions.findIndex(
+        (q) =>
+          (q._id || q.id) === condition.skipTo
+      );
+
+      if (index !== -1) {
+        setCurrentQuestion(index);
+      } else {
+        setCurrentQuestion(currentQuestion + 1);
+      }
+
+      break;
+    }
+
+    case "complete":
+
+      await submitSurvey("COMPLETE");
+      return;
+
+    case "disqualify":
+
+      await submitSurvey("DISQUALIFIED");
+      return;
+
+    case "quota":
+
+      await submitSurvey("QUOTA");
+      return;
+
+    default:
+
+      setCurrentQuestion(currentQuestion + 1);
+
+  }
+
+};
+
+//     const submitSurvey = async () => {
+
+//     for (const q of survey.questions) {
+
+//       if (!q.required) continue;
+
+//       const key = q._id || q.id;
+
+//       const answer = answers[key];
+
+//       if (q.type === "matrix") {
+
+//         if (
+//           !answer ||
+//           Object.keys(answer).length !== q.rows.length
+//         ) {
+//           alert(`${q.title} is required`);
+//           return;
+//         }
+
+//       } else {
+
+//         if (
+//           answer === undefined ||
+//           answer === "" ||
+//           (Array.isArray(answer) &&
+//             answer.length === 0)
+//         ) {
+//           alert(`${q.title} is required`);
+//           return;
+//         }
+
+//       }
+
+//     }
+
+//     const action = evaluateConditions();
+//     try {
+//     await api.post(
+//   `/survey-builder/submit/${token}`,
+//   {
+//     answers,
+
+//     status:
+//       action === "disqualify"
+//         ? "DISQUALIFIED"
+//         : action === "quota"
+//         ? "QUOTA"
+//         : "COMPLETE",
+//   }
+// );
+//  } catch (err) {
+//     // console.error("Failed to save survey response", err);
+//     alert("Unable to save survey response.");
+//     return;
+//   }
+
+//     if (
+//       action === "disqualify" &&
+//       survey.disqualifyUrl
+//     ) {
+//       window.location.href =
+//         survey.disqualifyUrl;
+//       return;
+//     }
+
+//     if (
+//       action === "quota" &&
+//       survey.quotaFullUrl
+//     ) {
+//       window.location.href =
+//         survey.quotaFullUrl;
+//       return;
+//     }
+
+//     window.location.href =
+//       survey.completeUrl;
+//   };
+
+ const submitSurvey = async (status = "COMPLETE") => {
 
     for (const q of survey.questions) {
 
@@ -834,48 +1036,97 @@ const evaluateConditions = () => {
 
     }
 
-    const action = evaluateConditions();
-    try {
-    await api.post(
-  `/survey-builder/submit/${token}`,
-  {
-    answers,
+//     const action = evaluateConditions();
+//     try {
+//     await api.post(
+//   `/survey-builder/submit/${token}`,
+//   {
+//     answers,
 
-    status:
-      action === "disqualify"
-        ? "DISQUALIFIED"
-        : action === "quota"
-        ? "QUOTA"
-        : "COMPLETE",
-  }
-);
- } catch (err) {
-    // console.error("Failed to save survey response", err);
-    alert("Unable to save survey response.");
-    return;
-  }
+//     status:
+//       action === "disqualify"
+//         ? "DISQUALIFIED"
+//         : action === "quota"
+//         ? "QUOTA"
+//         : "COMPLETE",
+//   }
+// );
+//  } catch (err) {
+//     // console.error("Failed to save survey response", err);
+//     alert("Unable to save survey response.");
+//     return;
+//   }
 
-    if (
-      action === "disqualify" &&
-      survey.disqualifyUrl
-    ) {
-      window.location.href =
-        survey.disqualifyUrl;
-      return;
+
+try {
+
+  await api.post(
+    `/survey-builder/submit/${token}`,
+    {
+      answers,
+      status,
     }
+  );
 
-    if (
-      action === "quota" &&
-      survey.quotaFullUrl
-    ) {
-      window.location.href =
-        survey.quotaFullUrl;
-      return;
-    }
+} catch (err) {
 
-    window.location.href =
-      survey.completeUrl;
+  alert("Unable to save survey response");
+
+  return;
+
+}
+
+
+    // if (
+    //   action === "disqualify" &&
+    //   survey.disqualifyUrl
+    // ) {
+    //   window.location.href =
+    //     survey.disqualifyUrl;
+    //   return;
+    // }
+
+    // if (
+    //   action === "quota" &&
+    //   survey.quotaFullUrl
+    // ) {
+    //   window.location.href =
+    //     survey.quotaFullUrl;
+    //   return;
+    // }
+
+    // window.location.href =
+    //   survey.completeUrl;
+
+if (
+  status === "DISQUALIFIED" &&
+  survey.disqualifyUrl
+) {
+
+  window.location.href =
+    survey.disqualifyUrl;
+
+  return;
+
+}
+
+if (
+  status === "QUOTA" &&
+  survey.quotaFullUrl
+) {
+
+  window.location.href =
+    survey.quotaFullUrl;
+
+  return;
+
+}
+
+window.location.href =
+  survey.completeUrl;
+
   };
+
 
   return(
     <div className="min-h-screen bg-slate-100 py-10">
@@ -1315,29 +1566,27 @@ const evaluateConditions = () => {
 
           <button
 
-            onClick={() =>
-              setCurrentQuestion(currentQuestion + 1)
-            }
+  onClick={handleNext}
 
-            className="
-              bg-orange-500
-              hover:bg-orange-600
-              text-white
-              px-8
-              py-3
-              rounded-xl
-            "
-          >
+  className="
+    bg-orange-500
+    hover:bg-orange-600
+    text-white
+    px-8
+    py-3
+    rounded-xl
+  "
+>
 
-            Next →
+  Next →
 
-          </button>
+</button>
 
         ) : (
 
           <button
 
-            onClick={submitSurvey}
+            onClick={() => submitSurvey("COMPLETE")}
 
             className="
               bg-green-600

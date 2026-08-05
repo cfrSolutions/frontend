@@ -34,29 +34,59 @@ const { id } = useParams();
     }));
   };
 
-  const addQuestion = () => {
-  setQuestions((prev) => [
-    ...prev,
-    {
-      id: Date.now(),
-      title: "",
-      type: "radio",
-      required: false,
-      options: ["Option 1", "Option 2"],
-      rows: [
-  "Statement 1",
-  "Statement 2",
-],
-columns: [
-  "1",
-  "2",
-  "3",
-  "4",
-  "5",
-],
-      conditions: [],
-    },
-  ]);
+//   const addQuestion = () => {
+//   setQuestions((prev) => [
+//     ...prev,
+//     {
+//       id: Date.now(),
+//       title: "",
+//       type: "radio",
+//       required: false,
+//       options: ["Option 1", "Option 2"],
+//       rows: [
+//   "Statement 1",
+//   "Statement 2",
+// ],
+// columns: [
+//   "1",
+//   "2",
+//   "3",
+//   "4",
+//   "5",
+// ],
+//       conditions: [],
+//     },
+//   ]);
+// };
+
+const addQuestion = (position = questions.length) => {
+
+  const newQuestion = {
+    id: Date.now(),
+    title: "",
+    type: "radio",
+    required: false,
+    options: ["Option 1", "Option 2"],
+    rows: [
+      "Statement 1",
+      "Statement 2",
+    ],
+    columns: [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+    ],
+    conditions: [],
+  };
+
+  const updated = [...questions];
+
+  updated.splice(position, 0, newQuestion);
+
+  setQuestions(updated);
+
 };
 
 const addCondition = (questionId) => {
@@ -71,6 +101,7 @@ const addCondition = (questionId) => {
     id: Date.now(),
     operator: "equals",
     value: "",
+    skipTo: "",
     action: "continue",
 }
             ],
@@ -514,16 +545,16 @@ const loadSurvey = async () => {
     >
       <div className="flex justify-between items-center mb-4">
 
-        <h4 className="font-semibold">
+        <h4 className="text-lg font-semibold">
           Question {qIndex + 1}
         </h4>
 
-        <button
+        {/* <button
           onClick={() => deleteQuestion(question.id)}
           className="text-red-600"
         >
           Delete
-        </button>
+        </button> */}
 
       </div>
 
@@ -610,6 +641,45 @@ const loadSurvey = async () => {
               >
                 ✕
               </button>
+              <div className="flex justify-between items-center mt-6 border-t pt-4">
+
+  <button
+    type="button"
+    onClick={() => addQuestion(qIndex + 1)}
+    className="
+      flex
+      items-center
+      gap-2
+      bg-orange-500
+      hover:bg-orange-600
+      text-white
+      px-4
+      py-2
+      rounded-lg
+      font-medium
+    "
+  >
+    <Plus size={18} />
+    Add Question
+  </button>
+
+  <button
+    type="button"
+    onClick={() => deleteQuestion(question.id)}
+    className="
+      bg-red-500
+      hover:bg-red-600
+      text-white
+      px-4
+      py-2
+      rounded-lg
+      font-medium
+    "
+  >
+    Delete
+  </button>
+
+</div>
             </div>
           ))}
 
@@ -728,23 +798,86 @@ const loadSurvey = async () => {
   )}
 
   {/* Then */}
-  <select
+ <select
     className="border rounded-lg p-2"
     value={condition.action}
-    onChange={(e) =>
-      updateCondition(
-        question.id,
-        condition.id,
-        "action",
-        e.target.value
-      )
+    onChange={(e)=>
+        updateCondition(
+            question.id,
+            condition.id,
+            "action",
+            e.target.value
+        )
     }
-  >
-    <option value="continue">Continue</option>
-    <option value="complete">Complete</option>
-    <option value="disqualify">Disqualify</option>
-    <option value="quota">Quota Full</option>
-  </select>
+>
+    <option value="continue">
+        Continue
+    </option>
+
+    <option value="skip">
+        Skip To Question
+    </option>
+
+    <option value="complete">
+        Complete Survey
+    </option>
+
+    <option value="disqualify">
+        Disqualify
+    </option>
+
+    <option value="quota">
+        Quota Full
+    </option>
+</select>
+
+{condition.action === "skip" && (
+
+<div className="mt-3">
+
+<label className="block mb-2 text-sm font-medium">
+Skip To
+</label>
+
+<select
+    className="w-full border rounded-lg p-2"
+    value={condition.skipTo}
+    onChange={(e)=>
+        updateCondition(
+            question.id,
+            condition.id,
+            "skipTo",
+            e.target.value
+        )
+    }
+>
+
+<option value="">
+Select Question
+</option>
+
+{questions
+.filter(q=>q.id!==question.id)
+.map((q,index)=>(
+
+<option
+key={q.id}
+value={q.id}
+>
+
+Question {index+1}
+{" - "}
+{q.title || "Untitled"}
+
+</option>
+
+))}
+
+</select>
+
+</div>
+
+)}
 
 </div>
 
