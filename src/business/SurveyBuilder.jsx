@@ -641,45 +641,7 @@ const loadSurvey = async () => {
               >
                 ✕
               </button>
-              <div className="flex justify-between items-center mt-6 border-t pt-4">
-
-  <button
-    type="button"
-    onClick={() => addQuestion(qIndex + 1)}
-    className="
-      flex
-      items-center
-      gap-2
-      bg-orange-500
-      hover:bg-orange-600
-      text-white
-      px-4
-      py-2
-      rounded-lg
-      font-medium
-    "
-  >
-    <Plus size={18} />
-    Add Question
-  </button>
-
-  <button
-    type="button"
-    onClick={() => deleteQuestion(question.id)}
-    className="
-      bg-red-500
-      hover:bg-red-600
-      text-white
-      px-4
-      py-2
-      rounded-lg
-      font-medium
-    "
-  >
-    Delete
-  </button>
-
-</div>
+              
             </div>
           ))}
 
@@ -1028,7 +990,45 @@ className="text-red-600"
 >
 ✕
 </button>
+<div className="flex justify-between items-center mt-6 border-t pt-4">
 
+  <button
+    type="button"
+    onClick={() => addQuestion(qIndex + 1)}
+    className="
+      flex
+      items-center
+      gap-2
+      bg-orange-500
+      hover:bg-orange-600
+      text-white
+      px-4
+      py-2
+      rounded-lg
+      font-medium
+    "
+  >
+    <Plus size={18} />
+    Add Question
+  </button>
+
+  <button
+    type="button"
+    onClick={() => deleteQuestion(question.id)}
+    className="
+      bg-red-500
+      hover:bg-red-600
+      text-white
+      px-4
+      py-2
+      rounded-lg
+      font-medium
+    "
+  >
+    Delete
+  </button>
+
+</div>
 </div>
 
 ))}
