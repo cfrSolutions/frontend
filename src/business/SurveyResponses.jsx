@@ -170,25 +170,36 @@ export default function SurveyResponses() {
   </button>
 
 </div>
-      <div className="overflow-auto border rounded-lg">
+     <div className="w-full overflow-x-auto overflow-y-auto max-h-[75vh] border rounded-xl shadow-sm">
+        
 
-        <table className="min-w-full">
+        <table className="min-w-max w-full border-collapse whitespace-nowrap">
 
           <thead className="bg-gray-100">
 
             <tr>
 
-              <th className="border p-3">#</th>
+              <th className="sticky left-0 z-30 bg-gray-100 border p-3 min-w-[70px]">
+  #
+</th>
 
-              <th className="border p-3">Status</th>
-              <th className="border p-3">Date</th>
-              <th className="border p-3">Time</th>
+<th className="sticky left-[70px] z-30 bg-gray-100 border p-3 min-w-[140px]">
+  Status
+</th>
+
+<th className="sticky left-[210px] z-30 bg-gray-100 border p-3 min-w-[130px]">
+  Date
+</th>
+
+<th className="sticky left-[340px] z-30 bg-gray-100 border p-3 min-w-[140px]">
+  Time
+</th>
 
               {survey.questions.map((q) => (
 
                 <th
                   key={q._id}
-                  className="border p-3"
+                  className="border p-3 min-w-[220px]"
                 >
                   {q.title}
                 </th>
@@ -205,21 +216,21 @@ export default function SurveyResponses() {
 
               <tr key={response._id}>
 
-                <td className="border p-3">
+                <td className="sticky left-0 bg-white border p-3">
                   {(page - 1) * PER_PAGE + index + 1}
                 </td>
 
-                <td className="border p-3">
+                <td className="sticky left-[70px] bg-white border p-3">
                   {response.status}
                 </td>
                 
-                <td className="border p-3">
+                <td className="sticky left-[210px] bg-white border p-3">
   {response.completedAt
     ? new Date(response.completedAt).toLocaleDateString()
     : "-"}
 </td>
 
-<td className="border p-3">
+<td className="sticky left-[340px] bg-white border p-3">
   {response.completedAt
     ? new Date(response.completedAt).toLocaleTimeString()
     : "-"}
@@ -233,7 +244,7 @@ const value = response.answers[key];
 return (
   <td
     key={key}
-    className="border p-3 align-top"
+    className="border p-3 align-top min-w-[220px]"
   >
     {Array.isArray(value) ? (
       value.join(", ")
