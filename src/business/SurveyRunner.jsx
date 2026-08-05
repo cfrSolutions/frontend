@@ -868,10 +868,6 @@ const evaluateConditions = () => {
 
   const handleNext = async () => {
 
-    if (!validateCurrentQuestion()) {
-    return;
-}
-
   const condition = evaluateConditions();
 
   // No condition matched
@@ -1004,41 +1000,43 @@ const evaluateConditions = () => {
 //       survey.completeUrl;
 //   };
 
- const submitSurvey = async (status = "COMPLETE") => {
 
-    // for (const q of survey.questions) {
 
-    //   if (!q.required) continue;
+//  const submitSurvey = async (status = "COMPLETE") => {
 
-    //   const key = q.id;
+//     for (const q of survey.questions) {
 
-    //   const answer = answers[key];
+//       if (!q.required) continue;
 
-    //   if (q.type === "matrix") {
+//       const key = q.id;
 
-    //     if (
-    //       !answer ||
-    //       Object.keys(answer).length !== q.rows.length
-    //     ) {
-    //       alert(`${q.title} is required`);
-    //       return;
-    //     }
+//       const answer = answers[key];
 
-    //   } else {
+//       if (q.type === "matrix") {
 
-    //     if (
-    //       answer === undefined ||
-    //       answer === "" ||
-    //       (Array.isArray(answer) &&
-    //         answer.length === 0)
-    //     ) {
-    //       alert(`${q.title} is required`);
-    //       return;
-    //     }
+//         if (
+//           !answer ||
+//           Object.keys(answer).length !== q.rows.length
+//         ) {
+//           alert(`${q.title} is required`);
+//           return;
+//         }
 
-    //   }
+//       } else {
 
-    // }
+//         if (
+//           answer === undefined ||
+//           answer === "" ||
+//           (Array.isArray(answer) &&
+//             answer.length === 0)
+//         ) {
+//           alert(`${q.title} is required`);
+//           return;
+//         }
+
+//       }
+
+//     }
 
 //     const action = evaluateConditions();
 //     try {
@@ -1061,6 +1059,46 @@ const evaluateConditions = () => {
 //     return;
 //   }
 
+
+
+const submitSurvey = async (status = "COMPLETE") => {
+   if (status === "COMPLETE") {
+
+    for (const q of survey.questions) {
+
+      if (!q.required) continue;
+
+      const key = q.id;
+
+      const answer = answers[key];
+
+      if (q.type === "matrix") {
+
+        if (
+          !answer ||
+          Object.keys(answer).length !== q.rows.length
+        ) {
+          alert(`${q.title} is required`);
+          return;
+        }
+
+      } else {
+
+        if (
+          answer === undefined ||
+          answer === "" ||
+          (Array.isArray(answer) &&
+            answer.length === 0)
+        ) {
+          alert(`${q.title} is required`);
+          return;
+        }
+
+      }
+
+    }
+
+  }
 
 try {
 
