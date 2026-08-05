@@ -1177,9 +1177,9 @@ const selectClass = inputClass + " appearance-none";
 const labelClass = "block mb-2 text-sm font-medium text-slate-700";
 
 export default function SurveyBuilder() {
-  const navigate = useNavigate();
+   const navigate = useNavigate();
 
-  const { id } = useParams();
+const { id } = useParams();
   const [survey, setSurvey] = useState({
     name: "",
     description: "",
@@ -1197,273 +1197,339 @@ export default function SurveyBuilder() {
     }));
   };
 
-  const addQuestion = (position = questions.length) => {
-    const newQuestion = {
-      id: Date.now(),
-      title: "",
-      type: "radio",
-      required: false,
-      options: ["Option 1", "Option 2"],
-      rows: ["Statement 1", "Statement 2"],
-      columns: ["1", "2", "3", "4", "5"],
-      conditions: [],
+//   const addQuestion = () => {
+//   setQuestions((prev) => [
+//     ...prev,
+//     {
+//       id: Date.now(),
+//       title: "",
+//       type: "radio",
+//       required: false,
+//       options: ["Option 1", "Option 2"],
+//       rows: [
+//   "Statement 1",
+//   "Statement 2",
+// ],
+// columns: [
+//   "1",
+//   "2",
+//   "3",
+//   "4",
+//   "5",
+// ],
+//       conditions: [],
+//     },
+//   ]);
+// };
+
+const addQuestion = (position = questions.length) => {
+
+  const newQuestion = {
+    id: Date.now(),
+    title: "",
+    type: "radio",
+    required: false,
+    options: ["Option 1", "Option 2"],
+    rows: [
+      "Statement 1",
+      "Statement 2",
+    ],
+    columns: [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+    ],
+    conditions: [],
+  };
+
+  const updated = [...questions];
+
+  updated.splice(position, 0, newQuestion);
+
+  setQuestions(updated);
+
+};
+
+const addCondition = (questionId) => {
+  setQuestions((prev) =>
+    prev.map((q) =>
+      q.id === questionId
+        ? {
+            ...q,
+            conditions: [
+              ...q.conditions,
+              {
+    id: Date.now(),
+    operator: "equals",
+    value: "",
+    skipTo: "",
+    action: "continue",
+}
+            ],
+          }
+        : q
+    )
+  );
+};
+
+const updateCondition = (
+  questionId,
+  conditionId,
+  field,
+  value
+) => {
+  setQuestions((prev) =>
+    prev.map((q) => {
+      if (q.id !== questionId) return q;
+
+      return {
+        ...q,
+        conditions: q.conditions.map((c) =>
+          c.id === conditionId
+            ? {
+                ...c,
+                [field]: value,
+              }
+            : c
+        ),
+      };
+    })
+  );
+};
+
+const deleteCondition = (
+  questionId,
+  conditionId
+) => {
+  setQuestions((prev) =>
+    prev.map((q) => {
+      if (q.id !== questionId) return q;
+
+      return {
+        ...q,
+        conditions: q.conditions.filter(
+          (c) => c.id !== conditionId
+        ),
+      };
+    })
+  );
+};
+
+const updateQuestion = (id, field, value) => {
+  setQuestions((prev) =>
+    prev.map((q) =>
+      q.id === id ? { ...q, [field]: value } : q
+    )
+  );
+};
+
+const deleteQuestion = (id) => {
+  setQuestions((prev) =>
+    prev.filter((q) => q.id !== id)
+  );
+};
+
+const addOption = (id) => {
+  setQuestions((prev) =>
+    prev.map((q) =>
+      q.id === id
+        ? {
+            ...q,
+            options: [...q.options, `Option ${q.options.length + 1}`],
+          }
+        : q
+    )
+  );
+};
+
+const updateOption = (questionId, index, value) => {
+  setQuestions((prev) =>
+    prev.map((q) => {
+      if (q.id !== questionId) return q;
+
+      const options = [...q.options];
+      options[index] = value;
+
+      return {
+        ...q,
+        options,
+      };
+    })
+  );
+};
+
+const removeOption = (questionId, index) => {
+  setQuestions((prev) =>
+    prev.map((q) => {
+      if (q.id !== questionId) return q;
+
+      return {
+        ...q,
+        options: q.options.filter((_, i) => i !== index),
+      };
+    })
+  );
+};
+
+const updateRow = (questionId, index, value) => {
+  setQuestions((prev) =>
+    prev.map((q) => {
+      if (q.id !== questionId) return q;
+
+      const rows = [...q.rows];
+      rows[index] = value;
+
+      return {
+        ...q,
+        rows,
+      };
+    })
+  );
+};
+
+const addRow = (questionId) => {
+  setQuestions((prev) =>
+    prev.map((q) =>
+      q.id === questionId
+        ? {
+            ...q,
+            rows: [...q.rows, `Statement ${q.rows.length + 1}`],
+          }
+        : q
+    )
+  );
+};
+
+const removeRow = (questionId, index) => {
+  setQuestions((prev) =>
+    prev.map((q) => {
+      if (q.id !== questionId) return q;
+
+      return {
+        ...q,
+        rows: q.rows.filter((_, i) => i !== index),
+      };
+    })
+  );
+};
+
+const updateColumn = (questionId, index, value) => {
+  setQuestions((prev) =>
+    prev.map((q) => {
+      if (q.id !== questionId) return q;
+
+      const columns = [...q.columns];
+      columns[index] = value;
+
+      return {
+        ...q,
+        columns,
+      };
+    })
+  );
+};
+
+const addColumn = (questionId) => {
+  setQuestions((prev) =>
+    prev.map((q) =>
+      q.id === questionId
+        ? {
+            ...q,
+            columns: [...q.columns, `${q.columns.length + 1}`],
+          }
+        : q
+    )
+  );
+};
+
+const removeColumn = (questionId, index) => {
+  setQuestions((prev) =>
+    prev.map((q) => {
+      if (q.id !== questionId) return q;
+
+      return {
+        ...q,
+        columns: q.columns.filter((_, i) => i !== index),
+      };
+    })
+  );
+};
+
+ const handleSave = async () => {
+  try {
+
+    const payload = {
+      ...survey,
+      questions,
     };
 
-    const updated = [...questions];
+    if (id) {
 
-    updated.splice(position, 0, newQuestion);
+      await updateSurvey(id, payload);
 
-    setQuestions(updated);
-  };
+      alert("Survey updated.");
 
-  const addCondition = (questionId) => {
-    setQuestions((prev) =>
-      prev.map((q) =>
-        q.id === questionId
-          ? {
-              ...q,
-              conditions: [
-                ...q.conditions,
-                {
-                  id: Date.now(),
-                  operator: "equals",
-                  value: "",
-                  skipTo: "",
-                  action: "continue",
-                },
-              ],
-            }
-          : q
-      )
-    );
-  };
+    } else {
 
-  const updateCondition = (questionId, conditionId, field, value) => {
-    setQuestions((prev) =>
-      prev.map((q) => {
-        if (q.id !== questionId) return q;
+      await createSurvey(payload);
 
-        return {
-          ...q,
-          conditions: q.conditions.map((c) =>
-            c.id === conditionId
-              ? {
-                  ...c,
-                  [field]: value,
-                }
-              : c
-          ),
-        };
-      })
-    );
-  };
+      alert("Survey created.");
 
-  const deleteCondition = (questionId, conditionId) => {
-    setQuestions((prev) =>
-      prev.map((q) => {
-        if (q.id !== questionId) return q;
-
-        return {
-          ...q,
-          conditions: q.conditions.filter((c) => c.id !== conditionId),
-        };
-      })
-    );
-  };
-
-  const updateQuestion = (id, field, value) => {
-    setQuestions((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, [field]: value } : q))
-    );
-  };
-
-  const deleteQuestion = (id) => {
-    setQuestions((prev) => prev.filter((q) => q.id !== id));
-  };
-
-  const addOption = (id) => {
-    setQuestions((prev) =>
-      prev.map((q) =>
-        q.id === id
-          ? {
-              ...q,
-              options: [...q.options, `Option ${q.options.length + 1}`],
-            }
-          : q
-      )
-    );
-  };
-
-  const updateOption = (questionId, index, value) => {
-    setQuestions((prev) =>
-      prev.map((q) => {
-        if (q.id !== questionId) return q;
-
-        const options = [...q.options];
-        options[index] = value;
-
-        return {
-          ...q,
-          options,
-        };
-      })
-    );
-  };
-
-  const removeOption = (questionId, index) => {
-    setQuestions((prev) =>
-      prev.map((q) => {
-        if (q.id !== questionId) return q;
-
-        return {
-          ...q,
-          options: q.options.filter((_, i) => i !== index),
-        };
-      })
-    );
-  };
-
-  const updateRow = (questionId, index, value) => {
-    setQuestions((prev) =>
-      prev.map((q) => {
-        if (q.id !== questionId) return q;
-
-        const rows = [...q.rows];
-        rows[index] = value;
-
-        return {
-          ...q,
-          rows,
-        };
-      })
-    );
-  };
-
-  const addRow = (questionId) => {
-    setQuestions((prev) =>
-      prev.map((q) =>
-        q.id === questionId
-          ? {
-              ...q,
-              rows: [...q.rows, `Statement ${q.rows.length + 1}`],
-            }
-          : q
-      )
-    );
-  };
-
-  const removeRow = (questionId, index) => {
-    setQuestions((prev) =>
-      prev.map((q) => {
-        if (q.id !== questionId) return q;
-
-        return {
-          ...q,
-          rows: q.rows.filter((_, i) => i !== index),
-        };
-      })
-    );
-  };
-
-  const updateColumn = (questionId, index, value) => {
-    setQuestions((prev) =>
-      prev.map((q) => {
-        if (q.id !== questionId) return q;
-
-        const columns = [...q.columns];
-        columns[index] = value;
-
-        return {
-          ...q,
-          columns,
-        };
-      })
-    );
-  };
-
-  const addColumn = (questionId) => {
-    setQuestions((prev) =>
-      prev.map((q) =>
-        q.id === questionId
-          ? {
-              ...q,
-              columns: [...q.columns, `${q.columns.length + 1}`],
-            }
-          : q
-      )
-    );
-  };
-
-  const removeColumn = (questionId, index) => {
-    setQuestions((prev) =>
-      prev.map((q) => {
-        if (q.id !== questionId) return q;
-
-        return {
-          ...q,
-          columns: q.columns.filter((_, i) => i !== index),
-        };
-      })
-    );
-  };
-
-  const handleSave = async () => {
-    try {
-      const payload = {
-        ...survey,
-        questions,
-      };
-
-      if (id) {
-        await updateSurvey(id, payload);
-
-        alert("Survey updated.");
-      } else {
-        await createSurvey(payload);
-
-        alert("Survey created.");
-      }
-
-      navigate("/business/dashboard/survey-forms");
-    } catch (err) {
-      // console.log(err);
-
-      alert("Unable to save survey.");
     }
-  };
 
-  useEffect(() => {
-    if (!id) return;
+    navigate("/business/dashboard/survey-forms");
 
-    loadSurvey();
-  }, [id]);
+  } catch (err) {
 
-  const loadSurvey = async () => {
-    try {
-      const { data } = await getSurvey(id);
+    // console.log(err);
 
-      setSurvey({
-        name: data.name,
-        description: data.description,
-        completeUrl: data.completeUrl,
-        disqualifyUrl: data.disqualifyUrl,
-        quotaFullUrl: data.quotaFullUrl,
-      });
+    alert("Unable to save survey.");
 
-      setQuestions(
-        data.questions.map((question, qIndex) => ({
-          ...question,
-          id: question.id || `q-${qIndex}-${Date.now()}`,
-          conditions: (question.conditions || []).map((condition, cIndex) => ({
-            ...condition,
-            id: condition.id || `c-${qIndex}-${cIndex}-${Date.now()}`,
-          })),
-        }))
-      );
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  }
+};
+
+useEffect(() => {
+
+  if (!id) return;
+
+  loadSurvey();
+
+}, [id]);
+
+const loadSurvey = async () => {
+
+  try {
+
+    const { data } = await getSurvey(id);
+
+    setSurvey({
+      name: data.name,
+      description: data.description,
+      completeUrl: data.completeUrl,
+      disqualifyUrl: data.disqualifyUrl,
+      quotaFullUrl: data.quotaFullUrl,
+    });
+
+    setQuestions(
+  data.questions.map((question, qIndex) => ({
+    ...question,
+    id: question.id || `q-${qIndex}-${Date.now()}`,
+    conditions: (question.conditions || []).map((condition, cIndex) => ({
+      ...condition,
+      id: condition.id || `c-${qIndex}-${cIndex}-${Date.now()}`
+    }))
+  }))
+);
+
+  } catch (err) {
+
+    console.log(err);
+
+  }
+
+};
 
   return (
     <div className="min-h-screen bg-[#F6F7FB]">
