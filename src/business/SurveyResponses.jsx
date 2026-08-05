@@ -470,18 +470,17 @@ export default function SurveyResponses() {
 
       <div className="rounded-xl border bg-white shadow w-full overflow-hidden">
 
-  <div
-    className="w-full overflow-x-scroll overflow-y-auto"
-    style={{
-      maxHeight: "72vh",
-      maxWidth: "100%",
-    }}
-  >
+ <div
+  className="overflow-x-auto overflow-y-auto"
+  style={{
+    width: "100%",
+    maxHeight: "72vh",
+  }}
+>
 <table
   className="border-collapse"
   style={{
     width: "max-content",
-    minWidth: `${700 + survey.questions.length * 250}px`,
   }}
 >
   <thead className="sticky top-0 bg-gray-100 z-20">
@@ -503,13 +502,15 @@ export default function SurveyResponses() {
       </th>
 
       {survey.questions.map((q) => (
-        <th
-          key={q.id}
-          className="border px-5 py-3 font-semibold text-gray-700 bg-gray-100"
-          style={{
-            minWidth: 250,
-          }}
-        >
+       <th
+  key={q.id}
+  className="border px-5 py-3 whitespace-nowrap"
+  style={{
+    width: 250,
+    minWidth: 250,
+    maxWidth: 250,
+  }}
+>
           {q.title}
         </th>
       ))}
@@ -556,13 +557,15 @@ export default function SurveyResponses() {
           const value = response.answers?.[q.id];
 
           return (
-            <td
-              key={q.id}
-              className="border px-4 py-3 align-top"
-              style={{
-                minWidth: 250,
-              }}
-            >
+           <td
+  key={q.id}
+  className="border px-4 py-3 whitespace-nowrap"
+  style={{
+    width: 250,
+    minWidth: 250,
+    maxWidth: 250,
+  }}
+>
               {Array.isArray(value) ? (
                 value.join(", ")
               ) : value &&
