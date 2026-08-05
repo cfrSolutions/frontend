@@ -1225,7 +1225,7 @@ const { id } = useParams();
 const addQuestion = (position = questions.length) => {
 
   const newQuestion = {
-    id: Date.now(),
+    id: crypto.randomUUID(),
     title: "",
     type: "radio",
     required: false,
@@ -1261,7 +1261,7 @@ const addCondition = (questionId) => {
             conditions: [
               ...q.conditions,
               {
-    id: Date.now(),
+    id: crypto.randomUUID(),
     operator: "equals",
     value: "",
     skipTo: "",
@@ -1515,10 +1515,10 @@ const loadSurvey = async () => {
     setQuestions(
   data.questions.map((question, qIndex) => ({
     ...question,
-    id: question.id || `q-${qIndex}-${Date.now()}`,
+    id: question.id,
     conditions: (question.conditions || []).map((condition, cIndex) => ({
       ...condition,
-      id: condition.id || `c-${qIndex}-${cIndex}-${Date.now()}`
+      id: condition.id,
     }))
   }))
 );
