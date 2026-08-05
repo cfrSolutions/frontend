@@ -1,3 +1,1125 @@
+// import { useState, useEffect } from "react";
+// import { useNavigate, useParams } from "react-router-dom";
+
+// import {
+//   createSurvey,
+//   updateSurvey,
+//   getSurvey,
+// } from "../services/surveyBuilderApi";
+// import {
+//   FileText,
+//   Link,
+//   Plus,
+//   Save,
+// } from "lucide-react";
+
+// export default function SurveyBuilder() {
+//   const navigate = useNavigate();
+
+// const { id } = useParams();
+//   const [survey, setSurvey] = useState({
+//     name: "",
+//     description: "",
+//     completeUrl: "",
+//     disqualifyUrl: "",
+//     quotaFullUrl: "",
+//   });
+
+//   const [questions, setQuestions] = useState([]);
+
+//   const handleChange = (e) => {
+//     setSurvey((prev) => ({
+//       ...prev,
+//       [e.target.name]: e.target.value,
+//     }));
+//   };
+
+// //   const addQuestion = () => {
+// //   setQuestions((prev) => [
+// //     ...prev,
+// //     {
+// //       id: Date.now(),
+// //       title: "",
+// //       type: "radio",
+// //       required: false,
+// //       options: ["Option 1", "Option 2"],
+// //       rows: [
+// //   "Statement 1",
+// //   "Statement 2",
+// // ],
+// // columns: [
+// //   "1",
+// //   "2",
+// //   "3",
+// //   "4",
+// //   "5",
+// // ],
+// //       conditions: [],
+// //     },
+// //   ]);
+// // };
+
+// const addQuestion = (position = questions.length) => {
+
+//   const newQuestion = {
+//     id: Date.now(),
+//     title: "",
+//     type: "radio",
+//     required: false,
+//     options: ["Option 1", "Option 2"],
+//     rows: [
+//       "Statement 1",
+//       "Statement 2",
+//     ],
+//     columns: [
+//       "1",
+//       "2",
+//       "3",
+//       "4",
+//       "5",
+//     ],
+//     conditions: [],
+//   };
+
+//   const updated = [...questions];
+
+//   updated.splice(position, 0, newQuestion);
+
+//   setQuestions(updated);
+
+// };
+
+// const addCondition = (questionId) => {
+//   setQuestions((prev) =>
+//     prev.map((q) =>
+//       q.id === questionId
+//         ? {
+//             ...q,
+//             conditions: [
+//               ...q.conditions,
+//               {
+//     id: Date.now(),
+//     operator: "equals",
+//     value: "",
+//     skipTo: "",
+//     action: "continue",
+// }
+//             ],
+//           }
+//         : q
+//     )
+//   );
+// };
+
+// const updateCondition = (
+//   questionId,
+//   conditionId,
+//   field,
+//   value
+// ) => {
+//   setQuestions((prev) =>
+//     prev.map((q) => {
+//       if (q.id !== questionId) return q;
+
+//       return {
+//         ...q,
+//         conditions: q.conditions.map((c) =>
+//           c.id === conditionId
+//             ? {
+//                 ...c,
+//                 [field]: value,
+//               }
+//             : c
+//         ),
+//       };
+//     })
+//   );
+// };
+
+// const deleteCondition = (
+//   questionId,
+//   conditionId
+// ) => {
+//   setQuestions((prev) =>
+//     prev.map((q) => {
+//       if (q.id !== questionId) return q;
+
+//       return {
+//         ...q,
+//         conditions: q.conditions.filter(
+//           (c) => c.id !== conditionId
+//         ),
+//       };
+//     })
+//   );
+// };
+
+// const updateQuestion = (id, field, value) => {
+//   setQuestions((prev) =>
+//     prev.map((q) =>
+//       q.id === id ? { ...q, [field]: value } : q
+//     )
+//   );
+// };
+
+// const deleteQuestion = (id) => {
+//   setQuestions((prev) =>
+//     prev.filter((q) => q.id !== id)
+//   );
+// };
+
+// const addOption = (id) => {
+//   setQuestions((prev) =>
+//     prev.map((q) =>
+//       q.id === id
+//         ? {
+//             ...q,
+//             options: [...q.options, `Option ${q.options.length + 1}`],
+//           }
+//         : q
+//     )
+//   );
+// };
+
+// const updateOption = (questionId, index, value) => {
+//   setQuestions((prev) =>
+//     prev.map((q) => {
+//       if (q.id !== questionId) return q;
+
+//       const options = [...q.options];
+//       options[index] = value;
+
+//       return {
+//         ...q,
+//         options,
+//       };
+//     })
+//   );
+// };
+
+// const removeOption = (questionId, index) => {
+//   setQuestions((prev) =>
+//     prev.map((q) => {
+//       if (q.id !== questionId) return q;
+
+//       return {
+//         ...q,
+//         options: q.options.filter((_, i) => i !== index),
+//       };
+//     })
+//   );
+// };
+
+// const updateRow = (questionId, index, value) => {
+//   setQuestions((prev) =>
+//     prev.map((q) => {
+//       if (q.id !== questionId) return q;
+
+//       const rows = [...q.rows];
+//       rows[index] = value;
+
+//       return {
+//         ...q,
+//         rows,
+//       };
+//     })
+//   );
+// };
+
+// const addRow = (questionId) => {
+//   setQuestions((prev) =>
+//     prev.map((q) =>
+//       q.id === questionId
+//         ? {
+//             ...q,
+//             rows: [...q.rows, `Statement ${q.rows.length + 1}`],
+//           }
+//         : q
+//     )
+//   );
+// };
+
+// const removeRow = (questionId, index) => {
+//   setQuestions((prev) =>
+//     prev.map((q) => {
+//       if (q.id !== questionId) return q;
+
+//       return {
+//         ...q,
+//         rows: q.rows.filter((_, i) => i !== index),
+//       };
+//     })
+//   );
+// };
+
+// const updateColumn = (questionId, index, value) => {
+//   setQuestions((prev) =>
+//     prev.map((q) => {
+//       if (q.id !== questionId) return q;
+
+//       const columns = [...q.columns];
+//       columns[index] = value;
+
+//       return {
+//         ...q,
+//         columns,
+//       };
+//     })
+//   );
+// };
+
+// const addColumn = (questionId) => {
+//   setQuestions((prev) =>
+//     prev.map((q) =>
+//       q.id === questionId
+//         ? {
+//             ...q,
+//             columns: [...q.columns, `${q.columns.length + 1}`],
+//           }
+//         : q
+//     )
+//   );
+// };
+
+// const removeColumn = (questionId, index) => {
+//   setQuestions((prev) =>
+//     prev.map((q) => {
+//       if (q.id !== questionId) return q;
+
+//       return {
+//         ...q,
+//         columns: q.columns.filter((_, i) => i !== index),
+//       };
+//     })
+//   );
+// };
+
+//  const handleSave = async () => {
+//   try {
+
+//     const payload = {
+//       ...survey,
+//       questions,
+//     };
+
+//     if (id) {
+
+//       await updateSurvey(id, payload);
+
+//       alert("Survey updated.");
+
+//     } else {
+
+//       await createSurvey(payload);
+
+//       alert("Survey created.");
+
+//     }
+
+//     navigate("/business/dashboard/survey-forms");
+
+//   } catch (err) {
+
+//     // console.log(err);
+
+//     alert("Unable to save survey.");
+
+//   }
+// };
+
+// useEffect(() => {
+
+//   if (!id) return;
+
+//   loadSurvey();
+
+// }, [id]);
+
+// const loadSurvey = async () => {
+
+//   try {
+
+//     const { data } = await getSurvey(id);
+
+//     setSurvey({
+//       name: data.name,
+//       description: data.description,
+//       completeUrl: data.completeUrl,
+//       disqualifyUrl: data.disqualifyUrl,
+//       quotaFullUrl: data.quotaFullUrl,
+//     });
+
+//     setQuestions(
+//   data.questions.map((question, qIndex) => ({
+//     ...question,
+//     id: question.id || `q-${qIndex}-${Date.now()}`,
+//     conditions: (question.conditions || []).map((condition, cIndex) => ({
+//       ...condition,
+//       id: condition.id || `c-${qIndex}-${cIndex}-${Date.now()}`
+//     }))
+//   }))
+// );
+
+//   } catch (err) {
+
+//     console.log(err);
+
+//   }
+
+// };
+
+//   return (
+//     <div className="container mx-auto px-6 py-8">
+
+//       <div className="flex items-center justify-between mb-8">
+//         <div>
+//           <h1 className="text-3xl font-bold">Survey Builder</h1>
+//           <p className="text-gray-500 mt-1">
+//             Create your own survey with custom logic.
+//           </p>
+//         </div>
+
+//         <button
+//           onClick={handleSave}
+//           className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-lg"
+//         >
+//           <Save size={18} />
+//           Save & Continue
+//         </button>
+//       </div>
+
+//       {/* Survey Information */}
+
+//       <div className="bg-white rounded-xl shadow border mb-8">
+
+//         <div className="border-b px-6 py-4">
+//           <h2 className="flex items-center gap-2 font-semibold text-lg">
+//             <FileText size={18} />
+//             Survey Information
+//           </h2>
+//         </div>
+
+//         <div className="p-6">
+
+//           <div className="mb-5">
+//             <label className="block mb-2 font-medium">
+//               Survey Name
+//             </label>
+
+//             <input
+//               type="text"
+//               name="name"
+//               value={survey.name}
+//               onChange={handleChange}
+//               placeholder="Customer Banking Survey"
+//               className="w-full border rounded-lg px-4 py-3"
+//             />
+//           </div>
+
+//           <div className="mb-5">
+//             <label className="block mb-2 font-medium">
+//               Description
+//             </label>
+
+//             <textarea
+//               rows={4}
+//               name="description"
+//               value={survey.description}
+//               onChange={handleChange}
+//               placeholder="Survey description..."
+//               className="w-full border rounded-lg px-4 py-3"
+//             />
+//           </div>
+
+//           <div className="grid md:grid-cols-3 gap-5">
+
+//             <div>
+//               <label className="block mb-2 font-medium">
+//                 Complete URL
+//               </label>
+
+//               <div className="flex items-center border rounded-lg overflow-hidden">
+
+//                 <div className="px-3 bg-gray-100">
+//                   <Link size={16} />
+//                 </div>
+
+//                 <input
+//                   type="text"
+//                   name="completeUrl"
+//                   value={survey.completeUrl}
+//                   onChange={handleChange}
+//                   placeholder="https://..."
+//                   className="w-full px-3 py-3 outline-none"
+//                 />
+//               </div>
+//             </div>
+
+//             <div>
+//               <label className="block mb-2 font-medium">
+//                 Disqualify URL
+//               </label>
+
+//               <div className="flex items-center border rounded-lg overflow-hidden">
+
+//                 <div className="px-3 bg-gray-100">
+//                   <Link size={16} />
+//                 </div>
+
+//                 <input
+//                   type="text"
+//                   name="disqualifyUrl"
+//                   value={survey.disqualifyUrl}
+//                   onChange={handleChange}
+//                   placeholder="https://..."
+//                   className="w-full px-3 py-3 outline-none"
+//                 />
+//               </div>
+//             </div>
+
+//             <div>
+//               <label className="block mb-2 font-medium">
+//                 Quota Full URL
+//               </label>
+
+//               <div className="flex items-center border rounded-lg overflow-hidden">
+
+//                 <div className="px-3 bg-gray-100">
+//                   <Link size={16} />
+//                 </div>
+
+//                 <input
+//                   type="text"
+//                   name="quotaFullUrl"
+//                   value={survey.quotaFullUrl}
+//                   onChange={handleChange}
+//                   placeholder="https://..."
+//                   className="w-full px-3 py-3 outline-none"
+//                 />
+//               </div>
+//             </div>
+
+//           </div>
+
+//         </div>
+//       </div>
+
+//       {/* Questions */}
+
+//       <div className="bg-white rounded-xl shadow border">
+
+//         <div className="flex justify-between items-center border-b px-6 py-4">
+
+//           <h2 className="font-semibold text-lg">
+//             Questions
+//           </h2>
+
+//           <button
+//     onClick={addQuestion}
+//     className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg"
+// >
+//             <Plus size={18} />
+//             Add Question
+//           </button>
+
+//         </div>
+
+//         <div className="p-6">
+
+//   {questions.length === 0 && (
+//     <div className="text-center py-12">
+//       <h3 className="text-xl font-semibold">
+//         No Questions Added
+//       </h3>
+
+//       <p className="text-gray-500 mt-2">
+//         Click Add Question.
+//       </p>
+//     </div>
+//   )}
+
+//   {questions.map((question, qIndex) => (
+//     <div
+//       key={question.id || question._id}
+//       className="border rounded-xl p-5 mb-5 bg-slate-50"
+//     >
+//       <div className="flex justify-between items-center mb-4">
+
+//         <h4 className="text-lg font-semibold">
+//           Question {qIndex + 1}
+//         </h4>
+
+//         {/* <button
+//           onClick={() => deleteQuestion(question.id)}
+//           className="text-red-600"
+//         >
+//           Delete
+//         </button> */}
+
+//       </div>
+
+//       <input
+//         className="w-full border rounded-lg px-3 py-2 mb-4"
+//         placeholder="Question title"
+//         value={question.title}
+//         onChange={(e) =>
+//           updateQuestion(
+//             question.id,
+//             "title",
+//             e.target.value
+//           )
+//         }
+//       />
+
+//       <select
+//         className="w-full border rounded-lg px-3 py-2 mb-4"
+//         value={question.type}
+//         onChange={(e) =>
+//           updateQuestion(
+//             question.id,
+//             "type",
+//             e.target.value
+//           )
+//         }
+//       >
+//         <option value="radio">Single Choice</option>
+//         <option value="checkbox">Multiple Choice</option>
+//         <option value="dropdown">Dropdown</option>
+//         <option value="text">Text</option>
+//         <option value="textarea">Textarea</option>
+//         <option value="number">Number</option>
+//         <option value="email">Email</option>
+//         <option value="date">Date</option>
+//         <option value="matrix">Matrix</option>
+//       </select>
+
+//       <label className="flex items-center gap-2 mb-4">
+
+//         <input
+//           type="checkbox"
+//           checked={question.required}
+//           onChange={(e) =>
+//             updateQuestion(
+//               question.id,
+//               "required",
+//               e.target.checked
+//             )
+//           }
+//         />
+
+//         Required
+
+//       </label>
+
+//       {(question.type === "radio" ||
+//         question.type === "checkbox" ||
+//         question.type === "dropdown") && (
+//         <>
+        
+//           {question.options.map((option, index) => (
+//             <div
+//               key={index}
+//               className="flex gap-2 mb-2"
+//             >
+//               <input
+//                 className="flex-1 border rounded-lg px-3 py-2"
+//                 value={option}
+//                 onChange={(e) =>
+//                   updateOption(
+//                     question.id,
+//                     index,
+//                     e.target.value
+//                   )
+//                 }
+//               />
+
+//               <button
+//                 onClick={() =>
+//                   removeOption(question.id, index)
+//                 }
+//                 className="text-red-600"
+//               >
+//                 ✕
+//               </button>
+              
+//             </div>
+//           ))}
+
+          
+
+//           <button
+//             onClick={() =>
+//               addOption(question.id)
+//             }
+//             className="mt-2 text-orange-600 font-medium"
+//           >
+//             + Add Option
+//           </button>
+
+//           <div className="mt-6 border-t pt-5">
+
+//   <div className="flex justify-between items-center">
+
+//     <h4 className="font-semibold text-gray-700">
+//       Conditions
+//     </h4>
+
+//     <button
+//       onClick={() => addCondition(question.id)}
+//       className="text-orange-600 font-medium"
+//     >
+//       + Condition
+//     </button>
+
+//   </div>
+
+//   {question.conditions.map((condition) => (
+
+//     <div
+//        key={condition.id || condition._id}
+//       className="border rounded-lg p-4 mt-4 bg-white"
+//     >
+
+//       <div className="grid md:grid-cols-3 gap-4">
+
+//         <div>
+
+//          <label className="block text-sm font-semibold mb-3">
+//   IF
+// </label>
+
+// <div className="grid md:grid-cols-3 gap-3">
+
+//   {/* Operator */}
+//   <select
+//     className="border rounded-lg p-2"
+//     value={condition.operator}
+//     onChange={(e) =>
+//       updateCondition(
+//         question.id,
+//         condition.id,
+//         "operator",
+//         e.target.value
+//       )
+//     }
+//   >
+//     <option value="equals">Equals</option>
+//     <option value="not_equals">Not Equals</option>
+//     <option value="greater_than">Greater Than</option>
+//     <option value="greater_equal">Greater Than or Equal</option>
+//     <option value="less_than">Less Than</option>
+//     <option value="less_equal">Less Than or Equal</option>
+//     <option value="contains">Contains</option>
+//   </select>
+
+//   {/* Value */}
+//   {(question.type === "radio" ||
+//     question.type === "checkbox" ||
+//     question.type === "dropdown") ? (
+
+//     <select
+//       className="border rounded-lg p-2"
+//       value={condition.value}
+//       onChange={(e) =>
+//         updateCondition(
+//           question.id,
+//           condition.id,
+//           "value",
+//           e.target.value
+//         )
+//       }
+//     >
+//       <option value="">Select Value</option>
+
+//       {question.options.map((option) => (
+//         <option
+//           key={option}
+//           value={option}
+//         >
+//           {option}
+//         </option>
+//       ))}
+//     </select>
+
+//   ) : (
+
+//     <input
+//       className="border rounded-lg p-2"
+//       placeholder="Enter value"
+//       value={condition.value}
+//       onChange={(e) =>
+//         updateCondition(
+//           question.id,
+//           condition.id,
+//           "value",
+//           e.target.value
+//         )
+//       }
+//     />
+
+//   )}
+
+//   {/* Then */}
+//  <select
+//     className="border rounded-lg p-2"
+//     value={condition.action}
+//     onChange={(e)=>
+//         updateCondition(
+//             question.id,
+//             condition.id,
+//             "action",
+//             e.target.value
+//         )
+//     }
+// >
+//     <option value="continue">
+//         Continue
+//     </option>
+
+//     <option value="skip">
+//         Skip To Question
+//     </option>
+
+//     <option value="complete">
+//         Complete Survey
+//     </option>
+
+//     <option value="disqualify">
+//         Disqualify
+//     </option>
+
+//     <option value="quota">
+//         Quota Full
+//     </option>
+// </select>
+
+// {condition.action === "skip" && (
+
+// <div className="mt-3">
+
+// <label className="block mb-2 text-sm font-medium">
+// Skip To
+// </label>
+
+// <select
+//     className="w-full border rounded-lg p-2"
+//     value={condition.skipTo}
+//     onChange={(e)=>
+//         updateCondition(
+//             question.id,
+//             condition.id,
+//             "skipTo",
+//             e.target.value
+//         )
+//     }
+// >
+
+// <option value="">
+// Select Question
+// </option>
+
+// {questions
+// .filter(q=>q.id!==question.id)
+// .map((q,index)=>(
+
+// <option
+// key={q.id}
+// value={q.id}
+// >
+
+// Question {index+1}
+// {" - "}
+// {q.title || "Untitled"}
+
+// </option>
+
+// ))}
+
+// </select>
+
+// </div>
+
+// )}
+
+// </div>
+
+//         </div>
+
+      
+
+//         <div className="flex items-end">
+
+//           <button
+//             onClick={() =>
+//               deleteCondition(
+//                 question.id,
+//                 condition.id
+//               )
+//             }
+//             className="text-red-600"
+//           >
+//             Delete
+//           </button>
+
+//         </div>
+
+//       </div>
+
+//     </div>
+
+//   ))}
+
+// </div>
+//         </>
+//       )}
+
+//       {question.type === "matrix" && (
+
+// <div className="mt-5">
+
+// <h3 className="font-semibold text-lg mb-4">
+// Matrix Builder
+// </h3>
+
+// {/* ROWS */}
+
+// <div className="mb-6">
+
+// <div className="flex justify-between items-center mb-3">
+
+// <h4 className="font-medium">
+// Rows
+// </h4>
+
+// <button
+// type="button"
+// onClick={() => addRow(question.id)}
+// className="text-orange-600"
+// >
+// + Add Row
+// </button>
+
+// </div>
+
+// {question.rows.map((row, index) => (
+
+// <div
+// key={index}
+// className="flex gap-2 mb-2"
+// >
+
+// <input
+// className="flex-1 border rounded-lg px-3 py-2"
+// value={row}
+// onChange={(e)=>
+// updateRow(
+// question.id,
+// index,
+// e.target.value
+// )
+// }
+// />
+
+// <button
+// type="button"
+// onClick={() =>
+// removeRow(
+// question.id,
+// index
+// )
+// }
+// className="text-red-600"
+// >
+// ✕
+// </button>
+
+// </div>
+
+// ))}
+
+// </div>
+
+// {/* COLUMNS */}
+
+// <div className="mb-6">
+
+// <div className="flex justify-between items-center mb-3">
+
+// <h4 className="font-medium">
+// Columns
+// </h4>
+
+// <button
+// type="button"
+// onClick={() => addColumn(question.id)}
+// className="text-orange-600"
+// >
+// + Add Column
+// </button>
+
+// </div>
+
+// {question.columns.map((column,index)=>(
+
+// <div
+// key={index}
+// className="flex gap-2 mb-2"
+// >
+
+// <input
+// className="flex-1 border rounded-lg px-3 py-2"
+// value={column}
+// onChange={(e)=>
+// updateColumn(
+// question.id,
+// index,
+// e.target.value
+// )
+// }
+// />
+
+// <button
+// type="button"
+// onClick={()=>
+// removeColumn(
+// question.id,
+// index
+// )
+// }
+// className="text-red-600"
+// >
+// ✕
+// </button>
+
+// </div>
+
+// ))}
+
+// </div>
+
+// {/* PREVIEW */}
+
+// <div className="border rounded-xl overflow-hidden">
+
+// <table className="w-full">
+
+// <thead>
+
+// <tr className="bg-gray-100">
+
+// <th className="border p-3 text-left">
+// Statements
+// </th>
+
+// {question.columns.map((column,index)=>(
+
+// <th
+// key={index}
+// className="border p-3 text-center"
+// >
+// {column}
+// </th>
+
+// ))}
+
+// </tr>
+
+// </thead>
+
+// <tbody>
+
+// {question.rows.map((row,rowIndex)=>(
+
+// <tr key={rowIndex}>
+
+// <td className="border p-3">
+// {row}
+// </td>
+
+// {question.columns.map((column,columnIndex)=>(
+
+// <td
+// key={columnIndex}
+// className="border p-3 text-center"
+// >
+
+// <input
+// type="radio"
+// disabled
+// />
+
+// </td>
+
+// ))}
+
+// </tr>
+
+// ))}
+
+// </tbody>
+
+// </table>
+
+// </div>
+
+// </div>
+
+// )}
+// <div className="flex justify-between items-center mt-6 border-t pt-4">
+
+//   <button
+//     type="button"
+//     onClick={() => addQuestion(qIndex + 1)}
+//     className="
+//       flex
+//       items-center
+//       gap-2
+//       bg-orange-500
+//       hover:bg-orange-600
+//       text-white
+//       px-4
+//       py-2
+//       rounded-lg
+//       font-medium
+//     "
+//   >
+//     <Plus size={18} />
+//     Add Question
+//   </button>
+
+//   <button
+//     type="button"
+//     onClick={() => deleteQuestion(question.id)}
+//     className="
+//       bg-red-500
+//       hover:bg-red-600
+//       text-white
+//       px-4
+//       py-2
+//       rounded-lg
+//       font-medium
+//     "
+//   >
+//     Delete
+//   </button>
+
+// </div>
+//     </div>
+//   ))}
+
+// </div>
+
+//       </div>
+
+//     </div>
+//   );
+// }
+
+
+
+
+
+
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -540,26 +1662,91 @@ const loadSurvey = async () => {
 
   {questions.map((question, qIndex) => (
     <div
-      key={question.id || question._id}
-      className="border rounded-xl p-5 mb-5 bg-slate-50"
+  key={question.id || question._id}
+  className="
+    mb-10
+    overflow-hidden
+    rounded-3xl
+    border
+    border-slate-200
+    bg-white
+    shadow-lg
+"
+>
+     <div
+  className="
+    bg-gradient-to-r
+    from-orange-500
+    via-orange-400
+    to-amber-400
+    px-6
+    py-5
+    flex
+    items-center
+    justify-between
+  "
+>
+  <div>
+
+    <p className="text-white/80 text-sm">
+      Question {qIndex + 1}
+    </p>
+
+    <h2 className="text-white text-2xl font-bold">
+      {question.title || "Untitled Question"}
+    </h2>
+
+  </div>
+
+  <div className="flex gap-3">
+
+    {question.required && (
+
+      <span
+        className="
+        px-3
+        py-1
+        rounded-full
+        bg-white/20
+        text-white
+        text-sm
+        "
+      >
+        Required
+      </span>
+
+    )}
+
+    <span
+      className="
+      px-3
+      py-1
+      rounded-full
+      bg-white/20
+      text-white
+      text-sm
+      "
     >
-      <div className="flex justify-between items-center mb-4">
+      {question.type}
+    </span>
 
-        <h4 className="text-lg font-semibold">
-          Question {qIndex + 1}
-        </h4>
-
-        {/* <button
-          onClick={() => deleteQuestion(question.id)}
-          className="text-red-600"
-        >
-          Delete
-        </button> */}
-
-      </div>
+  </div>
+</div>
 
       <input
-        className="w-full border rounded-lg px-3 py-2 mb-4"
+        className="w-full
+rounded-xl
+border
+border-slate-300
+bg-white
+px-4
+py-3
+text-sm
+focus:border-orange-500
+focus:ring-4
+focus:ring-orange-100
+outline-none
+transition"
         placeholder="Question title"
         value={question.title}
         onChange={(e) =>
@@ -572,7 +1759,17 @@ const loadSurvey = async () => {
       />
 
       <select
-        className="w-full border rounded-lg px-3 py-2 mb-4"
+        className="w-full
+rounded-xl
+border
+border-slate-300
+bg-white
+px-4
+py-3
+focus:border-orange-500
+focus:ring-4
+focus:ring-orange-100
+transition"
         value={question.type}
         onChange={(e) =>
           updateQuestion(
@@ -990,45 +2187,7 @@ className="text-red-600"
 >
 ✕
 </button>
-<div className="flex justify-between items-center mt-6 border-t pt-4">
 
-  <button
-    type="button"
-    onClick={() => addQuestion(qIndex + 1)}
-    className="
-      flex
-      items-center
-      gap-2
-      bg-orange-500
-      hover:bg-orange-600
-      text-white
-      px-4
-      py-2
-      rounded-lg
-      font-medium
-    "
-  >
-    <Plus size={18} />
-    Add Question
-  </button>
-
-  <button
-    type="button"
-    onClick={() => deleteQuestion(question.id)}
-    className="
-      bg-red-500
-      hover:bg-red-600
-      text-white
-      px-4
-      py-2
-      rounded-lg
-      font-medium
-    "
-  >
-    Delete
-  </button>
-
-</div>
 </div>
 
 ))}
@@ -1103,7 +2262,45 @@ disabled
 </div>
 
 )}
+<div className="flex justify-between items-center mt-6 border-t pt-4">
 
+  <button
+    type="button"
+    onClick={() => addQuestion(qIndex + 1)}
+    className="
+      flex
+      items-center
+      gap-2
+      bg-orange-500
+      hover:bg-orange-600
+      text-white
+      px-4
+      py-2
+      rounded-lg
+      font-medium
+    "
+  >
+    <Plus size={18} />
+    Add Question
+  </button>
+
+  <button
+    type="button"
+    onClick={() => deleteQuestion(question.id)}
+    className="
+      bg-red-500
+      hover:bg-red-600
+      text-white
+      px-4
+      py-2
+      rounded-lg
+      font-medium
+    "
+  >
+    Delete
+  </button>
+
+</div>
     </div>
   ))}
 
