@@ -777,7 +777,7 @@ const evaluateConditions = () => {
         matched = false;
 
     }
-    console.log("Matched condition:", condition);
+   
 
     if (matched) {
       return condition;
@@ -867,6 +867,10 @@ const evaluateConditions = () => {
 
 
   const handleNext = async () => {
+
+    if (!validateCurrentQuestion()) {
+    return;
+}
 
   const condition = evaluateConditions();
 
@@ -1002,39 +1006,39 @@ const evaluateConditions = () => {
 
  const submitSurvey = async (status = "COMPLETE") => {
 
-    for (const q of survey.questions) {
+    // for (const q of survey.questions) {
 
-      if (!q.required) continue;
+    //   if (!q.required) continue;
 
-      const key = q.id;
+    //   const key = q.id;
 
-      const answer = answers[key];
+    //   const answer = answers[key];
 
-      if (q.type === "matrix") {
+    //   if (q.type === "matrix") {
 
-        if (
-          !answer ||
-          Object.keys(answer).length !== q.rows.length
-        ) {
-          alert(`${q.title} is required`);
-          return;
-        }
+    //     if (
+    //       !answer ||
+    //       Object.keys(answer).length !== q.rows.length
+    //     ) {
+    //       alert(`${q.title} is required`);
+    //       return;
+    //     }
 
-      } else {
+    //   } else {
 
-        if (
-          answer === undefined ||
-          answer === "" ||
-          (Array.isArray(answer) &&
-            answer.length === 0)
-        ) {
-          alert(`${q.title} is required`);
-          return;
-        }
+    //     if (
+    //       answer === undefined ||
+    //       answer === "" ||
+    //       (Array.isArray(answer) &&
+    //         answer.length === 0)
+    //     ) {
+    //       alert(`${q.title} is required`);
+    //       return;
+    //     }
 
-      }
+    //   }
 
-    }
+    // }
 
 //     const action = evaluateConditions();
 //     try {
