@@ -624,6 +624,16 @@ import api from "../services/api";
 export default function SurveyRunner() {
   const { token } = useParams();
 
+const params = new URLSearchParams(window.location.search);
+
+const rid =
+  params.get("RID") ||
+  params.get("rid") ||
+  params.get("pid") ||
+  params.get("PID");
+
+console.log("RID FROM URL:", rid);
+
   const [survey, setSurvey] = useState(null);
   const [answers, setAnswers] = useState({});
   const [started, setStarted] = useState(false);
@@ -1221,8 +1231,13 @@ if (
   survey.disqualifyUrl
 ) {
 
-  window.location.href =
-    survey.disqualifyUrl;
+ const url = new URL(survey.disqualifyUrl);
+
+if (rid) {
+  url.searchParams.set("RID", rid);
+}
+
+window.location.href = url.toString();
 
   return;
 
@@ -1233,15 +1248,25 @@ if (
   survey.quotaFullUrl
 ) {
 
-  window.location.href =
-    survey.quotaFullUrl;
+  const url = new URL(survey.quotaFullUrl);
+
+if (rid) {
+  url.searchParams.set("RID", rid);
+}
+
+window.location.href = url.toString();
 
   return;
 
 }
 
-window.location.href =
-  survey.completeUrl;
+const url = new URL(survey.completeUrl);
+
+if (rid) {
+  url.searchParams.set("RID", rid);
+}
+
+window.location.href = url.toString();
 
   };
 
