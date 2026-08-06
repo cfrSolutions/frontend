@@ -1820,13 +1820,40 @@ const loadSurvey = async () => {
                                 </div>
                               ))}
 
-                              <button
+                              {/* <button
                                 onClick={() => addOption(question.id)}
                                 className="mt-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 flex items-center gap-1.5"
                               >
                                 <Plus size={14} />
                                 Add option
-                              </button>
+                              </button> */}
+                              <div className="flex gap-3 mt-3">
+  <button
+    onClick={() => addOption(question.id)}
+    className="text-sm font-medium text-indigo-600 hover:text-indigo-700 flex items-center gap-1.5"
+  >
+    <Plus size={14} />
+    Add option
+  </button>
+
+  <button
+    onClick={() => {
+      setQuestions((prev) =>
+        prev.map((q) =>
+          q.id === question.id
+            ? {
+                ...q,
+                options: [...q.options, "Other (please specify)"],
+              }
+            : q
+        )
+      );
+    }}
+    className="text-sm font-medium text-purple-600 hover:text-purple-700"
+  >
+    + Add Other
+  </button>
+</div>
                             </div>
 
                             <div className="mt-6 border-t border-slate-100 pt-5">

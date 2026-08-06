@@ -1224,7 +1224,7 @@ window.location.href =
 
       </h2>
 
-            {question.type === "radio" &&
+            {/* {question.type === "radio" &&
 
         question.options.map((option) => (
 
@@ -1267,7 +1267,71 @@ window.location.href =
 
           </label>
 
-      ))}
+      ))} */}
+
+{question.type === "radio" &&
+  question.options.map((option) => (
+    <div key={option} className="mb-4">
+
+      <label
+        className="
+          flex
+          items-center
+          gap-4
+          border
+          rounded-xl
+          p-5
+          cursor-pointer
+          hover:border-orange-500
+          transition
+        "
+      >
+        <input
+          type="radio"
+          name={questionKey}
+          value={option}
+          checked={answers[questionKey] === option}
+          onChange={(e) =>
+            setAnswers({
+              ...answers,
+              [questionKey]: e.target.value,
+            })
+          }
+        />
+
+        <span className="text-lg">
+          {option}
+        </span>
+      </label>
+
+      {option === "Other (please specify)" &&
+        answers[questionKey] === option && (
+
+          <input
+            type="text"
+            placeholder="Please specify..."
+            value={answers[`${questionKey}_other`] || ""}
+            onChange={(e) =>
+              setAnswers({
+                ...answers,
+                [`${questionKey}_other`]: e.target.value,
+              })
+            }
+            className="
+              mt-3
+              ml-10
+              w-[calc(100%-40px)]
+              border
+              rounded-xl
+              p-4
+              text-lg
+            "
+          />
+
+      )}
+
+    </div>
+))}
 
             {question.type === "checkbox" &&
 
