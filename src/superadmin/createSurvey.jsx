@@ -18,7 +18,10 @@ export default function CreateSurvey() {
  
     surveyType: "",
     externalSurveyUrl: "",
-   trackingParam: "",
+    vendorCompleteUrl: "",
+    vendorDisqualifyUrl: "",
+    vendorQuotaUrl: "",
+    trackingParam: "",
     randomizeQuestions: false,
     allowBackNavigation: true,
     showProgressBar: true,
@@ -46,10 +49,29 @@ export default function CreateSurvey() {
         surveyType: activeTab,
         // ✅ IMPORTANT
         companySurveyUrl:
-    activeTab === "EXTERNAL" ? form.externalSurveyUrl : null,
+  activeTab === "EXTERNAL"
+    ? form.externalSurveyUrl
+    : null,
 
-  trackingParam:
-    activeTab === "EXTERNAL" ? form.trackingParam : null,
+vendorCompleteUrl:
+  activeTab === "EXTERNAL"
+    ? form.vendorCompleteUrl
+    : null,
+
+vendorDisqualifyUrl:
+  activeTab === "EXTERNAL"
+    ? form.vendorDisqualifyUrl
+    : null,
+
+vendorQuotaUrl:
+  activeTab === "EXTERNAL"
+    ? form.vendorQuotaUrl
+    : null,
+
+trackingParam:
+  activeTab === "EXTERNAL"
+    ? form.trackingParam
+    : null,
       };
 
       await api.post("/surveys", payload);
@@ -113,6 +135,52 @@ export default function CreateSurvey() {
               placeholder="https://forms.google.com/..."
               className="w-full mt-1 border rounded px-3 py-2"
             />
+
+            <div className="space-y-4">
+
+  <div>
+    <label className="text-sm font-medium">
+      Vendor Complete URL
+    </label>
+
+    <input
+      name="vendorCompleteUrl"
+      value={form.vendorCompleteUrl}
+      onChange={handleChange}
+      placeholder="https://api.inputify.io/api/redirect/c?tk=..."
+      className="w-full mt-1 border rounded px-3 py-2"
+    />
+  </div>
+
+  <div>
+    <label className="text-sm font-medium">
+      Vendor Disqualify URL
+    </label>
+
+    <input
+      name="vendorDisqualifyUrl"
+      value={form.vendorDisqualifyUrl}
+      onChange={handleChange}
+      placeholder="https://api.inputify.io/api/redirect/dq?tk=..."
+      className="w-full mt-1 border rounded px-3 py-2"
+    />
+  </div>
+
+  <div>
+    <label className="text-sm font-medium">
+      Vendor Quota URL
+    </label>
+
+    <input
+      name="vendorQuotaUrl"
+      value={form.vendorQuotaUrl}
+      onChange={handleChange}
+      placeholder="https://api.inputify.io/api/redirect/qf?tk=..."
+      className="w-full mt-1 border rounded px-3 py-2"
+    />
+  </div>
+
+</div>
           </div>
         )}
 
