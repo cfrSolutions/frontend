@@ -866,60 +866,60 @@ const evaluateConditions = () => {
   }
 
 
-  const handleNext = async () => {
+//   const handleNext = async () => {
 
-  const condition = evaluateConditions();
+//   const condition = evaluateConditions();
 
-  // No condition matched
-  if (!condition) {
-    setCurrentQuestion(currentQuestion + 1);
-    return;
-  }
+//   // No condition matched
+//   if (!condition) {
+//     setCurrentQuestion(currentQuestion + 1);
+//     return;
+//   }
 
-  switch (condition.action) {
+//   switch (condition.action) {
 
-    case "continue":
-      setCurrentQuestion(currentQuestion + 1);
-      break;
+//     case "continue":
+//       setCurrentQuestion(currentQuestion + 1);
+//       break;
 
-    case "skip": {
+//     case "skip": {
 
-      const index = survey.questions.findIndex(
-        (q) =>
-          (q.id) === condition.skipTo
-      );
+//       const index = survey.questions.findIndex(
+//         (q) =>
+//           (q.id) === condition.skipTo
+//       );
 
-      if (index !== -1) {
-        setCurrentQuestion(index);
-      } else {
-        setCurrentQuestion(currentQuestion + 1);
-      }
+//       if (index !== -1) {
+//         setCurrentQuestion(index);
+//       } else {
+//         setCurrentQuestion(currentQuestion + 1);
+//       }
 
-      break;
-    }
+//       break;
+//     }
 
-    case "complete":
+//     case "complete":
 
-      await submitSurvey("COMPLETE");
-      return;
+//       await submitSurvey("COMPLETE");
+//       return;
 
-    case "disqualify":
+//     case "disqualify":
 
-      await submitSurvey("DISQUALIFIED");
-      return;
+//       await submitSurvey("DISQUALIFIED");
+//       return;
 
-    case "quota":
+//     case "quota":
 
-      await submitSurvey("QUOTA");
-      return;
+//       await submitSurvey("QUOTA");
+//       return;
 
-    default:
+//     default:
 
-      setCurrentQuestion(currentQuestion + 1);
+//       setCurrentQuestion(currentQuestion + 1);
 
-  }
+//   }
 
-};
+// };
 
 //     const submitSurvey = async () => {
 
@@ -1059,10 +1059,86 @@ const evaluateConditions = () => {
 //     return;
 //   }
 
+const handleNext = async () => {
 
+  const current = survey.questions[currentQuestion];
+  const key = current.id;
+  const answer = answers[key];
+
+  // First check conditional logic
+  const condition = evaluateConditions();
+
+  if (condition) {
+
+    switch (condition.action) {
+
+      case "continue":
+        setCurrentQuestion(currentQuestion + 1);
+        return;
+
+      case "skip": {
+
+        const index = survey.questions.findIndex(
+          (q) => q.id === condition.skipTo
+        );
+
+        if (index !== -1) {
+          setCurrentQuestion(index);
+        } else {
+          setCurrentQuestion(currentQuestion + 1);
+        }
+
+        return;
+      }
+
+      case "complete":
+        await submitSurvey("COMPLETE");
+        return;
+
+      case "disqualify":
+        await submitSurvey("DISQUALIFIED");
+        return;
+
+      case "quota":
+        await submitSurvey("QUOTA");
+        return;
+    }
+  }
+
+  // No condition matched → validate required field
+  if (current.required) {
+
+    if (current.type === "matrix") {
+
+      if (
+        !answer ||
+        Object.keys(answer).length !== current.rows.length
+      ) {
+        alert(`${current.title} is required`);
+        return;
+      }
+
+    } else {
+
+      if (
+        answer === undefined ||
+        answer === "" ||
+        (Array.isArray(answer) && answer.length === 0)
+      ) {
+        alert(`${current.title} is required`);
+        return;
+      }
+
+    }
+
+  }
+
+  // Go to next question
+  setCurrentQuestion(currentQuestion + 1);
+};
 
 const submitSurvey = async (status = "COMPLETE") => {
-   if (status === "COMPLETE") {
+   if (status === "COMPLETE" && currentQuestion === survey.questions.length - 1) {
 
     for (const q of survey.questions) {
 
