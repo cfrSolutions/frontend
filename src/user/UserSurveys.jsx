@@ -411,9 +411,26 @@ function SurveyRow({ survey, onStart }) {
         <div className="flex items-center gap-3 mb-1">
           <h4 className="font-medium">{survey.title}</h4>
 
-          {survey.completed && (
+          {/* {survey.completed && (
   <span className="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">
     Completed
+  </span>
+)} */}
+{survey.userStatus === "COMPLETED" && (
+  <span className="text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full">
+    Completed
+  </span>
+)}
+
+{survey.userStatus === "SCREENOUT" && (
+  <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">
+    Disqualified
+  </span>
+)}
+
+{survey.userStatus === "QUOTA_FULL" && (
+  <span className="text-xs bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full">
+    Quota Full
   </span>
 )}
 
@@ -459,7 +476,7 @@ function SurveyRow({ survey, onStart }) {
       </div>
 
       {/* BUTTON */}
-      <button
+      {/* <button
   disabled={survey.completed}
   onClick={onStart}
   className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg w-full sm:w-auto
@@ -471,6 +488,32 @@ function SurveyRow({ survey, onStart }) {
   `}
 >
   {survey.completed ? "Completed" : "Start"}
+</button> */}
+
+<button
+  disabled={
+    survey.userStatus === "COMPLETED" ||
+    survey.userStatus === "SCREENOUT" ||
+    survey.userStatus === "QUOTA_FULL"
+  }
+  onClick={onStart}
+  className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg w-full sm:w-auto
+    ${
+      survey.userStatus === "COMPLETED" ||
+      survey.userStatus === "SCREENOUT" ||
+      survey.userStatus === "QUOTA_FULL"
+        ? "bg-gray-300 cursor-not-allowed text-gray-500"
+        : "bg-[#E2852E] hover:bg-orange-300 text-white"
+    }
+  `}
+>
+  {survey.userStatus === "COMPLETED"
+    ? "Completed"
+    : survey.userStatus === "SCREENOUT"
+    ? "Disqualified"
+    : survey.userStatus === "QUOTA_FULL"
+    ? "Quota Full"
+    : "Start"}
 </button>
 
     </div>
