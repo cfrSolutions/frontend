@@ -1,11 +1,13 @@
 import { useState } from "react";
 import api from "../services/api";
+import TargetGroupBuilder from "./TargetGroupBuilder";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateSurvey() {
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState("INTERNAL");
+  const [targetGroups, setTargetGroups] = useState([]);
 
   const [form, setForm] = useState({
     title: "",
@@ -72,6 +74,8 @@ trackingParam:
   activeTab === "EXTERNAL"
     ? form.trackingParam
     : null,
+
+    targetGroups,
       };
 
       await api.post("/surveys", payload);
@@ -254,6 +258,16 @@ trackingParam:
                   <option value="IN">India</option>
                   <option value="US">US</option>
                 </select>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium">
+                  Target Groups
+                </label>
+                <TargetGroupBuilder
+  targetGroups={targetGroups}
+  setTargetGroups={setTargetGroups}
+/>
               </div>
             </div>
         <div>
