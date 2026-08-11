@@ -1094,50 +1094,364 @@
 //   );
 // }
 
+// import { useEffect, useState } from "react";
+// import { useParams } from "react-router-dom";
+// import api from "../services/api";
+
+// export default function AdminProjectDetail() {
+
+//   const { id } = useParams();
+
+//   const [project, setProject] =
+//     useState(null);
+
+//   const [activeTab, setActiveTab] = useState("vendor");
+
+//   const [vendorLinks, setVendorLinks] =
+//     useState({
+//       vendorName: "",
+//       capture: "",
+//       complete: "",
+//       disqualified: "",
+//       quotaFull: "",
+//     });
+
+//   const [saving, setSaving] = useState(false);
+
+//   const base = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+
+//   const fetchProject = async () => {
+//     try {
+//       const res = await api.get(
+//         `/admin/project/${id}`
+//       );
+
+//       const data = res.data;
+
+//       setProject(res.data);
+
+//       const firstVendor = Array.isArray(data.vendorLinks)
+//         ? data.vendorLinks[0]
+//         : data.vendorLinks;
+
+// if (firstVendor) {
+//   setVendorLinks({
+//     vendorName:
+//     res.data.vendorLinks.vendorName || "",
+//     capture:
+//       res.data.vendorLinks.capture || "",
+//     complete:
+//       res.data.vendorLinks.complete || "",
+//     disqualified:
+//       res.data.vendorLinks.disqualified || "",
+//     quotaFull:
+//       res.data.vendorLinks.quotaFull || "",
+//   });
+// }
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchProject();
+//   }, [id]);
+
+//   // const moveTesting = async () => {
+//   //   await api.put(
+//   //     `/admin/project/${id}/move-testing`
+//   //   );
+
+//   //   fetchProject();
+//   // };
+//   const moveTesting = async () => {
+//     try {
+//       await api.put(`/admin/project/${id}/move-testing`);
+//       await fetchProject();
+//     } catch (err) {
+//       console.error("Failed to move project to testing:", err);
+//       alert("Failed to move project to testing");
+//     }
+//   };
+
+//   const saveVendorLinks = async () => {
+//   try {
+//     setSaving(true);
+//     await api.put(
+//       `/admin/project/${id}/vendor-links`,
+//       {
+//         vendorName:  vendorLinks.vendorName,
+//         capture: vendorLinks.capture,
+//         complete: vendorLinks.complete,
+//         disqualified:
+//           vendorLinks.disqualified,
+//         quotaFull:
+//           vendorLinks.quotaFull,
+//       }
+//     );
+
+//     alert("Vendor links saved");
+
+//     await fetchProject();
+
+//   } catch (err) {
+
+//     console.log(err);
+
+//     alert("Failed to save vendor links");
+
+//   } finally {
+//       setSaving(false);
+//   }
+// };
+
+//   // const moveLive = async () => {
+//   //   await api.put(
+//   //     `/admin/project/${id}/go-live`
+//   //   );
+
+//   //   fetchProject();
+//   // };
+
+//    const moveLive = async () => {
+//     try {
+//       await api.put(`/admin/project/${id}/go-live`);
+//       await fetchProject();
+//     } catch (err) {
+//       console.error("Failed to move project live:", err);
+//       alert("Failed to move project live");
+//     }
+//   };
+
+//   const getBusinessRedirects = () => {
+//     if (!project?.redirects) {
+//       return {
+//         start: "",
+//         complete: "",
+//         disqualified: "",
+//         quotaFull: "",
+//       };
+//     }
+
+//     return {
+//       start: project.redirects.start?.token
+//         ? `${base}/redirect/start?tk=${project.redirects.start.token}&RID={RID}`
+//         : "",
+
+//       complete: project.redirects.complete?.token
+//         ? `${base}/redirect/c?tk=${project.redirects.complete.token}&RID={RID}`
+//         : "",
+
+//       disqualified: project.redirects.disqualified?.token
+//         ? `${base}/redirect/dq?tk=${project.redirects.disqualified.token}&RID={RID}`
+//         : "",
+
+//       quotaFull: project.redirects.quotaFull?.token
+//         ? `${base}/redirect/qf?tk=${project.redirects.quotaFull.token}&RID={RID}`
+//         : "",
+//     };
+//   };
+
+//   const businessRedirects = getBusinessRedirects();
+
+//   if (!project) {
+//     return (
+//       <div className="p-6">
+//         Loading...
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="p-6 max-w-6xl mx-auto">
+//       <div className="mb-8">
+//       <h1 className="text-3xl font-bold mb-2">
+//         {project.name}
+//       </h1>
+
+//       <p className="text-gray-500 mb-8">
+//         {project.business?.email}
+//       </p>
+//     </div>
+//       <div className="bg-white border rounded-xl p-6 mb-6">
+
+//         <h2 className="font-bold mb-4">
+//           Project Information
+//         </h2>
+
+//         <p>
+//           Status:
+//           {" "}
+//           <b>{project.status}</b>
+//         </p>
+
+//         <p>
+//           Survey ID:
+//           {" "}
+//           {project.surveyId}
+//         </p>
+
+//         <p>
+//           Completes:
+//           {" "}
+//           {project.completes}
+//         </p>
+
+//       </div>
+
+//       <div className="bg-white border rounded-xl p-6 mb-6">
+
+//         <h2 className="font-bold mb-4">
+//           Vendor Redirects
+//         </h2>
+
+// <input
+//   placeholder="Vendor Name"
+//   className="border p-3 w-full mb-3"
+//   value={vendorLinks.vendorName || ""}
+//   onChange={(e) =>
+//     setVendorLinks({
+//       ...vendorLinks,
+//       vendorName: e.target.value,
+//     })
+//   }
+// />
+//         <input
+//           placeholder="Capture URL"
+//           className="border p-3 w-full mb-3"
+//           value={vendorLinks.capture}
+//           onChange={(e) =>
+//             setVendorLinks({
+//               ...vendorLinks,
+//               capture: e.target.value,
+//             })
+//           }
+//         />
+
+//         <input
+//           placeholder="Complete URL"
+//           className="border p-3 w-full mb-3"
+//           value={vendorLinks.complete}
+//           onChange={(e) =>
+//             setVendorLinks({
+//               ...vendorLinks,
+//               complete: e.target.value,
+//             })
+//           }
+//         />
+
+//         <input
+//           placeholder="Disqualified URL"
+//           className="border p-3 w-full mb-3"
+//           value={vendorLinks.disqualified}
+//           onChange={(e) =>
+//             setVendorLinks({
+//               ...vendorLinks,
+//               disqualified: e.target.value,
+//             })
+//           }
+//         />
+
+//         <input
+//           placeholder="Quota Full URL"
+//           className="border p-3 w-full"
+//           value={vendorLinks.quotaFull}
+//           onChange={(e) =>
+//             setVendorLinks({
+//               ...vendorLinks,
+//               quotaFull: e.target.value,
+//             })
+//           }
+//         />
+
+//       </div>
+
+//       <button
+//   onClick={saveVendorLinks}
+//   className="
+//     bg-blue-600
+//     text-white
+//     px-4
+//     py-2
+//     rounded
+//   "
+// >
+//   Save Vendor Links
+// </button>
+
+//       <div className="flex gap-3">
+
+//         <button
+//           onClick={moveTesting}
+//           className="bg-yellow-500 text-white px-5 py-3 rounded"
+//         >
+//           Move To Testing
+//         </button>
+
+//         <button
+//           onClick={moveLive}
+//           className="bg-green-600 text-white px-5 py-3 rounded"
+//         >
+//           Go Live
+//         </button>
+
+//       </div>
+
+//     </div>
+//   );
+// }
+
+
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../services/api";
 
 export default function AdminProjectDetail() {
-
   const { id } = useParams();
 
-  const [project, setProject] =
-    useState(null);
+  const [project, setProject] = useState(null);
+  const [activeTab, setActiveTab] = useState("vendor");
 
-  const [vendorLinks, setVendorLinks] =
-    useState({
-      vendorName: "",
-      capture: "",
-      complete: "",
-      disqualified: "",
-      quotaFull: "",
-    });
+  const [vendorLinks, setVendorLinks] = useState({
+    vendorName: "",
+    capture: "",
+    complete: "",
+    disqualified: "",
+    quotaFull: "",
+  });
+
+  const [saving, setSaving] = useState(false);
+
+  const base = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+
+  // --------------------------------------------------
+  // FETCH PROJECT
+  // --------------------------------------------------
 
   const fetchProject = async () => {
     try {
-      const res = await api.get(
-        `/admin/project/${id}`
-      );
+      const res = await api.get(`/admin/project/${id}`);
 
-      setProject(res.data);
+      const data = res.data;
 
-if (res.data.vendorLinks) {
-  setVendorLinks({
-    vendorName:
-    res.data.vendorLinks.vendorName || "",
-    capture:
-      res.data.vendorLinks.capture || "",
-    complete:
-      res.data.vendorLinks.complete || "",
-    disqualified:
-      res.data.vendorLinks.disqualified || "",
-    quotaFull:
-      res.data.vendorLinks.quotaFull || "",
-  });
-}
+      setProject(data);
+
+      // vendorLinks is an ARRAY in MongoDB
+      const firstVendor = Array.isArray(data.vendorLinks)
+        ? data.vendorLinks[0]
+        : data.vendorLinks;
+
+      if (firstVendor) {
+        setVendorLinks({
+          vendorName: firstVendor.vendorName || "",
+          capture: firstVendor.capture || "",
+          complete: firstVendor.complete || "",
+          disqualified: firstVendor.disqualified || "",
+          quotaFull: firstVendor.quotaFull || "",
+        });
+      }
     } catch (err) {
-      console.log(err);
+      console.error("Failed to fetch project:", err);
     }
   };
 
@@ -1145,50 +1459,99 @@ if (res.data.vendorLinks) {
     fetchProject();
   }, [id]);
 
-  const moveTesting = async () => {
-    await api.put(
-      `/admin/project/${id}/move-testing`
-    );
-
-    fetchProject();
-  };
+  // --------------------------------------------------
+  // SAVE VENDOR LINKS
+  // --------------------------------------------------
 
   const saveVendorLinks = async () => {
-  try {
+    try {
+      setSaving(true);
 
-    await api.put(
-      `/admin/project/${id}/vendor-links`,
-      {
-        vendorName:  vendorLinks.vendorName,
+      await api.put(`/admin/project/${id}/vendor-links`, {
+        vendorName: vendorLinks.vendorName,
         capture: vendorLinks.capture,
         complete: vendorLinks.complete,
-        disqualified:
-          vendorLinks.disqualified,
-        quotaFull:
-          vendorLinks.quotaFull,
-      }
-    );
+        disqualified: vendorLinks.disqualified,
+        quotaFull: vendorLinks.quotaFull,
+      });
 
-    alert("Vendor links saved");
+      alert("Vendor links saved successfully");
 
-    fetchProject();
+      await fetchProject();
+    } catch (err) {
+      console.error("Failed to save vendor links:", err);
+      alert("Failed to save vendor links");
+    } finally {
+      setSaving(false);
+    }
+  };
 
-  } catch (err) {
+  // --------------------------------------------------
+  // MOVE TO TESTING
+  // --------------------------------------------------
 
-    console.log(err);
+  const moveTesting = async () => {
+    try {
+      await api.put(`/admin/project/${id}/move-testing`);
+      await fetchProject();
+    } catch (err) {
+      console.error("Failed to move project to testing:", err);
+      alert("Failed to move project to testing");
+    }
+  };
 
-    alert("Failed to save vendor links");
-
-  }
-};
+  // --------------------------------------------------
+  // GO LIVE
+  // --------------------------------------------------
 
   const moveLive = async () => {
-    await api.put(
-      `/admin/project/${id}/go-live`
-    );
-
-    fetchProject();
+    try {
+      await api.put(`/admin/project/${id}/go-live`);
+      await fetchProject();
+    } catch (err) {
+      console.error("Failed to move project live:", err);
+      alert("Failed to move project live");
+    }
   };
+
+  // --------------------------------------------------
+  // BUSINESS GENERATED REDIRECT URLS
+  // --------------------------------------------------
+
+  const getBusinessRedirects = () => {
+    if (!project?.redirects) {
+      return {
+        start: "",
+        complete: "",
+        disqualified: "",
+        quotaFull: "",
+      };
+    }
+
+    return {
+      start: project.redirects.start?.token
+        ? `${base}/redirect/start?tk=${project.redirects.start.token}&RID={RID}`
+        : "",
+
+      complete: project.redirects.complete?.token
+        ? `${base}/redirect/c?tk=${project.redirects.complete.token}&RID={RID}`
+        : "",
+
+      disqualified: project.redirects.disqualified?.token
+        ? `${base}/redirect/dq?tk=${project.redirects.disqualified.token}&RID={RID}`
+        : "",
+
+      quotaFull: project.redirects.quotaFull?.token
+        ? `${base}/redirect/qf?tk=${project.redirects.quotaFull.token}&RID={RID}`
+        : "",
+    };
+  };
+
+  const businessRedirects = getBusinessRedirects();
+
+  // --------------------------------------------------
+  // LOADING
+  // --------------------------------------------------
 
   if (!project) {
     return (
@@ -1199,139 +1562,574 @@ if (res.data.vendorLinks) {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-6 max-w-7xl mx-auto">
 
-      <h1 className="text-3xl font-bold mb-2">
-        {project.name}
-      </h1>
+      {/* --------------------------------------------- */}
+      {/* HEADER */}
+      {/* --------------------------------------------- */}
 
-      <p className="text-gray-500 mb-8">
-        {project.business?.email}
-      </p>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold">
+          {project.name}
+        </h1>
+
+        <p className="text-gray-500 mt-1">
+          {project.business?.email}
+        </p>
+      </div>
+
+      {/* --------------------------------------------- */}
+      {/* PROJECT INFORMATION */}
+      {/* --------------------------------------------- */}
 
       <div className="bg-white border rounded-xl p-6 mb-6">
 
-        <h2 className="font-bold mb-4">
+        <h2 className="font-bold text-lg mb-5">
           Project Information
         </h2>
 
-        <p>
-          Status:
-          {" "}
-          <b>{project.status}</b>
-        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-        <p>
-          Survey ID:
-          {" "}
-          {project.surveyId}
-        </p>
+          <div>
+            <p className="text-sm text-gray-500">
+              Status
+            </p>
 
-        <p>
-          Completes:
-          {" "}
-          {project.completes}
-        </p>
+            <p className="font-semibold mt-1">
+              {project.status}
+            </p>
+          </div>
 
-      </div>
+          <div>
+            <p className="text-sm text-gray-500">
+              Survey ID
+            </p>
 
-      <div className="bg-white border rounded-xl p-6 mb-6">
+            <p className="font-semibold mt-1">
+              {project.surveyId}
+            </p>
+          </div>
 
-        <h2 className="font-bold mb-4">
-          Vendor Redirects
-        </h2>
+          <div>
+            <p className="text-sm text-gray-500">
+              Completes
+            </p>
 
-<input
-  placeholder="Vendor Name"
-  className="border p-3 w-full mb-3"
-  value={vendorLinks.vendorName || ""}
-  onChange={(e) =>
-    setVendorLinks({
-      ...vendorLinks,
-      vendorName: e.target.value,
-    })
-  }
-/>
-        <input
-          placeholder="Capture URL"
-          className="border p-3 w-full mb-3"
-          value={vendorLinks.capture}
-          onChange={(e) =>
-            setVendorLinks({
-              ...vendorLinks,
-              capture: e.target.value,
-            })
-          }
-        />
+            <p className="font-semibold mt-1">
+              {project.completes || 0}
+            </p>
+          </div>
 
-        <input
-          placeholder="Complete URL"
-          className="border p-3 w-full mb-3"
-          value={vendorLinks.complete}
-          onChange={(e) =>
-            setVendorLinks({
-              ...vendorLinks,
-              complete: e.target.value,
-            })
-          }
-        />
-
-        <input
-          placeholder="Disqualified URL"
-          className="border p-3 w-full mb-3"
-          value={vendorLinks.disqualified}
-          onChange={(e) =>
-            setVendorLinks({
-              ...vendorLinks,
-              disqualified: e.target.value,
-            })
-          }
-        />
-
-        <input
-          placeholder="Quota Full URL"
-          className="border p-3 w-full"
-          value={vendorLinks.quotaFull}
-          onChange={(e) =>
-            setVendorLinks({
-              ...vendorLinks,
-              quotaFull: e.target.value,
-            })
-          }
-        />
+        </div>
 
       </div>
 
-      <button
-  onClick={saveVendorLinks}
-  className="
-    bg-blue-600
-    text-white
-    px-4
-    py-2
-    rounded
-  "
->
-  Save Vendor Links
-</button>
+      {/* --------------------------------------------- */}
+      {/* TABS */}
+      {/* --------------------------------------------- */}
 
-      <div className="flex gap-3">
+      <div className="bg-white border rounded-xl overflow-hidden">
+
+        {/* TAB HEADER */}
+
+        <div className="border-b flex">
+
+          <button
+            onClick={() => setActiveTab("vendor")}
+            className={`
+              px-6
+              py-4
+              font-medium
+              transition
+              ${
+                activeTab === "vendor"
+                  ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50"
+                  : "text-gray-600 hover:bg-gray-50"
+              }
+            `}
+          >
+            Vendor Links
+          </button>
+
+          <button
+            onClick={() => setActiveTab("business")}
+            className={`
+              px-6
+              py-4
+              font-medium
+              transition
+              ${
+                activeTab === "business"
+                  ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50"
+                  : "text-gray-600 hover:bg-gray-50"
+              }
+            `}
+          >
+            Business Redirects
+          </button>
+
+        </div>
+
+        {/* ------------------------------------------- */}
+        {/* VENDOR LINKS TAB */}
+        {/* ------------------------------------------- */}
+
+        {activeTab === "vendor" && (
+          <div className="p-6">
+
+            <div className="mb-6">
+
+              <h2 className="text-lg font-bold">
+                Vendor Redirect Configuration
+              </h2>
+
+              <p className="text-sm text-gray-500 mt-1">
+                Enter the URLs supplied by the vendor.
+                These values can be edited by Admin.
+              </p>
+
+            </div>
+
+            <div className="space-y-4">
+
+              {/* Vendor Name */}
+
+              <InputField
+                label="Vendor Name"
+                placeholder="Enter vendor name"
+                value={vendorLinks.vendorName}
+                onChange={(value) =>
+                  setVendorLinks({
+                    ...vendorLinks,
+                    vendorName: value,
+                  })
+                }
+              />
+
+              {/* Capture */}
+
+              <InputField
+                label="Capture URL"
+                placeholder="Enter vendor capture URL"
+                value={vendorLinks.capture}
+                onChange={(value) =>
+                  setVendorLinks({
+                    ...vendorLinks,
+                    capture: value,
+                  })
+                }
+              />
+
+              {/* Complete */}
+
+              <InputField
+                label="Complete URL"
+                placeholder="Enter vendor complete URL"
+                value={vendorLinks.complete}
+                onChange={(value) =>
+                  setVendorLinks({
+                    ...vendorLinks,
+                    complete: value,
+                  })
+                }
+              />
+
+              {/* Disqualified */}
+
+              <InputField
+                label="Disqualified URL"
+                placeholder="Enter vendor disqualified URL"
+                value={vendorLinks.disqualified}
+                onChange={(value) =>
+                  setVendorLinks({
+                    ...vendorLinks,
+                    disqualified: value,
+                  })
+                }
+              />
+
+              {/* Quota Full */}
+
+              <InputField
+                label="Quota Full URL"
+                placeholder="Enter vendor quota full URL"
+                value={vendorLinks.quotaFull}
+                onChange={(value) =>
+                  setVendorLinks({
+                    ...vendorLinks,
+                    quotaFull: value,
+                  })
+                }
+              />
+
+            </div>
+
+            {/* SAVE */}
+
+            <div className="mt-6">
+
+              <button
+                onClick={saveVendorLinks}
+                disabled={saving}
+                className="
+                  bg-blue-600
+                  hover:bg-blue-700
+                  disabled:bg-blue-300
+                  text-white
+                  px-5
+                  py-2.5
+                  rounded-lg
+                  font-medium
+                  transition
+                "
+              >
+                {saving
+                  ? "Saving..."
+                  : "Save Vendor Links"}
+              </button>
+
+            </div>
+
+          </div>
+        )}
+
+        {/* ------------------------------------------- */}
+        {/* BUSINESS REDIRECTS TAB */}
+        {/* ------------------------------------------- */}
+
+        {activeTab === "business" && (
+          <div className="p-6">
+
+            <div className="mb-6">
+
+              <h2 className="text-lg font-bold">
+                Business Generated Redirects
+              </h2>
+
+              <p className="text-sm text-gray-500 mt-1">
+                These URLs are generated by the Business
+                panel and are read-only.
+              </p>
+
+            </div>
+
+            {/* TEST / LIVE SURVEY URL */}
+
+            <div className="mb-8">
+
+              <h3 className="font-semibold mb-3">
+                Survey URLs
+              </h3>
+
+              <div className="space-y-3">
+
+                <ReadOnlyLink
+                  label="Test Survey"
+                  url={project.surveyLinks?.test}
+                />
+
+                <ReadOnlyLink
+                  label="Live Survey"
+                  url={project.surveyLinks?.live}
+                />
+
+              </div>
+
+            </div>
+
+            {/* REDIRECT URLS */}
+
+            <div>
+
+              <h3 className="font-semibold mb-3">
+                Redirect URLs
+              </h3>
+
+              <div className="space-y-3">
+
+                <ReadOnlyLink
+                  label="Start URL"
+                  url={businessRedirects.start}
+                />
+
+                <ReadOnlyLink
+                  label="Complete"
+                  url={businessRedirects.complete}
+                />
+
+                <ReadOnlyLink
+                  label="Disqualified"
+                  url={businessRedirects.disqualified}
+                />
+
+                <ReadOnlyLink
+                  label="Quota Full"
+                  url={businessRedirects.quotaFull}
+                />
+
+              </div>
+
+            </div>
+
+          </div>
+        )}
+
+      </div>
+
+      {/* --------------------------------------------- */}
+      {/* PROJECT ACTIONS */}
+      {/* --------------------------------------------- */}
+
+      <div className="flex gap-3 mt-6">
 
         <button
           onClick={moveTesting}
-          className="bg-yellow-500 text-white px-5 py-3 rounded"
+          className="
+            bg-yellow-500
+            hover:bg-yellow-600
+            text-white
+            px-5
+            py-3
+            rounded-lg
+            font-medium
+          "
         >
           Move To Testing
         </button>
 
         <button
           onClick={moveLive}
-          className="bg-green-600 text-white px-5 py-3 rounded"
+          className="
+            bg-green-600
+            hover:bg-green-700
+            text-white
+            px-5
+            py-3
+            rounded-lg
+            font-medium
+          "
         >
           Go Live
         </button>
 
       </div>
+
+      {/* --------------------------------------------- */}
+      {/* STATISTICS */}
+      {/* --------------------------------------------- */}
+
+      <div className="mt-8">
+
+        <h3 className="text-lg font-semibold mb-4">
+          Project Statistics
+        </h3>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+
+          <StatCard
+            label="Target Completes"
+            value={project.targetCompletes || 0}
+          />
+
+          <StatCard
+            label="Completes"
+            value={project.completes || 0}
+          />
+
+          <StatCard
+            label="Remaining"
+            value={Math.max(
+              (project.targetCompletes || 0) -
+              (project.completes || 0),
+              0
+            )}
+          />
+
+          <StatCard
+            label="DQ"
+            value={project.disqualified || 0}
+          />
+
+          <StatCard
+            label="QF"
+            value={project.quotaFull || 0}
+          />
+
+          <StatCard
+            label="Total Responses"
+            value={project.totalResponses || 0}
+          />
+
+        </div>
+
+      </div>
+
+    </div>
+  );
+}
+
+
+// ==================================================
+// INPUT FIELD
+// ==================================================
+
+function InputField({
+  label,
+  placeholder,
+  value,
+  onChange,
+}) {
+  return (
+    <div>
+
+      <label className="block text-sm font-medium mb-2">
+        {label}
+      </label>
+
+      <input
+        type="text"
+        placeholder={placeholder}
+        value={value || ""}
+        onChange={(e) =>
+          onChange(e.target.value)
+        }
+        className="
+          w-full
+          border
+          rounded-lg
+          px-4
+          py-3
+          outline-none
+          focus:ring-2
+          focus:ring-blue-500
+          focus:border-blue-500
+        "
+      />
+
+    </div>
+  );
+}
+
+
+// ==================================================
+// READ ONLY LINK
+// ==================================================
+
+function ReadOnlyLink({
+  label,
+  url,
+}) {
+  const copy = async () => {
+    if (!url) return;
+
+    try {
+      await navigator.clipboard.writeText(url);
+      alert(`${label} copied`);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  return (
+    <div className="
+      border
+      rounded-lg
+      p-3
+      bg-gray-50
+    ">
+
+      <div className="
+        flex
+        flex-col
+        lg:flex-row
+        lg:items-center
+        gap-3
+      ">
+
+        <div className="w-40 shrink-0">
+
+          <p className="font-medium text-sm">
+            {label}
+          </p>
+
+        </div>
+
+        <div className="flex-1 flex gap-2">
+
+          <input
+            value={url || "Not generated"}
+            readOnly
+            className="
+              flex-1
+              min-w-0
+              border
+              rounded-md
+              px-3
+              py-2
+              text-sm
+              bg-white
+              text-gray-700
+            "
+          />
+
+          <button
+            onClick={copy}
+            disabled={!url}
+            className="
+              bg-black
+              hover:bg-gray-800
+              disabled:bg-gray-300
+              text-white
+              px-4
+              py-2
+              rounded-md
+              text-sm
+              shrink-0
+            "
+          >
+            Copy
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  );
+}
+
+
+// ==================================================
+// STAT CARD
+// ==================================================
+
+function StatCard({
+  label,
+  value,
+}) {
+  return (
+    <div className="
+      bg-white
+      border
+      rounded-lg
+      p-4
+    ">
+
+      <p className="
+        text-xs
+        text-gray-500
+        uppercase
+      ">
+        {label}
+      </p>
+
+      <p className="
+        text-2xl
+        font-bold
+        mt-1
+      ">
+        {value}
+      </p>
 
     </div>
   );
