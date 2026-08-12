@@ -92,11 +92,21 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [type, setType] = useState("PERSONAL"); // 🔥 NEW
+  const [type, setType] = useState("PERSONAL"); 
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
+  if (!email.trim() || !password) {
+    setError("Please enter your email and password.");
+    return;
+  }
+
+  setLoading(true);
 
     try {
       const data = await login({ email, password, role: type === "BUSINESS" ? "BUSINESS" : "USER", });
@@ -117,8 +127,15 @@ export default function Login() {
         navigate("/user/dashboard");
       }
     } catch (err) {
-      // console.log("LOGIN ERROR FULL:", err);
+       const message =
+      err.response?.data?.message ||
+      "Unable to login. Please check your credentials.";
+
+    setError(message);
     }
+    finally {
+    setLoading(false);
+  }
   };
 
   return (
