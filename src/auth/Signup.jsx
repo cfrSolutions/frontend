@@ -153,6 +153,11 @@ export default function Signup() {
     e.preventDefault();
     if (loading) return;
 
+    if (type === "PERSONAL" && !captcha) {
+    alert("Please complete the CAPTCHA");
+    return;
+  }
+
     setLoading(true);
 
     try {
