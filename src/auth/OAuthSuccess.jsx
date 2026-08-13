@@ -236,15 +236,15 @@ export default function OAuthSuccess() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        console.log("Checking authenticated user...");
+        // console.log("Checking authenticated user...");
 
         const res = await api.get("/auth/me");
 
-        console.log("ME RESPONSE:", res.data);
+        // console.log("ME RESPONSE:", res.data);
 
         const role = res.data.user.role;
 
-        console.log("AUTH ROLE:", role);
+        // console.log("AUTH ROLE:", role);
 
         localStorage.setItem("role", role);
 
