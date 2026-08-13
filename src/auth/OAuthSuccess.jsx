@@ -176,6 +176,56 @@
 //   );
 // }
 
+// import { useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+// import api from "../services/api";
+
+// export default function OAuthSuccess() {
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     let attempts = 0;
+
+//     const checkAuth = async () => {
+//       try {
+//         const res = await api.get("/auth/me");
+
+//         const role = res.data.user.role;
+//         localStorage.setItem("role", role);
+
+//         // 🔥 ROLE BASED REDIRECT (FIXED)
+//         if (role === "ADMIN") {
+//           navigate("/admin/dashboard");
+//         } else if (role === "SUPERADMIN") {
+//           navigate("/superadmin/dashboard");
+//         } else if (role === "BUSINESS") {
+//           navigate("/business/dashboard"); // ✅ IMPORTANT FIX
+//         } else {
+//           navigate("/user/dashboard"); // USER
+//         }
+
+//       } catch (err) {
+//         if (attempts < 5) {
+//           attempts++;
+//           // console.log(`Attempt ${attempts} failed. Retrying...`);
+//           setTimeout(checkAuth, 1000);
+//         } else {
+//           navigate("/login");
+//         }
+//       }
+//     };
+
+//     checkAuth();
+//   }, [navigate]);
+
+//   return (
+//     <div className="h-screen flex items-center justify-center">
+//       <p>Finalizing login... Please wait.</p>
+//     </div>
+//   );
+// }
+
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
@@ -184,34 +234,41 @@ export default function OAuthSuccess() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    let attempts = 0;
-
     const checkAuth = async () => {
       try {
+        console.log("Checking authenticated user...");
+
         const res = await api.get("/auth/me");
 
+        console.log("ME RESPONSE:", res.data);
+
         const role = res.data.user.role;
+
+        console.log("AUTH ROLE:", role);
+
         localStorage.setItem("role", role);
 
-        // 🔥 ROLE BASED REDIRECT (FIXED)
         if (role === "ADMIN") {
-          navigate("/admin/dashboard");
+          navigate("/admin/dashboard", { replace: true });
         } else if (role === "SUPERADMIN") {
-          navigate("/superadmin/dashboard");
+          navigate("/superadmin/dashboard", { replace: true });
         } else if (role === "BUSINESS") {
-          navigate("/business/dashboard"); // ✅ IMPORTANT FIX
+          navigate("/business/dashboard", { replace: true });
+        } else if (role === "USER") {
+          navigate("/user/dashboard", { replace: true });
         } else {
-          navigate("/user/dashboard"); // USER
+          console.error("Unknown role:", role);
+          navigate("/login", { replace: true });
         }
 
       } catch (err) {
-        if (attempts < 5) {
-          attempts++;
-          // console.log(`Attempt ${attempts} failed. Retrying...`);
-          setTimeout(checkAuth, 1000);
-        } else {
-          navigate("/login");
-        }
+        console.error(
+          "OAuth /me ERROR:",
+          err.response?.status,
+          err.response?.data
+        );
+
+        navigate("/login", { replace: true });
       }
     };
 
