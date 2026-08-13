@@ -144,6 +144,7 @@ export default function Signup() {
   });
 
   const [captcha, setCaptcha] = useState(null);
+  const [passwordError, setPasswordError] = useState("");
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -152,6 +153,17 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
+
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+
+if (!passwordRegex.test(form.password)) {
+  setPasswordError(
+    "Password must be at least 8 characters and contain at least one letter and one number."
+  );
+  return;
+}
+
+setPasswordError("");
 
     if (type === "PERSONAL" && !captcha) {
     alert("Please complete the CAPTCHA");
@@ -266,9 +278,16 @@ export default function Signup() {
             placeholder="Password"
             value={form.password}
             className="w-full border p-3 mb-4 rounded"
-            onChange={handleChange}
+            onChange={(e) => {
+              setForm({ ...form, password: e.target.value });
+              setPasswordError("");
+            }}
           />
-
+          {passwordError && (
+  <p className="text-sm text-red-600 mb-4">
+    {passwordError}
+  </p>
+)}
           {/* 🔐 CAPTCHA only for user */}
           {type === "PERSONAL" && (
             <ReCAPTCHA
