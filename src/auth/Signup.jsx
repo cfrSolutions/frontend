@@ -173,37 +173,22 @@ setPasswordError("");
     setLoading(true);
 
     try {
-      // const payload =
-      //   type === "PERSONAL"
-      //     ? {
-      //         name: form.name,
-      //         email: form.email,
-      //         password: form.password,
-      //         referralCode: ref,
-      //         captcha,
-      //         role: "USER",
-      //       }
-      //     : {
-      //         name: form.companyName,
-      //         email: form.email,
-      //         password: form.password,
-      //         role: "BUSINESS",
-      //       };
-
-      const payload = {
-  name: type === "PERSONAL"
-    ? form.name
-    : form.companyName,
-
-  email: form.email,
-  password: form.password,
-
-  referralCode: type === "PERSONAL" ? ref : undefined,
-
-  captcha: type === "PERSONAL" ? captcha : undefined,
-
-  role: type === "BUSINESS" ? "BUSINESS" : "USER",
-};
+      const payload =
+        type === "PERSONAL"
+          ? {
+              name: form.name,
+              email: form.email,
+              password: form.password,
+              referralCode: ref,
+              captcha,
+              role: "USER",
+            }
+          : {
+              name: form.companyName,
+              email: form.email,
+              password: form.password,
+              role: "BUSINESS",
+            };
 
       const response = await api.post("/auth/register", payload);
 
