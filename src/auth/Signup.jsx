@@ -58,7 +58,7 @@ setPasswordError("");
 
   referralCode: type === "PERSONAL" ? ref : undefined,
 
-  captcha: type === "PERSONAL" ? captcha : undefined,
+  captcha: captcha,
 
   role: type === "BUSINESS" ? "BUSINESS" : "USER",
 };
@@ -69,7 +69,7 @@ const response = await api.post("/auth/register", payload);
 
       alert(response.data.message);
 
-      navigate(type === "BUSINESS" ? "/login" : "/login");
+      navigate("/login");
     } catch (error) {
       // console.error(error.response?.data);
       alert(error.response?.data?.message);
