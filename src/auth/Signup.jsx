@@ -40,7 +40,7 @@ if (!passwordRegex.test(form.password)) {
 
 setPasswordError("");
 
-    if (type === "PERSONAL" && !captcha) {
+    if (!captcha) {
     alert("Please complete the CAPTCHA");
     return;
   }
@@ -69,7 +69,7 @@ const response = await api.post("/auth/register", payload);
 
       alert(response.data.message);
 
-      navigate(type === "BUSINESS" ? "/business/login" : "/login");
+      navigate(type === "BUSINESS" ? "/login" : "/login");
     } catch (error) {
       // console.error(error.response?.data);
       alert(error.response?.data?.message);
@@ -164,13 +164,13 @@ const response = await api.post("/auth/register", payload);
   </p>
 )}
           {/* 🔐 CAPTCHA only for user */}
-          {type === "PERSONAL" && (
+         
             <ReCAPTCHA
               sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
               onChange={(token) => setCaptcha(token)}
               className="mb-4"
             />
-          )}
+          
 
           <button
             type="submit"
