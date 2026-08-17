@@ -63,7 +63,7 @@ setPasswordError("");
   role: type === "BUSINESS" ? "BUSINESS" : "USER",
 };
 
-console.log("SIGNUP PAYLOAD:", payload);
+// console.log("SIGNUP PAYLOAD:", payload);
 
 const response = await api.post("/auth/register", payload);
 
