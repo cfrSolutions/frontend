@@ -32,7 +32,7 @@ const createProject = async () => {
     );
 
     navigate(
-      `/business/dashboard/project/${res.data._id}`
+      `/business/dashboard/project/${res.data.project._id}`
     );
 
   } catch (err) {
