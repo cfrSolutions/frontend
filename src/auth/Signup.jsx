@@ -221,7 +221,7 @@ const response = await api.post("/auth/register", payload);
             Already have an account?
             <span
               onClick={() =>
-                navigate(type === "BUSINESS" ? "/business/login" : "/login")
+                navigate(type === "BUSINESS" ? "/login" : "/login")
               }
               style={{ color: "blue", cursor: "pointer" }}
             >
