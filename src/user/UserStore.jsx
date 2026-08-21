@@ -16,6 +16,7 @@ export default function UserStore() {
   const [wallet, setWallet] = useState({ balance: 0 });
   const [category, setCategory] = useState("GIFT_CARD");
   const [successMsg, setSuccessMsg] = useState("");
+  const [redeemingCard, setRedeemingCard] = useState(null);
 
 useEffect(() => {
   api.get("/giftcards").then(res => {
