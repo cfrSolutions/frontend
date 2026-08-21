@@ -15,6 +15,7 @@ export default function UserStore() {
   const [cards, setCards] = useState([]);
   const [wallet, setWallet] = useState({ balance: 0 });
   const [category, setCategory] = useState("GIFT_CARD");
+  const [successMsg, setSuccessMsg] = useState("");
 
 useEffect(() => {
   api.get("/giftcards").then(res => {
@@ -29,6 +30,38 @@ useEffect(() => {
   }, []);
   return (
      <div className="space-y-10">
+      {successMsg && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+
+    <div className="bg-white rounded-2xl shadow-2xl px-14 py-12 text-center animate-scaleIn">
+
+      {/* GREEN CIRCLE */}
+      <div className="w-28 h-28 mx-auto rounded-full border-[10px] border-green-400 flex items-center justify-center">
+        <span className="text-green-500 text-5xl">
+          ✓
+        </span>
+      </div>
+
+      {/* TEXT */}
+      <h2 className="mt-6 text-2xl font-semibold text-gray-700">
+        Success!
+      </h2>
+
+      <p className="text-gray-400 mt-2">
+        {successMsg}
+      </p>
+
+      <button
+        onClick={() => setSuccessMsg("")}
+        className="mt-6 px-6 py-2 rounded-lg bg-orange-400 text-white text-sm font-semibold hover:bg-orange-500 transition"
+      >
+        Done
+      </button>
+
+    </div>
+
+  </div>
+)}
       {/* HEADER */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold">Reward Store</h1>
@@ -127,9 +160,19 @@ useEffect(() => {
 
           <button
             disabled={!canRedeem}
-            onClick={() =>
-              api.post(`/giftcards/redeem/${card._id}`).then(() => alert("Redeemed successfully"))
-            }
+            onClick={() => {
+  api
+    .post(`/giftcards/redeem/${card._id}`)
+    .then(() => {
+      setSuccessMsg("Gift card redeemed successfully!");
+    })
+    .catch((error) => {
+      console.log(
+        error.response?.data?.message ||
+        "Unable to redeem gift card."
+      );
+    });
+}}
             className={`px-4 py-2 rounded-lg text-xs font-bold transition-colors ${
               canRedeem
                 ? "bg-orange-400 text-white hover:bg-orange-600 shadow-sm"
