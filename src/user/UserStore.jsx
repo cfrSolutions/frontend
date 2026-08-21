@@ -183,9 +183,15 @@ useEffect(() => {
             Redeem
           </button> */}
           <button
-  disabled={!canRedeem || redeemingCard === card._id}
+  disabled={
+    !canRedeem ||
+    redeemingCard === card._id
+  }
   onClick={async () => {
-    if (redeemingCard === card._id) return;
+    // Prevent accidental double click
+    if (redeemingCard === card._id) {
+      return;
+    }
 
     setRedeemingCard(card._id);
 
@@ -199,18 +205,28 @@ useEffect(() => {
           "Gift card redeemed successfully!"
         );
 
+        // Refresh wallet balance
         const walletRes = await api.get("/wallet");
         setWallet(walletRes.data);
+      } else {
+        setSuccessMsg("");
       }
+
     } catch (error) {
-      console.error(
+      console.log(
         error.response?.data?.message ||
         "Unable to redeem gift card."
       );
+
     } finally {
       setRedeemingCard(null);
     }
   }}
+  className={`px-4 py-2 rounded-lg text-xs font-bold transition-colors ${
+    canRedeem && redeemingCard !== card._id
+      ? "bg-orange-400 text-white hover:bg-orange-600 shadow-sm"
+      : "bg-gray-100 text-gray-400 cursor-not-allowed"
+  }`}
 >
   {redeemingCard === card._id
     ? "Processing..."
