@@ -158,7 +158,7 @@ useEffect(() => {
             </span>
           </div>
 
-          <button
+          {/* <button
             disabled={!canRedeem}
             onClick={() => {
   api
@@ -180,7 +180,43 @@ useEffect(() => {
             }`}
           >
             Redeem
-          </button>
+          </button> */}
+          <button
+  disabled={!canRedeem || redeemingCard === card._id}
+  onClick={async () => {
+    if (redeemingCard === card._id) return;
+
+    setRedeemingCard(card._id);
+
+    try {
+      const response = await api.post(
+        `/giftcards/redeem/${card._id}`
+      );
+
+      if (response.data?.success) {
+        setSuccessMsg(
+          "Gift card redeemed successfully!"
+        );
+
+        const walletRes = await api.get("/wallet");
+        setWallet(walletRes.data);
+      }
+    } catch (error) {
+      console.error(
+        error.response?.data?.message ||
+        "Unable to redeem gift card."
+      );
+    } finally {
+      setRedeemingCard(null);
+    }
+  }}
+>
+  {redeemingCard === card._id
+    ? "Processing..."
+    : canRedeem
+    ? "Redeem"
+    : "Insufficient Points"}
+</button>
         </div>
       </div>
     </div>
