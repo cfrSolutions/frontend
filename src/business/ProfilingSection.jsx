@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import api from "../services/api";
 
 export default function ProfilingSection({
   targetCompletes,
@@ -46,11 +47,25 @@ const [conditions, setConditions] =
 const [profiles, setProfiles] = useState([]);
 
 
+// useEffect(() => {
+//   fetch("https://api.inputify.io/api/profiles")
+//     .then(res => res.json())
+//     .then(data => setProfiles(data));
+// }, []);
 useEffect(() => {
-  fetch("https://api.inputify.io/api/profiles")
-    .then(res => res.json())
-    .then(data => setProfiles(data));
+  const loadProfiles = async () => {
+    try {
+      const res = await api.get("/profiles");
+
+      setProfiles(res.data);
+    } catch (error) {
+      console.error("PROFILE LOAD ERROR:", error);
+    }
+  };
+
+  loadProfiles();
 }, []);
+
     const [search, setSearch] = useState("");
     const updateQuota = (
   profileId,
