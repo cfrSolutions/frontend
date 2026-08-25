@@ -753,28 +753,13 @@ const saveDraft = async () => {
     </option>
   ))}
 </select>
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label className="text-xs text-gray-500 mb-1 block">
               Age range
             </label>
 
             <div className="flex items-center gap-3">
-              {/* <input
-                type="number"
-                name="ageFrom"
-                value={form.ageFrom}
-                onChange={handleChange}
-                className="border rounded px-3 py-2 w-20"
-              />
-              <span>to</span>
-              <input
-                type="number"
-                name="ageTo"
-                value={form.ageTo}
-                onChange={handleChange}
-                className="border rounded px-3 py-2 w-20"
-              /> */}
-
+              
               <div>
   <input
     type="number"
@@ -818,8 +803,67 @@ const saveDraft = async () => {
 </div>
               <span className="text-xs text-gray-400">years</span>
             </div>
-          </div>
+          </div> */}
+<div className="mb-4">
 
+  <label className="text-xs text-gray-500 mb-1 block">
+    Age range
+  </label>
+
+  <div className="flex items-start gap-3">
+
+    {/* AGE FROM */}
+    <div>
+      <input
+        type="number"
+        name="ageFrom"
+        value={form.ageFrom}
+        onChange={handleChange}
+        className={`border rounded px-3 py-2 w-20 ${
+          errors.ageFrom
+            ? "border-red-500"
+            : "border-slate-300"
+        }`}
+      />
+
+      {errors.ageFrom && (
+        <p className="text-red-500 text-xs mt-1 w-40">
+          {errors.ageFrom}
+        </p>
+      )}
+    </div>
+
+    <span className="mt-2">
+      to
+    </span>
+
+    {/* AGE TO */}
+    <div>
+      <input
+        type="number"
+        name="ageTo"
+        value={form.ageTo}
+        onChange={handleChange}
+        className={`border rounded px-3 py-2 w-20 ${
+          errors.ageTo
+            ? "border-red-500"
+            : "border-slate-300"
+        }`}
+      />
+
+      {errors.ageTo && (
+        <p className="text-red-500 text-xs mt-1 w-40">
+          {errors.ageTo}
+        </p>
+      )}
+    </div>
+
+    <span className="text-xs text-gray-400 mt-2">
+      years
+    </span>
+
+  </div>
+</div>
           <div className="mb-4">
             <label className="text-xs text-gray-500 mb-1 block">
               Gender
@@ -1033,6 +1077,7 @@ font-medium"
   </button>
 
   <button
+   type="button"
     onClick={handleSubmit}
     className="
      h-12
