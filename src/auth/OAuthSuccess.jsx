@@ -257,16 +257,16 @@ export default function OAuthSuccess() {
         } else if (role === "USER") {
           navigate("/user/dashboard", { replace: true });
         } else {
-          console.error("Unknown role:", role);
+          // console.error("Unknown role:", role);
           navigate("/login", { replace: true });
         }
 
       } catch (err) {
-        console.error(
-          "OAuth /me ERROR:",
-          err.response?.status,
-          err.response?.data
-        );
+        // console.error(
+        //   "OAuth /me ERROR:",
+        //   err.response?.status,
+        //   err.response?.data
+        // );
 
         navigate("/login", { replace: true });
       }

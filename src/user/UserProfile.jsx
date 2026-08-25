@@ -1751,6 +1751,8 @@ function SecurityCard() {
 function ProfileCard({ user, profile }) {
   const [open, setOpen] = useState(false);
   const [preview, setPreview] = useState(null);
+  const [imageError, setImageError] = useState("");
+  const [imageUploading, setImageUploading] = useState(false);
   const fileInputRef = useRef();
 
   
@@ -1762,18 +1764,88 @@ useEffect(() => {
 }, [profile]);
 
 
+  // const handleImageChange = async (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
+
+  //   const formData = new FormData();
+  //   formData.append("image", file);
+
+  //   const res = await api.post("/users/upload-profile", formData);
+
+  //   // update preview immediately
+  //   setPreview(res.data.image);
+  // };
+
   const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const file = e.target.files?.[0];
+
+  if (!file) return;
+
+  // Clear previous error
+  setImageError("");
+
+  // =========================
+  // FRONTEND SIZE VALIDATION
+  // =========================
+  const MAX_SIZE = 2 * 1024 * 1024; // 2 MB
+
+  if (file.size > MAX_SIZE) {
+    setImageError("Image must be smaller than 2 MB.");
+    e.target.value = "";
+    return;
+  }
+
+  // =========================
+  // FRONTEND TYPE VALIDATION
+  // =========================
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/jpg",
+  ];
+
+  if (!allowedTypes.includes(file.type)) {
+    setImageError("Only JPG, JPEG, and PNG images are allowed.");
+    e.target.value = "";
+    return;
+  }
+
+  try {
+    setImageUploading(true);
 
     const formData = new FormData();
     formData.append("image", file);
 
-    const res = await api.post("/users/upload-profile", formData);
+    const res = await api.post(
+      "/users/upload-profile",
+      formData
+    );
 
-    // update preview immediately
     setPreview(res.data.image);
-  };
+
+  } catch (err) {
+    
+
+    if (err.response?.status === 413) {
+      setImageError(
+        "Image is too large. Please choose an image smaller than 2 MB."
+      );
+    } else {
+      setImageError(
+        err.response?.data?.message ||
+        "Failed to upload profile image."
+      );
+    }
+
+  } finally {
+    setImageUploading(false);
+
+    // Allow selecting the same file again
+    e.target.value = "";
+  }
+};
+
 const [passwords, setPasswords] = useState({
   currentPassword: "",
   newPassword: "",
@@ -1821,7 +1893,7 @@ const handleUpdatePassword = async () => {
 
         <input
           type="file"
-          accept="image/*"
+          accept="image/jpeg,image/png,image/jpg"
           hidden
           ref={fileInputRef}
           onChange={handleImageChange}
@@ -1858,6 +1930,11 @@ const handleUpdatePassword = async () => {
         >
           <Camera size={16} />
         </div>
+        {imageError && (
+  <p className="mt-3 text-sm text-red-500 font-medium text-center">
+    {imageError}
+  </p>
+)}
       </div>
 
       {/* NAME */}
