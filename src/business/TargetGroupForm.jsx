@@ -490,55 +490,53 @@ useEffect(() => {
 // };
 
 const handleSubmit = async () => {
+  setErrors({});
+
   try {
-    // Clear old errors
-    setErrors({});
+    const payload = {
+      ...form,
+      profiles: selectedProfiles,
+      status: "LIVE",
+    };
+
+    let response;
 
     if (targetGroupId) {
-      await api.put(
+      response = await api.put(
         `/projects/${projectId}/target-group/${targetGroupId}`,
-        {
-          ...form,
-          profiles: selectedProfiles,
-          status: "LIVE",
-        }
+        payload
       );
     } else {
-      await api.post(
+      response = await api.post(
         `/projects/${projectId}/target-groups`,
-        {
-          ...form,
-          profiles: selectedProfiles,
-          status: "LIVE",
-        }
+        payload
       );
     }
 
+    // Only navigate when backend accepts the request
     navigate(
       `/business/dashboard/project/${projectId}/status`
     );
 
   } catch (err) {
-    const response = err.response?.data;
+    const data = err.response?.data;
 
-   console.log("FRONTEND ERRORS:", response?.errors);
- console.log("BACKEND RESPONSE:", response);
-  console.log("BACKEND FIELD ERRORS:", response?.errors);
-    // Backend field-specific validation
-    if (response?.errors) {
-      setErrors(response.errors);
+    console.log("VALIDATION RESPONSE:", data);
+
+    // Backend returned field-specific errors
+    if (data?.errors) {
+      setErrors(data.errors);
       return;
     }
 
-    // Backend single validation message
-    if (response?.message) {
+    // Backend returned one general error
+    if (data?.message) {
       setErrors({
-        general: response.message,
+        general: data.message,
       });
       return;
     }
 
-    // Unknown error
     setErrors({
       general: "Something went wrong. Please try again.",
     });
