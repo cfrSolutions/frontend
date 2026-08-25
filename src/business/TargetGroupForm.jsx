@@ -231,9 +231,25 @@ const languages =
 //   languages
 // );
 
+  // const handleChange = (e) => {
+  //   setForm({ ...form, [e.target.name]: e.target.value });
+  // };
+
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const { name, value } = e.target;
+
+  setForm((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+
+  // Remove the error as soon as user changes the field
+  setErrors((prev) => ({
+    ...prev,
+    [name]: "",
+    general: "",
+  }));
+};
 
 const marketTimezones =
   form.market
@@ -323,12 +339,51 @@ useEffect(() => {
     });
   };
 
+// useEffect(() => {
+
+//   async function fetchCPI() {
+
+//     try {
+
+//       const res = await api.post(
+//         "/projects/calculate-cpi",
+//         {
+//           country: form.market,
+//           ir: Number(form.incidence),
+//           loi: Number(form.loi),
+//         }
+//       );
+
+//       const cpi = res.data.cpi;
+
+//       setForm(prev => ({
+//         ...prev,
+//         cpi,
+//         totalCost: cpi * prev.targetCompletes,
+//       }));
+
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   }
+
+//   if (
+//     form.market &&
+//     form.incidence &&
+//     form.loi
+//   ) {
+//     fetchCPI();
+//   }
+
+// }, [
+//   form.market,
+//   form.incidence,
+//   form.loi,
+//   form.targetCompletes
+// ]);
 useEffect(() => {
-
   async function fetchCPI() {
-
     try {
-
       const res = await api.post(
         "/projects/calculate-cpi",
         {
@@ -346,15 +401,30 @@ useEffect(() => {
         totalCost: cpi * prev.targetCompletes,
       }));
 
+      // Clear CPI/market error after successful calculation
+      setErrors(prev => ({
+        ...prev,
+        market: "",
+        incidence: "",
+        loi: "",
+      }));
+
     } catch (err) {
-      console.log(err);
+      const message =
+        err.response?.data?.message ||
+        "Unable to calculate CPI";
+
+      setErrors(prev => ({
+        ...prev,
+        market: message,
+      }));
     }
   }
 
   if (
     form.market &&
-    form.incidence &&
-    form.loi
+    form.incidence !== "" &&
+    form.loi !== ""
   ) {
     fetchCPI();
   }
@@ -366,7 +436,6 @@ useEffect(() => {
   form.targetCompletes
 ]);
 
-
 useEffect(() => {
   api
     .get("/profiles")
@@ -377,32 +446,38 @@ useEffect(() => {
 }, []);
   const navigate = useNavigate();
 
-//   const handleSubmit = async () => {
+// const handleSubmit = async () => {
 //   try {
-//     const token = localStorage.getItem("token");
-
-//     let res;
 
 //     if (targetGroupId) {
-//       res = await api.put(
+// // console.log("SAVING PROFILES", selectedProfiles);
+
+// // console.log({
+// //   ...form,
+// //   profiles: selectedProfiles,
+// //   status: "DRAFT",
+// // });
+// // console.log("selectedProfiles", selectedProfiles);
+//       await api.put(
 //         `/projects/${projectId}/target-group/${targetGroupId}`,
-//         form,
 //         {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
+//           ...form,
+//           profiles: selectedProfiles,
+//           status: "LIVE",
 //         }
 //       );
+
 //     } else {
-//       res = await api.post(
-//         `/projects/${projectId}/target-groups`,
-//         form,
-//         {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
-//         }
-//       );
+
+//       await api.post(
+//   `/projects/${projectId}/target-groups`,
+//   {
+//     ...form,
+//     profiles: selectedProfiles,
+//     status: "LIVE",
+//   }
+// );
+
 //     }
 
 //     navigate(
@@ -416,16 +491,10 @@ useEffect(() => {
 
 const handleSubmit = async () => {
   try {
+    // Clear old errors
+    setErrors({});
 
     if (targetGroupId) {
-// console.log("SAVING PROFILES", selectedProfiles);
-
-// console.log({
-//   ...form,
-//   profiles: selectedProfiles,
-//   status: "DRAFT",
-// });
-// console.log("selectedProfiles", selectedProfiles);
       await api.put(
         `/projects/${projectId}/target-group/${targetGroupId}`,
         {
@@ -434,18 +503,15 @@ const handleSubmit = async () => {
           status: "LIVE",
         }
       );
-
     } else {
-
       await api.post(
-  `/projects/${projectId}/target-groups`,
-  {
-    ...form,
-    profiles: selectedProfiles,
-    status: "LIVE",
-  }
-);
-
+        `/projects/${projectId}/target-groups`,
+        {
+          ...form,
+          profiles: selectedProfiles,
+          status: "LIVE",
+        }
+      );
     }
 
     navigate(
@@ -453,7 +519,28 @@ const handleSubmit = async () => {
     );
 
   } catch (err) {
-    console.log(err);
+    const response = err.response?.data;
+
+    console.log("TARGET GROUP VALIDATION:", response);
+
+    // Backend field-specific validation
+    if (response?.errors) {
+      setErrors(response.errors);
+      return;
+    }
+
+    // Backend single validation message
+    if (response?.message) {
+      setErrors({
+        general: response.message,
+      });
+      return;
+    }
+
+    // Unknown error
+    setErrors({
+      general: "Something went wrong. Please try again.",
+    });
   }
 };
 
@@ -612,8 +699,17 @@ const saveDraft = async () => {
   name="market"
   value={form.market}
   onChange={handleChange}
-  className="border rounded-lg px-3 py-2 w-full text-sm"
+  className={`border rounded-lg px-3 py-2 w-full text-sm ${
+    errors.market
+      ? "border-red-500"
+      : "border-slate-300"
+  }`}
 >
+  {errors.market && (
+  <p className="text-red-500 text-xs mt-1">
+    {errors.market}
+  </p>
+)}
   <option value="">
     Select market
   </option>
@@ -634,8 +730,17 @@ const saveDraft = async () => {
   value={form.language}
   onChange={handleChange}
   name="language"
-  className="border rounded-lg px-3 py-2 w-full text-sm"
+  className={`border rounded-lg px-3 py-2 w-full text-sm ${
+    errors.language
+      ? "border-red-500"
+      : "border-slate-300"
+  }`}
 >
+  {errors.language && (
+  <p className="text-red-500 text-xs mt-1">
+    {errors.language}
+  </p>
+)}
   <option value="">
     Select Language
   </option>
@@ -655,7 +760,7 @@ const saveDraft = async () => {
             </label>
 
             <div className="flex items-center gap-3">
-              <input
+              {/* <input
                 type="number"
                 name="ageFrom"
                 value={form.ageFrom}
@@ -669,7 +774,49 @@ const saveDraft = async () => {
                 value={form.ageTo}
                 onChange={handleChange}
                 className="border rounded px-3 py-2 w-20"
-              />
+              /> */}
+
+              <div>
+  <input
+    type="number"
+    name="ageFrom"
+    value={form.ageFrom}
+    onChange={handleChange}
+    className={`border rounded px-3 py-2 w-20 ${
+      errors.ageFrom
+        ? "border-red-500"
+        : "border-slate-300"
+    }`}
+  />
+
+  {errors.ageFrom && (
+    <p className="text-red-500 text-xs mt-1">
+      {errors.ageFrom}
+    </p>
+  )}
+</div>
+
+<span>to</span>
+
+<div>
+  <input
+    type="number"
+    name="ageTo"
+    value={form.ageTo}
+    onChange={handleChange}
+    className={`border rounded px-3 py-2 w-20 ${
+      errors.ageTo
+        ? "border-red-500"
+        : "border-slate-300"
+    }`}
+  />
+
+  {errors.ageTo && (
+    <p className="text-red-500 text-xs mt-1">
+      {errors.ageTo}
+    </p>
+  )}
+</div>
               <span className="text-xs text-gray-400">years</span>
             </div>
           </div>
@@ -758,14 +905,24 @@ const saveDraft = async () => {
               </label>
 
               <input
-                type="number"
-                name={name}
-                value={form[name]}
-                onChange={handleChange}
-                min={1}
-                max={name === "loi" ? 45 : 100}
-                className="border rounded-lg px-3 py-2 w-full"
-              />
+  type="number"
+  name={name}
+  value={form[name]}
+  onChange={handleChange}
+  min={1}
+  max={name === "loi" ? 45 : 100}
+  className={`border rounded-lg px-3 py-2 w-full ${
+    errors[name]
+      ? "border-red-500"
+      : "border-slate-300"
+  }`}
+/>
+
+{errors[name] && (
+  <p className="text-red-500 text-xs mt-1">
+    {errors[name]}
+  </p>
+)}
             </div>
           ))}
         </div>
@@ -842,6 +999,11 @@ const saveDraft = async () => {
   </div>
 
 <div className="flex flex-col sm:flex-row gap-3 mt-6">
+  {errors.general && (
+  <div className="mt-4 text-red-500 text-sm">
+    {errors.general}
+  </div>
+)}
 <button
   type="button"
   onClick={() => setShowAdvanced(true)}
