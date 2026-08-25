@@ -965,7 +965,7 @@ export default function CreateProject() {
 //   SG: "Asia/Singapore",
 //   JP: "Asia/Tokyo",
 // };
-
+const [errors, setErrors] = useState({});
   const [form, setForm] = useState({
     sector: "",
     market: "",
@@ -991,12 +991,30 @@ export default function CreateProject() {
       tablet: true,
     },
   });
+const getFieldError = (field) => {
+  return errors[field] || "";
+};
 
 
-
+  // const handleChange = (e) => {
+  //   setForm({ ...form, [e.target.name]: e.target.value });
+  // };
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const { name, value } = e.target;
+
+  setForm((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+
+  // Clear field error when user changes it
+  if (errors[name]) {
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+  }
+};
 
 const marketTimezones =
   form.market
@@ -1114,6 +1132,7 @@ useEffect(() => {
   const navigate = useNavigate();
   const handleSubmit = async () => {
   try {
+    setErrors({});
     const token = localStorage.getItem("token"); // 🔥 get token
     
     const res = await api.post(
@@ -1133,7 +1152,33 @@ useEffect(() => {
 
   } catch (err) {
     // console.log(err);
-    alert("❌ Error creating project");
+    const message =
+      err.response?.data?.message ||
+      "Something went wrong";
+
+    /*
+     * Your /create endpoint currently only validates
+     * name/description, so these are general errors.
+     */
+    if (message === "Project name is required") {
+      setErrors({
+        name: message,
+      });
+      return;
+    }
+
+    if (message === "Invalid description") {
+      setErrors({
+        description: message,
+      });
+      return;
+    }
+
+    // General backend error
+    setErrors({
+      general: message,
+    });
+  
   }
 };
 
@@ -1215,6 +1260,11 @@ useEffect(() => {
                 onChange={handleChange}
                 className="border rounded px-3 py-2 w-20"
               />
+              {errors.ageFrom && (
+        <p className="text-red-500 text-xs mt-1">
+          {errors.ageFrom}
+        </p>
+      )}
               <span>to</span>
               <input
                 type="number"
@@ -1224,6 +1274,11 @@ useEffect(() => {
                 className="border rounded px-3 py-2 w-20"
               />
               <span className="text-xs text-gray-400">years</span>
+              {errors.ageFrom && (
+        <p className="text-red-500 text-xs mt-1">
+          {errors.ageFrom}
+        </p>
+      )}
             </div>
           </div>
 
@@ -1316,8 +1371,17 @@ useEffect(() => {
                 onChange={handleChange}
                 min={1}
                 max={name === "loi" ? 45 : 100}
-                className="border rounded-lg px-3 py-2 w-full"
+                className={`border rounded-lg px-3 py-2 w-full ${
+        errors[name]
+          ? "border-red-500"
+          : "border-slate-300"
+      }`}
               />
+              {errors[name] && (
+      <p className="text-red-500 text-xs mt-1">
+        {errors[name]}
+      </p>
+    )}
             </div>
           ))}
         </div>
