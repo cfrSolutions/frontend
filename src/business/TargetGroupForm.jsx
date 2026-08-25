@@ -163,7 +163,7 @@ const [showProfileCondition,
       .toLowerCase()
       .includes(search.toLowerCase())
   );
-
+const [errors, setErrors] = useState({});
   const [form, setForm] = useState({
     sector: "",
     market: "",
