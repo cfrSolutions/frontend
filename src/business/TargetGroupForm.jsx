@@ -490,118 +490,12 @@ useEffect(() => {
 // };
 
 const handleSubmit = async () => {
-  // Clear previous errors
   setErrors({});
-
-  // ------------------------------------
-  // FRONTEND VALIDATION
-  // ------------------------------------
-
-  const newErrors = {};
-
-  const ageFrom = Number(form.ageFrom);
-  const ageTo = Number(form.ageTo);
-  const targetCompletes = Number(form.targetCompletes);
-  const loi = Number(form.loi);
-  const incidence = Number(form.incidence);
-  const timeline = Number(form.timeline);
-
-  if (
-    !Number.isFinite(ageFrom) ||
-    ageFrom < 1 ||
-    ageFrom > 120
-  ) {
-    newErrors.ageFrom =
-      "Age must be between 1 and 120";
-  }
-
-  if (
-    !Number.isFinite(ageTo) ||
-    ageTo < 1 ||
-    ageTo > 120
-  ) {
-    newErrors.ageTo =
-      "Age must be between 1 and 120";
-  }
-
-  if (
-    Number.isFinite(ageFrom) &&
-    Number.isFinite(ageTo) &&
-    ageFrom > ageTo
-  ) {
-    newErrors.ageFrom =
-      "Minimum age cannot be greater than maximum age";
-  }
-
-  if (
-    !Number.isFinite(targetCompletes) ||
-    targetCompletes <= 0
-  ) {
-    newErrors.targetCompletes =
-      "Target completes must be greater than 0";
-  }
-
-  if (
-    !Number.isFinite(loi) ||
-    loi <= 0
-  ) {
-    newErrors.loi =
-      "LOI must be greater than 0";
-  }
-
-  if (
-    !Number.isFinite(incidence) ||
-    incidence < 0 ||
-    incidence > 100
-  ) {
-    newErrors.incidence =
-      "Incidence must be between 0 and 100";
-  }
-
-  if (
-    !Number.isFinite(timeline) ||
-    timeline <= 0
-  ) {
-    newErrors.timeline =
-      "Timeline must be greater than 0";
-  }
-
-  if (!form.market) {
-    newErrors.market =
-      "Market is required";
-  }
-
-  if (!form.language) {
-    newErrors.language =
-      "Language is required";
-  }
-
-  // ------------------------------------
-  // SHOW FRONTEND ERRORS
-  // ------------------------------------
-
-  if (Object.keys(newErrors).length > 0) {
-    setErrors(newErrors);
-    return;
-  }
-
-  // ------------------------------------
-  // SEND TO BACKEND
-  // ------------------------------------
 
   try {
     const payload = {
       ...form,
-      ageFrom: Number(form.ageFrom),
-      ageTo: Number(form.ageTo),
-      targetCompletes: Number(form.targetCompletes),
-      loi: Number(form.loi),
-      incidence: Number(form.incidence),
-      timeline: Number(form.timeline),
       profiles: selectedProfiles,
-
-      // Do NOT trust these from frontend.
-      // Backend calculates them.
       status: "LIVE",
     };
 
@@ -619,7 +513,7 @@ const handleSubmit = async () => {
       );
     }
 
-    // Only navigate if request succeeded
+    // Only navigate when backend accepts the request
     navigate(
       `/business/dashboard/project/${projectId}/status`
     );
@@ -627,24 +521,15 @@ const handleSubmit = async () => {
   } catch (err) {
     const data = err.response?.data;
 
-    console.log(
-      "BACKEND VALIDATION RESPONSE:",
-      data
-    );
+    console.log("VALIDATION RESPONSE:", data);
 
-    // ------------------------------------
-    // BACKEND FIELD ERRORS
-    // ------------------------------------
-
+    // Backend returned field-specific errors
     if (data?.errors) {
       setErrors(data.errors);
       return;
     }
 
-    // ------------------------------------
-    // BACKEND GENERAL ERROR
-    // ------------------------------------
-
+    // Backend returned one general error
     if (data?.message) {
       setErrors({
         general: data.message,
@@ -653,8 +538,7 @@ const handleSubmit = async () => {
     }
 
     setErrors({
-      general:
-        "Something went wrong. Please try again.",
+      general: "Something went wrong. Please try again.",
     });
   }
 };
@@ -943,7 +827,7 @@ const saveDraft = async () => {
       />
 
       {errors.ageFrom && (
-        <p className="text-red-500 text-xs mt-1 max-w-[160px]">
+        <p className="text-red-500 text-xs mt-1 w-40">
           {errors.ageFrom}
         </p>
       )}
@@ -968,7 +852,7 @@ const saveDraft = async () => {
       />
 
       {errors.ageTo && (
-        <p className="text-red-500 text-xs mt-1 max-w-[160px]">
+        <p className="text-red-500 text-xs mt-1 w-40">
           {errors.ageTo}
         </p>
       )}
@@ -980,7 +864,7 @@ const saveDraft = async () => {
 
   </div>
 </div>
-          <div className="mb-4">/
+          <div className="mb-4">
             <label className="text-xs text-gray-500 mb-1 block">
               Gender
             </label>
