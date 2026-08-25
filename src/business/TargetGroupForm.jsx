@@ -521,8 +521,9 @@ const handleSubmit = async () => {
   } catch (err) {
     const response = err.response?.data;
 
-    console.log("TARGET GROUP VALIDATION:", response);
-
+   console.log("FRONTEND ERRORS:", response?.errors);
+ console.log("BACKEND RESPONSE:", response);
+  console.log("BACKEND FIELD ERRORS:", response?.errors);
     // Backend field-specific validation
     if (response?.errors) {
       setErrors(response.errors);
