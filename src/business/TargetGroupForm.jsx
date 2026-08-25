@@ -943,7 +943,7 @@ const saveDraft = async () => {
       />
 
       {errors.ageFrom && (
-        <p className="text-red-500 text-xs mt-1 w-40">
+        <p className="text-red-500 text-xs mt-1 max-w-[160px]">
           {errors.ageFrom}
         </p>
       )}
@@ -968,7 +968,7 @@ const saveDraft = async () => {
       />
 
       {errors.ageTo && (
-        <p className="text-red-500 text-xs mt-1 w-40">
+        <p className="text-red-500 text-xs mt-1 max-w-[160px]">
           {errors.ageTo}
         </p>
       )}
@@ -980,7 +980,7 @@ const saveDraft = async () => {
 
   </div>
 </div>
-          <div className="mb-4">
+          <div className="mb-4">/
             <label className="text-xs text-gray-500 mb-1 block">
               Gender
             </label>
