@@ -1229,7 +1229,11 @@ useEffect(() => {
   name="market"
   value={form.market}
   onChange={handleChange}
-  className="border rounded-lg px-3 py-2 w-full text-sm"
+  className={`border rounded-lg px-3 py-2 w-full text-sm ${
+    errors.market
+      ? "border-red-500"
+      : "border-slate-300"
+  }`}
 >
   <option value="">
     Select market
@@ -1244,6 +1248,11 @@ useEffect(() => {
     </option>
   ))}
 </select>
+{errors.market && (
+  <p className="text-red-500 text-xs mt-1">
+    {errors.market}
+  </p>
+)}
             </div>
           </div>
 
