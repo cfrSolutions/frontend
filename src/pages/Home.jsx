@@ -475,6 +475,7 @@ import { useState } from "react";
 import { Search, ChevronDown } from "lucide-react";
 import { useRef } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import PanelRobotSection from "./PanelRobotSection";
 import { Linkedin, Youtube, Facebook } from "lucide-react";
 
 import './homeCss.css';
@@ -732,7 +733,7 @@ const scrollRef = useRef();
         </p>
       </div>
     </div>
-
+    
     {/* CARD 3 */}
     <div className="relative flex flex-col items-center">
 
@@ -754,7 +755,7 @@ const scrollRef = useRef();
   </div>
 </div>
 </div>
-
+<PanelRobotSection />
 {/* third section */}
         {/* LEFT */}
         
