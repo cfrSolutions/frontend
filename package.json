@@ -18,6 +18,7 @@
     "date-fns-tz": "^3.2.0",
     "dompurify": "^3.3.1",
     "file-saver": "^2.0.5",
+    "gsap": "^3.15.0",
     "langs": "^2.0.0",
     "leaflet": "^1.9.4",
     "libphonenumber-js": "^1.12.34",
