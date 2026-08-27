@@ -1079,6 +1079,11 @@ export default function Signup() {
 
   const [captcha, setCaptcha] = useState(null);
   const [passwordError, setPasswordError] = useState("");
+  const [messageModal, setMessageModal] = useState({
+  open: false,
+  type: "success",
+  message: "",
+});
 
   const handleChange = (e) => {
     setForm({
@@ -1103,10 +1108,14 @@ export default function Signup() {
 
     setPasswordError("");
 
-    if (!captcha) {
-      alert("Please complete the CAPTCHA");
-      return;
-    }
+  if (!captcha) {
+  setMessageModal({
+    open: true,
+    type: "warning",
+    message: "Please complete the CAPTCHA before creating your account.",
+  });
+  return;
+}
 
     setLoading(true);
 
@@ -1139,11 +1148,22 @@ export default function Signup() {
         payload
       );
 
-      alert(response.data.message);
+      // alert(response.data.message);
 
-      navigate("/login");
+      // navigate("/login");
+      setMessageModal({
+  open: true,
+  type: "success",
+  message: response.data.message || "Account created successfully!",
+});
     } catch (error) {
-      alert(error.response?.data?.message);
+     setMessageModal({
+  open: true,
+  type: "error",
+  message:
+    error.response?.data?.message ||
+    "Something went wrong. Please try again.",
+});
     } finally {
       setLoading(false);
     }
@@ -2010,6 +2030,168 @@ export default function Signup() {
         </div>
 
       </main>
+      {/* =====================================================
+    CUSTOM MESSAGE MODAL
+===================================================== */}
+
+{messageModal.open && (
+  <div
+    className="
+      fixed
+      inset-0
+      z-[9999]
+      flex
+      items-center
+      justify-center
+      bg-[#333333]/40
+      backdrop-blur-[3px]
+      px-4
+    "
+  >
+    <div
+      className="
+        relative
+        w-full
+        max-w-[420px]
+        bg-white
+        rounded-[24px]
+        border
+        border-[#E7E7E7]
+        shadow-[0_25px_80px_rgba(0,0,0,0.18)]
+        p-6
+        animate-[fadeIn_0.2s_ease-out]
+      "
+    >
+
+      {/* Close */}
+
+      <button
+        type="button"
+        onClick={() =>
+          setMessageModal({
+            open: false,
+            type: "success",
+            message: "",
+          })
+        }
+        className="
+          absolute
+          right-4
+          top-4
+          w-8
+          h-8
+          rounded-full
+          bg-[#F7F7F8]
+          text-gray-400
+          hover:bg-[#EEEEEE]
+          hover:text-[#333333]
+          transition
+        "
+      >
+        ×
+      </button>
+
+
+      {/* Icon */}
+
+      <div
+        className={`
+          w-12
+          h-12
+          rounded-2xl
+          flex
+          items-center
+          justify-center
+          text-xl
+          mb-4
+          ${
+            messageModal.type === "success"
+              ? "bg-[#FFF0DD]"
+              : messageModal.type === "warning"
+              ? "bg-[#FFF7E8]"
+              : "bg-[#FFF1F1]"
+          }
+        `}
+      >
+        {messageModal.type === "success"
+          ? "✓"
+          : messageModal.type === "warning"
+          ? "!"
+          : "×"}
+      </div>
+
+
+      {/* Title */}
+
+      <h3
+        className="
+          text-[20px]
+          font-bold
+          text-[#333333]
+          mb-1
+        "
+      >
+        {messageModal.type === "success"
+          ? "Account created!"
+          : messageModal.type === "warning"
+          ? "Almost there"
+          : "Unable to create account"}
+      </h3>
+
+
+      {/* Message */}
+
+      <p
+        className="
+          text-sm
+          leading-6
+          text-gray-500
+          pr-4
+        "
+      >
+        {messageModal.message}
+      </p>
+
+
+      {/* Button */}
+
+      <button
+        type="button"
+        onClick={() => {
+          const isSuccess =
+            messageModal.type === "success";
+
+          setMessageModal({
+            open: false,
+            type: "success",
+            message: "",
+          });
+
+          if (isSuccess) {
+            navigate("/login");
+          }
+        }}
+        className="
+          w-full
+          h-[46px]
+          mt-6
+          rounded-xl
+          bg-[#333333]
+          hover:bg-[#222222]
+          text-white
+          text-sm
+          font-semibold
+          transition
+        "
+      >
+        {messageModal.type === "success"
+          ? "Continue to Login"
+          : "Okay"}
+      </button>
+
+    </div>
+  </div>
+)}
     </>
   );
 }

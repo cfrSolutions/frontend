@@ -156,14 +156,33 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Custom message modal
+  const [messageModal, setMessageModal] = useState({
+    open: false,
+    type: "error",
+    message: "",
+  });
+
   const navigate = useNavigate();
+
+  const closeModal = () => {
+    setMessageModal({
+      open: false,
+      type: "error",
+      message: "",
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     if (!email.trim() || !password) {
-      setError("Please enter your email and password.");
+      setMessageModal({
+        open: true,
+        type: "warning",
+        message: "Please enter your email and password.",
+      });
       return;
     }
 
@@ -201,7 +220,11 @@ export default function Login() {
         err.response?.data?.message ||
         "Unable to login. Please check your credentials.";
 
-      setError(message);
+      setMessageModal({
+        open: true,
+        type: "error",
+        message,
+      });
     } finally {
       setLoading(false);
     }
@@ -217,27 +240,25 @@ export default function Login() {
 
       <main
         className="
-          h-[calc(100dvh-132px)]
+          min-h-[calc(100dvh-132px)]
           w-full
           bg-[#F7F7F8]
           flex
           items-center
           justify-center
           px-4
+          py-6
           overflow-hidden
         "
       >
-
         <div
           className="
             w-full
             max-w-[1050px]
-            h-full
             flex
             items-center
           "
         >
-
           <div
             className="
               grid
@@ -250,7 +271,7 @@ export default function Login() {
           >
 
             {/* =====================================================
-                LEFT — LOGIN
+                LEFT — LOGIN CARD
             ===================================================== */}
 
             <div
@@ -281,7 +302,6 @@ export default function Login() {
                   mb-3
                 "
               >
-
                 <div className="relative flex items-center">
 
                   {/* Robert */}
@@ -312,7 +332,6 @@ export default function Login() {
                       p-3
                     "
                   >
-
                     <div
                       className="
                         flex
@@ -321,7 +340,6 @@ export default function Login() {
                         mb-1.5
                       "
                     >
-
                       <span className="text-xs">
                         🤖
                       </span>
@@ -345,7 +363,6 @@ export default function Login() {
                           bg-green-500
                         "
                       />
-
                     </div>
 
                     <p
@@ -357,11 +374,9 @@ export default function Login() {
                     >
                       {ROBERT_MESSAGES[type]}
                     </p>
-
                   </div>
 
                 </div>
-
               </div>
 
 
@@ -383,7 +398,6 @@ export default function Login() {
                     mb-2
                   "
                 >
-
                   <span
                     className="
                       w-1.5
@@ -404,7 +418,6 @@ export default function Login() {
                   >
                     Inputify
                   </span>
-
                 </div>
 
                 <h2
@@ -494,44 +507,6 @@ export default function Login() {
                 </button>
 
               </div>
-
-
-              {/* =====================================================
-                  ERROR
-              ===================================================== */}
-
-              {error && (
-                <div
-                  className="
-                    flex
-                    items-center
-                    gap-2
-                    bg-red-50
-                    border
-                    border-red-100
-                    rounded-lg
-                    px-3
-                    py-2
-                    mb-3
-                  "
-                >
-
-                  <span className="text-sm">
-                    ⚠️
-                  </span>
-
-                  <p
-                    className="
-                      text-[11px]
-                      leading-4
-                      text-red-500
-                    "
-                  >
-                    {error}
-                  </p>
-
-                </div>
-              )}
 
 
               {/* =====================================================
@@ -635,9 +610,7 @@ export default function Login() {
                     disabled:cursor-not-allowed
                   "
                 >
-
                   {loading ? "Signing in..." : "Login"}
-
                 </button>
 
 
@@ -653,7 +626,6 @@ export default function Login() {
                     my-3
                   "
                 >
-
                   <div className="flex-1 h-px bg-[#EEEEEE]" />
 
                   <span
@@ -666,7 +638,6 @@ export default function Login() {
                   </span>
 
                   <div className="flex-1 h-px bg-[#EEEEEE]" />
-
                 </div>
 
 
@@ -698,7 +669,6 @@ export default function Login() {
                     transition
                   "
                 >
-
                   <span
                     className="
                       flex
@@ -707,7 +677,6 @@ export default function Login() {
                       gap-2
                     "
                   >
-
                     <span
                       className="
                         w-7
@@ -725,9 +694,7 @@ export default function Login() {
                     </span>
 
                     Continue with Google
-
                   </span>
-
                 </button>
 
 
@@ -743,7 +710,6 @@ export default function Login() {
                     mt-3
                   "
                 >
-
                   Don't have an account?{" "}
 
                   <button
@@ -757,7 +723,6 @@ export default function Login() {
                   >
                     Sign up
                   </button>
-
                 </p>
 
               </form>
@@ -780,7 +745,7 @@ export default function Login() {
               "
             >
 
-              {/* Background */}
+              {/* Background circle */}
 
               <div
                 className="
@@ -807,9 +772,7 @@ export default function Login() {
               />
 
 
-              {/* =================================================
-                  ROBERT AREA
-              ================================================= */}
+              {/* Robert area */}
 
               <div
                 className="
@@ -840,8 +803,6 @@ export default function Login() {
                     z-20
                   "
                 >
-
-                  {/* Header */}
 
                   <div
                     className="
@@ -903,8 +864,6 @@ export default function Login() {
                   </div>
 
 
-                  {/* Message */}
-
                   <div
                     className="
                       bg-[#F7F7F8]
@@ -930,7 +889,7 @@ export default function Login() {
                   </div>
 
 
-                  {/* Tail */}
+                  {/* Chat tail */}
 
                   <div
                     className="
@@ -951,7 +910,7 @@ export default function Login() {
 
 
                 {/* =================================================
-                    ROBERT
+                    ROBERT IMAGE
                 ================================================= */}
 
                 <img
@@ -972,10 +931,152 @@ export default function Login() {
             </div>
 
           </div>
+        </div>
+      </main>
+
+
+      {/* =========================================================
+          CUSTOM MESSAGE MODAL
+      ========================================================= */}
+
+      {messageModal.open && (
+        <div
+          className="
+            fixed
+            inset-0
+            z-[9999]
+            flex
+            items-center
+            justify-center
+            bg-[#333333]/40
+            backdrop-blur-[3px]
+            px-4
+          "
+          onClick={closeModal}
+        >
+
+          <div
+            className="
+              relative
+              w-full
+              max-w-[420px]
+              bg-white
+              rounded-[24px]
+              border
+              border-[#E7E7E7]
+              shadow-[0_25px_80px_rgba(0,0,0,0.18)]
+              p-6
+              animate-[fadeIn_0.2s_ease-out]
+            "
+            onClick={(e) => e.stopPropagation()}
+          >
+
+            {/* Close */}
+
+            <button
+              type="button"
+              onClick={closeModal}
+              className="
+                absolute
+                right-4
+                top-4
+                w-8
+                h-8
+                rounded-full
+                bg-[#F7F7F8]
+                text-gray-400
+                hover:bg-[#EEEEEE]
+                hover:text-[#333333]
+                transition
+                text-lg
+                leading-none
+              "
+            >
+              ×
+            </button>
+
+
+            {/* Icon */}
+
+            <div
+              className={`
+                w-12
+                h-12
+                rounded-2xl
+                flex
+                items-center
+                justify-center
+                text-xl
+                font-bold
+                mb-4
+
+                ${
+                  messageModal.type === "warning"
+                    ? "bg-[#FFF7E8] text-[#D96F00]"
+                    : "bg-[#FFF1F1] text-[#D64545]"
+                }
+              `}
+            >
+              {messageModal.type === "warning" ? "!" : "×"}
+            </div>
+
+
+            {/* Title */}
+
+            <h3
+              className="
+                text-[20px]
+                font-bold
+                text-[#333333]
+                mb-1
+              "
+            >
+              {messageModal.type === "warning"
+                ? "Almost there"
+                : "Unable to login"}
+            </h3>
+
+
+            {/* Message */}
+
+            <p
+              className="
+                text-sm
+                leading-6
+                text-gray-500
+                pr-4
+              "
+            >
+              {messageModal.message}
+            </p>
+
+
+            {/* Button */}
+
+            <button
+              type="button"
+              onClick={closeModal}
+              className="
+                w-full
+                h-[46px]
+                mt-6
+                rounded-xl
+                bg-[#333333]
+                hover:bg-[#222222]
+                text-white
+                text-sm
+                font-semibold
+                transition
+              "
+            >
+              Okay
+            </button>
+
+          </div>
 
         </div>
+      )}
 
-      </main>
     </>
   );
 }
