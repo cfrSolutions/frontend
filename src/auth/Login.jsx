@@ -308,7 +308,7 @@ export default function Login() {
 
                   <img
                     src="/HomeImage/inputifyRobert.png"
-                    alt="Inputify Robert"
+                    alt="Infi"
                     className="
                       w-[90px]
                       h-[95px]
@@ -351,7 +351,7 @@ export default function Login() {
                           text-[#333333]
                         "
                       >
-                        Robert
+                        Infi
                       </span>
 
                       <span
@@ -837,7 +837,7 @@ export default function Login() {
                           text-[#333333]
                         "
                       >
-                        Robert
+                        Infi
                       </p>
 
                       <p
@@ -915,7 +915,7 @@ export default function Login() {
 
                 <img
                   src="/HomeImage/inputifyRobert.png"
-                  alt="Inputify Robert"
+                  alt="Infy"
                   className="
                     relative
                     z-10
