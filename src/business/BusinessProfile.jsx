@@ -577,7 +577,7 @@ export default function BusinessProfile() {
 
           <div>
             <div className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-500 text-white">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-400 text-white">
                 <User size={18} />
               </div>
 
@@ -662,7 +662,7 @@ export default function BusinessProfile() {
             <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
 
               {/* Profile hero */}
-              <div className="bg-orange-500 px-6 py-8 text-white">
+              <div className="bg-orange-400 px-6 py-8 text-white">
                 <div className="flex flex-col items-center text-center">
 
                   <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white text-2xl font-bold text-black shadow-lg">

@@ -58,14 +58,37 @@ export default function App() {
         <Route path="/verify-email/:token" element={<VerifyEmail />} />
        
 
-        <Route
+        {/* <Route
           path="/admin/dashboard"
           element={
             <ProtectedRoute allowedRoles={["ADMIN"]}>
               <AdminDashboard />
             </ProtectedRoute>
           }
-        />
+        /> */}
+
+        <Route
+  path="/admin/dashboard"
+  element={
+    <ProtectedRoute allowedRoles={["ADMIN"]}>
+      <SuperAdminDashboard />
+    </ProtectedRoute>
+  }
+>
+  <Route index element={<Dashboard />} />
+
+  <Route path="surveys" element={<Survey />} />
+
+  <Route path="create-survey" element={<CreateSurvey />} />
+
+  <Route path="responses" element={<Responses />} />
+
+  <Route path="reports" element={<AdminReports />} />
+
+  <Route path="projects" element={<AdminProjects />} />
+
+  <Route path="project/:id" element={<AdminProjectDetail />} />
+</Route>
 
         <Route
           path="/superadmin/dashboard"
