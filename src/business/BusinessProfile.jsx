@@ -285,6 +285,9 @@ export default function BusinessProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [countrySearch, setCountrySearch] = useState("");
+  const [showCountryList, setShowCountryList] = useState(false);
+  const [manualCountry, setManualCountry] = useState(false);
 
   const [profile, setProfile] = useState(emptyProfile);
   const [originalProfile, setOriginalProfile] =
@@ -365,46 +368,57 @@ export default function BusinessProfile() {
   // LOCATION DETECTED
   // ---------------------------------------
   const handleLocationFetched = (data) => {
-    if (!data) return;
+  if (!data) return;
 
-    const detectedCountry =
-      data.country || "";
+  const detectedCountry = data.country || "";
 
-    // Find country from CountryList
-    const matchedCountry = countries.find(
-      (country) =>
-        country.name?.toLowerCase() ===
-        detectedCountry.toLowerCase()
-    );
+  const matchedCountry = countries.find(
+    (country) =>
+      country.name?.toLowerCase() ===
+      detectedCountry.toLowerCase()
+  );
 
-    const countryName =
-      matchedCountry?.name ||
-      detectedCountry;
+  const countryName =
+    matchedCountry?.name || detectedCountry;
 
-    setProfile((prev) => ({
-      ...prev,
+  setProfile((prev) => ({
+    ...prev,
 
-      country:
-        countryName || prev.country,
+    // Only automatically set country if
+    // user has not manually selected one.
+    country:
+      !manualCountry && countryName
+        ? countryName
+        : prev.country,
 
-      postalCode:
-        data.postalCode ||
-        prev.postalCode,
+    postalCode:
+      data.postalCode || prev.postalCode,
 
-      location:
-        data.fullAddress ||
-        prev.location,
-    }));
-  };
-
+    location:
+      data.fullAddress || prev.location,
+  }));
+};
   // ---------------------------------------
   // START EDIT
   // ---------------------------------------
+  const handleCountrySelect = (country) => {
+  setProfile((prev) => ({
+    ...prev,
+    country: country.name,
+  }));
+
+  setManualCountry(true);
+  setCountrySearch("");
+  setShowCountryList(false);
+};
+
   const handleEdit = () => {
     setMessage({
       type: "",
       text: "",
     });
+    setCountrySearch("");
+    setShowCountryList(false);
 
     setIsEditing(true);
   };
@@ -414,6 +428,9 @@ export default function BusinessProfile() {
   // ---------------------------------------
   const handleCancel = () => {
     setProfile(originalProfile);
+    setManualCountry(false);
+    setCountrySearch("");
+    setShowCountryList(false);
 
     setMessage({
       type: "",
@@ -767,35 +784,151 @@ export default function BusinessProfile() {
                   />
 
                   {/* COUNTRY */}
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-700">
-                      Country
-                    </label>
+                 <div className="relative">
+  <label className="mb-2 block text-sm font-medium text-gray-700">
+    Country
+  </label>
 
-                    <div className="flex min-h-[46px] items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-3">
+  {isEditing ? (
+    <>
+      <button
+        type="button"
+        onClick={() =>
+          setShowCountryList((prev) => !prev)
+        }
+        className="flex min-h-[46px] w-full items-center gap-3 rounded-xl border border-gray-300 bg-white px-3 text-left transition focus:border-black focus:ring-1 focus:ring-black"
+      >
+        <Globe2
+          size={18}
+          className="shrink-0 text-gray-400"
+        />
 
-                      <Globe2
-                        size={18}
-                        className="text-gray-400"
-                      />
+        {selectedCountry?.flag && (
+          <span className="text-xl">
+            {selectedCountry.flag}
+          </span>
+        )}
 
-                      {selectedCountry?.flag && (
-                        <span className="text-xl">
-                          {selectedCountry.flag}
-                        </span>
-                      )}
+        <span className="flex-1 truncate text-sm text-gray-800">
+          {profile.country || "Select country"}
+        </span>
 
-                      <span className="text-sm text-gray-800">
-                        {profile.country ||
-                          "Detecting location..."}
-                      </span>
-                    </div>
+        <span className="text-xs text-gray-400">
+          ▼
+        </span>
+      </button>
 
-                    <p className="mt-1.5 text-xs text-gray-400">
-                      Automatically detected from your
-                      current location.
-                    </p>
-                  </div>
+      {showCountryList && (
+        <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl">
+
+          {/* SEARCH */}
+          <div className="border-b border-gray-200 p-3">
+            <input
+              type="text"
+              value={countrySearch}
+              onChange={(e) =>
+                setCountrySearch(e.target.value)
+              }
+              onClick={(e) =>
+                e.stopPropagation()
+              }
+              placeholder="Search country..."
+              autoFocus
+              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-black focus:ring-1 focus:ring-black"
+            />
+          </div>
+
+          {/* COUNTRY LIST */}
+          <div className="max-h-64 overflow-y-auto p-1">
+
+            {countries
+              .filter((country) =>
+                country.name
+                  ?.toLowerCase()
+                  .includes(
+                    countrySearch.toLowerCase()
+                  )
+              )
+              .map((country) => (
+                <button
+                  key={
+                    country.code ||
+                    country.name
+                  }
+                  type="button"
+                  onClick={() =>
+                    handleCountrySelect(country)
+                  }
+                  className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition hover:bg-gray-100 ${
+                    profile.country ===
+                    country.name
+                      ? "bg-gray-100 font-medium"
+                      : ""
+                  }`}
+                >
+                  {country.flag && (
+                    <span className="text-xl">
+                      {country.flag}
+                    </span>
+                  )}
+
+                  <span className="flex-1">
+                    {country.name}
+                  </span>
+
+                  {profile.country ===
+                    country.name && (
+                    <CheckCircle
+                      size={16}
+                      className="text-gray-700"
+                    />
+                  )}
+                </button>
+              ))}
+
+            {countries.filter((country) =>
+              country.name
+                ?.toLowerCase()
+                .includes(
+                  countrySearch.toLowerCase()
+                )
+            ).length === 0 && (
+              <div className="px-3 py-6 text-center text-sm text-gray-500">
+                No country found
+              </div>
+            )}
+
+          </div>
+        </div>
+      )}
+    </>
+  ) : (
+    <div className="flex min-h-[46px] items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-3">
+
+      <Globe2
+        size={18}
+        className="text-gray-400"
+      />
+
+      {selectedCountry?.flag && (
+        <span className="text-xl">
+          {selectedCountry.flag}
+        </span>
+      )}
+
+      <span className="text-sm text-gray-800">
+        {profile.country ||
+          "Not detected"}
+      </span>
+    </div>
+  )}
+
+  <p className="mt-1.5 text-xs text-gray-400">
+    {isEditing
+      ? "Automatically detected initially. You can change it manually."
+      : "Country based on your saved profile location."}
+  </p>
+</div>
 
                   {/* POSTAL CODE */}
                   <ProfileField
