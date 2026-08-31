@@ -83,9 +83,18 @@ trackingParam:
     console.log("FULL PAYLOAD:");
     console.log(JSON.stringify(payload, null, 2));
     console.log("================================");
+      // await api.post("/surveys", payload);
+      // alert("Survey created successfully");
+      // navigate("/superadmin/dashboard/surveys");
       await api.post("/surveys", payload);
-      alert("Survey created successfully");
-      navigate("/superadmin/dashboard/surveys");
+
+alert("Survey created successfully");
+
+navigate(
+  window.location.pathname.startsWith("/admin/")
+    ? "/admin/dashboard/surveys"
+    : "/superadmin/dashboard/surveys"
+);
     } catch (err) {
       console.error(err);
       alert(
