@@ -126,7 +126,7 @@ export default function Survey() {
    const [activeRow, setActiveRow] = useState(null);
    
   useEffect(() => {
-    api.get("/admin/surveys")
+    api.get("/surveys")
       .then(res => setSurveys(res.data))
       .catch(err => console.error(err));
   }, []);
