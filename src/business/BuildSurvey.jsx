@@ -490,6 +490,15 @@ useEffect(() => {
   }
 }, [user]);
 
+const startVariableParams = variables
+  .map((v) => `${v.param}={${v.param}}`)
+  .join("&");
+
+const startUrl =
+  project?.redirects?.start?.token
+    ? `${base}/redirect/start?tk=${project.redirects.start.token}&${startVariableParams}`
+    : "";
+
   return (
     <>
 
@@ -891,9 +900,13 @@ useEffect(() => {
       )}
       {project?.redirects && (
   <>
-  <LinkBox
+  {/* <LinkBox
   label="Start URL"
   url={`${base}/redirect/start?tk=${project.redirects.start?.token}&RID={RID}`}
+/> */}
+<LinkBox
+  label="Start URL"
+  url={startUrl}
 />
 
 <LinkBox

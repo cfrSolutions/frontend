@@ -206,6 +206,7 @@ const toggleSurveyStatus = async (survey) =>{
   console.log("SURVEY:", s);
 
   if (s.surveyType === "EXTERNAL") {
+    
   const res = await api.post("/responses/start", {
     surveyId: s._id,
   });
