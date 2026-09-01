@@ -444,3 +444,607 @@ function SettingRow({ label, desc, name, checked, onChange }) {
     </div>
   );
 }
+
+
+// import { useState } from "react";
+// import api from "../services/api";
+// import TargetGroupBuilder from "./TargetGroupBuilder";
+// import { useNavigate } from "react-router-dom";
+
+// export default function CreateSurvey() {
+//   const TRACKING_VARIABLES = [
+//   { label: "Response ID", param: "RID" },
+//   { label: "Bid Incidence", param: "BidIncidence" },
+//   { label: "Panelist ID", param: "PID" },
+//   { label: "Supplier ID", param: "SupplierID" },
+//   { label: "Supplier Name", param: "SupplierName" },
+//   { label: "MID", param: "MID" },
+//   { label: "RSID", param: "RSID" },
+// ];
+//   const navigate = useNavigate();
+
+//   const [activeTab, setActiveTab] = useState("INTERNAL");
+//   const [targetGroups, setTargetGroups] = useState([]);
+
+//   const [form, setForm] = useState({
+//     title: "",
+//     description: "",
+//     points: 10,
+//     timeLimit: 10,
+//     difficulty: "Easy",
+//     category: "GENERAL",
+//     countries: "ALL",
+ 
+//     surveyType: "",
+//     externalSurveyUrl: "",
+//     vendorCompleteUrl: "",
+//     vendorDisqualifyUrl: "",
+//     vendorQuotaUrl: "",
+//     // trackingParam: "",
+//      trackingVariables: [
+//     {
+//       label: "Response ID",
+//       param: "RID",
+//     },
+//   ],
+//     randomizeQuestions: false,
+//     allowBackNavigation: true,
+//     showProgressBar: true,
+//   });
+
+
+//   const addTrackingVariable = (item) => {
+//   const exists = form.trackingVariables.some(
+//     (v) => v.param === item.param
+//   );
+
+//   if (exists) return;
+
+//   setForm((prev) => ({
+//     ...prev,
+//     trackingVariables: [
+//       ...prev.trackingVariables,
+//       item,
+//     ],
+//   }));
+// };
+
+// const removeTrackingVariable = (param) => {
+//   // RID should always remain
+//   if (param === "RID") return;
+
+//   setForm((prev) => ({
+//     ...prev,
+//     trackingVariables:
+//       prev.trackingVariables.filter(
+//         (v) => v.param !== param
+//       ),
+//   }));
+// };
+
+//   const handleChange = (e) => {
+//     const { name, value, type, checked } = e.target;
+//     setForm((prev) => ({
+//       ...prev,
+//       [name]: type === "checkbox" ? checked : value,
+//     }));
+//   };
+
+//   const handleSubmit = async (status = "DRAFT") => {
+//     try {
+//       const payload = {
+//         title: form.title,
+//         description: form.description,
+//         points: Number(form.points),
+//         timeLimit: Number(form.timeLimit),
+//         difficulty: form.difficulty,
+//         category: form.category,
+//         countries: form.countries === "ALL" ? ["ALL"] : [form.countries],
+//         status,
+//         surveyType: activeTab,
+//         // ✅ IMPORTANT
+//         companySurveyUrl:
+//   activeTab === "EXTERNAL"
+//     ? form.externalSurveyUrl
+//     : null,
+
+// vendorCompleteUrl:
+//   activeTab === "EXTERNAL"
+//     ? form.vendorCompleteUrl
+//     : null,
+
+// vendorDisqualifyUrl:
+//   activeTab === "EXTERNAL"
+//     ? form.vendorDisqualifyUrl
+//     : null,
+
+// vendorQuotaUrl:
+//   activeTab === "EXTERNAL"
+//     ? form.vendorQuotaUrl
+//     : null,
+
+// // trackingParam:
+// //   activeTab === "EXTERNAL"
+// //     ? form.trackingParam
+// //     : null,
+// trackingVariables:
+//   activeTab === "EXTERNAL"
+//     ? form.trackingVariables
+//     : [],
+
+//     targetGroups,
+//       };
+//  console.log("================================");
+//     console.log("TARGET GROUPS BEFORE SAVE:");
+//     console.log(JSON.stringify(targetGroups, null, 2));
+//     console.log("FULL PAYLOAD:");
+//     console.log(JSON.stringify(payload, null, 2));
+//     console.log("================================");
+//       // await api.post("/surveys", payload);
+//       // alert("Survey created successfully");
+//       // navigate("/superadmin/dashboard/surveys");
+//       await api.post("/surveys", payload);
+
+// alert("Survey created successfully");
+
+// navigate(
+//   window.location.pathname.startsWith("/admin/")
+//     ? "/admin/dashboard/surveys"
+//     : "/superadmin/dashboard/surveys"
+// );
+//     } catch (err) {
+//       console.error(err);
+//       alert(
+//         "Failed to create survey: " +
+//           (err.response?.data?.message || "Server Error")
+//       );
+//     }
+//   };
+
+//   return (
+//     <div className="max-w-4xl space-y-6">
+//       {/* ================= HEADER TABS ================= */}
+//       <div className="flex gap-4 border-b">
+//         <TabButton
+//           label="Create Own Survey"
+//           active={activeTab === "INTERNAL"}
+//           onClick={() => {
+//             setActiveTab("INTERNAL");
+//             setForm((f) => ({ ...f, surveyType: "INTERNAL" }));
+//           }}
+//         />
+
+//         <TabButton
+//           label="Direct Survey (External)"
+//           active={activeTab === "EXTERNAL"}
+//           onClick={() => {
+//             setActiveTab("EXTERNAL");
+//             setForm((f) => ({ ...f, surveyType: "EXTERNAL" }));
+//           }}
+//         />
+//       </div>
+
+//       {/* ================= BASIC INFO ================= */}
+//       <section className="bg-white p-6 rounded-xl border space-y-4">
+//         <h3 className="font-semibold">Basic Information</h3>
+
+//         <div>
+//           <label className="text-sm font-medium">Survey Title</label>
+//           <input
+//             name="title"
+//             value={form.title}
+//             onChange={handleChange}
+//             className="w-full mt-1 border rounded px-3 py-2"
+//           />
+//         </div>
+
+//         {activeTab === "EXTERNAL" && (
+//           <div>
+//             <label className="text-sm font-medium">
+//               External Survey URL
+//             </label>
+//             <input
+//               name="externalSurveyUrl"
+//               value={form.externalSurveyUrl}
+//               onChange={handleChange}
+//               placeholder="https://forms.google.com/..."
+//               className="w-full mt-1 border rounded px-3 py-2"
+//             />
+
+//             <div className="space-y-4">
+
+//   <div>
+//     <label className="text-sm font-medium">
+//       Vendor Complete URL
+//     </label>
+
+//     <input
+//       name="vendorCompleteUrl"
+//       value={form.vendorCompleteUrl}
+//       onChange={handleChange}
+//       placeholder="https://api.inputify.io/api/redirect/c?tk=..."
+//       className="w-full mt-1 border rounded px-3 py-2"
+//     />
+//   </div>
+
+//   <div>
+//     <label className="text-sm font-medium">
+//       Vendor Disqualify URL
+//     </label>
+
+//     <input
+//       name="vendorDisqualifyUrl"
+//       value={form.vendorDisqualifyUrl}
+//       onChange={handleChange}
+//       placeholder="https://api.inputify.io/api/redirect/dq?tk=..."
+//       className="w-full mt-1 border rounded px-3 py-2"
+//     />
+//   </div>
+
+//   <div>
+//     <label className="text-sm font-medium">
+//       Vendor Quota URL
+//     </label>
+
+//     <input
+//       name="vendorQuotaUrl"
+//       value={form.vendorQuotaUrl}
+//       onChange={handleChange}
+//       placeholder="https://api.inputify.io/api/redirect/qf?tk=..."
+//       className="w-full mt-1 border rounded px-3 py-2"
+//     />
+//   </div>
+
+// </div>
+//           </div>
+//         )}
+
+//         {/* {activeTab === "EXTERNAL" && (
+//   <div>
+//     <label className="text-sm font-medium">
+//       Tracking Placeholder (from company)
+//     </label>
+//     <input
+//       name="trackingParam"
+//       value={form.trackingParam || ""}
+//       onChange={handleChange}
+//       placeholder="{ID} or {uid}"
+//       className="w-full mt-1 border rounded px-3 py-2"
+//     />
+//   </div>
+// )} */}
+// {activeTab === "EXTERNAL" && (
+//   <div>
+//     <label className="text-sm font-medium">
+//       Tracking Variables
+//     </label>
+
+//     <p className="text-xs text-gray-500 mt-1 mb-3">
+//       Select all respondent variables that this survey
+//       requires.
+//     </p>
+
+//     <details>
+//       <summary
+//         className="
+//           cursor-pointer
+//           border
+//           px-4
+//           py-2
+//           rounded-lg
+//           inline-flex
+//           items-center
+//           gap-2
+//         "
+//       >
+//         Add Tracking Variable
+//       </summary>
+
+//       <div
+//         className="
+//           mt-2
+//           border
+//           rounded-lg
+//           p-2
+//           max-h-64
+//           overflow-auto
+//         "
+//       >
+//         {TRACKING_VARIABLES.map((item) => (
+//           <button
+//             key={item.param}
+//             type="button"
+//             onClick={() =>
+//               addTrackingVariable(item)
+//             }
+//             className="
+//               w-full
+//               text-left
+//               px-3
+//               py-2
+//               hover:bg-gray-100
+//               rounded
+//             "
+//           >
+//             <div className="font-medium">
+//               {item.label}
+//             </div>
+
+//             <div className="text-xs text-gray-500">
+//               {item.param}
+//             </div>
+//           </button>
+//         ))}
+//       </div>
+//     </details>
+
+//     <div className="mt-4 space-y-2">
+//       {form.trackingVariables.map((item) => (
+//         <div
+//           key={item.param}
+//           className="
+//             flex
+//             items-center
+//             justify-between
+//             border
+//             rounded-lg
+//             px-4
+//             py-3
+//             bg-gray-50
+//           "
+//         >
+//           <div>
+//             <div className="font-medium">
+//               {item.label}
+//             </div>
+
+//             <div className="text-xs text-gray-500">
+//               {item.param}
+//             </div>
+//           </div>
+
+//           {item.param !== "RID" && (
+//             <button
+//               type="button"
+//               onClick={() =>
+//                 removeTrackingVariable(
+//                   item.param
+//                 )
+//               }
+//               className="text-red-500"
+//             >
+//               🗑
+//             </button>
+//           )}
+//         </div>
+//       ))}
+//     </div>
+//   </div>
+// )}
+// <div className="grid grid-cols-2 gap-4">
+//               <div>
+//                 <label className="text-sm font-medium">Reward Points</label>
+//                 <input
+//                   type="number"
+//                   name="points"
+//                   value={form.points}
+//                   onChange={handleChange}
+//                   className="w-full mt-1 border rounded px-3 py-2"
+//                 />
+//               </div>
+
+//               <div>
+//                 <label className="text-sm font-medium">
+//                   Time Limit (minutes)
+//                 </label>
+//                 <input
+//                   type="number"
+//                   name="timeLimit"
+//                   value={form.timeLimit}
+//                   onChange={handleChange}
+//                   className="w-full mt-1 border rounded px-3 py-2"
+//                 />
+//               </div>
+//             </div>
+
+//             <div className="grid grid-cols-2 gap-4">
+//               <div>
+//                 <label className="text-sm font-medium">Difficulty</label>
+//                 <select
+//                   name="difficulty"
+//                   value={form.difficulty}
+//                   onChange={handleChange}
+//                   className="w-full mt-1 border rounded px-3 py-2"
+//                 >
+//                   <option>Easy</option>
+//                   <option>Medium</option>
+//                   <option>Hard</option>
+//                 </select>
+//               </div>
+
+//               <div>
+//                 <label className="text-sm font-medium">
+//                   Country Availability
+//                 </label>
+//                 <select
+//                   name="countries"
+//                   value={form.countries}
+//                   onChange={handleChange}
+//                   className="w-full mt-1 border rounded px-3 py-2"
+//                 >
+//                   <option value="ALL">All Countries</option>
+//                   <option value="IN">India</option>
+//                   <option value="US">US</option>
+//                 </select>
+//               </div>
+
+//               <div>
+//                 <label className="text-sm font-medium">
+//                   Target Groups
+//                 </label>
+//                 <TargetGroupBuilder
+//   targetGroups={targetGroups}
+//   setTargetGroups={setTargetGroups}
+// />
+//               </div>
+//             </div>
+//         <div>
+//           <label className="text-sm font-medium">Description</label>
+//           <textarea
+//             name="description"
+//             value={form.description}
+//             onChange={handleChange}
+//             className="w-full mt-1 border rounded px-3 py-2"
+//             rows={3}
+//           />
+//         </div>
+
+//         {/* INTERNAL ONLY SETTINGS */}
+//         {activeTab === "INTERNAL" && (
+//           <>
+//             <div className="grid grid-cols-2 gap-4">
+//               <div>
+//                 <label className="text-sm font-medium">Reward Points</label>
+//                 <input
+//                   type="number"
+//                   name="points"
+//                   value={form.points}
+//                   onChange={handleChange}
+//                   className="w-full mt-1 border rounded px-3 py-2"
+//                 />
+//               </div>
+
+//               <div>
+//                 <label className="text-sm font-medium">
+//                   Time Limit (minutes)
+//                 </label>
+//                 <input
+//                   type="number"
+//                   name="timeLimit"
+//                   value={form.timeLimit}
+//                   onChange={handleChange}
+//                   className="w-full mt-1 border rounded px-3 py-2"
+//                 />
+//               </div>
+//             </div>
+
+//             <div className="grid grid-cols-2 gap-4">
+//               <div>
+//                 <label className="text-sm font-medium">Difficulty</label>
+//                 <select
+//                   name="difficulty"
+//                   value={form.difficulty}
+//                   onChange={handleChange}
+//                   className="w-full mt-1 border rounded px-3 py-2"
+//                 >
+//                   <option>Easy</option>
+//                   <option>Medium</option>
+//                   <option>Hard</option>
+//                 </select>
+//               </div>
+
+//               <div>
+//                 <label className="text-sm font-medium">
+//                   Country Availability
+//                 </label>
+//                 <select
+//                   name="countries"
+//                   value={form.countries}
+//                   onChange={handleChange}
+//                   className="w-full mt-1 border rounded px-3 py-2"
+//                 >
+//                   <option value="ALL">All Countries</option>
+//                   <option value="IN">India</option>
+//                   <option value="US">US</option>
+//                 </select>
+//               </div>
+//             </div>
+//           </>
+//         )}
+//       </section>
+
+//       {/* ================= SETTINGS (INTERNAL ONLY) ================= */}
+//       {activeTab === "INTERNAL" && (
+//         <section className="bg-white p-6 rounded-xl border">
+//           <h3 className="font-semibold mb-4">Survey Settings</h3>
+
+//           <SettingRow
+//             label="Randomize Questions"
+//             desc="Show questions in random order"
+//             name="randomizeQuestions"
+//             checked={form.randomizeQuestions}
+//             onChange={handleChange}
+//           />
+
+//           <SettingRow
+//             label="Allow Back Navigation"
+//             desc="Let users go back to previous questions"
+//             name="allowBackNavigation"
+//             checked={form.allowBackNavigation}
+//             onChange={handleChange}
+//           />
+
+//           <SettingRow
+//             label="Show Progress Bar"
+//             desc="Display completion progress"
+//             name="showProgressBar"
+//             checked={form.showProgressBar}
+//             onChange={handleChange}
+//           />
+//         </section>
+//       )}
+
+//       {/* ================= ACTIONS ================= */}
+//       <div className="flex justify-end gap-3">
+//         <button
+//           onClick={() => handleSubmit("DRAFT")}
+//           className="px-4 py-2 border rounded"
+//         >
+//           Save as Draft
+//         </button>
+
+//         <button
+//           onClick={() => handleSubmit("ACTIVE")}
+//           className="px-4 py-2 bg-green-600 text-white rounded"
+//         >
+//           Publish Survey
+//         </button>
+//       </div>
+//     </div>
+//   );
+// }
+
+// /* ================= UI HELPERS ================= */
+
+// function TabButton({ label, active, onClick }) {
+//   return (
+//     <button
+//       onClick={onClick}
+//       className={`pb-3 font-medium text-sm ${
+//         active
+//           ? "border-b-2 border-green-600 text-green-600"
+//           : "text-gray-500"
+//       }`}
+//     >
+//       {label}
+//     </button>
+//   );
+// }
+
+// function SettingRow({ label, desc, name, checked, onChange }) {
+//   return (
+//     <div className="flex justify-between items-center py-3 border-b last:border-none">
+//       <div>
+//         <p className="text-sm font-medium">{label}</p>
+//         <p className="text-xs text-gray-500">{desc}</p>
+//       </div>
+//       <input
+//         type="checkbox"
+//         name={name}
+//         checked={checked}
+//         onChange={onChange}
+//         className="w-10 h-5 accent-green-600"
+//       />
+//     </div>
+//   );
+// }
