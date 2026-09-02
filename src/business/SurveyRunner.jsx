@@ -632,15 +632,7 @@ const rid =
   params.get("pid") ||
   params.get("PID");
 
-  const completeToken =
-  params.get("CTK");
-
-const disqualifiedToken =
-  params.get("DQTK");
-
-const quotaFullToken =
-  params.get("QFTK");
-
+console.log("RID FROM URL:", rid);
 
   const [survey, setSurvey] = useState(null);
   const [answers, setAnswers] = useState({});
@@ -744,9 +736,6 @@ const quotaFullToken =
 const evaluateConditions = () => {
 
   const current = survey.questions[currentQuestion];
-  if (!current) {
-    return null;
-  }
 
   const key = current.id;
 
@@ -810,6 +799,113 @@ const evaluateConditions = () => {
 
 };
 
+const evaluateConditionForAnswer = (question, answer) => {
+  for (const condition of question.conditions || []) {
+    let matched = false;
+
+    switch (condition.operator) {
+      case "equals":
+        matched = Array.isArray(answer)
+          ? answer.includes(condition.value)
+          : String(answer) === String(condition.value);
+        break;
+
+      case "not_equals":
+        matched = Array.isArray(answer)
+          ? !answer.includes(condition.value)
+          : String(answer) !== String(condition.value);
+        break;
+
+      case "greater_than":
+        matched = Number(answer) > Number(condition.value);
+        break;
+
+      case "greater_equal":
+        matched = Number(answer) >= Number(condition.value);
+        break;
+
+      case "less_than":
+        matched = Number(answer) < Number(condition.value);
+        break;
+
+      case "less_equal":
+        matched = Number(answer) <= Number(condition.value);
+        break;
+
+      case "contains":
+        matched = String(answer || "")
+          .toLowerCase()
+          .includes(
+            String(condition.value).toLowerCase()
+          );
+        break;
+
+      default:
+        matched = false;
+    }
+
+    if (matched) {
+      return condition;
+    }
+  }
+
+  return null;
+};
+
+const handleAnswerChange = async (value) => {
+  const key = question.id;
+
+  const updatedAnswers = {
+    ...answers,
+    [key]: value,
+  };
+
+  // Update UI immediately
+  setAnswers(updatedAnswers);
+
+  // Check condition immediately
+  const condition = evaluateConditionForAnswer(
+    question,
+    value
+  );
+
+  if (!condition) {
+    return;
+  }
+
+  // -------------------------------
+  // DISQUALIFY IMMEDIATELY
+  // -------------------------------
+  if (condition.action === "disqualify") {
+    await submitSurvey(
+      "DISQUALIFIED",
+      updatedAnswers
+    );
+    return;
+  }
+
+  // -------------------------------
+  // QUOTA FULL IMMEDIATELY
+  // -------------------------------
+  if (condition.action === "quota") {
+    await submitSurvey(
+      "QUOTA",
+      updatedAnswers
+    );
+    return;
+  }
+
+  // -------------------------------
+  // COMPLETE IMMEDIATELY
+  // -------------------------------
+  if (condition.action === "complete") {
+    await submitSurvey(
+      "COMPLETE",
+      updatedAnswers
+    );
+    return;
+  }
+};
   const question =
     survey.questions[currentQuestion];
 
@@ -1158,162 +1254,25 @@ const handleNext = async () => {
   setCurrentQuestion(currentQuestion + 1);
 };
 
-// const submitSurvey = async (status = "COMPLETE") => {
-//    if (status === "COMPLETE" && currentQuestion === survey.questions.length - 1) {
-
-//     for (const q of survey.questions) {
-
-//       if (!q.required) continue;
-
-//       const key = q.id;
-
-//       const answer = answers[key];
-
-//       if (q.type === "matrix") {
-
-//         if (
-//           !answer ||
-//           Object.keys(answer).length !== q.rows.length
-//         ) {
-//           alert(`${q.title} is required`);
-//           return;
-//         }
-
-//       } else {
-
-//         if (
-//           answer === undefined ||
-//           answer === "" ||
-//           (Array.isArray(answer) &&
-//             answer.length === 0)
-//         ) {
-//           alert(`${q.title} is required`);
-//           return;
-//         }
-
-//       }
-
-//     }
-
-//   }
-
-// try {
-
-//   await api.post(
-//     `/survey-builder/submit/${token}`,
-//     {
-//       answers,
-//       status,
-//     }
-//   );
-
-// } catch (err) {
-
-//   alert("Unable to save survey response");
-
-//   return;
-
-// }
-
-
-//     // if (
-//     //   action === "disqualify" &&
-//     //   survey.disqualifyUrl
-//     // ) {
-//     //   window.location.href =
-//     //     survey.disqualifyUrl;
-//     //   return;
-//     // }
-
-//     // if (
-//     //   action === "quota" &&
-//     //   survey.quotaFullUrl
-//     // ) {
-//     //   window.location.href =
-//     //     survey.quotaFullUrl;
-//     //   return;
-//     // }
-
-//     // window.location.href =
-//     //   survey.completeUrl;
-
-// if (
-//   status === "DISQUALIFIED" &&
-//   survey.disqualifyUrl
-// ) {
-
-//  const url = new URL(survey.disqualifyUrl);
-
-// if (rid) {
-//   url.searchParams.set("RID", rid);
-// }
-
-// window.location.href = url.toString();
-
-//   return;
-
-// }
-
-// if (
-//   status === "QUOTA" &&
-//   survey.quotaFullUrl
-// ) {
-
-//   const url = new URL(survey.quotaFullUrl);
-
-// if (rid) {
-//   url.searchParams.set("RID", rid);
-// }
-
-// window.location.href = url.toString();
-
-//   return;
-
-// }
-
-// const url = new URL(survey.completeUrl);
-
-// if (rid) {
-//   url.searchParams.set("RID", rid);
-// }
-
-// window.location.href = url.toString();
-
-//   };
-const submitSurvey = async (
-  status = "COMPLETE"
-) => {
-
-  // -----------------------------------------
-  // VALIDATE REQUIRED QUESTIONS
-  // -----------------------------------------
-
-  if (
-    status === "COMPLETE" &&
-    currentQuestion ===
-      survey.questions.length - 1
-  ) {
+const submitSurvey = async (status = "COMPLETE",
+  answersToSubmit = answers) => {
+   if (status === "COMPLETE" && currentQuestion === survey.questions.length - 1) {
 
     for (const q of survey.questions) {
 
       if (!q.required) continue;
 
-      const key =
-        q._id || q.id;
+      const key = q.id;
 
-      const answer =
-        answers[key];
+      const answer = answers[key];
 
       if (q.type === "matrix") {
 
         if (
           !answer ||
-          Object.keys(answer).length !==
-            q.rows.length
+          Object.keys(answer).length !== q.rows.length
         ) {
-          alert(
-            `${q.title} is required`
-          );
+          alert(`${q.title} is required`);
           return;
         }
 
@@ -1322,158 +1281,104 @@ const submitSurvey = async (
         if (
           answer === undefined ||
           answer === "" ||
-          (
-            Array.isArray(answer) &&
-            answer.length === 0
-          )
+          (Array.isArray(answer) &&
+            answer.length === 0)
         ) {
-          alert(
-            `${q.title} is required`
-          );
+          alert(`${q.title} is required`);
           return;
         }
+
       }
-    }
-  }
 
-
-  // -----------------------------------------
-  // SAVE SURVEY RESPONSE
-  // -----------------------------------------
-
-  try {
-
-    await api.post(
-      `/survey-builder/submit/${token}`,
-      {
-        answers,
-        status,
-      }
-    );
-
-  } catch (err) {
-
-    console.error(
-      "SUBMIT SURVEY ERROR:",
-      err
-    );
-
-    alert(
-      "Unable to save survey response"
-    );
-
-    return;
-  }
-
-
-  // -----------------------------------------
-  // BUILD REDIRECT URL
-  // -----------------------------------------
-
-  const base =
-    import.meta.env.VITE_API_URL;
-
-
-  // -----------------------------------------
-  // DISQUALIFIED
-  // -----------------------------------------
-
-  if (
-    status === "DISQUALIFIED"
-  ) {
-
-    if (!disqualifiedToken) {
-
-      console.error(
-        "Missing DQ redirect token"
-      );
-
-      alert(
-        "Disqualification redirect is not configured."
-      );
-
-      return;
     }
 
-    const url =
-      `${base}/redirect/dq` +
-      `?tk=${encodeURIComponent(
-        disqualifiedToken
-      )}` +
-      `&RID=${encodeURIComponent(
-        rid || ""
-      )}`;
-
-    window.location.href = url;
-
-    return;
   }
 
+try {
 
-  // -----------------------------------------
-  // QUOTA FULL
-  // -----------------------------------------
-
-  if (
-    status === "QUOTA"
-  ) {
-
-    if (!quotaFullToken) {
-
-      console.error(
-        "Missing QF redirect token"
-      );
-
-      alert(
-        "Quota-full redirect is not configured."
-      );
-
-      return;
+  await api.post(
+    `/survey-builder/submit/${token}`,
+    {
+    answers: answersToSubmit,
+    status,
+    
     }
+  );
 
-    const url =
-      `${base}/redirect/qf` +
-      `?tk=${encodeURIComponent(
-        quotaFullToken
-      )}` +
-      `&RID=${encodeURIComponent(
-        rid || ""
-      )}`;
+} catch (err) {
 
-    window.location.href = url;
+  alert("Unable to save survey response");
 
-    return;
-  }
+  return;
+
+}
 
 
-  // -----------------------------------------
-  // COMPLETE
-  // -----------------------------------------
+    // if (
+    //   action === "disqualify" &&
+    //   survey.disqualifyUrl
+    // ) {
+    //   window.location.href =
+    //     survey.disqualifyUrl;
+    //   return;
+    // }
 
-  if (!completeToken) {
+    // if (
+    //   action === "quota" &&
+    //   survey.quotaFullUrl
+    // ) {
+    //   window.location.href =
+    //     survey.quotaFullUrl;
+    //   return;
+    // }
 
-    console.error(
-      "Missing complete redirect token"
-    );
+    // window.location.href =
+    //   survey.completeUrl;
 
-    alert(
-      "Complete redirect is not configured."
-    );
+if (
+  status === "DISQUALIFIED" &&
+  survey.disqualifyUrl
+) {
 
-    return;
-  }
+ const url = new URL(survey.disqualifyUrl);
 
-  const url =
-    `${base}/redirect/c` +
-    `?tk=${encodeURIComponent(
-      completeToken
-    )}` +
-    `&RID=${encodeURIComponent(
-      rid || ""
-    )}`;
+if (rid) {
+  url.searchParams.set("RID", rid);
+}
 
-  window.location.href = url;
-};
+window.location.href = url.toString();
+
+  return;
+
+}
+
+if (
+  status === "QUOTA" &&
+  survey.quotaFullUrl
+) {
+
+  const url = new URL(survey.quotaFullUrl);
+
+if (rid) {
+  url.searchParams.set("RID", rid);
+}
+
+window.location.href = url.toString();
+
+  return;
+
+}
+
+const url = new URL(survey.completeUrl);
+
+if (rid) {
+  url.searchParams.set("RID", rid);
+}
+
+window.location.href = url.toString();
+
+  };
+
 
   return(
     <div className="min-h-screen bg-slate-100 py-10">
@@ -1597,11 +1502,8 @@ const submitSurvey = async (
           value={option}
           checked={answers[questionKey] === option}
           onChange={(e) =>
-            setAnswers({
-              ...answers,
-              [questionKey]: e.target.value,
-            })
-          }
+  handleAnswerChange(e.target.value)
+}
         />
 
         <span className="text-lg">
@@ -1616,12 +1518,12 @@ const submitSurvey = async (
             type="text"
             placeholder="Please specify..."
             value={answers[`${questionKey}_other`] || ""}
-            onChange={(e) =>
-              setAnswers({
-                ...answers,
-                [`${questionKey}_other`]: e.target.value,
-              })
-            }
+          onChange={(e) =>
+  setAnswers((prev) => ({
+    ...prev,
+    [`${questionKey}_other`]: e.target.value,
+  }))
+}
             className="
               mt-3
               ml-10
@@ -1661,34 +1563,15 @@ const submitSurvey = async (
               checked={
                 answers[questionKey]?.includes(option) || false
               }
-              onChange={(e)=>{
+             onChange={(e) => {
+  const current = answers[questionKey] || [];
 
-                const current =
-                  answers[questionKey] || [];
+  const updated = e.target.checked
+    ? [...current, option]
+    : current.filter((x) => x !== option);
 
-                if(e.target.checked){
-
-                  setAnswers({
-                    ...answers,
-                    [questionKey]:[
-                      ...current,
-                      option
-                    ]
-                  });
-
-                }else{
-
-                  setAnswers({
-                    ...answers,
-                    [questionKey]:
-                    current.filter(
-                      x=>x!==option
-                    )
-                  });
-
-                }
-
-              }}
+  handleAnswerChange(updated);
+}}
             />
 
             <span className="text-lg">
@@ -1832,14 +1715,9 @@ const submitSurvey = async (
             text-lg
           "
           value={answers[questionKey] || ""}
-          onChange={(e)=>
-
-            setAnswers({
-              ...answers,
-              [questionKey]:e.target.value
-            })
-
-          }
+          onChange={(e) =>
+  handleAnswerChange(e.target.value)
+}
         >
 
           <option value="">
@@ -1996,22 +1874,18 @@ const submitSurvey = async (
         ) : (
 
           <button
-
-            onClick={() => submitSurvey("COMPLETE")}
-
-            className="
-              bg-green-600
-              hover:bg-green-700
-              text-white
-              px-8
-              py-3
-              rounded-xl
-            "
-          >
-
-            Submit Survey
-
-          </button>
+  onClick={handleNext}
+  className="
+    bg-green-600
+    hover:bg-green-700
+    text-white
+    px-8
+    py-3
+    rounded-xl
+  "
+>
+  Submit Survey
+</button>
 
         )}
 
