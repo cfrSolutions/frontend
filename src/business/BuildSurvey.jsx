@@ -986,6 +986,7 @@ export default function BuildSurvey({
     useState("");
 
  const [variables, setVariables] = useState([]);
+ 
 
     const [surveyUrl, setSurveyUrl] = useState("");
 const [project, setProject] = useState(null);
@@ -1138,6 +1139,17 @@ const startUrl =
   project?.redirects?.start?.token
     ? `${base}/redirect/start?tk=${project.redirects.start.token}`
     : "";
+
+
+    const getCallbackVariable = () => {
+  if (!variables.length) return null;
+
+  // Prefer the first selected variable.
+  // The backend will use the configured variable.
+  return variables[0]?.param || null;
+};
+
+const callbackParam = getCallbackVariable();
 
   return (
     <>
@@ -1595,19 +1607,44 @@ onClick={async () => {
   url={startUrl}
 />
 
-<LinkBox
+{/* <LinkBox
   label="Complete"
   url={`${base}/redirect/c?tk=${project.redirects.complete?.token}&RID={RID}`}
-/>
+/> */}
 
 <LinkBox
+  label="Complete"
+  url={
+    project?.redirects?.complete?.token && callbackParam
+      ? `${base}/redirect/c?tk=${project.redirects.complete.token}&${callbackParam}={${callbackParam}}`
+      : ""
+  }
+/>
+
+{/* <LinkBox
   label="Disqualified"
   url={`${base}/redirect/dq?tk=${project.redirects.disqualified?.token}&RID={RID}`}
+/> */}
+<LinkBox
+  label="Disqualified"
+  url={
+    project?.redirects?.disqualified?.token && callbackParam
+      ? `${base}/redirect/dq?tk=${project.redirects.disqualified.token}&${callbackParam}={${callbackParam}}`
+      : ""
+  }
 />
 
-<LinkBox
+{/* <LinkBox
   label="Quota Full"
   url={`${base}/redirect/qf?tk=${project.redirects.quotaFull?.token}&RID={RID}`}
+/> */}
+<LinkBox
+  label="Quota Full"
+  url={
+    project?.redirects?.quotaFull?.token && callbackParam
+      ? `${base}/redirect/qf?tk=${project.redirects.quotaFull.token}&${callbackParam}={${callbackParam}}`
+      : ""
+  }
 />
 
     {/* <LinkBox
