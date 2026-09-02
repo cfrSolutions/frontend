@@ -882,7 +882,7 @@ const URL_VARIABLES = [
   {
     label: "Response ID",
     param: "RID",
-    required: true,
+    required: false,
     pattern: "RID-{date}-{number}",
   },
   {
@@ -986,7 +986,7 @@ export default function BuildSurvey({
     useState("");
 
  const [variables, setVariables] = useState([]);
- 
+ const [responseIdentifier, setResponseIdentifier] = useState("");
 
     const [surveyUrl, setSurveyUrl] = useState("");
 const [project, setProject] = useState(null);
@@ -1046,6 +1046,9 @@ useEffect(() => {
           )
         );
       }
+      setResponseIdentifier(
+  res.data.responseIdentifier || ""
+);
 
     } catch (err) {
       console.error(
@@ -1141,15 +1144,16 @@ const startUrl =
     : "";
 
 
-    const getCallbackVariable = () => {
-  if (!variables.length) return null;
+//     const getCallbackVariable = () => {
+//   if (!variables.length) return null;
 
-  // Prefer the first selected variable.
-  // The backend will use the configured variable.
-  return variables[0]?.param || null;
-};
+//   // Prefer the first selected variable.
+//   // The backend will use the configured variable.
+//   return variables[0]?.param || null;
+// };
 
-const callbackParam = getCallbackVariable();
+// const callbackParam = getCallbackVariable();
+const callbackParam = responseIdentifier;
 
   return (
     <>
@@ -1471,6 +1475,38 @@ const callbackParam = getCallbackVariable();
                     </div>
                   )
                 )}
+                {variables.length > 0 && (
+  <div className="mt-6 border-t pt-6">
+    <h3 className="text-lg font-semibold mb-2">
+      Response Identifier
+    </h3>
+
+    <p className="text-sm text-gray-600 mb-3">
+      Select the parameter that the client uses to identify the respondent.
+    </p>
+
+    <select
+      value={responseIdentifier}
+      onChange={(e) =>
+        setResponseIdentifier(e.target.value)
+      }
+      className="w-full border rounded-lg px-3 py-3 bg-white"
+    >
+      <option value="">
+        Select response identifier
+      </option>
+
+      {variables.map((item) => (
+        <option
+          key={item.param}
+          value={item.param}
+        >
+          {item.label} ({item.param})
+        </option>
+      ))}
+    </select>
+  </div>
+)}
               </div>
             </div>
 
@@ -1537,14 +1573,16 @@ onClick={async () => {
     // -----------------------------------------
 
     await api.put(
-      `/projects/${projectId}/url-variables`,
-      {
-        variables: variables.map((item) => ({
-          param: item.param,
-          pattern: item.pattern,
-        })),
-      }
-    );
+  `/projects/${projectId}/url-variables`,
+  {
+    variables: variables.map((item) => ({
+      param: item.param,
+      pattern: item.pattern,
+    })),
+
+    responseIdentifier,
+  }
+);
 
 
     // -----------------------------------------
