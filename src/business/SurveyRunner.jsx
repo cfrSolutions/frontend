@@ -734,19 +734,20 @@ console.log("RID FROM URL:", rid);
 // };
 
 const evaluateConditions = () => {
+  const current =
+    survey?.questions?.[currentQuestion];
 
-  const current = survey.questions[currentQuestion];
+  if (!current) {
+    return null;
+  }
 
   const key = current.id;
-
   const answer = answers[key];
 
   for (const condition of current.conditions || []) {
-
     let matched = false;
 
     switch (condition.operator) {
-
       case "equals":
         matched = Array.isArray(answer)
           ? answer.includes(condition.value)
@@ -760,19 +761,23 @@ const evaluateConditions = () => {
         break;
 
       case "greater_than":
-        matched = Number(answer) > Number(condition.value);
+        matched =
+          Number(answer) > Number(condition.value);
         break;
 
       case "greater_equal":
-        matched = Number(answer) >= Number(condition.value);
+        matched =
+          Number(answer) >= Number(condition.value);
         break;
 
       case "less_than":
-        matched = Number(answer) < Number(condition.value);
+        matched =
+          Number(answer) < Number(condition.value);
         break;
 
       case "less_equal":
-        matched = Number(answer) <= Number(condition.value);
+        matched =
+          Number(answer) <= Number(condition.value);
         break;
 
       case "contains":
@@ -785,18 +790,14 @@ const evaluateConditions = () => {
 
       default:
         matched = false;
-
     }
-   
 
     if (matched) {
       return condition;
     }
-
   }
 
   return null;
-
 };
 
 const evaluateConditionForAnswer = (question, answer) => {
@@ -853,7 +854,19 @@ const evaluateConditionForAnswer = (question, answer) => {
 };
 
 const handleAnswerChange = async (value) => {
-  const key = question.id;
+  const current =
+    survey?.questions?.[currentQuestion];
+
+  if (!current) {
+    console.error(
+      "Current question not found:",
+      currentQuestion,
+      survey?.questions
+    );
+    return;
+  }
+
+  const key = current.id;
 
   const updatedAnswers = {
     ...answers,
@@ -864,18 +877,17 @@ const handleAnswerChange = async (value) => {
   setAnswers(updatedAnswers);
 
   // Check condition immediately
-  const condition = evaluateConditionForAnswer(
-    question,
-    value
-  );
+  const condition =
+    evaluateConditionForAnswer(
+      current,
+      value
+    );
 
   if (!condition) {
     return;
   }
 
-  // -------------------------------
   // DISQUALIFY IMMEDIATELY
-  // -------------------------------
   if (condition.action === "disqualify") {
     await submitSurvey(
       "DISQUALIFIED",
@@ -884,9 +896,7 @@ const handleAnswerChange = async (value) => {
     return;
   }
 
-  // -------------------------------
   // QUOTA FULL IMMEDIATELY
-  // -------------------------------
   if (condition.action === "quota") {
     await submitSurvey(
       "QUOTA",
@@ -895,9 +905,7 @@ const handleAnswerChange = async (value) => {
     return;
   }
 
-  // -------------------------------
   // COMPLETE IMMEDIATELY
-  // -------------------------------
   if (condition.action === "complete") {
     await submitSurvey(
       "COMPLETE",
@@ -906,6 +914,7 @@ const handleAnswerChange = async (value) => {
     return;
   }
 };
+
   const question =
     survey.questions[currentQuestion];
 
@@ -1177,81 +1186,136 @@ const handleAnswerChange = async (value) => {
 //   }
 
 const handleNext = async () => {
+  const current =
+    survey?.questions?.[currentQuestion];
 
-  const current = survey.questions[currentQuestion];
+  if (!current) {
+    return;
+  }
+
   const key = current.id;
   const answer = answers[key];
 
-  // First check conditional logic
+  // ==========================================
+  // VALIDATE CURRENT QUESTION FIRST
+  // ==========================================
+
+  if (current.required) {
+    if (current.type === "matrix") {
+      if (
+        !answer ||
+        Object.keys(answer).length !==
+          current.rows.length
+      ) {
+        alert(`${current.title} is required`);
+        return;
+      }
+    } else {
+      if (
+        answer === undefined ||
+        answer === "" ||
+        (Array.isArray(answer) &&
+          answer.length === 0)
+      ) {
+        alert(`${current.title} is required`);
+        return;
+      }
+    }
+  }
+
+  // ==========================================
+  // CHECK CONDITION
+  // ==========================================
+
   const condition = evaluateConditions();
 
   if (condition) {
-
     switch (condition.action) {
 
       case "continue":
-        setCurrentQuestion(currentQuestion + 1);
+        if (
+          currentQuestion <
+          survey.questions.length - 1
+        ) {
+          setCurrentQuestion(
+            currentQuestion + 1
+          );
+        } else {
+          await submitSurvey(
+            "COMPLETE",
+            answers
+          );
+        }
         return;
 
       case "skip": {
-
-        const index = survey.questions.findIndex(
-          (q) => q.id === condition.skipTo
-        );
+        const index =
+          survey.questions.findIndex(
+            (q) => q.id === condition.skipTo
+          );
 
         if (index !== -1) {
           setCurrentQuestion(index);
+        } else if (
+          currentQuestion <
+          survey.questions.length - 1
+        ) {
+          setCurrentQuestion(
+            currentQuestion + 1
+          );
         } else {
-          setCurrentQuestion(currentQuestion + 1);
+          await submitSurvey(
+            "COMPLETE",
+            answers
+          );
         }
 
         return;
       }
 
       case "complete":
-        await submitSurvey("COMPLETE");
+        await submitSurvey(
+          "COMPLETE",
+          answers
+        );
         return;
 
       case "disqualify":
-        await submitSurvey("DISQUALIFIED");
+        await submitSurvey(
+          "DISQUALIFIED",
+          answers
+        );
         return;
 
       case "quota":
-        await submitSurvey("QUOTA");
+        await submitSurvey(
+          "QUOTA",
+          answers
+        );
         return;
+
+      default:
+        break;
     }
   }
 
-  // No condition matched → validate required field
-  if (current.required) {
+  // ==========================================
+  // NO CONDITION
+  // ==========================================
 
-    if (current.type === "matrix") {
-
-      if (
-        !answer ||
-        Object.keys(answer).length !== current.rows.length
-      ) {
-        alert(`${current.title} is required`);
-        return;
-      }
-
-    } else {
-
-      if (
-        answer === undefined ||
-        answer === "" ||
-        (Array.isArray(answer) && answer.length === 0)
-      ) {
-        alert(`${current.title} is required`);
-        return;
-      }
-
-    }
-
+  if (
+    currentQuestion <
+    survey.questions.length - 1
+  ) {
+    setCurrentQuestion(
+      currentQuestion + 1
+    );
+  } else {
+    await submitSurvey(
+      "COMPLETE",
+      answers
+    );
   }
-
-  // Go to next question
-  setCurrentQuestion(currentQuestion + 1);
 };
 
 const submitSurvey = async (status = "COMPLETE",
