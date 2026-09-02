@@ -632,7 +632,7 @@ const rid =
   params.get("pid") ||
   params.get("PID");
 
-console.log("RID FROM URL:", rid);
+// console.log("RID FROM URL:", rid);
 
   const [survey, setSurvey] = useState(null);
   const [answers, setAnswers] = useState({});
