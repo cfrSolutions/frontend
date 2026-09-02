@@ -632,7 +632,15 @@ const rid =
   params.get("pid") ||
   params.get("PID");
 
-console.log("RID FROM URL:", rid);
+  const completeToken =
+  params.get("CTK");
+
+const disqualifiedToken =
+  params.get("DQTK");
+
+const quotaFullToken =
+  params.get("QFTK");
+
 
   const [survey, setSurvey] = useState(null);
   const [answers, setAnswers] = useState({});
@@ -736,6 +744,9 @@ console.log("RID FROM URL:", rid);
 const evaluateConditions = () => {
 
   const current = survey.questions[currentQuestion];
+  if (!current) {
+    return null;
+  }
 
   const key = current.id;
 
@@ -1147,24 +1158,162 @@ const handleNext = async () => {
   setCurrentQuestion(currentQuestion + 1);
 };
 
-const submitSurvey = async (status = "COMPLETE") => {
-   if (status === "COMPLETE" && currentQuestion === survey.questions.length - 1) {
+// const submitSurvey = async (status = "COMPLETE") => {
+//    if (status === "COMPLETE" && currentQuestion === survey.questions.length - 1) {
+
+//     for (const q of survey.questions) {
+
+//       if (!q.required) continue;
+
+//       const key = q.id;
+
+//       const answer = answers[key];
+
+//       if (q.type === "matrix") {
+
+//         if (
+//           !answer ||
+//           Object.keys(answer).length !== q.rows.length
+//         ) {
+//           alert(`${q.title} is required`);
+//           return;
+//         }
+
+//       } else {
+
+//         if (
+//           answer === undefined ||
+//           answer === "" ||
+//           (Array.isArray(answer) &&
+//             answer.length === 0)
+//         ) {
+//           alert(`${q.title} is required`);
+//           return;
+//         }
+
+//       }
+
+//     }
+
+//   }
+
+// try {
+
+//   await api.post(
+//     `/survey-builder/submit/${token}`,
+//     {
+//       answers,
+//       status,
+//     }
+//   );
+
+// } catch (err) {
+
+//   alert("Unable to save survey response");
+
+//   return;
+
+// }
+
+
+//     // if (
+//     //   action === "disqualify" &&
+//     //   survey.disqualifyUrl
+//     // ) {
+//     //   window.location.href =
+//     //     survey.disqualifyUrl;
+//     //   return;
+//     // }
+
+//     // if (
+//     //   action === "quota" &&
+//     //   survey.quotaFullUrl
+//     // ) {
+//     //   window.location.href =
+//     //     survey.quotaFullUrl;
+//     //   return;
+//     // }
+
+//     // window.location.href =
+//     //   survey.completeUrl;
+
+// if (
+//   status === "DISQUALIFIED" &&
+//   survey.disqualifyUrl
+// ) {
+
+//  const url = new URL(survey.disqualifyUrl);
+
+// if (rid) {
+//   url.searchParams.set("RID", rid);
+// }
+
+// window.location.href = url.toString();
+
+//   return;
+
+// }
+
+// if (
+//   status === "QUOTA" &&
+//   survey.quotaFullUrl
+// ) {
+
+//   const url = new URL(survey.quotaFullUrl);
+
+// if (rid) {
+//   url.searchParams.set("RID", rid);
+// }
+
+// window.location.href = url.toString();
+
+//   return;
+
+// }
+
+// const url = new URL(survey.completeUrl);
+
+// if (rid) {
+//   url.searchParams.set("RID", rid);
+// }
+
+// window.location.href = url.toString();
+
+//   };
+const submitSurvey = async (
+  status = "COMPLETE"
+) => {
+
+  // -----------------------------------------
+  // VALIDATE REQUIRED QUESTIONS
+  // -----------------------------------------
+
+  if (
+    status === "COMPLETE" &&
+    currentQuestion ===
+      survey.questions.length - 1
+  ) {
 
     for (const q of survey.questions) {
 
       if (!q.required) continue;
 
-      const key = q.id;
+      const key =
+        q._id || q.id;
 
-      const answer = answers[key];
+      const answer =
+        answers[key];
 
       if (q.type === "matrix") {
 
         if (
           !answer ||
-          Object.keys(answer).length !== q.rows.length
+          Object.keys(answer).length !==
+            q.rows.length
         ) {
-          alert(`${q.title} is required`);
+          alert(
+            `${q.title} is required`
+          );
           return;
         }
 
@@ -1173,103 +1322,158 @@ const submitSurvey = async (status = "COMPLETE") => {
         if (
           answer === undefined ||
           answer === "" ||
-          (Array.isArray(answer) &&
-            answer.length === 0)
+          (
+            Array.isArray(answer) &&
+            answer.length === 0
+          )
         ) {
-          alert(`${q.title} is required`);
+          alert(
+            `${q.title} is required`
+          );
           return;
         }
-
       }
-
     }
-
   }
 
-try {
 
-  await api.post(
-    `/survey-builder/submit/${token}`,
-    {
-      answers,
-      status,
+  // -----------------------------------------
+  // SAVE SURVEY RESPONSE
+  // -----------------------------------------
+
+  try {
+
+    await api.post(
+      `/survey-builder/submit/${token}`,
+      {
+        answers,
+        status,
+      }
+    );
+
+  } catch (err) {
+
+    console.error(
+      "SUBMIT SURVEY ERROR:",
+      err
+    );
+
+    alert(
+      "Unable to save survey response"
+    );
+
+    return;
+  }
+
+
+  // -----------------------------------------
+  // BUILD REDIRECT URL
+  // -----------------------------------------
+
+  const base =
+    import.meta.env.VITE_API_URL;
+
+
+  // -----------------------------------------
+  // DISQUALIFIED
+  // -----------------------------------------
+
+  if (
+    status === "DISQUALIFIED"
+  ) {
+
+    if (!disqualifiedToken) {
+
+      console.error(
+        "Missing DQ redirect token"
+      );
+
+      alert(
+        "Disqualification redirect is not configured."
+      );
+
+      return;
     }
-  );
 
-} catch (err) {
+    const url =
+      `${base}/redirect/dq` +
+      `?tk=${encodeURIComponent(
+        disqualifiedToken
+      )}` +
+      `&RID=${encodeURIComponent(
+        rid || ""
+      )}`;
 
-  alert("Unable to save survey response");
+    window.location.href = url;
 
-  return;
+    return;
+  }
 
-}
+
+  // -----------------------------------------
+  // QUOTA FULL
+  // -----------------------------------------
+
+  if (
+    status === "QUOTA"
+  ) {
+
+    if (!quotaFullToken) {
+
+      console.error(
+        "Missing QF redirect token"
+      );
+
+      alert(
+        "Quota-full redirect is not configured."
+      );
+
+      return;
+    }
+
+    const url =
+      `${base}/redirect/qf` +
+      `?tk=${encodeURIComponent(
+        quotaFullToken
+      )}` +
+      `&RID=${encodeURIComponent(
+        rid || ""
+      )}`;
+
+    window.location.href = url;
+
+    return;
+  }
 
 
-    // if (
-    //   action === "disqualify" &&
-    //   survey.disqualifyUrl
-    // ) {
-    //   window.location.href =
-    //     survey.disqualifyUrl;
-    //   return;
-    // }
+  // -----------------------------------------
+  // COMPLETE
+  // -----------------------------------------
 
-    // if (
-    //   action === "quota" &&
-    //   survey.quotaFullUrl
-    // ) {
-    //   window.location.href =
-    //     survey.quotaFullUrl;
-    //   return;
-    // }
+  if (!completeToken) {
 
-    // window.location.href =
-    //   survey.completeUrl;
+    console.error(
+      "Missing complete redirect token"
+    );
 
-if (
-  status === "DISQUALIFIED" &&
-  survey.disqualifyUrl
-) {
+    alert(
+      "Complete redirect is not configured."
+    );
 
- const url = new URL(survey.disqualifyUrl);
+    return;
+  }
 
-if (rid) {
-  url.searchParams.set("RID", rid);
-}
+  const url =
+    `${base}/redirect/c` +
+    `?tk=${encodeURIComponent(
+      completeToken
+    )}` +
+    `&RID=${encodeURIComponent(
+      rid || ""
+    )}`;
 
-window.location.href = url.toString();
-
-  return;
-
-}
-
-if (
-  status === "QUOTA" &&
-  survey.quotaFullUrl
-) {
-
-  const url = new URL(survey.quotaFullUrl);
-
-if (rid) {
-  url.searchParams.set("RID", rid);
-}
-
-window.location.href = url.toString();
-
-  return;
-
-}
-
-const url = new URL(survey.completeUrl);
-
-if (rid) {
-  url.searchParams.set("RID", rid);
-}
-
-window.location.href = url.toString();
-
-  };
-
+  window.location.href = url;
+};
 
   return(
     <div className="min-h-screen bg-slate-100 py-10">
