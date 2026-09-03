@@ -123,6 +123,7 @@ export default function TargetGroupForm() {
   const timezones = Intl.supportedValuesOf("timeZone");
   const [marketTimezone, setMarketTimezone] = useState("");
   const { projectId, targetGroupId } = useParams();
+  const isNew = !targetGroupId || targetGroupId === "new";
   const [search, setSearch] = useState("");
   const [expandedProfile, setExpandedProfile] = useState(null);
   const [profileLibrary, setProfileLibrary] =
@@ -301,24 +302,108 @@ if (
     );
 }
 
-useEffect(() => {
-  if (!targetGroupId) return;
+// useEffect(() => {
+//   if (!targetGroupId) return;
 
-  api
-    .get(
-      `/projects/${projectId}/target-group/${targetGroupId}`
-    )
-    .then((res) => {
-      // setForm(res.data);
-      setForm(prev => ({
-  ...prev,
-  ...res.data
-}));
- setSelectedProfiles(
-    res.data.profiles || []
-  );
+//   api
+//     .get(
+//       `/projects/${projectId}/target-group/${targetGroupId}`
+//     )
+//     .then((res) => {
+//       // setForm(res.data);
+//       setForm(prev => ({
+//   ...prev,
+//   ...res.data
+// }));
+//  setSelectedProfiles(
+//     res.data.profiles || []
+//   );
+//     });
+// }, []);
+
+useEffect(() => {
+  // =========================================
+  // NEW TARGET GROUP
+  // =========================================
+
+  if (isNew) {
+    setForm({
+      sector: "",
+      market: "",
+      language: "",
+
+      targetCompletes: "",
+      ageFrom: "",
+      ageTo: "",
+
+      gender: "All",
+
+      loi: "",
+      incidence: "",
+      timeline: "",
+      openEnded: "",
+
+      cpi: 0,
+      totalCost: 0,
+
+      timezone: "Asia/Kolkata",
+      startTime: "09:00",
+      endTime: "18:00",
+      startDate: "",
+      endDate: "",
+
+      description: "",
+
+      devices: {
+        mobile: false,
+        desktop: false,
+        tablet: false,
+      },
+
+      containsPII: false,
+      profiles: [],
+      surveyUrl: "",
     });
-}, []);
+
+    setSelectedProfiles([]);
+
+    setMarketTimezone("");
+
+    return;
+  }
+
+  // =========================================
+  // EXISTING TARGET GROUP
+  // =========================================
+
+  const loadTargetGroup = async () => {
+    try {
+      const res = await api.get(
+        `/projects/${projectId}/target-group/${targetGroupId}`
+      );
+
+      const group = res.data;
+
+      setForm((prev) => ({
+        ...prev,
+        ...group,
+      }));
+
+      setSelectedProfiles(
+        group.profiles || []
+      );
+
+    } catch (err) {
+      console.error(
+        "Failed to load target group:",
+        err
+      );
+    }
+  };
+
+  loadTargetGroup();
+
+}, [projectId, targetGroupId, isNew]);
 
 useEffect(() => {
   const zones =
@@ -501,7 +586,7 @@ const handleSubmit = async () => {
 
     let response;
 
-    if (targetGroupId) {
+    if (!isNew) {
       response = await api.put(
         `/projects/${projectId}/target-group/${targetGroupId}`,
         payload
@@ -543,20 +628,49 @@ const handleSubmit = async () => {
   }
 };
 
+// const saveAdvancedSettings = async () => {
+  
+//   try {
+//     await api.put(
+//       `/projects/${projectId}/target-group/${targetGroupId}`,
+//       {
+//         startDate: form.startDate,
+//         endDate: form.endDate,
+//         startTime: form.startTime,
+//         endTime: form.endTime,
+//         timezone: form.timezone,
+//       }
+//     );
+
+//     setShowAdvanced(false);
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
+
 const saveAdvancedSettings = async () => {
+  if (isNew) {
+    setShowAdvanced(false);
+    return;
+  }
+
   try {
     await api.put(
       `/projects/${projectId}/target-group/${targetGroupId}`,
       {
-        startDate: form.startDate,
-        endDate: form.endDate,
-        startTime: form.startTime,
-        endTime: form.endTime,
-        timezone: form.timezone,
+        advancedCalendar: {
+          startDate: form.startDate,
+          endDate: form.endDate,
+          startTime: form.startTime,
+          endTime: form.endTime,
+          timezone: form.timezone,
+          marketTimezone: marketTimezone,
+        },
       }
     );
 
     setShowAdvanced(false);
+
   } catch (err) {
     console.log(err);
   }
@@ -568,7 +682,7 @@ const handleSaveDraft = async () => {
     const token =
       localStorage.getItem("token");
 
-    if (targetGroupId) {
+    if (!isNew) {
 
       await api.put(
         `/projects/${projectId}/target-group/${targetGroupId}`,
@@ -641,11 +755,31 @@ const updateQuota = (
 
 };
 
+// const saveDraft = async () => {
+//   await api.put(
+//     `/projects/${projectId}/target-group/${targetGroupId}`,
+//     form
+//   );
+// };
+
 const saveDraft = async () => {
-  await api.put(
-    `/projects/${projectId}/target-group/${targetGroupId}`,
-    form
-  );
+  const payload = {
+    ...form,
+    profiles: selectedProfiles,
+    status: "DRAFT",
+  };
+
+  if (isNew) {
+    await api.post(
+      `/projects/${projectId}/target-groups`,
+      payload
+    );
+  } else {
+    await api.put(
+      `/projects/${projectId}/target-group/${targetGroupId}`,
+      payload
+    );
+  }
 };
 
   return (
@@ -1403,10 +1537,10 @@ mb-4
   </label>
 
   <BuildSurvey
-   targetGroupName={
-    targetGroupId
+  targetGroupName={
+    !isNew
       ? form.name
-      : "Target Group 1"
+      : "New Target Group"
   }
   user={user}
     onApply={(url) =>
