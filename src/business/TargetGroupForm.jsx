@@ -1536,20 +1536,22 @@ mb-4
     Survey URL Builder
   </label>
 
-  <BuildSurvey
+ <BuildSurvey
+  projectId={projectId}
+  targetGroupId={isNew ? null : targetGroupId}
   targetGroupName={
     !isNew
       ? form.name
       : "New Target Group"
   }
   user={user}
-    onApply={(url) =>
-      setForm(prev => ({
-        ...prev,
-        surveyUrl: url,
-      }))
-    }
-  />
+  onApply={(url) =>
+    setForm(prev => ({
+      ...prev,
+      surveyUrl: url,
+    }))
+  }
+/>
 
   <textarea
     value={form.surveyUrl || ""}
