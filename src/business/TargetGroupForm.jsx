@@ -676,57 +676,116 @@ const saveAdvancedSettings = async () => {
   }
 };
 
+// const handleSaveDraft = async () => {
+//   try {
+
+//     const token =
+//       localStorage.getItem("token");
+
+//     if (!isNew) {
+
+//       await api.put(
+//         `/projects/${projectId}/target-group/${targetGroupId}`,
+//         {
+//           ...form,
+//           profiles: selectedProfiles,
+//           status: "DRAFT",
+//         },
+//         {
+//           headers: {
+//             Authorization:
+//               `Bearer ${token}`,
+//           },
+//         }
+//       );
+
+//     } else {
+
+//       await api.post(
+//         `/projects/${projectId}/target-groups`,
+//         {
+//           ...form,
+//     profiles: selectedProfiles,
+//     status: "DRAFT",
+//         },
+//         {
+//           headers: {
+//             Authorization:
+//               `Bearer ${token}`,
+//           },
+//         }
+//       );
+
+//     }
+
+//     navigate(
+//       `/business/dashboard/project/${projectId}`
+//     );
+
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 const handleSaveDraft = async () => {
+  setErrors({});
+
   try {
+    const payload = {
+      ...form,
+      profiles: selectedProfiles,
+      status: "DRAFT",
+    };
 
-    const token =
-      localStorage.getItem("token");
+    console.log("SAVING TARGET GROUP DRAFT:", payload);
 
-    if (!isNew) {
+    let response;
 
-      await api.put(
-        `/projects/${projectId}/target-group/${targetGroupId}`,
-        {
-          ...form,
-          profiles: selectedProfiles,
-          status: "DRAFT",
-        },
-        {
-          headers: {
-            Authorization:
-              `Bearer ${token}`,
-          },
-        }
-      );
-
-    } else {
-
-      await api.post(
+    if (isNew) {
+      response = await api.post(
         `/projects/${projectId}/target-groups`,
-        {
-          ...form,
-    profiles: selectedProfiles,
-    status: "DRAFT",
-        },
-        {
-          headers: {
-            Authorization:
-              `Bearer ${token}`,
-          },
-        }
+        payload
       );
-
+    } else {
+      response = await api.put(
+        `/projects/${projectId}/target-group/${targetGroupId}`,
+        payload
+      );
     }
+
+    console.log(
+      "TARGET GROUP DRAFT SAVED:",
+      response.data
+    );
 
     navigate(
       `/business/dashboard/project/${projectId}`
     );
 
   } catch (err) {
-    console.log(err);
+    console.error(
+      "SAVE DRAFT ERROR:",
+      err
+    );
+
+    console.error(
+      "BACKEND RESPONSE:",
+      err.response?.data
+    );
+
+    const data = err.response?.data;
+
+    if (data?.errors) {
+      setErrors(data.errors);
+      return;
+    }
+
+    setErrors({
+      general:
+        data?.message ||
+        "Failed to save draft.",
+    });
   }
 };
-
 const updateQuota = (
   profileId,
   conditionIndex,
