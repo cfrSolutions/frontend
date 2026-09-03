@@ -1708,61 +1708,27 @@ onClick={async () => {
   label="Start URL"
   url={`${base}/redirect/start?tk=${project.redirects.start?.token}&RID={RID}`}
 /> */}
-{/* <LinkBox
+<LinkBox
   label="Start URL"
   url={startUrl}
 />
 
 <LinkBox
   label="Complete"
-  url={`${base}/redirect/c?tk=${project.redirects.complete?.token}&RID={RID}`}
+  url={`${base}/redirect/c?tk=${targetGroup.redirects.complete?.token}&RID={RID}`}
 />
 
 <LinkBox
   label="Disqualified"
-  url={`${base}/redirect/dq?tk=${project.redirects.disqualified?.token}&RID={RID}`}
+  url={`${base}/redirect/dq?tk=${targetGroup.redirects.disqualified?.token}&RID={RID}`}
 />
 
 <LinkBox
   label="Quota Full"
-  url={`${base}/redirect/qf?tk=${project.redirects.quotaFull?.token}&RID={RID}`}
-/> */}
-
-{targetGroup?.redirects && (
-  <>
-   <LinkBox
-  label="Start URL"
-  url={startUrl}
+  url={`${base}/redirect/qf?tk=${targetGroup.redirects.quotaFull?.token}&RID={RID}`}
 />
 
-    <LinkBox
-      label="Complete"
-      url={
-        targetGroup.redirects.complete?.token
-          ? `${base}/redirect/c?tk=${targetGroup.redirects.complete.token}&RID={RID}`
-          : ""
-      }
-    />
 
-    <LinkBox
-      label="Disqualified"
-      url={
-        targetGroup.redirects.disqualified?.token
-          ? `${base}/redirect/dq?tk=${targetGroup.redirects.disqualified.token}&RID={RID}`
-          : ""
-      }
-    />
-
-    <LinkBox
-      label="Quota Full"
-      url={
-        targetGroup.redirects.quotaFull?.token
-          ? `${base}/redirect/qf?tk=${targetGroup.redirects.quotaFull.token}&RID={RID}`
-          : ""
-      }
-    />
-  </>
-)}
 
     {/* <LinkBox
   label="Complete"
