@@ -339,7 +339,8 @@ export default function UserSurveys() {
       });
 
       const { redirectUrl } = res.data;
-      window.location.href = redirectUrl;
+      // window.location.href = redirectUrl;
+      window.open(redirectUrl, "_blank", "noopener,noreferrer");
     } catch (err) {
       alert("Failed to start survey");
     }
