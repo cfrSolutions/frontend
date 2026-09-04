@@ -970,6 +970,7 @@ const [errors, setErrors] = useState({});
     sector: "",
     market: "",
     targetCompletes: 90,
+    overQuotaAction: "QUOTA",
     ageFrom: 18,
     ageTo: 63,
     gender: "All",
@@ -1361,13 +1362,15 @@ useEffect(() => {
             PROJECT PARAMETERS
           </h3>
 
-          {[
+          {/* {[
             { label: "Target Completes", name: "targetCompletes", icon: Users },
             { label: "LOI (minutes)", name: "loi", icon: Clock },
             { label: "Incidence (%)", name: "incidence", icon: BarChart3 },
             { label: "Timeline (days)", name: "timeline", icon: Calendar },
           ].map(({ label, name, icon: Icon }) => (
+            
             <div key={name} className="mb-4">
+              
               <label className="text-xs text-gray-500 flex items-center gap-1 mb-1">
                 <Icon size={14} />
                 {label}
@@ -1392,7 +1395,83 @@ useEffect(() => {
       </p>
     )}
             </div>
-          ))}
+          ))} */}{[
+  {
+    label: "Target Completes",
+    name: "targetCompletes",
+    icon: Users,
+  },
+  {
+    label: "LOI (minutes)",
+    name: "loi",
+    icon: Clock,
+  },
+  {
+    label: "Incidence (%)",
+    name: "incidence",
+    icon: BarChart3,
+  },
+  {
+    label: "Timeline (days)",
+    name: "timeline",
+    icon: Calendar,
+  },
+].map(({ label, name, icon: Icon }) => (
+  <div key={name} className="mb-4">
+
+    <label className="text-xs text-gray-500 flex items-center gap-1 mb-1">
+      <Icon size={14} />
+      {label}
+    </label>
+
+    <input
+      type="number"
+      name={name}
+      value={form[name]}
+      onChange={handleChange}
+      min={1}
+      max={name === "loi" ? 45 : 100}
+      className={`border rounded-lg px-3 py-2 w-full ${
+        errors[name]
+          ? "border-red-500"
+          : "border-slate-300"
+      }`}
+    />
+
+    {errors[name] && (
+      <p className="text-red-500 text-xs mt-1">
+        {errors[name]}
+      </p>
+    )}
+  </div>
+))}
+
+{/* AFTER TARGET COMPLETES */}
+<div className="mb-4">
+  <label className="text-xs text-gray-500 block mb-1">
+    After Target Completes
+  </label>
+
+  <select
+    name="overQuotaAction"
+    value={form.overQuotaAction}
+    onChange={handleChange}
+    className="border rounded-lg px-3 py-2 w-full border-slate-300"
+  >
+    <option value="QUOTA">
+      Quota Full
+    </option>
+
+    <option value="DISQUALIFIED">
+      Disqualified
+    </option>
+  </select>
+
+  <p className="text-xs text-gray-400 mt-1">
+    When the target is reached, new respondents will receive
+    the selected result.
+  </p>
+</div>
         </div>
 
         </div>
