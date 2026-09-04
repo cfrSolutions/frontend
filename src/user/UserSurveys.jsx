@@ -325,12 +325,44 @@ export default function UserSurveys() {
   const queryParams = new URLSearchParams(location.search);
   const search = queryParams.get("search");
 
-  useEffect(() => {
-    api
-      .get("/user-surveys/available")
-      .then((res) => setSurveys(res.data))
-      .catch((err) => console.error(err));
-  }, []);
+  // useEffect(() => {
+  //   api
+  //     .get("/user-surveys/available")
+  //     .then((res) => setSurveys(res.data))
+  //     .catch((err) => console.error(err));
+  // }, []);
+  const loadSurveys = async () => {
+  try {
+    const res = await api.get("/user-surveys/available");
+    setSurveys(res.data);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+useEffect(() => {
+  loadSurveys();
+}, []);
+
+useEffect(() => {
+  const handleVisibilityChange = () => {
+    if (document.visibilityState === "visible") {
+      loadSurveys();
+    }
+  };
+
+  document.addEventListener(
+    "visibilitychange",
+    handleVisibilityChange
+  );
+
+  return () => {
+    document.removeEventListener(
+      "visibilitychange",
+      handleVisibilityChange
+    );
+  };
+}, []);
 
   const startSurvey = async (survey) => {
     try {
