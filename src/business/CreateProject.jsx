@@ -1354,7 +1354,7 @@ useEffect(() => {
         </div>
 
         {/* RIGHT */}
-        <div className="space-y-4">
+        {/* <div className="space-y-4">
 
          <div>
           <h3 className="text-xs font-semibold mb-4 text-gray-500 flex items-center gap-2">
@@ -1396,8 +1396,104 @@ useEffect(() => {
           ))}
         </div>
 
+        </div> */}
+
+        {/* RIGHT */}
+<div className="space-y-4">
+
+  <div>
+    <h3 className="text-xs font-semibold mb-4 text-gray-500 flex items-center gap-2">
+      <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+      PROJECT PARAMETERS
+    </h3>
+
+    {[
+      {
+        label: "Target Completes",
+        name: "targetCompletes",
+        icon: Users,
+      },
+      {
+        label: "LOI (minutes)",
+        name: "loi",
+        icon: Clock,
+      },
+      {
+        label: "Incidence (%)",
+        name: "incidence",
+        icon: BarChart3,
+      },
+      {
+        label: "Timeline (days)",
+        name: "timeline",
+        icon: Calendar,
+      },
+    ].map(({ label, name, icon: Icon }) => (
+      <div key={name}>
+
+        {/* PARAMETER */}
+        <div className="mb-4">
+          <label className="text-xs text-gray-500 flex items-center gap-1 mb-1">
+            <Icon size={14} />
+            {label}
+          </label>
+
+          <input
+            type="number"
+            name={name}
+            value={form[name]}
+            onChange={handleChange}
+            min={1}
+            max={name === "loi" ? 45 : 100}
+            className={`border rounded-lg px-3 py-2 w-full ${
+              errors[name]
+                ? "border-red-500"
+                : "border-slate-300"
+            }`}
+          />
+
+          {errors[name] && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors[name]}
+            </p>
+          )}
         </div>
 
+        {/* AFTER TARGET COMPLETES */}
+        {name === "targetCompletes" && (
+          <div className="mb-4">
+
+            <label className="text-xs text-gray-500 block mb-1">
+              After Target Completes
+            </label>
+
+            <select
+              name="overQuotaAction"
+              value={form.overQuotaAction}
+              onChange={handleChange}
+              className="border rounded-lg px-3 py-2 w-full border-slate-300 bg-white"
+            >
+              <option value="QUOTA">
+                Quota Full
+              </option>
+
+              <option value="DISQUALIFIED">
+                Disqualified
+              </option>
+            </select>
+
+            <p className="text-xs text-gray-400 mt-1">
+              Select what happens when the target completes are reached.
+            </p>
+
+          </div>
+        )}
+
+      </div>
+    ))}
+  </div>
+
+</div>
       </div>
 
       {/* DESCRIPTION */}
