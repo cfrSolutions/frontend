@@ -1859,7 +1859,7 @@ export default function BuildSurvey({
             url={completeUrl}
           />
 
-          {/* <LinkBox
+          <LinkBox
             label="Disqualified"
             url={disqualifiedUrl}
           />
@@ -1867,18 +1867,7 @@ export default function BuildSurvey({
           <LinkBox
             label="Quota Full"
             url={quotaFullUrl}
-          /> */}
-          {targetGroup.overQuotaAction === "DISQUALIFIED" ? (
-      <LinkBox
-        label="After Target: Disqualified"
-        url={disqualifiedUrl}
-      />
-    ) : (
-      <LinkBox
-        label="After Target: Quota Full"
-        url={quotaFullUrl}
-      />
-    )}
+          />
 
         </div>
       ) : (
