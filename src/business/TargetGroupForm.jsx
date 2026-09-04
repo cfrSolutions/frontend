@@ -170,6 +170,7 @@ const [errors, setErrors] = useState({});
     market: "",
     language: "",
     targetCompletes: 90,
+    overQuotaAction: "QUOTA",
     ageFrom: 18,
     ageTo: 63,
     gender: "All",
@@ -333,6 +334,7 @@ useEffect(() => {
       language: "",
 
       targetCompletes: "",
+      overQuotaAction: "QUOTA",
       ageFrom: "",
       ageTo: "",
 
@@ -1120,7 +1122,7 @@ const saveDraft = async () => {
         </div>
 
         {/* RIGHT */}
-        <div className="space-y-4">
+        {/* <div className="space-y-4">
 
          <div>
           <h3 className="text-xs font-semibold mb-4 text-gray-500 flex items-center gap-2">
@@ -1163,7 +1165,168 @@ const saveDraft = async () => {
           ))}
         </div>
 
-        </div>
+        </div> */}
+
+        {/* RIGHT */}
+<div className="space-y-4">
+
+  <h3 className="text-xs font-semibold mb-4 text-gray-500 flex items-center gap-2">
+    <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+    PROJECT PARAMETERS
+  </h3>
+
+  {/* TARGET COMPLETES */}
+  <div className="mb-4">
+
+    <label className="text-xs text-gray-500 flex items-center gap-1 mb-1">
+      <Users size={14} />
+      Target Completes
+    </label>
+
+    <input
+      type="number"
+      name="targetCompletes"
+      value={form.targetCompletes}
+      onChange={handleChange}
+      min={1}
+      className={`border rounded-lg px-3 py-2 w-full ${
+        errors.targetCompletes
+          ? "border-red-500"
+          : "border-slate-300"
+      }`}
+    />
+
+    {errors.targetCompletes && (
+      <p className="text-red-500 text-xs mt-1">
+        {errors.targetCompletes}
+      </p>
+    )}
+
+  </div>
+
+
+  {/* AFTER TARGET COMPLETES */}
+  <div className="mb-4">
+
+    <label className="text-xs text-gray-500 block mb-1">
+      After Target Completes
+    </label>
+
+    <select
+      name="overQuotaAction"
+      value={form.overQuotaAction || "QUOTA"}
+      onChange={handleChange}
+      className="border border-slate-300 rounded-lg px-3 py-2 w-full bg-white text-sm"
+    >
+      <option value="QUOTA">
+        Quota Full
+      </option>
+
+      <option value="DISQUALIFIED">
+        Disqualified
+      </option>
+    </select>
+
+    <p className="text-xs text-gray-400 mt-1">
+      Select what happens when the target completes are reached.
+    </p>
+
+  </div>
+
+
+  {/* LOI */}
+  <div className="mb-4">
+
+    <label className="text-xs text-gray-500 flex items-center gap-1 mb-1">
+      <Clock size={14} />
+      LOI (minutes)
+    </label>
+
+    <input
+      type="number"
+      name="loi"
+      value={form.loi}
+      onChange={handleChange}
+      min={1}
+      max={45}
+      className={`border rounded-lg px-3 py-2 w-full ${
+        errors.loi
+          ? "border-red-500"
+          : "border-slate-300"
+      }`}
+    />
+
+    {errors.loi && (
+      <p className="text-red-500 text-xs mt-1">
+        {errors.loi}
+      </p>
+    )}
+
+  </div>
+
+
+  {/* INCIDENCE */}
+  <div className="mb-4">
+
+    <label className="text-xs text-gray-500 flex items-center gap-1 mb-1">
+      <BarChart3 size={14} />
+      Incidence (%)
+    </label>
+
+    <input
+      type="number"
+      name="incidence"
+      value={form.incidence}
+      onChange={handleChange}
+      min={1}
+      max={100}
+      className={`border rounded-lg px-3 py-2 w-full ${
+        errors.incidence
+          ? "border-red-500"
+          : "border-slate-300"
+      }`}
+    />
+
+    {errors.incidence && (
+      <p className="text-red-500 text-xs mt-1">
+        {errors.incidence}
+      </p>
+    )}
+
+  </div>
+
+
+  {/* TIMELINE */}
+  <div className="mb-4">
+
+    <label className="text-xs text-gray-500 flex items-center gap-1 mb-1">
+      <Calendar size={14} />
+      Timeline (days)
+    </label>
+
+    <input
+      type="number"
+      name="timeline"
+      value={form.timeline}
+      onChange={handleChange}
+      min={1}
+      max={100}
+      className={`border rounded-lg px-3 py-2 w-full ${
+        errors.timeline
+          ? "border-red-500"
+          : "border-slate-300"
+      }`}
+    />
+
+    {errors.timeline && (
+      <p className="text-red-500 text-xs mt-1">
+        {errors.timeline}
+      </p>
+    )}
+
+  </div>
+
+</div>
 
       </div>
 
