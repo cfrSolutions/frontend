@@ -1061,6 +1061,31 @@ export default function UserProfile() {
     phone: "",
     countryCode: "IN",
     whatsapp: "",
+
+    household: "",
+  parental: "",
+  primary: "",
+  ownership: "",
+  techStack: "",
+
+  // Lifestyle
+  alcoholConsumption: "",
+  smokingHabit: "",
+  vapingHabit: "",
+  physicalActivity: "",
+  dietaryPreference: "",
+  sleepDuration: "",
+
+  // Shopping
+  shoppingPreference: "",
+  onlineShoppingFrequency: "",
+
+  // Travel
+  travelFrequency: "",
+  travelType: "",
+
+  // Entertainment
+  entertainmentPreference: "",
     
   });
 
@@ -2152,56 +2177,331 @@ function AdvancedTab({ form, editMode, onChange }) {
 }
 
 
+// function ConsumerTab({ form, editMode, onChange, countries }) {
+//   return (
+//     <>
+//       <Section title="Consumer & Lifestyle Module" />
+
+//       <Input
+//         label="Household Composition"
+//         placeholder="How many people, including yourself, live in your household?"
+//         name="household"
+//         value={form.household}
+//         editable={editMode}
+//         onChange={onChange}
+//       />
+//       <Input
+//         label="Parental Status"
+//         placeholder="parental status"
+//         name="parental"
+//         value={form.parental}
+//         editable={editMode}
+//         onChange={onChange}
+//       />
+//        <Input
+//         label="Primary Decision Maker"
+//         placeholder="primary Decision"
+//         name="primary"
+//         value={form.primary}
+//         editable={editMode}
+//         onChange={onChange}
+//       />
+//        <Input
+//         label="Ownership"
+//         name="ownership"
+//         value={form.ownership}
+//         editable={editMode}
+//         onChange={onChange}
+//       />
+//       <Input
+//         label="Tech Stack"
+//         placeholder="tech stack"
+//         name="techStack"
+//         value={form.techStack}
+//         editable={editMode}
+//         onChange={onChange}
+//       />
+//       <Input
+//         label="Health (General)"
+//         name="health"
+//         value={form.health}
+//         editable={editMode}
+//         onChange={onChange}
+//       />
+//       <Section title="Lifestyle Preference" />
+//       <Input
+//         label="Drinking Habits"
+//         placeholder="Did you drink alchol or any other beverages ?"
+//         name="lifestyle"
+//         value={form.lifestyle}
+//         editable={editMode}
+//         onChange={onChange}
+//       />
+//     </>
+//   );
+// }
+
 function ConsumerTab({ form, editMode, onChange, countries }) {
   return (
     <>
       <Section title="Consumer & Lifestyle Module" />
 
-      <Input
+      {/* ================= HOUSEHOLD ================= */}
+      <Section title="Household & Family" />
+
+      <SelectInput
         label="Household Composition"
-        placeholder="How many people, including yourself, live in your household?"
         name="household"
         value={form.household}
-        editable={editMode}
         onChange={onChange}
+        options={[
+          "Live alone",
+          "2 people",
+          "3 people",
+          "4 people",
+          "5 people",
+          "6 or more people",
+          "Prefer not to say",
+        ]}
       />
-      <Input
+
+      <SelectInput
         label="Parental Status"
-        placeholder="parental status"
         name="parental"
         value={form.parental}
-        editable={editMode}
         onChange={onChange}
+        options={[
+          "Parent / Guardian",
+          "Not a parent",
+          "Prefer not to say",
+        ]}
       />
-       <Input
-        label="Primary Decision Maker"
-        placeholder="primary Decision"
+
+      <SelectInput
+        label="Primary Household Decision Maker"
         name="primary"
         value={form.primary}
-        editable={editMode}
         onChange={onChange}
+        options={[
+          "Primarily me",
+          "Primarily another household member",
+          "Shared equally",
+          "Depends on the purchase",
+          "Prefer not to say",
+        ]}
       />
-       <Input
-        label="Ownership"
+
+      {/* ================= OWNERSHIP ================= */}
+      <Section title="Ownership & Technology" />
+
+      <SelectInput
+        label="Home Ownership"
         name="ownership"
         value={form.ownership}
-        editable={editMode}
         onChange={onChange}
+        options={[
+          "Own",
+          "Rent",
+          "Living with family",
+          "Other",
+          "Prefer not to say",
+        ]}
       />
+
       <Input
-        label="Tech Stack"
-        placeholder="tech stack"
+        label="Technology & Devices Used"
+        placeholder="e.g. Smartphone, Laptop, Tablet, Smart TV"
         name="techStack"
         value={form.techStack}
         editable={editMode}
         onChange={onChange}
       />
-      <Input
-        label="Health (General)"
-        name="health"
-        value={form.health}
-        editable={editMode}
+
+      {/* ================= LIFESTYLE ================= */}
+      <Section title="Lifestyle Preferences" />
+
+      {/* DRINKING */}
+      <SelectInput
+        label="Alcohol Consumption"
+        name="alcoholConsumption"
+        value={form.alcoholConsumption}
         onChange={onChange}
+        options={[
+          "Never",
+          "Rarely",
+          "Occasionally",
+          "1–2 times per week",
+          "3–4 times per week",
+          "5 or more times per week",
+          "Prefer not to say",
+        ]}
+      />
+
+      {/* SMOKING */}
+      <SelectInput
+        label="Smoking / Tobacco Use"
+        name="smokingHabit"
+        value={form.smokingHabit}
+        onChange={onChange}
+        options={[
+          "Never",
+          "Former smoker",
+          "Occasionally",
+          "Daily",
+          "Prefer not to say",
+        ]}
+      />
+
+      {/* VAPING */}
+      <SelectInput
+        label="Vaping / E-cigarette Use"
+        name="vapingHabit"
+        value={form.vapingHabit}
+        onChange={onChange}
+        options={[
+          "Never",
+          "Former user",
+          "Occasionally",
+          "Daily",
+          "Prefer not to say",
+        ]}
+      />
+
+      {/* EXERCISE */}
+      <SelectInput
+        label="Physical Activity"
+        name="physicalActivity"
+        value={form.physicalActivity}
+        onChange={onChange}
+        options={[
+          "Rarely or never",
+          "1–2 days per week",
+          "3–4 days per week",
+          "5 or more days per week",
+          "Prefer not to say",
+        ]}
+      />
+
+      {/* DIET */}
+      <SelectInput
+        label="Dietary Preference"
+        name="dietaryPreference"
+        value={form.dietaryPreference}
+        onChange={onChange}
+        options={[
+          "No specific preference",
+          "Vegetarian",
+          "Vegan",
+          "Pescatarian",
+          "Jain",
+          "Halal",
+          "Other",
+          "Prefer not to say",
+        ]}
+      />
+
+      {/* SLEEP */}
+      <SelectInput
+        label="Typical Sleep Duration"
+        name="sleepDuration"
+        value={form.sleepDuration}
+        onChange={onChange}
+        options={[
+          "Less than 5 hours",
+          "5–6 hours",
+          "7–8 hours",
+          "9–10 hours",
+          "More than 10 hours",
+          "Prefer not to say",
+        ]}
+      />
+
+      {/* ================= SHOPPING ================= */}
+      <Section title="Shopping & Consumer Behavior" />
+
+      <SelectInput
+        label="Preferred Shopping Method"
+        name="shoppingPreference"
+        value={form.shoppingPreference}
+        onChange={onChange}
+        options={[
+          "Mostly online",
+          "Mostly physical stores",
+          "Both equally",
+          "Depends on the product",
+          "Prefer not to say",
+        ]}
+      />
+
+      <SelectInput
+        label="Online Shopping Frequency"
+        name="onlineShoppingFrequency"
+        value={form.onlineShoppingFrequency}
+        onChange={onChange}
+        options={[
+          "Rarely",
+          "Once a month or less",
+          "2–3 times per month",
+          "Weekly",
+          "Several times per week",
+          "Prefer not to say",
+        ]}
+      />
+
+      {/* ================= TRAVEL ================= */}
+      <Section title="Travel & Leisure" />
+
+      <SelectInput
+        label="Travel Frequency"
+        name="travelFrequency"
+        value={form.travelFrequency}
+        onChange={onChange}
+        options={[
+          "Rarely",
+          "1–2 times per year",
+          "3–5 times per year",
+          "6 or more times per year",
+          "Prefer not to say",
+        ]}
+      />
+
+      <SelectInput
+        label="Preferred Travel Type"
+        name="travelType"
+        value={form.travelType}
+        onChange={onChange}
+        options={[
+          "Domestic travel",
+          "International travel",
+          "Both",
+          "Business travel",
+          "Leisure travel",
+          "Adventure travel",
+          "Family travel",
+          "Prefer not to say",
+        ]}
+      />
+
+      {/* ================= ENTERTAINMENT ================= */}
+      <Section title="Entertainment & Media" />
+
+      <SelectInput
+        label="Primary Entertainment Preference"
+        name="entertainmentPreference"
+        value={form.entertainmentPreference}
+        onChange={onChange}
+        options={[
+          "Movies & TV",
+          "Music",
+          "Gaming",
+          "Sports",
+          "Reading",
+          "Social Media",
+          "Podcasts",
+          "Outdoor Activities",
+          "Other",
+          "Prefer not to say",
+        ]}
       />
     </>
   );
