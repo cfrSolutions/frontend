@@ -976,21 +976,36 @@ const PROFESSION_SEGMENTS = {
 
   IT: [
     "Engineer",
+    "Software Developer",
     "IT Professional",
-    "Software Engineer",
-    "Developer",
+    "DevOps / SRE",
+    "Data Scientist",
+    "Data Engineer",
+    "Cybersecurity Specialist",
+    "IT Support / System Administrator",
+    "Engineering Manager",
+    "Product Manager",
   ],
 
   EDUCATION: [
     "Teacher",
+    "K-12 Teacher",
+    "Special Education Teacher",
     "Professor",
+    "University Researcher",
     "Lecturer",
+    "Academic Administrator",
+    "Principal",
   ],
 
   BUSINESS: [
     "Business Owner",
-    "Entrepreneur",
-    "Consultant",
+    "Founder / Entrepreneur",
+    "CEO / Executive",
+    "Management Consultant",
+    "Operations Manager",
+    "Project Manager",
+    "Sales / Business Development",
   ],
 };
 
@@ -1082,9 +1097,53 @@ const handleChange = (e) => {
       ? {
           profession: "",
           specialty: "",
+          healthcareRole: "",
           workSetting: "",
           patientVolume: "",
           prescribingAuthority: "",
+
+          itRole: "",
+          itDomain: "",
+          itEmploymentType: "",
+          itExperience: "",
+          itChallenge: "",
+
+          educationRole: "",
+          institutionType: "",
+          teachingMethod: "",
+          educationExperience: "",
+          educationChallenge: "",
+
+          businessRole: "",
+          businessCompanySize: "",
+          businessIndustry: "",
+          businessExperience: "",
+          businessChallenge: "",
+        }
+      : {}),
+
+      ...(name === "profession"
+      ? {
+          specialty: "",
+          healthcareRole: "",
+          workSetting: "",
+          patientVolume: "",
+          prescribingAuthority: "",
+          itRole: "",
+          itDomain: "",
+          itEmploymentType: "",
+          itExperience: "",
+          itChallenge: "",
+          educationRole: "",
+          institutionType: "",
+          teachingMethod: "",
+          educationExperience: "",
+          educationChallenge: "",
+          businessRole: "",
+          businessCompanySize: "",
+          businessIndustry: "",
+          businessExperience: "",
+          businessChallenge: "",
         }
       : {}),
   }));
@@ -1375,7 +1434,7 @@ function AdvancedTab({ form, editMode, onChange }) {
   );
 
   // const userSegment = getUserSegment(form.profession);
-  const userSegment = form.employmentStatus === "Employed" ? getUserSegment(form.profession) : null;
+  const userSegment = form.employmentStatus === isEmployed ? getUserSegment(form.profession) : null;
 
   return (
     <>
@@ -1390,7 +1449,7 @@ function AdvancedTab({ form, editMode, onChange }) {
           "Diploma",
           "Bachelor’s Degree",
           "Master’s Degree",
-          
+          "PHD",
         ]}
       />
 
@@ -1426,6 +1485,7 @@ function AdvancedTab({ form, editMode, onChange }) {
       "IT Professional",
       "Business Owner",
       "Other",
+      "Dentist",
     ]}
   />
 )}
@@ -1476,13 +1536,30 @@ function AdvancedTab({ form, editMode, onChange }) {
         <>
           <Section title="Healthcare Professional Details" />
 
-          <Input
+          {/* <Input
             label="Healthcare Profession"
             name="profession"
             value={form.profession}
             editable={editMode}
             onChange={onChange}
-          />
+          /> */}
+          <SelectInput
+  label="Primary Specialization / Role"
+  name="healthcareRole"
+  value={form.healthcareRole}
+  onChange={onChange}
+  options={[
+    "General Practitioner / Family Physician",
+    "Medical Specialist",
+    "Surgeon",
+    "Registered Nurse / Nurse Practitioner",
+    "Clinical Pharmacist",
+    "Physiotherapist",
+    "Occupational Therapist",
+    "Dentist",
+    "Healthcare Administrator / Practice Manager",
+  ]}
+/>
 
           <Input
             label="Primary Specialty"
@@ -1508,6 +1585,20 @@ function AdvancedTab({ form, editMode, onChange }) {
             ]}
           />
 
+           <SelectInput
+      label="Years of Experience"
+      name="healthcareExperience"
+      value={form.healthcareExperience}
+      onChange={onChange}
+      options={[
+        "0–2 years",
+        "3–5 years",
+        "6–10 years",
+        "11–20 years",
+        "20+ years",
+      ]}
+    />
+
           <Input
             label="Patients Seen Per Week"
             name="patientVolume"
@@ -1524,19 +1615,278 @@ function AdvancedTab({ form, editMode, onChange }) {
             onChange={onChange}
             options={["Yes", "No"]}
           />
+          <SelectInput
+      label="Primary Professional Challenge"
+      name="healthcareChallenge"
+      value={form.healthcareChallenge}
+      onChange={onChange}
+      options={[
+        "Administrative burden / EHR documentation",
+        "Patient load and time constraints",
+        "Burnout and work-life balance",
+        "Regulatory or insurance requirements",
+        "Staffing and workforce challenges",
+        "Patient access and care coordination",
+      ]}
+    />
         </>
       )}
 
       {/* ================= OTHER PROFESSIONS (LOCKED) ================= */}
-      {userSegment &&
+      {/* {userSegment &&
         ["IT", "EDUCATION", "BUSINESS", "OTHER"].includes(userSegment) && (
           <div className="border border-dashed rounded-lg p-4 text-sm text-gray-500 bg-orange-50">
             Professional profiling questions for this profession are not
             available yet.
           </div>
-        )}
+        )} */}
 
-      {/* ================= NO PROFESSION ================= */}
+      {/* ================= IT MODULE ================= */}
+{userSegment === "IT" && (
+  <>
+    <Section title="IT & Technology Professional Details" />
+
+    <SelectInput
+      label="Primary Role / Focus"
+      name="itRole"
+      value={form.itRole}
+      onChange={onChange}
+      options={[
+        "Software Engineer / Developer",
+        "DevOps / Site Reliability Engineer",
+        "Data Scientist",
+        "Data Engineer",
+        "Cybersecurity Specialist",
+        "IT Support / Systems Administrator",
+        "Engineering Manager",
+        "Product Manager",
+      ]}
+    />
+
+    <SelectInput
+      label="Primary Technology Domain"
+      name="itDomain"
+      value={form.itDomain}
+      onChange={onChange}
+      options={[
+        "Cloud Computing",
+        "Web & Mobile Development",
+        "Artificial Intelligence / Machine Learning",
+        "Data & Analytics",
+        "Cybersecurity",
+        "Enterprise IT & Infrastructure",
+      ]}
+    />
+
+    <SelectInput
+      label="Employment Type"
+      name="itEmploymentType"
+      value={form.itEmploymentType}
+      onChange={onChange}
+      options={[
+        "Full-time Employee - Product Company",
+        "Full-time Employee - Service / Consulting",
+        "Freelancer / Independent Contractor",
+        "Startup Employee",
+        "Government / Public Sector",
+      ]}
+    />
+
+    <SelectInput
+      label="Years of Professional Experience"
+      name="itExperience"
+      value={form.itExperience}
+      onChange={onChange}
+      options={[
+        "0–2 years",
+        "3–5 years",
+        "6–10 years",
+        "11–20 years",
+        "20+ years",
+      ]}
+    />
+
+    <SelectInput
+      label="Primary Professional Challenge"
+      name="itChallenge"
+      value={form.itChallenge}
+      onChange={onChange}
+      options={[
+        "Keeping up with rapidly changing technologies",
+        "Managing technical debt",
+        "Cross-functional communication and alignment",
+        "Unrealistic project timelines",
+        "Hiring and retaining technical talent",
+        "Cybersecurity and data protection",
+      ]}
+    />
+  </>
+)}
+
+{/* ================= EDUCATION MODULE ================= */}
+{userSegment === "EDUCATION" && (
+  <>
+    <Section title="Education Professional Details" />
+
+    <SelectInput
+      label="Primary Role / Level"
+      name="educationRole"
+      value={form.educationRole}
+      onChange={onChange}
+      options={[
+        "K-12 Teacher",
+        "Special Education Teacher",
+        "University Professor",
+        "University Researcher",
+        "College Lecturer / Instructor",
+        "Academic Administrator",
+        "Principal",
+      ]}
+    />
+
+    <SelectInput
+      label="Institution Type"
+      name="institutionType"
+      value={form.institutionType}
+      onChange={onChange}
+      options={[
+        "Public School / District",
+        "Private / Independent School",
+        "Community College",
+        "Four-Year University / College",
+        "Vocational / Technical Institution",
+        "Online Education Institution",
+      ]}
+    />
+
+    <SelectInput
+      label="Primary Teaching Delivery Method"
+      name="teachingMethod"
+      value={form.teachingMethod}
+      onChange={onChange}
+      options={[
+        "In-person / On-campus",
+        "Fully Online",
+        "Hybrid / Blended",
+      ]}
+    />
+
+    <SelectInput
+      label="Years of Teaching / Education Experience"
+      name="educationExperience"
+      value={form.educationExperience}
+      onChange={onChange}
+      options={[
+        "0–2 years",
+        "3–5 years",
+        "6–10 years",
+        "11–20 years",
+        "20+ years",
+      ]}
+    />
+
+    <SelectInput
+      label="Primary Professional Challenge"
+      name="educationChallenge"
+      value={form.educationChallenge}
+      onChange={onChange}
+      options={[
+        "Student engagement and motivation",
+        "Administrative workload and grading",
+        "Resource and funding constraints",
+        "Integrating new educational technology",
+        "Teacher workload and burnout",
+        "Curriculum development",
+      ]}
+    />
+  </>
+)}
+
+{/* ================= BUSINESS MODULE ================= */}
+{userSegment === "BUSINESS" && (
+  <>
+    <Section title="Business & Management Professional Details" />
+
+    <SelectInput
+      label="Primary Role / Function"
+      name="businessRole"
+      value={form.businessRole}
+      onChange={onChange}
+      options={[
+        "Business Owner / Founder",
+        "CEO / C-Level Executive",
+        "Management Consultant",
+        "Strategy Consultant",
+        "Operations Manager",
+        "Project Manager",
+        "Sales / Business Development",
+        "Marketing Manager",
+        "Finance Manager",
+        "Human Resources Manager",
+      ]}
+    />
+
+    <SelectInput
+      label="Company Size"
+      name="businessCompanySize"
+      value={form.businessCompanySize}
+      onChange={onChange}
+      options={[
+        "Solo Entrepreneur / Freelancer",
+        "Small Business (1–50 employees)",
+        "Mid-market (51–250 employees)",
+        "Enterprise (250+ employees)",
+      ]}
+    />
+
+    <SelectInput
+      label="Primary Industry Focus"
+      name="businessIndustry"
+      value={form.businessIndustry}
+      onChange={onChange}
+      options={[
+        "B2B SaaS / Technology",
+        "Retail / E-commerce",
+        "Professional Services",
+        "Manufacturing / Supply Chain",
+        "Healthcare",
+        "Financial Services",
+        "Education",
+        "Other",
+      ]}
+    />
+
+    <SelectInput
+      label="Years of Professional Experience"
+      name="businessExperience"
+      value={form.businessExperience}
+      onChange={onChange}
+      options={[
+        "0–2 years",
+        "3–5 years",
+        "6–10 years",
+        "11–20 years",
+        "20+ years",
+      ]}
+    />
+
+    <SelectInput
+      label="Primary Professional Challenge"
+      name="businessChallenge"
+      value={form.businessChallenge}
+      onChange={onChange}
+      options={[
+        "Scaling operations and growth",
+        "Cash flow and financial management",
+        "Talent acquisition and retention",
+        "Navigating market competition",
+        "Customer acquisition and retention",
+        "Digital transformation",
+        "Economic uncertainty",
+      ]}
+    />
+  </>
+)}
       
     </>
   );
