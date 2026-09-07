@@ -1429,12 +1429,15 @@ function CoreTab({ form, editMode, onChange, countries, setForm }) {
 /* ================= ADVANCED (B2B) ================= */
 
 function AdvancedTab({ form, editMode, onChange }) {
-  const isEmployed = ["Full-time", "Part-time", "Self-employed"].includes(
+  const isEmployed = ["Full-time", "Part-time", "Self-employed", "Employed",].includes(
     form.employmentStatus
   );
 
   // const userSegment = getUserSegment(form.profession);
-  const userSegment = form.employmentStatus === isEmployed ? getUserSegment(form.profession) : null;
+  // const userSegment = form.employmentStatus === isEmployed ? getUserSegment(form.profession) : null;
+  const userSegment = isEmployed
+  ? getUserSegment(form.profession)
+  : null;
 
   return (
     <>
@@ -1468,7 +1471,7 @@ function AdvancedTab({ form, editMode, onChange }) {
           "Employed",
         ]}
       />
-{form.employmentStatus === "Employed" && (
+{/* {form.employmentStatus === "Employed" && (
   <SelectInput
     label="Profession"
     name="profession"
@@ -1486,6 +1489,55 @@ function AdvancedTab({ form, editMode, onChange }) {
       "Business Owner",
       "Other",
       "Dentist",
+    ]}
+  />
+)} */}
+
+{isEmployed && (
+  <SelectInput
+    label="Profession"
+    name="profession"
+    value={form.profession}
+    onChange={onChange}
+    options={[
+      "Doctor",
+      "Nurse",
+      "Pharmacist",
+      "Physiotherapist",
+      "Dentist",
+      "Hospital Administrator",
+
+      "Engineer",
+      "Software Developer",
+      "IT Professional",
+      "DevOps / SRE",
+      "Data Scientist",
+      "Data Engineer",
+      "Cybersecurity Specialist",
+      "IT Support / System Administrator",
+      "Engineering Manager",
+      "Product Manager",
+
+      "Teacher",
+      "K-12 Teacher",
+      "Special Education Teacher",
+      "Professor",
+      "University Researcher",
+      "Lecturer",
+      "Academic Administrator",
+      "Principal",
+
+      "Business Owner",
+      "Founder / Entrepreneur",
+      "CEO / Executive",
+      "Management Consultant",
+      "Operations Manager",
+      "Project Manager",
+      "Sales / Business Development",
+
+      "Lawyer",
+      "Chartered Accountant",
+      "Other",
     ]}
   />
 )}
