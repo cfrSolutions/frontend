@@ -1086,6 +1086,16 @@ export default function UserProfile() {
 
   // Entertainment
   entertainmentPreference: "",
+   // Pets
+  petOwnership: "",
+  petType: "",
+  petCount: "",
+
+  // Vehicle
+  carOwnership: "",
+  vehicleType: "",
+  vehicleCount: "",
+  vehicleUsage: "",
     
   });
 
@@ -2503,6 +2513,120 @@ function ConsumerTab({ form, editMode, onChange, countries }) {
           "Prefer not to say",
         ]}
       />
+
+      <Section title="Pets & Animals" />
+
+<SelectInput
+  label="Do you currently own a pet?"
+  name="petOwnership"
+  value={form.petOwnership}
+  onChange={onChange}
+  options={[
+    "Yes",
+    "No",
+    "Prefer not to say",
+  ]}
+/>
+
+<SelectInput
+  label="Type of Pet"
+  name="petType"
+  value={form.petType}
+  onChange={onChange}
+  options={[
+    "Dog",
+    "Cat",
+    "Bird",
+    "Fish",
+    "Rabbit",
+    "Reptile",
+    "Other",
+    "Multiple types",
+    "Prefer not to say",
+  ]}
+/>
+
+<SelectInput
+  label="Number of Pets"
+  name="petCount"
+  value={form.petCount}
+  onChange={onChange}
+  options={[
+    "1",
+    "2",
+    "3",
+    "4 or more",
+    "Prefer not to say",
+  ]}
+/>
+<Section title="Vehicle & Transportation" />
+
+<SelectInput
+  label="Do you own or have access to a car?"
+  name="carOwnership"
+  value={form.carOwnership}
+  onChange={onChange}
+  options={[
+    "Own a car",
+    "Lease a car",
+    "Company-provided car",
+    "Have access to a household car",
+    "Do not own or have access to a car",
+    "Prefer not to say",
+  ]}
+/>
+
+<SelectInput
+  label="Primary Vehicle Type"
+  name="vehicleType"
+  value={form.vehicleType}
+  onChange={onChange}
+  options={[
+    "Sedan",
+    "Hatchback",
+    "SUV",
+    "MPV / Minivan",
+    "Pickup Truck",
+    "Coupe / Sports Car",
+    "Electric Vehicle (EV)",
+    "Hybrid",
+    "Motorcycle / Scooter",
+    "Other",
+    "Prefer not to say",
+  ]}
+/>
+
+<SelectInput
+  label="Number of Vehicles in Household"
+  name="vehicleCount"
+  value={form.vehicleCount}
+  onChange={onChange}
+  options={[
+    "None",
+    "1",
+    "2",
+    "3",
+    "4 or more",
+    "Prefer not to say",
+  ]}
+/>
+
+<SelectInput
+  label="Primary Vehicle Usage"
+  name="vehicleUsage"
+  value={form.vehicleUsage}
+  onChange={onChange}
+  options={[
+    "Daily commuting",
+    "Family / household transportation",
+    "Business / work",
+    "Long-distance travel",
+    "Occasional personal use",
+    "Mostly recreational",
+    "Other",
+    "Prefer not to say",
+  ]}
+/>
     </>
   );
 }
