@@ -1007,6 +1007,16 @@ const PROFESSION_SEGMENTS = {
     "Project Manager",
     "Sales / Business Development",
   ],
+
+  FINANCE: [
+    "Financial Analyst",
+    "CA",
+    "Accountant",
+    "Investment Banker",
+    "Financial Planner",
+    "Auditor",
+    "Risk Manager",
+  ],
 };
 
 const getUserSegment = (profession) => {
@@ -1119,6 +1129,12 @@ const handleChange = (e) => {
           businessIndustry: "",
           businessExperience: "",
           businessChallenge: "",
+
+          financeRole: "",
+          financeSpecialization: "",
+          financeOrganizationType: "",
+          financeExperience: "",
+          financeChallenge: "",
         }
       : {}),
 
@@ -1144,6 +1160,11 @@ const handleChange = (e) => {
           businessIndustry: "",
           businessExperience: "",
           businessChallenge: "",
+          financeRole: "",
+          financeSpecialization: "",
+          financeOrganizationType: "",
+          financeExperience: "",
+          financeChallenge: "",
         }
       : {}),
   }));
@@ -1493,7 +1514,7 @@ function AdvancedTab({ form, editMode, onChange }) {
   />
 )} */}
 
-{isEmployed && (
+{/* {isEmployed && (
   <SelectInput
     label="Profession"
     name="profession"
@@ -1535,9 +1556,105 @@ function AdvancedTab({ form, editMode, onChange }) {
       "Project Manager",
       "Sales / Business Development",
 
+      "Financial Analyst",
+      "CA",
+      "Accountant",
+      "Investment Banker",
+      "Financial Planner",
+      "Auditor",
+      "Risk Manager",
+
       "Lawyer",
       "Chartered Accountant",
       "Other",
+
+      
+    ]}
+  />
+)} */}
+
+{isEmployed && (
+  <SelectInput
+    label="Profession"
+    name="profession"
+    value={form.profession}
+    onChange={onChange}
+    options={[
+      {
+        label: "Healthcare",
+        options: [
+          "Doctor",
+          "Nurse",
+          "Pharmacist",
+          "Physiotherapist",
+          "Dentist",
+          "Hospital Administrator",
+        ],
+      },
+
+      {
+        label: "IT & Technology",
+        options: [
+          "Engineer",
+          "Software Developer",
+          "IT Professional",
+          "DevOps / SRE",
+          "Data Scientist",
+          "Data Engineer",
+          "Cybersecurity Specialist",
+          "IT Support / System Administrator",
+          "Engineering Manager",
+          "Product Manager",
+        ],
+      },
+
+      {
+        label: "Education",
+        options: [
+          "Teacher",
+          "K-12 Teacher",
+          "Special Education Teacher",
+          "Professor",
+          "University Researcher",
+          "Lecturer",
+          "Academic Administrator",
+          "Principal",
+        ],
+      },
+
+      {
+        label: "Business & Management",
+        options: [
+          "Business Owner",
+          "Founder / Entrepreneur",
+          "CEO / Executive",
+          "Management Consultant",
+          "Operations Manager",
+          "Project Manager",
+          "Sales / Business Development",
+        ],
+      },
+
+      {
+        label: "Finance & Accounting",
+        options: [
+          "Financial Analyst",
+          "Chartered Accountant",
+          "Accountant",
+          "Investment Banker",
+          "Financial Planner",
+          "Auditor",
+          "Risk Manager",
+        ],
+      },
+
+      {
+        label: "Other",
+        options: [
+          "Lawyer",
+          "Other",
+        ],
+      },
     ]}
   />
 )}
@@ -1935,6 +2052,96 @@ function AdvancedTab({ form, editMode, onChange }) {
         "Customer acquisition and retention",
         "Digital transformation",
         "Economic uncertainty",
+      ]}
+    />
+  </>
+)}
+
+{/* ================= FINANCE MODULE ================= */}
+{userSegment === "FINANCE" && (
+  <>
+    <Section title="Finance Professional Details" />
+
+    <SelectInput
+      label="Primary Role / Function"
+      name="financeRole"
+      value={form.financeRole}
+      onChange={onChange}
+      options={[
+        "Financial Analyst",
+        "Chartered Accountant (CA)",
+        "Accountant",
+        "Investment Banker",
+        "Financial Planner",
+        "Auditor",
+        "Risk Manager",
+      ]}
+    />
+
+    <SelectInput
+      label="Primary Area of Expertise"
+      name="financeSpecialization"
+      value={form.financeSpecialization}
+      onChange={onChange}
+      options={[
+        "Accounting & Financial Reporting",
+        "Financial Planning & Analysis",
+        "Investment & Wealth Management",
+        "Corporate Finance",
+        "Investment Banking",
+        "Audit & Assurance",
+        "Risk Management",
+        "Taxation",
+        "Treasury",
+        "Compliance",
+      ]}
+    />
+
+    <SelectInput
+      label="Organization Type"
+      name="financeOrganizationType"
+      value={form.financeOrganizationType}
+      onChange={onChange}
+      options={[
+        "Bank / Financial Institution",
+        "Investment / Asset Management Firm",
+        "Accounting / Audit Firm",
+        "Insurance Company",
+        "Fintech Company",
+        "Corporate / Private Company",
+        "Government / Public Sector",
+        "Independent / Self-employed",
+      ]}
+    />
+
+    <SelectInput
+      label="Years of Professional Experience"
+      name="financeExperience"
+      value={form.financeExperience}
+      onChange={onChange}
+      options={[
+        "0–2 years",
+        "3–5 years",
+        "6–10 years",
+        "11–20 years",
+        "20+ years",
+      ]}
+    />
+
+    <SelectInput
+      label="Primary Professional Challenge"
+      name="financeChallenge"
+      value={form.financeChallenge}
+      onChange={onChange}
+      options={[
+        "Regulatory and compliance requirements",
+        "Financial reporting and accuracy",
+        "Market volatility and uncertainty",
+        "Risk management",
+        "Client acquisition and retention",
+        "Technology and digital transformation",
+        "Data security and privacy",
+        "Talent acquisition and retention",
       ]}
     />
   </>
@@ -2444,27 +2651,91 @@ function Input({ label, name, value, editable, onChange, type = "text" }) {
   );
 }
 
-function SelectInput({ label, name, value, onChange, options }) {
+// function SelectInput({ label, name, value, onChange, options }) {
+//   return (
+//     <div>
+//       <label className="text-sm font-medium">{label}</label>
+//       <select name={name} value={value || ""} onChange={onChange} className="w-full border rounded-lg px-3 py-2">
+//         <option value="">Select</option>
+//         {options.map((o, index) => (
+//           // <option key={o} value={o}>{o}</option>
+//           <option key={`${o}-${index}`} value={o}>{o}</option>
+//         ))}
+
+//         {/* {options.map((o) => (
+//   <option key={o.value} value={o.value}>
+//     {o.label}
+//   </option>
+// ))} */}
+
+//       </select>
+//     </div>
+//   );
+// }
+
+function SelectInput({
+  label,
+  name,
+  value,
+  onChange,
+  options,
+}) {
   return (
     <div>
-      <label className="text-sm font-medium">{label}</label>
-      <select name={name} value={value || ""} onChange={onChange} className="w-full border rounded-lg px-3 py-2">
+      <label className="text-sm font-medium">
+        {label}
+      </label>
+
+      <select
+        name={name}
+        value={value || ""}
+        onChange={onChange}
+        className="w-full border rounded-lg px-3 py-2"
+      >
         <option value="">Select</option>
-        {options.map((o, index) => (
-          // <option key={o} value={o}>{o}</option>
-          <option key={`${o}-${index}`} value={o}>{o}</option>
-        ))}
 
-        {/* {options.map((o) => (
-  <option key={o.value} value={o.value}>
-    {o.label}
-  </option>
-))} */}
+        {options.map((option, index) => {
+          // =========================
+          // GROUPED OPTIONS
+          // =========================
+          if (
+            typeof option === "object" &&
+            option.options
+          ) {
+            return (
+              <optgroup
+                key={`${option.label}-${index}`}
+                label={option.label}
+              >
+                {option.options.map((item, itemIndex) => (
+                  <option
+                    key={`${item}-${itemIndex}`}
+                    value={item}
+                  >
+                    {item}
+                  </option>
+                ))}
+              </optgroup>
+            );
+          }
 
+          // =========================
+          // NORMAL OPTIONS
+          // =========================
+          return (
+            <option
+              key={`${option}-${index}`}
+              value={option}
+            >
+              {option}
+            </option>
+          );
+        })}
       </select>
     </div>
   );
 }
+
 function Card({ children, center }) {
   return (
     <div
