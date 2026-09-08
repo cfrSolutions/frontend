@@ -1010,7 +1010,7 @@ const PROFESSION_SEGMENTS = {
 
   FINANCE: [
     "Financial Analyst",
-    "CA",
+    "Chartered Accountant",
     "Accountant",
     "Investment Banker",
     "Financial Planner",
@@ -1062,7 +1062,45 @@ export default function UserProfile() {
     countryCode: "IN",
     whatsapp: "",
 
-    household: "",
+    // Healthcare
+  healthcareRole: "",
+  specialty: "",
+  workSetting: "",
+  healthcareExperience: "",
+  patientVolume: "",
+  prescribingAuthority: "",
+  healthcareChallenge: "",
+
+  // IT
+  itRole: "",
+  itDomain: "",
+  itEmploymentType: "",
+  itExperience: "",
+  itChallenge: "",
+
+  // Education
+  educationRole: "",
+  institutionType: "",
+  teachingMethod: "",
+  educationExperience: "",
+  educationChallenge: "",
+
+  // Business
+  businessRole: "",
+  businessCompanySize: "",
+  businessIndustry: "",
+  businessExperience: "",
+  businessChallenge: "",
+
+  // Finance
+  financeRole: "",
+  financeSpecialization: "",
+  financeOrganizationType: "",
+  financeExperience: "",
+  financeChallenge: "",
+
+
+  household: "",
   parental: "",
   primary: "",
   ownership: "",
