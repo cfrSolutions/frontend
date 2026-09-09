@@ -38,6 +38,7 @@ import CreateProject from "./business/CreateProject";
 import ProjectStatus from "./business/ProjectStatus";
 import AdminProjects from "./superadmin/AdminProjects";
 import AdminProjectDetail from "./superadmin/AdminProjectDetail";
+import AdminTargetGroupDetail from "./superadmin/AdminTargetGroupDetail";
 import SurveyStatusPages from "./business/SurveyStatusPages";
 import CreateProjects from "./business/createProjects";
 import SurveyBuilder from "./business/SurveyBuilder";
