@@ -1425,6 +1425,42 @@ export default function AdminProjectDetail() {
 
   const base = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 
+  // ==================================================
+// TARGET GROUP REDIRECT URLS
+// ==================================================
+
+const getTargetGroupRedirects = () => {
+  if (!targetGroup?.redirects) {
+    return {
+      start: "",
+      complete: "",
+      disqualified: "",
+      quotaFull: "",
+    };
+  }
+
+  return {
+    start: targetGroup.redirects.start?.token
+      ? `${base}/redirect/start?tk=${targetGroup.redirects.start.token}&RID={RID}`
+      : "",
+
+    complete: targetGroup.redirects.complete?.token
+      ? `${base}/redirect/c?tk=${targetGroup.redirects.complete.token}&RID={RID}`
+      : "",
+
+    disqualified: targetGroup.redirects.disqualified?.token
+      ? `${base}/redirect/dq?tk=${targetGroup.redirects.disqualified.token}&RID={RID}`
+      : "",
+
+    quotaFull: targetGroup.redirects.quotaFull?.token
+      ? `${base}/redirect/qf?tk=${targetGroup.redirects.quotaFull.token}&RID={RID}`
+      : "",
+  };
+};
+
+const targetGroupRedirects =
+  getTargetGroupRedirects();
+
   // --------------------------------------------------
   // FETCH PROJECT
   // --------------------------------------------------
@@ -1826,12 +1862,12 @@ export default function AdminProjectDetail() {
 
                 <ReadOnlyLink
                   label="Test Survey"
-                  url={project.surveyLinks?.test}
+                  url={targetGroup.surveyLinks?.test}
                 />
 
                 <ReadOnlyLink
                   label="Live Survey"
-                  url={project.surveyLinks?.live}
+                  url={targetGroup.surveyLinks?.live}
                 />
 
               </div>
@@ -1840,37 +1876,39 @@ export default function AdminProjectDetail() {
 
             {/* REDIRECT URLS */}
 
-            <div>
+            {/* REDIRECT URLS */}
 
-              <h3 className="font-semibold mb-3">
-                Redirect URLs
-              </h3>
+<div>
 
-              <div className="space-y-3">
+  <h3 className="font-semibold mb-3">
+    Redirect URLs
+  </h3>
 
-                <ReadOnlyLink
-                  label="Start URL"
-                  url={businessRedirects.start}
-                />
+  <div className="space-y-3">
 
-                <ReadOnlyLink
-                  label="Complete"
-                  url={businessRedirects.complete}
-                />
+    <ReadOnlyLink
+      label="Start URL"
+      url={targetGroupRedirects.start}
+    />
 
-                <ReadOnlyLink
-                  label="Disqualified"
-                  url={businessRedirects.disqualified}
-                />
+    <ReadOnlyLink
+      label="Complete"
+      url={targetGroupRedirects.complete}
+    />
 
-                <ReadOnlyLink
-                  label="Quota Full"
-                  url={businessRedirects.quotaFull}
-                />
+    <ReadOnlyLink
+      label="Disqualified"
+      url={targetGroupRedirects.disqualified}
+    />
 
-              </div>
+    <ReadOnlyLink
+      label="Quota Full"
+      url={targetGroupRedirects.quotaFull}
+    />
 
-            </div>
+  </div>
+
+</div>
 
           </div>
         )}
