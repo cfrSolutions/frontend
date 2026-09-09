@@ -1403,11 +1403,12 @@
 
 
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, } from "react-router-dom";
 import api from "../services/api";
 
 export default function AdminProjectDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [project, setProject] = useState(null);
   const [activeTab, setActiveTab] = useState("vendor");
@@ -1964,6 +1965,294 @@ export default function AdminProjectDetail() {
 
       </div>
 
+{/* --------------------------------------------- */}
+{/* TARGET GROUPS */}
+{/* --------------------------------------------- */}
+
+<div className="mt-8">
+
+  <div className="
+    bg-white
+    border
+    rounded-xl
+    overflow-hidden
+  ">
+
+    {/* HEADER */}
+
+    <div className="
+      px-6
+      py-5
+      border-b
+      flex
+      items-center
+      justify-between
+    ">
+
+      <div>
+
+        <h3 className="
+          text-lg
+          font-semibold
+        ">
+          Target Groups
+        </h3>
+
+        <p className="
+          text-sm
+          text-gray-500
+          mt-1
+        ">
+          {project.targetGroups?.length || 0}
+          {" "}
+          target groups
+        </p>
+
+      </div>
+
+    </div>
+
+
+    {/* NO TARGET GROUPS */}
+
+    {!project.targetGroups ||
+    project.targetGroups.length === 0 ? (
+
+      <div className="
+        p-8
+        text-center
+        text-gray-500
+      ">
+        No target groups found.
+      </div>
+
+    ) : (
+
+      <div className="overflow-x-auto">
+
+        <div className="min-w-[1000px]">
+
+          {/* TABLE HEADER */}
+
+          <div className="
+            grid
+            grid-cols-8
+            px-6
+            py-4
+            border-b
+            text-xs
+            font-semibold
+            uppercase
+            text-gray-500
+          ">
+
+            <div>
+              Target Group
+            </div>
+
+            <div>
+              Status
+            </div>
+
+            <div>
+              Progress
+            </div>
+
+            <div>
+              CPI
+            </div>
+
+            <div>
+              CR
+            </div>
+
+            <div>
+              IR
+            </div>
+
+            <div>
+              LOI
+            </div>
+
+            <div>
+              DOR
+            </div>
+
+          </div>
+
+
+          {/* TARGET GROUP ROWS */}
+
+          {project.targetGroups.map(
+            (group) => {
+
+              const completes =
+                Number(
+                  group.completes
+                ) || 0;
+
+              const target =
+                Number(
+                  group.targetCompletes
+                ) || 0;
+
+              const progress =
+                target > 0
+                  ? Math.min(
+                      (completes / target) *
+                        100,
+                      100
+                    )
+                  : 0;
+
+              return (
+
+                <div
+                  key={group._id}
+                  onClick={() =>
+                    navigate(
+                      `/superadmin/dashboard/project/${project._id}/target-group/${group._id}`
+                    )
+                  }
+                  className="
+                    grid
+                    grid-cols-8
+                    items-center
+                    px-6
+                    py-5
+                    border-b
+                    cursor-pointer
+                    hover:bg-slate-50
+                    transition
+                  "
+                >
+
+                  {/* TARGET GROUP */}
+
+                  <div>
+
+                    <div className="
+                      font-semibold
+                      text-purple-700
+                    ">
+                      {group.name ||
+                        "Target Group"}
+                    </div>
+
+                    <div className="
+                      text-sm
+                      text-gray-500
+                      mt-1
+                    ">
+                      {group._id?.slice(-6)}
+                    </div>
+
+                  </div>
+
+
+                  {/* STATUS */}
+
+                  <div>
+
+                    <span className="
+                      inline-block
+                      px-3
+                      py-1
+                      border
+                      rounded-full
+                      text-xs
+                    ">
+                      {group.status ||
+                        "DRAFT"}
+                    </span>
+
+                  </div>
+
+
+                  {/* PROGRESS */}
+
+                  <div>
+
+                    <div className="
+                      font-medium
+                    ">
+                      {completes}
+                      {" / "}
+                      {target}
+                    </div>
+
+                    <div className="
+                      text-xs
+                      text-gray-400
+                      mt-1
+                    ">
+                      {Math.round(
+                        progress
+                      )}%
+                    </div>
+
+                  </div>
+
+
+                  {/* CPI */}
+
+                  <div>
+                    {group.cpi != null
+                      ? `$${group.cpi}`
+                      : "-"}
+                  </div>
+
+
+                  {/* CR */}
+
+                  <div>
+                    {group.cr != null
+                      ? `${group.cr}%`
+                      : "-"}
+                  </div>
+
+
+                  {/* IR */}
+
+                  <div>
+                    {group.incidence != null
+                      ? `${group.incidence}%`
+                      : "-"}
+                  </div>
+
+
+                  {/* LOI */}
+
+                  <div>
+                    {group.loi != null
+                      ? `${group.loi} min`
+                      : "-"}
+                  </div>
+
+
+                  {/* DOR */}
+
+                  <div>
+                    {group.dor != null
+                      ? group.dor
+                      : "-"}
+                  </div>
+
+                </div>
+
+              );
+            }
+          )}
+
+        </div>
+
+      </div>
+
+    )}
+
+  </div>
+
+</div>
     </div>
   );
 }

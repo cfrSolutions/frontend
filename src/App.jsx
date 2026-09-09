@@ -125,6 +125,10 @@ export default function App() {
    <Route path="reports" element={<AdminReports />} />
    <Route path="projects" element={<AdminProjects />} />
    <Route path="project/:id" element={<AdminProjectDetail />} />
+   <Route
+  path="project/:id/target-group/:targetGroupId"
+  element={<AdminTargetGroupDetail />}
+/>
 </Route>
 <Route
   path="/user/dashboard"
