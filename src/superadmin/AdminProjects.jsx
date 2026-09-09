@@ -78,7 +78,7 @@ export default function AdminProjects() {
   const navigate = useNavigate();
 
   // =====================================================
-  // FETCH ALL PROJECTS
+  // FETCH PROJECTS
   // =====================================================
 
   const fetchProjects = async () => {
@@ -130,19 +130,15 @@ export default function AdminProjects() {
         project.business ||
         "unknown";
 
-      const businessName =
-        project.business?.name ||
-        "Unknown Business";
-
-      const businessEmail =
-        project.business?.email ||
-        "";
-
       if (!grouped[businessId]) {
         grouped[businessId] = {
           id: businessId,
-          name: businessName,
-          email: businessEmail,
+          name:
+            project.business?.name ||
+            "Unknown Business",
+          email:
+            project.business?.email ||
+            "",
           projects: [],
         };
       }
@@ -159,11 +155,9 @@ export default function AdminProjects() {
   // TOGGLE BUSINESS
   // =====================================================
 
-  const toggleBusiness = (
-    businessId
-  ) => {
-    setExpandedBusiness(
-      expandedBusiness === businessId
+  const toggleBusiness = (businessId) => {
+    setExpandedBusiness((current) =>
+      current === businessId
         ? null
         : businessId
     );
@@ -188,15 +182,13 @@ export default function AdminProjects() {
   }
 
   // =====================================================
-  // RENDER
+  // PAGE
   // =====================================================
 
   return (
     <div className="p-6">
 
-      {/* =================================================
-          HEADER
-      ================================================= */}
+      {/* HEADER */}
 
       <div className="mb-8">
         <h1 className="text-3xl font-bold">
@@ -204,354 +196,384 @@ export default function AdminProjects() {
         </h1>
 
         <p className="text-gray-500 mt-1">
-          Projects organized by business
+          Manage projects by business
         </p>
 
-        <div className="mt-3 text-sm text-gray-500">
-          {businesses.length} Businesses
-          {" · "}
-          {projects.length} Projects
-        </div>
+        <p className="text-sm text-gray-400 mt-2">
+          {businesses.length} businesses ·{" "}
+          {projects.length} projects
+        </p>
       </div>
 
-      {/* =================================================
-          NO PROJECTS
-      ================================================= */}
+      {/* EMPTY */}
 
       {businesses.length === 0 ? (
-        <div className="border rounded-xl p-8 bg-white text-gray-500">
+        <div className="
+          bg-white
+          border
+          rounded-xl
+          p-8
+          text-gray-500
+        ">
           No projects found.
         </div>
       ) : (
+
         <div className="space-y-4">
 
-          {businesses.map(
-            (business) => {
+          {businesses.map((business) => {
 
-              const isExpanded =
-                expandedBusiness ===
-                business.id;
+            const isExpanded =
+              expandedBusiness ===
+              business.id;
 
-              return (
-                <div
-                  key={business.id}
+            return (
+              <div
+                key={business.id}
+                className="
+                  bg-white
+                  border
+                  rounded-2xl
+                  overflow-hidden
+                "
+              >
+
+                {/* =================================================
+                    BUSINESS HEADER
+                ================================================= */}
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    toggleBusiness(
+                      business.id
+                    )
+                  }
                   className="
-                    bg-white
-                    border
-                    rounded-2xl
-                    overflow-hidden
+                    w-full
+                    flex
+                    items-center
+                    justify-between
+                    px-6
+                    py-5
+                    text-left
+                    hover:bg-gray-50
                   "
                 >
 
-                  {/* ======================================
-                      BUSINESS HEADER
-                  ====================================== */}
+                  <div className="
+                    flex
+                    items-center
+                    gap-4
+                  ">
 
-                  <button
-                    type="button"
-                    onClick={() =>
-                      toggleBusiness(
-                        business.id
-                      )
-                    }
-                    className="
-                      w-full
-                      px-6
-                      py-5
-                      flex
-                      items-center
-                      justify-between
-                      text-left
-                      hover:bg-gray-50
-                    "
-                  >
+                    <span className="
+                      text-xl
+                      w-5
+                    ">
+                      {isExpanded
+                        ? "⌄"
+                        : "›"}
+                    </span>
 
-                    <div className="flex items-center gap-4">
+                    <div>
 
-                      {/* ARROW */}
+                      <h2 className="
+                        text-lg
+                        font-bold
+                        text-slate-900
+                      ">
+                        {business.name}
+                      </h2>
 
-                      <span className="text-xl">
-                        {isExpanded
-                          ? "⌄"
-                          : "›"}
-                      </span>
-
-                      {/* BUSINESS INFO */}
-
-                      <div>
-                        <h2 className="text-lg font-bold text-slate-900">
-                          {business.name}
-                        </h2>
-
-                        {business.email && (
-                          <p className="text-sm text-gray-500 mt-1">
-                            {business.email}
-                          </p>
-                        )}
-                      </div>
+                      {business.email && (
+                        <p className="
+                          text-sm
+                          text-gray-500
+                          mt-1
+                        ">
+                          {business.email}
+                        </p>
+                      )}
 
                     </div>
 
-                    {/* PROJECT COUNT */}
+                  </div>
 
-                    <div className="
-                      px-4
-                      py-2
-                      rounded-full
-                      bg-purple-50
-                      text-purple-700
-                      text-sm
-                      font-semibold
-                    ">
-                      {business.projects.length}
-                      {" "}
-                      {business.projects.length === 1
-                        ? "Project"
-                        : "Projects"}
-                    </div>
+                  <span className="
+                    px-4
+                    py-2
+                    rounded-full
+                    bg-purple-50
+                    text-purple-700
+                    text-sm
+                    font-semibold
+                  ">
+                    {business.projects.length}{" "}
+                    {business.projects.length === 1
+                      ? "Project"
+                      : "Projects"}
+                  </span>
 
-                  </button>
+                </button>
 
-                  {/* ======================================
-                      BUSINESS PROJECTS
-                  ====================================== */}
+                {/* =================================================
+                    PROJECTS UNDER BUSINESS
+                ================================================= */}
 
-                  {isExpanded && (
-                    <div className="
-                      border-t
-                      bg-slate-50
-                      p-5
-                    ">
+                {isExpanded && (
 
-                      <div className="space-y-3">
+                  <div className="
+                    border-t
+                    bg-slate-50
+                    p-5
+                  ">
 
-                        {business.projects.map(
-                          (project) => {
+                    <div className="space-y-3">
 
-                            const completes =
-                              project.completes ||
-                              0;
+                      {business.projects.map(
+                        (project) => {
 
-                            const target =
-                              project.targetCompletes ||
-                              0;
+                          // Calculate target from
+                          // target groups
+                          const targetCompletes =
+                            (
+                              project.targetGroups ||
+                              []
+                            ).reduce(
+                              (
+                                total,
+                                group
+                              ) =>
+                                total +
+                                (
+                                  Number(
+                                    group.targetCompletes
+                                  ) || 0
+                                ),
+                              0
+                            );
 
-                            const progress =
-                              target > 0
-                                ? Math.min(
-                                    (completes /
-                                      target) *
-                                      100,
-                                    100
-                                  )
-                                : 0;
+                          const completes =
+                            Number(
+                              project.completes
+                            ) || 0;
 
-                            return (
-                              <div
-                                key={
-                                  project._id
-                                }
-                                onClick={() =>
-                                  navigate(
-                                    `/superadmin/dashboard/project/${project._id}`
-                                  )
-                                }
-                                className="
-                                  bg-white
-                                  border
-                                  rounded-xl
-                                  p-5
-                                  cursor-pointer
-                                  hover:border-purple-400
-                                  hover:shadow-sm
-                                  transition
-                                "
-                              >
+                          const progress =
+                            targetCompletes > 0
+                              ? Math.min(
+                                  (
+                                    completes /
+                                    targetCompletes
+                                  ) * 100,
+                                  100
+                                )
+                              : 0;
 
-                                {/* ==================================
-                                    PROJECT HEADER
-                                ================================== */}
+                          return (
+                            <div
+                              key={
+                                project._id
+                              }
+                              onClick={() =>
+                                navigate(
+                                  `/superadmin/dashboard/project/${project._id}`
+                                )
+                              }
+                              className="
+                                bg-white
+                                border
+                                rounded-xl
+                                p-5
+                                cursor-pointer
+                                hover:border-purple-400
+                                hover:shadow-sm
+                                transition
+                              "
+                            >
 
-                                <div className="
-                                  flex
-                                  items-start
-                                  justify-between
-                                  gap-4
-                                ">
+                              {/* PROJECT HEADER */}
 
-                                  <div>
+                              <div className="
+                                flex
+                                justify-between
+                                items-start
+                                gap-4
+                              ">
 
-                                    <h3 className="
-                                      text-lg
-                                      font-bold
-                                      text-purple-800
-                                    ">
-                                      {project.name ||
-                                        "Unnamed Project"}
-                                    </h3>
+                                <div>
 
-                                    <p className="
-                                      text-sm
-                                      text-gray-500
-                                      mt-1
-                                    ">
-                                      Survey ID:{" "}
-                                      {project.surveyId ||
-                                        "-"}
-                                    </p>
-
-                                  </div>
-
-                                  {/* STATUS */}
-
-                                  <span className="
-                                    px-3
-                                    py-1
-                                    rounded-full
-                                    border
-                                    text-xs
-                                    font-medium
+                                  <h3 className="
+                                    text-xl
+                                    font-bold
+                                    text-purple-800
                                   ">
-                                    {project.status ||
-                                      "DRAFT"}
-                                  </span>
+                                    {project.name ||
+                                      "Unnamed Project"}
+                                  </h3>
 
-                                </div>
-
-                                {/* ==================================
-                                    PROJECT STATS
-                                ================================== */}
-
-                                <div className="
-                                  grid
-                                  grid-cols-2
-                                  md:grid-cols-4
-                                  gap-4
-                                  mt-5
-                                ">
-
-                                  <Stat
-                                    label="Completes"
-                                    value={
-                                      `${completes} / ${target}`
-                                    }
-                                  />
-
-                                  <Stat
-                                    label="Disqualified"
-                                    value={
-                                      project.disqualified ||
-                                      0
-                                    }
-                                  />
-
-                                  <Stat
-                                    label="Quota Full"
-                                    value={
-                                      project.quotaFull ||
-                                      0
-                                    }
-                                  />
-
-                                  <Stat
-                                    label="Responses"
-                                    value={
-                                      project.totalResponses ||
-                                      0
-                                    }
-                                  />
-
-                                </div>
-
-                                {/* ==================================
-                                    PROGRESS
-                                ================================== */}
-
-                                <div className="mt-5">
-
-                                  <div className="
-                                    flex
-                                    justify-between
-                                    text-xs
+                                  <p className="
+                                    text-sm
                                     text-gray-500
-                                    mb-2
+                                    mt-1
                                   ">
-                                    <span>
-                                      Project Progress
-                                    </span>
-
-                                    <span>
-                                      {Math.round(
-                                        progress
-                                      )}%
-                                    </span>
-                                  </div>
-
-                                  <div className="
-                                    h-2
-                                    bg-purple-100
-                                    rounded-full
-                                    overflow-hidden
-                                  ">
-                                    <div
-                                      className="
-                                        h-full
-                                        bg-purple-700
-                                        rounded-full
-                                      "
-                                      style={{
-                                        width:
-                                          `${progress}%`,
-                                      }}
-                                    />
-                                  </div>
+                                    Survey ID:{" "}
+                                    {project.surveyId ||
+                                      "-"}
+                                  </p>
 
                                 </div>
 
-                                {/* ==================================
-                                    TARGET GROUP COUNT
-                                ================================== */}
+                                <span className="
+                                  px-3
+                                  py-1
+                                  border
+                                  rounded-full
+                                  text-xs
+                                ">
+                                  {project.status ||
+                                    "DRAFT"}
+                                </span>
+
+                              </div>
+
+                              {/* PROJECT STATS */}
+
+                              <div className="
+                                grid
+                                grid-cols-2
+                                md:grid-cols-4
+                                gap-4
+                                mt-5
+                              ">
+
+                                <Stat
+                                  label="Completes"
+                                  value={`${completes} / ${targetCompletes}`}
+                                />
+
+                                <Stat
+                                  label="Disqualified"
+                                  value={
+                                    project.disqualified ||
+                                    0
+                                  }
+                                />
+
+                                <Stat
+                                  label="Quota Full"
+                                  value={
+                                    project.quotaFull ||
+                                    0
+                                  }
+                                />
+
+                                <Stat
+                                  label="Responses"
+                                  value={
+                                    project.totalResponses ||
+                                    0
+                                  }
+                                />
+
+                              </div>
+
+                              {/* PROJECT PROGRESS */}
+
+                              <div className="mt-5">
 
                                 <div className="
-                                  mt-4
-                                  pt-4
-                                  border-t
                                   flex
                                   justify-between
-                                  text-sm
+                                  text-xs
+                                  text-gray-500
+                                  mb-2
                                 ">
-
-                                  <span className="text-gray-500">
-                                    Target Groups
+                                  <span>
+                                    Project Progress
                                   </span>
 
-                                  <span className="
-                                    font-semibold
-                                    text-slate-900
-                                  ">
-                                    {
-                                      project
-                                        .targetGroups
-                                        ?.length || 0
-                                    }
+                                  <span>
+                                    {Math.round(
+                                      progress
+                                    )}%
                                   </span>
+                                </div>
 
+                                <div className="
+                                  h-2
+                                  bg-purple-100
+                                  rounded-full
+                                  overflow-hidden
+                                ">
+                                  <div
+                                    className="
+                                      h-full
+                                      bg-purple-700
+                                      rounded-full
+                                    "
+                                    style={{
+                                      width:
+                                        `${progress}%`,
+                                    }}
+                                  />
                                 </div>
 
                               </div>
-                            );
-                          }
-                        )}
 
-                      </div>
+                              {/* TARGET GROUP COUNT */}
+
+                              <div className="
+                                mt-5
+                                pt-4
+                                border-t
+                                flex
+                                justify-between
+                                text-sm
+                              ">
+
+                                <span className="
+                                  text-gray-500
+                                ">
+                                  Target Groups
+                                </span>
+
+                                <span className="
+                                  font-semibold
+                                ">
+                                  {
+                                    project
+                                      .targetGroups
+                                      ?.length || 0
+                                  }
+                                </span>
+
+                              </div>
+
+                              {/* CLICK MESSAGE */}
+
+                              <div className="
+                                mt-3
+                                text-xs
+                                text-purple-600
+                                text-right
+                              ">
+                                Click to view project details →
+                              </div>
+
+                            </div>
+                          );
+                        }
+                      )}
 
                     </div>
-                  )}
 
-                </div>
-              );
-            }
-          )}
+                  </div>
+                )}
+
+              </div>
+            );
+          })}
 
         </div>
       )}
@@ -562,7 +584,7 @@ export default function AdminProjects() {
 
 
 // =====================================================
-// STAT COMPONENT
+// STAT
 // =====================================================
 
 function Stat({
@@ -576,6 +598,7 @@ function Stat({
       p-3
       bg-slate-50
     ">
+
       <p className="
         text-xs
         uppercase
@@ -591,6 +614,7 @@ function Stat({
       ">
         {value}
       </p>
+
     </div>
   );
 }
