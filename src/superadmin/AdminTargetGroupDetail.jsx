@@ -176,6 +176,27 @@ export default function AdminTargetGroupDetail() {
   const redirects =
     group.redirects || {};
 
+    const base = (
+  import.meta.env.VITE_API_URL || ""
+).replace(/\/$/, "");
+
+const businessRedirects = {
+  start: redirects.start?.token
+    ? `${base}/redirect/start?tk=${redirects.start.token}`
+    : "",
+
+  complete: redirects.complete?.token
+    ? `${base}/redirect/c?tk=${redirects.complete.token}&RID={RID}`
+    : "",
+
+  disqualified: redirects.disqualified?.token
+    ? `${base}/redirect/dq?tk=${redirects.disqualified.token}&RID={RID}`
+    : "",
+
+  quotaFull: redirects.quotaFull?.token
+    ? `${base}/redirect/qf?tk=${redirects.quotaFull.token}&RID={RID}`
+    : "",
+};
 
   // =====================================================
   // PAGE
@@ -506,7 +527,7 @@ export default function AdminTargetGroupDetail() {
               space-y-3
             ">
 
-              <ReadOnlyField
+              {/* <ReadOnlyField
                 label="Start URL"
                 value={
                   redirects.start?.url ||
@@ -536,8 +557,26 @@ export default function AdminTargetGroupDetail() {
                   redirects.quotaFull?.url ||
                   ""
                 }
-              />
+              /> */}
+              <ReadOnlyField
+  label="Start URL"
+  value={businessRedirects.start}
+/>
 
+<ReadOnlyField
+  label="Complete"
+  value={businessRedirects.complete}
+/>
+
+<ReadOnlyField
+  label="Disqualified"
+  value={businessRedirects.disqualified}
+/>
+
+<ReadOnlyField
+  label="Quota Full"
+  value={businessRedirects.quotaFull}
+/>
             </div>
 
           </div>
