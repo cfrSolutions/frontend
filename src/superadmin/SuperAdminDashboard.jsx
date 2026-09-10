@@ -321,7 +321,7 @@ export default function SuperAdminDashboard() {
       await api.post("/auth/logout");
       navigate("/login");
     } catch (err) {
-      console.error("Logout failed:", err);
+      // console.error("Logout failed:", err);
     }
   };
 

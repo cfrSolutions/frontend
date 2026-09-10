@@ -36,7 +36,7 @@ const [surveyId, setSurveyId] = useState(null);
   });
 
   api.get(`/surveys/${surveyId}/demographics`).then((res) => {
-    console.log("Demographics API:", res.data); 
+    console.log("Demographics API:"); 
     setDemo(res.data);
   });
 }, [surveyId]);

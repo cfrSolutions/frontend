@@ -155,10 +155,10 @@ export default function TargetGroupBuilder({
         });
       }
     } catch (error) {
-      console.error(
-        "Failed to load profession catalog",
-        error
-      );
+      // console.error(
+      //   "Failed to load profession catalog",
+      //   error
+      // );
     }
   };
 
@@ -332,7 +332,7 @@ export default function TargetGroupBuilder({
         [groupIndex]: "",
       });
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       alert(
         "Failed to add specialty"
       );

@@ -77,12 +77,12 @@ trackingParam:
 
     targetGroups,
       };
- console.log("================================");
-    console.log("TARGET GROUPS BEFORE SAVE:");
-    console.log(JSON.stringify(targetGroups, null, 2));
-    console.log("FULL PAYLOAD:");
-    console.log(JSON.stringify(payload, null, 2));
-    console.log("================================");
+//  console.log("================================");
+//     console.log("TARGET GROUPS BEFORE SAVE:");
+//     console.log(JSON.stringify(targetGroups, null, 2));
+//     console.log("FULL PAYLOAD:");
+//     console.log(JSON.stringify(payload, null, 2));
+//     console.log("================================");
       // await api.post("/surveys", payload);
       // alert("Survey created successfully");
       // navigate("/superadmin/dashboard/surveys");
@@ -96,7 +96,7 @@ navigate(
     : "/superadmin/dashboard/surveys"
 );
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       alert(
         "Failed to create survey: " +
           (err.response?.data?.message || "Server Error")

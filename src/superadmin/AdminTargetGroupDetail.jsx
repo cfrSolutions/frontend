@@ -75,10 +75,10 @@ export default function AdminTargetGroupDetail() {
 
       } catch (error) {
 
-        console.error(
-          "FAILED TO LOAD TARGET GROUP:",
-          error
-        );
+        // console.error(
+        //   "FAILED TO LOAD TARGET GROUP:",
+        //   error
+        // );
 
       } finally {
 

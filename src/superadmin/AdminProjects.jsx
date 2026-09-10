@@ -90,7 +90,7 @@ export default function AdminProjects() {
         withCredentials: true,
       });
 
-      console.log("ADMIN PROJECTS:", res.data);
+      // console.log("ADMIN PROJECTS:", res.data);
 
       setProjects(
         Array.isArray(res.data)
@@ -98,10 +98,10 @@ export default function AdminProjects() {
           : []
       );
     } catch (err) {
-      console.error(
-        "FETCH ADMIN PROJECTS ERROR:",
-        err
-      );
+      // console.error(
+      //   "FETCH ADMIN PROJECTS ERROR:",
+      //   err
+      // );
 
       setProjects([]);
     } finally {

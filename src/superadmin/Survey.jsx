@@ -203,7 +203,7 @@ const toggleSurveyStatus = async (survey) =>{
                   isOpen={activeRow === s._id}
                   onToggle={()=> setActiveRow(activeRow === s._id ? null : s._id)}
                  onView={async () => {
-  console.log("SURVEY:", s);
+  // console.log("SURVEY:", s);
 
   if (s.surveyType === "EXTERNAL") {
     

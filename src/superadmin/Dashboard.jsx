@@ -261,7 +261,7 @@ const top5Completion = completionData
         setCompletionData(formattedCompletion);
 
       } catch (err) {
-        console.error("Dashboard load failed", err);
+        console.error("Dashboard load failed");
       }
     };
 
