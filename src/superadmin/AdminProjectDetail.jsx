@@ -1628,6 +1628,276 @@ export default function AdminProjectDetail() {
       {/* TABS */}
       {/* --------------------------------------------- */}
 
+            {/* --------------------------------------------- */}
+      {/* TARGET GROUPS */}
+      {/* --------------------------------------------- */}
+
+      <div className="bg-white border rounded-xl p-6 mb-6">
+
+        <div className="flex items-center justify-between mb-6">
+
+          <h2 className="text-lg font-bold">
+            Target Groups
+          </h2>
+
+          <span className="font-semibold">
+            {project.targetGroups?.length || 0}
+          </span>
+
+        </div>
+
+        {project.targetGroups?.length > 0 ? (
+
+          <div className="space-y-3">
+
+            {project.targetGroups.map((group) => {
+
+              const target =
+                Number(group.targetCompletes) || 0;
+
+              const completes =
+                Number(group.completes) || 0;
+
+              const progress =
+                target > 0
+                  ? Math.min(
+                      (completes / target) * 100,
+                      100
+                    )
+                  : 0;
+
+              return (
+                <div
+                  key={group._id}
+                  onClick={() =>
+                    navigate(
+                      `/superadmin/dashboard/project/${project._id}/target-group/${group._id}`
+                    )
+                  }
+                  className="
+                    border
+                    rounded-xl
+                    p-5
+                    cursor-pointer
+                    hover:bg-gray-50
+                    transition
+                  "
+                >
+
+                  {/* TOP */}
+
+                  <div className="
+                    flex
+                    items-center
+                    justify-between
+                    gap-4
+                  ">
+
+                    <div>
+
+                      <h3 className="
+                        text-lg
+                        font-bold
+                        text-purple-700
+                      ">
+                        {group.name || "Target Group"}
+                      </h3>
+
+                      <p className="
+                        text-sm
+                        text-gray-500
+                        mt-1
+                      ">
+                        {group._id?.slice(-6)}
+                      </p>
+
+                    </div>
+
+                    <span className="
+                      px-3
+                      py-1
+                      border
+                      rounded-full
+                      text-xs
+                      font-medium
+                    ">
+                      {group.status || "DRAFT"}
+                    </span>
+
+                  </div>
+
+
+                  {/* STATS */}
+
+                  <div className="
+                    grid
+                    grid-cols-2
+                    md:grid-cols-5
+                    gap-4
+                    mt-5
+                  ">
+
+                    <div>
+                      <p className="
+                        text-xs
+                        text-gray-500
+                        uppercase
+                      ">
+                        Progress
+                      </p>
+
+                      <p className="font-semibold mt-1">
+                        {completes} / {target}
+                      </p>
+                    </div>
+
+
+                    <div>
+                      <p className="
+                        text-xs
+                        text-gray-500
+                        uppercase
+                      ">
+                        CPI
+                      </p>
+
+                      <p className="font-semibold mt-1">
+                        {group.cpi != null
+                          ? `$${group.cpi}`
+                          : "-"}
+                      </p>
+                    </div>
+
+
+                    <div>
+                      <p className="
+                        text-xs
+                        text-gray-500
+                        uppercase
+                      ">
+                        CR
+                      </p>
+
+                      <p className="font-semibold mt-1">
+                        {group.cr != null
+                          ? `${group.cr}%`
+                          : "-"}
+                      </p>
+                    </div>
+
+
+                    <div>
+                      <p className="
+                        text-xs
+                        text-gray-500
+                        uppercase
+                      ">
+                        IR
+                      </p>
+
+                      <p className="font-semibold mt-1">
+                        {group.incidence != null
+                          ? `${group.incidence}%`
+                          : "-"}
+                      </p>
+                    </div>
+
+
+                    <div>
+                      <p className="
+                        text-xs
+                        text-gray-500
+                        uppercase
+                      ">
+                        LOI
+                      </p>
+
+                      <p className="font-semibold mt-1">
+                        {group.loi != null
+                          ? `${group.loi} min`
+                          : "-"}
+                      </p>
+                    </div>
+
+                  </div>
+
+
+                  {/* PROGRESS BAR */}
+
+                  <div className="mt-5">
+
+                    <div className="
+                      flex
+                      justify-between
+                      text-xs
+                      text-gray-500
+                      mb-2
+                    ">
+
+                      <span>
+                        Progress
+                      </span>
+
+                      <span>
+                        {Math.round(progress)}%
+                      </span>
+
+                    </div>
+
+                    <div className="
+                      h-2
+                      bg-purple-100
+                      rounded-full
+                    ">
+
+                      <div
+                        className="
+                          h-2
+                          bg-purple-700
+                          rounded-full
+                        "
+                        style={{
+                          width: `${progress}%`,
+                        }}
+                      />
+
+                    </div>
+
+                  </div>
+
+
+                  {/* CLICK */}
+
+                  <div className="
+                    mt-4
+                    text-right
+                    text-sm
+                    text-purple-700
+                    font-medium
+                  ">
+                    Click to view target group details →
+                  </div>
+
+                </div>
+              );
+            })}
+
+          </div>
+
+        ) : (
+
+          <div className="
+            py-8
+            text-center
+            text-gray-500
+          ">
+            No target groups
+          </div>
+
+        )}
+
+      </div>
+
       <div className="bg-white border rounded-xl overflow-hidden">
 
         {/* TAB HEADER */}
