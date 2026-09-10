@@ -1405,13 +1405,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminProjectDetail() {
   const { id } = useParams();
 
   const [project, setProject] = useState(null);
   const [activeTab, setActiveTab] = useState("vendor");
-
+  const navigate = useNavigate();
   const [vendorLinks, setVendorLinks] = useState({
     vendorName: "",
     capture: "",
