@@ -912,12 +912,52 @@ export default function ProjectStatus() {
         err
       );
 
-      alert(
-        err.response?.data?.message ||
-        "Failed to save survey links"
-      );
+      
     }
   };
+
+  const handleGoLive = async () => {
+  try {
+    if (!group?._id) {
+      alert("Target group not found");
+      return;
+    }
+
+    if (!group.surveyLinks?.live) {
+      alert("Please save the live survey link first");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      "Are you sure you want to move this target group LIVE?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    await api.put(
+      `/projects/${currentProjectId}/target-group/${group._id}/go-live`
+    );
+
+    alert(
+      "Target group is now LIVE"
+    );
+
+    await fetchProject();
+
+  } catch (err) {
+    console.error(
+      "Failed to move target group live:",
+      err
+    );
+
+    alert(
+      err.response?.data?.message ||
+      "Failed to move target group live"
+    );
+  }
+};
 
   /*
   =====================================================
@@ -1036,16 +1076,25 @@ export default function ProjectStatus() {
   */
 
   const groupStatus =
-    group?.status || "DRAFT";
+  group?.status || "DRAFT";
 
-  const isTesting =
-    groupStatus === "TESTING";
+const isDraft =
+  groupStatus === "DRAFT";
 
-  const isLive =
-    groupStatus === "LIVE";
+const isTesting =
+  groupStatus === "TESTING";
 
-  const isHold =
-    groupStatus === "HOLD";
+const isLive =
+  groupStatus === "LIVE";
+
+const isHold =
+  groupStatus === "HOLD";
+
+const isClosed =
+  groupStatus === "CLOSED";
+
+  const canConfigure =
+  isDraft || isTesting;
 
   /*
   =====================================================
@@ -1170,6 +1219,82 @@ export default function ProjectStatus() {
         </p>
 
       </div>
+
+      {/* =================================================
+    TARGET GROUP ACTIONS
+================================================= */}
+
+<div className="flex items-center gap-3 mt-5">
+
+  {isDraft && (
+    <div className="
+      px-4
+      py-2
+      rounded-lg
+      bg-gray-100
+      text-gray-700
+      text-sm
+      font-medium
+    ">
+      Configure survey links below
+    </div>
+  )}
+
+  {isTesting && (
+    <button
+      onClick={handleGoLive}
+      className="
+        bg-green-600
+        hover:bg-green-700
+        text-white
+        px-5
+        py-2.5
+        rounded-lg
+        font-semibold
+        transition
+      "
+    >
+      Go Live
+    </button>
+  )}
+
+  {isLive && (
+    <div className="
+      flex
+      items-center
+      gap-2
+      px-4
+      py-2
+      rounded-lg
+      bg-green-50
+      text-green-700
+      border
+      border-green-200
+      text-sm
+      font-semibold
+    ">
+      <span>●</span>
+      Target Group is Live
+    </div>
+  )}
+
+  {isClosed && (
+    <div className="
+      px-4
+      py-2
+      rounded-lg
+      bg-red-50
+      text-red-700
+      border
+      border-red-200
+      text-sm
+      font-semibold
+    ">
+      Target Group Closed
+    </div>
+  )}
+
+</div>
 
       {/* =================================================
           TARGET GROUP INFORMATION
@@ -1409,7 +1534,7 @@ export default function ProjectStatus() {
           TESTING
       ================================================= */}
 
-      {isTesting && (
+      {canConfigure  && (
         <div className="
           mt-8
           border
@@ -1419,13 +1544,15 @@ export default function ProjectStatus() {
           bg-white
         ">
 
-          <h3 className="
-            font-semibold
-            text-lg
-            mb-4
-          ">
-            Configure Target Group Survey
-          </h3>
+         <h3 className="
+  font-semibold
+  text-lg
+  mb-4
+">
+  {isDraft
+    ? "Configure Target Group Survey"
+    : "Update Target Group Survey"}
+</h3>
 
           <label className="
             text-sm
@@ -1478,17 +1605,22 @@ export default function ProjectStatus() {
           />
 
           <button
-            onClick={handleSave}
-            className="
-              bg-blue-600
-              text-white
-              px-5
-              py-2
-              rounded-lg
-            "
-          >
-            Save Survey Links
-          </button>
+  onClick={handleSave}
+  className="
+    bg-blue-600
+    hover:bg-blue-700
+    text-white
+    px-5
+    py-2.5
+    rounded-lg
+    font-medium
+    transition
+  "
+>
+  {isDraft
+    ? "Save & Launch Testing"
+    : "Save Survey Links"}
+</button>
 
           <div className="mt-6">
 
