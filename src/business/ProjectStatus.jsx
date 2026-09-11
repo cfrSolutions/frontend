@@ -2,492 +2,11 @@
 // import { useParams } from "react-router-dom";
 // import { useEffect, useState } from "react";
 // import api from "../services/api";
-// export default function ProjectStatus(){
-//    const { id } = useParams();
-// const [project, setProject] = useState(null);
-// const base = import.meta.env.VITE_API_URL;
-// const [test, setTest] = useState("");
-// const [live, setLive] = useState("");
-// const [file, setFile] = useState(null);
-
-
-// useEffect(() => {
-//   fetchProject();
-// }, []);
- 
-// const fetchProject = async () => {
-//   const res = await api.get(`/projects/${id}`);
-//   setProject(res.data);
-//   setTest(res.data?.surveyLinks?.test || "");
-//   setLive(res.data?.surveyLinks?.live || "");
-// };
-//     const steps = [
-//         "Project Created",
-//         "Cost Accepted",
-//         "Testing Setup",
-//         "Live",
-//         "Hold",
-//         "Completed",
-//     ];
-
-//     // const getStep = () =>{
-//     //     switch(project?.status){
-//     //         case "DRAFT":
-//     //             return 0;
-//     //         case "LIVE":
-//     //             return 1;
-//     //         case "HOLD":
-//     //             return 4;
-//     //         case "CLOSED":
-//     //             return 5;
-//     //         default:
-//     //             return 0;
-//     //     }
-//     // };
-//     const getStep = () => {
-//   switch (project?.status) {
-//     case "DRAFT":
-//       return 0;
-//     case "TESTING":
-//       return 2;
-//     case "LIVE":
-//       return 3;
-//     case "HOLD":
-//       return 4;
-//     case "COMPLETED":
-//       return 5;
-//     default:
-//       return 0;
-//   }
-// };
-// const handleSave = async () => {
-//   await api.put(`/projects/${id}/survey-links`, { test, live });
-//   alert("Saved");
-
-//   fetchProject(); 
-// };
-
-// const handleFile = (e) => {
-//   setFile(e.target.files[0]);
-// };
-
-// const uploadFile = async () => {
-//   const formData = new FormData();
-//   formData.append("file", file);
-
-//   await api.put(`/projects/${id}/upload-keys`, formData);
-//   alert("Uploaded");
-//   fetchProject();
-// };
-//     const activeStep = getStep();
-    
-//     return (
-//   <div className="p-8">
-
-//    <h1 className="text-2xl font-bold mb-2">
-//   {project?.status === "LIVE"
-//     ? "Project is Live"
-//     : project?.status === "DRAFT"
-//     ? "Waiting for Approval"
-//     : project?.status === "HOLD"
-//     ? "Project On Hold"
-//     : "Project Closed"}
-// </h1>
-//     <p className="text-gray-500 mb-8">
-//       Your project has been successfully sent for review.
-//     </p>
-
-//     {/* TIMELINE */}
-//     <div className="flex items-center justify-between mb-10">
-//       {steps.map((step, i) => (
-//         <div key={i} className="flex-1 text-center">
-//           <div
-//             className={`w-4 h-4 mx-auto rounded-full mb-2 ${
-//               i <= activeStep ? "bg-blue-600" : "bg-gray-300"
-//             }`}
-//           />
-//           <p className="text-xs">{step}</p>
-//         </div>
-//       ))}
-//     </div>
-
-//     {/* SUMMARY */}
-//     <div className="border rounded-2xl p-6 w-[350px]">
-//       <h3 className="font-semibold mb-4">Summary</h3>
-
-//       <div className="text-sm space-y-1">
-//         <p>Sector – {project?.sector}</p>
-//         <p>Market – {project?.market}</p>
-//         <p>Age – {project?.ageFrom} to {project?.ageTo}</p>
-//         <p>Gender – {project?.gender}</p>
-//         <p>Completes – {project?.completes}</p>
-//         <p>Incidence – {project?.incidence}%</p>
-//         <p>LOI – {project?.loi} mins</p>
-//         <p>Open Ended – {project?.openEnded}</p>
-//         <p>
-//           Devices – {Object.keys(project?.devices || {})
-//             .filter(k => project.devices[k])
-//             .join(", ")}
-//         </p>
-//         <p>Timeline – {project?.timeline} days</p>
-//         <p>Budget – ${project?.budget}</p>
-//       </div>
-//     </div>
-
-//     {/* 🔥 REDIRECTS (PUT HERE) */}
-//     {project?.status === "LIVE" && project?.redirects && (
-//       <div className="mt-8 border rounded-xl p-6 w-[500px]">
-
-//         <h3 className="font-semibold mb-4">
-//           Redirect Links
-//         </h3>
-         
-//         <div className="space-y-3">
-
-//           <LinkBox
-//             label="Complete"
-//             url={`${base}/redirect/c?tk=${project.redirects.complete?.token}`}
-//           />
-
-//           <LinkBox
-//             label="Disqualified"
-//             url={`${base}/redirect/dq?tk=${project.redirects.disqualified?.token}`}
-//           />
-
-//           <LinkBox
-//             label="Quota Full"
-//             url={`${base}/redirect/qf?tk=${project.redirects.quotaFull?.token}`}
-//           />
-
-//         </div>
-
-//       </div>
-//     )}
-
-//     <div className="mt-10 border p-6 rounded-xl w-[500px]">
-
-//   <h3 className="font-semibold mb-4">
-//     Insert your Survey Link Below
-//   </h3>
-
-//   <input
-//     placeholder="Insert test link"
-//     className="border w-full mb-3 p-2"
-//     value={test}
-//     onChange={(e) => setTest(e.target.value)}
-//   />
-
-//   <input
-//     placeholder="Insert live link"
-//     className="border w-full mb-3 p-2"
-//     value={live}
-//     onChange={(e) => setLive(e.target.value)}
-//   />
-
-//   <button
-//     onClick={handleSave}
-//     className="bg-blue-600 text-white px-4 py-2 rounded"
-//   >
-//     Submit
-//   </button>
-
-//   <div className="mt-4">
-//     <input type="file" onChange={handleFile} />
-//     <button
-//   onClick={uploadFile}
-//   className="bg-green-600 text-white px-4 py-2 rounded mt-2"
-// >
-//   Upload Keys
-// </button>
-//   </div>
-
-// </div>
-
-//   </div>
-// );
-// }
-
-
-// function LinkBox({ label, url }) {
-//   const copy = () => {
-//     navigator.clipboard.writeText(url);
-//     alert("Copied!");
-//   };
-
-//   return (
-//     <div className="flex justify-between items-center border p-2 rounded">
-//       <span className="text-sm">{label}</span>
-
-//       <div className="flex gap-2">
-//         <input
-//           value={url}
-//           readOnly
-//           className="text-xs w-[260px] border px-2"
-//         />
-
-//         <button
-//           onClick={copy}
-//           className="bg-black text-white px-3 py-1 text-xs"
-//         >
-//           Copy
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
-
-
-// import {useLocation} from "react-router-dom";
-// import { useParams } from "react-router-dom";
-// import { useEffect, useState } from "react";
-// import api from "../services/api";
-// export default function ProjectStatus(){
-//    const { id } = useParams();
-// const [project, setProject] = useState(null);
-// const base = import.meta.env.VITE_API_URL;
-// const [test, setTest] = useState("");
-// const [live, setLive] = useState("");
-// const [file, setFile] = useState(null);
-
-
-// useEffect(() => {
-//   fetchProject();
-// }, []);
- 
-// const fetchProject = async () => {
-//   const res = await api.get(`/projects/${id}`);
-//   setProject(res.data);
-//   setTest(res.data?.surveyLinks?.test || "");
-//   setLive(res.data?.surveyLinks?.live || "");
-// };
-//     const steps = [
-//         "Project Created",
-//         "Cost Accepted",
-//         "Testing Setup",
-//         "Live",
-//         "Hold",
-//         "Completed",
-//     ];
-
-//     // const getStep = () =>{
-//     //     switch(project?.status){
-//     //         case "DRAFT":
-//     //             return 0;
-//     //         case "LIVE":
-//     //             return 1;
-//     //         case "HOLD":
-//     //             return 4;
-//     //         case "CLOSED":
-//     //             return 5;
-//     //         default:
-//     //             return 0;
-//     //     }
-//     // };
-//     const getStep = () => {
-//   switch (project?.status) {
-//     case "DRAFT":
-//       return 0;
-//     case "TESTING":
-//       return 2;
-//     case "LIVE":
-//       return 3;
-//     case "HOLD":
-//       return 4;
-//     case "COMPLETED":
-//       return 5;
-//     default:
-//       return 0;
-//   }
-// };
-// const handleSave = async () => {
-//   await api.put(`/projects/${id}/survey-links`, { test, live });
-//   alert("Saved");
-
-//   fetchProject(); 
-// };
-
-// const handleFile = (e) => {
-//   setFile(e.target.files[0]);
-// };
-
-// const uploadFile = async () => {
-//   const formData = new FormData();
-//   formData.append("file", file);
-
-//   await api.put(`/projects/${id}/upload-keys`, formData);
-//   alert("Uploaded");
-//   fetchProject();
-// };
-//     const activeStep = getStep();
-    
-//     return (
-//   <div className="p-8">
-
-//    <h1 className="text-2xl font-bold mb-2">
-//   {project?.status === "LIVE"
-//   ? "Project is Live"
-//   : project?.status === "TESTING"
-//   ? "Testing in Progress"
-//   : project?.status === "DRAFT"
-//   ? "Waiting for Approval"
-//   : project?.status === "HOLD"
-//   ? "Project On Hold"
-//   : "Project Completed"}
-// </h1>
-//     <p className="text-gray-500 mb-8">
-//       Your project has been successfully sent for review.
-//     </p>
-
-//     {/* TIMELINE */}
-//     <div className="flex items-center justify-between mb-10">
-//       {steps.map((step, i) => (
-//         <div key={i} className="flex-1 text-center">
-//           <div
-//             className={`w-4 h-4 mx-auto rounded-full mb-2 ${
-//               i <= activeStep ? "bg-blue-600" : "bg-gray-300"
-//             }`}
-//           />
-//           <p className="text-xs">{step}</p>
-//         </div>
-//       ))}
-//     </div>
-
-//     {/* SUMMARY */}
-//     <div className="border rounded-2xl p-6 w-[350px]">
-//       <h3 className="font-semibold mb-4">Summary</h3>
-
-//       <div className="text-sm space-y-1">
-//         <p>Sector – {project?.sector}</p>
-//         <p>Market – {project?.market}</p>
-//         <p>Age – {project?.ageFrom} to {project?.ageTo}</p>
-//         <p>Gender – {project?.gender}</p>
-//         <p>Completes – {project?.completes}</p>
-//         <p>Incidence – {project?.incidence}%</p>
-//         <p>LOI – {project?.loi} mins</p>
-//         <p>Open Ended – {project?.openEnded}</p>
-//         <p>
-//           Devices – {Object.keys(project?.devices || {})
-//             .filter(k => project.devices[k])
-//             .join(", ")}
-//         </p>
-//         <p>Timeline – {project?.timeline} days</p>
-//         <p>Budget – ${project?.budget}</p>
-//       </div>
-//     </div>
-
-//     {/* 🔥 REDIRECTS (PUT HERE) */}
-//     {project?.status === "TESTING" && project?.redirects && (
-//       <div className="mt-8 border rounded-xl p-6 w-[500px]">
-
-//         <h3 className="font-semibold mb-4">
-//           Redirect Links
-//         </h3>
-         
-//         <div className="space-y-3">
-
-//           <LinkBox
-//             label="Complete"
-//             url={`${base}/redirect/c?tk=${project.redirects.complete?.token}`}
-//           />
-
-//           <LinkBox
-//             label="Disqualified"
-//             url={`${base}/redirect/dq?tk=${project.redirects.disqualified?.token}`}
-//           />
-
-//           <LinkBox
-//             label="Quota Full"
-//             url={`${base}/redirect/qf?tk=${project.redirects.quotaFull?.token}`}
-//           />
-
-//         </div>
-
-//       </div>
-//     )}
-
-//     <div className="mt-10 border p-6 rounded-xl w-[500px]">
-
-//   <h3 className="font-semibold mb-4">
-//     Insert your Survey Link Below
-//   </h3>
-
-//   <input
-//     placeholder="Insert test link"
-//     className="border w-full mb-3 p-2"
-//     value={test}
-//     onChange={(e) => setTest(e.target.value)}
-//   />
-
-//   <input
-//     placeholder="Insert live link"
-//     className="border w-full mb-3 p-2"
-//     value={live}
-//     onChange={(e) => setLive(e.target.value)}
-//   />
-
-//   <button
-//     onClick={handleSave}
-//     className="bg-blue-600 text-white px-4 py-2 rounded"
-//   >
-//     Submit
-//   </button>
-
-//   <div className="mt-4">
-//     <input type="file" onChange={handleFile} />
-//     <button
-//   onClick={uploadFile}
-//   className="bg-green-600 text-white px-4 py-2 rounded mt-2"
-// >
-//   Upload Keys
-// </button>
-//   </div>
-
-// </div>
-
-//   </div>
-// );
-// }
-
-
-// function LinkBox({ label, url }) {
-//   const copy = () => {
-//     navigator.clipboard.writeText(url);
-//     alert("Copied!");
-//   };
-
-//   return (
-//     <div className="flex justify-between items-center border p-2 rounded">
-//       <span className="text-sm">{label}</span>
-
-//       <div className="flex gap-2">
-//         <input
-//           value={url}
-//           readOnly
-//           className="text-xs w-[260px] border px-2"
-//         />
-
-//         <button
-//           onClick={copy}
-//           className="bg-black text-white px-3 py-1 text-xs"
-//         >
-//           Copy
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
-
-
-
-// import {useLocation} from "react-router-dom";
-// import { useParams } from "react-router-dom";
-// import { useEffect, useState } from "react";
-// import api from "../services/api";
 // import socket from "../socket";
 
 // export default function ProjectStatus(){
 //    const { id } = useParams();
-// const [project, setProject] = useState(null);
+
 // const base = import.meta.env.VITE_API_URL;
 // const [test, setTest] = useState("");
 // const [live, setLive] = useState("");
@@ -495,11 +14,12 @@
 // const [messages, setMessages] = useState([]);
 // const [message, setMessage] = useState("");
 // const [offer, setOffer] = useState("");
+// const [project, setProject] = useState(null);
 
 // useEffect(() => {
 //   fetchProject();
 // }, []);
-
+// const group = project?.targetGroups?.[0];
 // useEffect(() => {
 
 //   socket.emit("join_project", id);
@@ -561,16 +81,16 @@
 //   setTest(res.data?.surveyLinks?.test || "");
 //   setLive(res.data?.surveyLinks?.live || "");
 // };
-//     const steps = [
-//         "Project Created",
-//         "Negotiation",
-//         "Cost Accepted",
-//         "Testing Setup",
-//         "Live",
-//         "Hold",
-//         "Completed",
-//         "Rejected",
-//     ];
+//     // const steps = [
+//     //     "Project Created",
+//     //     "Negotiation",
+//     //     "Cost Accepted",
+//     //     "Testing Setup",
+//     //     "Live",
+//     //     "Hold",
+//     //     "Completed",
+//     //     "Rejected",
+//     // ];
 
 //     // const getStep = () =>{
 //     //     switch(project?.status){
@@ -586,52 +106,35 @@
 //     //             return 0;
 //     //     }
 //     // };
-// //     const getStep = () => {
+
+// // const getStep = () => {
 // //   switch (project?.status) {
+
 // //     case "DRAFT":
 // //       return 0;
+
 // //     case "NEGOTIATION":
 // //       return 1;
-// //     case "TESTING":
+
+// //     case "ACCEPTED":
 // //       return 2;
-// //     case "LIVE":
+
+// //     case "TESTING":
 // //       return 3;
-// //     case "HOLD":
+
+// //     case "LIVE":
 // //       return 4;
-// //     case "COMPLETED":
+
+// //     case "HOLD":
 // //       return 5;
+
+// //     case "COMPLETED":
+// //       return 6;
+
 // //     default:
 // //       return 0;
 // //   }
 // // };
-// const getStep = () => {
-//   switch (project?.status) {
-
-//     case "DRAFT":
-//       return 0;
-
-//     case "NEGOTIATION":
-//       return 1;
-
-//     case "ACCEPTED":
-//       return 2;
-
-//     case "TESTING":
-//       return 3;
-
-//     case "LIVE":
-//       return 4;
-
-//     case "HOLD":
-//       return 5;
-
-//     case "COMPLETED":
-//       return 6;
-
-//     default:
-//       return 0;
-//   }
-// };
 // const handleSave = async () => {
 //   await api.put(`/projects/${id}/survey-links`, { test, live });
 //   alert("Saved");
@@ -651,7 +154,7 @@
 //   alert("Uploaded");
 //   fetchProject();
 // };
-//     const activeStep = getStep();
+//     // const activeStep = getStep();
 //     if (!project) {
 //   return (
 //     <div className="p-8">
@@ -670,7 +173,7 @@
 //   <div>
 //     <div className="flex items-center gap-3 mb-2">
 
-//       <h1 className="text-3xl font-bold text-gray-900">
+//       {/* <h1 className="text-3xl font-bold text-gray-900">
 
 //         {project?.status === "LIVE"
 //           ? "Project is Live"
@@ -684,7 +187,12 @@
 //           ? "project Rejected"
 //           : "Project Completed"}
 
-//       </h1>
+//       </h1> */}
+      
+//       <h1 className="text-3xl font-bold text-gray-900">
+//   {project.name}
+// </h1>
+
 
 //       <span
 //         className={`text-sm px-3 py-1 rounded-full capitalize font-medium
@@ -705,9 +213,12 @@
 
 //     </div>
 
-//     <p className="text-gray-500">
+//     {/* <p className="text-gray-500">
 //       Your project has been successfully sent for review.
-//     </p>
+//     </p> */}
+//     <p className="text-gray-500">
+//   Project Details
+// </p>
 //   </div>
 
 // </div>
@@ -715,7 +226,7 @@
 
 
 // {/* TIMELINE */}
-// <div className="border border-gray-200 rounded-2xl p-8 bg-white mb-10">
+// {/* <div className="border border-gray-200 rounded-2xl p-8 bg-white mb-10">
 
 //   <div className="flex justify-between items-center mb-8">
 
@@ -738,7 +249,7 @@
 //         className="flex items-center flex-1"
 //       >
 
-//         {/* STEP */}
+        
 //         <div className="flex flex-col items-center flex-1">
 
 //           <div
@@ -771,7 +282,7 @@
 
 //         </div>
 
-//         {/* LINE */}
+
 //         {i !== steps.length - 1 && (
 
 //           <div
@@ -792,7 +303,7 @@
 
 //   </div>
 
-// </div>
+// </div> */}
 
 //     {/* <div className="border border-gray-300 rounded-2xl p-6 w-[350px]">
 //       <h3 className="font-semibold mb-4">Summary</h3>
@@ -826,44 +337,44 @@
 
 //     <div className="flex justify-between px-6 py-4">
 //       <span className="text-gray-500">Sector</span>
-//       <span className="font-semibold">{project?.sector}</span>
+//       <span className="font-semibold">{group?.sector}</span>
 //     </div>
 
 //     <div className="flex justify-between px-6 py-4">
 //       <span className="text-gray-500">Market</span>
-//       <span className="font-semibold">{project?.market}</span>
+//       <span className="font-semibold">{group?.market}</span>
 //     </div>
 
 //     <div className="flex justify-between px-6 py-4">
 //       <span className="text-gray-500">Age Range</span>
 //       <span className="font-semibold">
-//         {project.ageFrom} – {project?.ageTo}
+//         {group.ageFrom} – {group?.ageTo}
 //       </span>
 //     </div>
 
 //     <div className="flex justify-between px-6 py-4">
 //       <span className="text-gray-500">Gender</span>
-//       <span className="font-semibold">{project?.gender}</span>
+//       <span className="font-semibold">{group?.gender}</span>
 //     </div>
 
 //     <div className="flex justify-between px-6 py-4">
 //       <span className="text-gray-500">Target Completes</span>
-//       <span className="font-semibold">{project?.targetCompletes}</span>
+//       <span className="font-semibold">{group?.targetCompletes}</span>
 //     </div>
 
 //     <div className="flex justify-between px-6 py-4">
 //       <span className="text-gray-500">Incidence</span>
-//       <span className="font-semibold">{project?.incidence}%</span>
+//       <span className="font-semibold">{group?.incidence}%</span>
 //     </div>
 
 //     <div className="flex justify-between px-6 py-4">
 //       <span className="text-gray-500">LOI</span>
-//       <span className="font-semibold">{project?.loi} mins</span>
+//       <span className="font-semibold">{group?.loi} mins</span>
 //     </div>
 
 //     <div className="flex justify-between px-6 py-4">
 //       <span className="text-gray-500">Budget</span>
-//       <span className="font-semibold">${project?.totalCost}</span>
+//       <span className="font-semibold">${group?.totalCost}</span>
 //     </div>
 
 //     <div className="flex justify-between px-6 py-4">
@@ -877,6 +388,14 @@
 //       </span>
 //     </div>
 
+//     <div className="flex justify-between px-6 py-4">
+//   <span className="text-gray-500">PII</span>
+
+//   <span className="font-semibold">
+//     {group?.containsPII ? "Yes" : "No"}
+//   </span>
+// </div>
+
 //     {/* <div className="flex justify-between px-6 py-4">
 //       <span className="text-gray-500">Project ID</span>
 //       <span className="font-semibold">
@@ -887,7 +406,7 @@
 //   </div>
 // </div>
 
-// {project.status === "NEGOTIATION" &&(
+// {/* {project.status === "NEGOTIATION" &&(
 //   <div className="border border-gray-200 rounded-2xl bg-white mt-8">
 
 //   <div className="px-6 py-5 border-b border-gray-200">
@@ -896,7 +415,7 @@
 //     </h3>
 //   </div>
 
-//   {/* MESSAGES */}
+ 
 //   <div className="p-6 space-y-4 max-h-[400px] overflow-y-auto">
 
 //     {messages.map((msg, i) => (
@@ -932,7 +451,7 @@
 
 //   </div>
 
-//   {/* INPUT */}
+ 
 //   <div className="border-t border-gray-200 p-4 flex gap-3">
 
 //     <input
@@ -962,10 +481,10 @@
 
 // </div>
 
-// )}
+// )} */}
 
 
-// {project.status === "ACCEPTED" && (
+// {/* {project.status === "ACCEPTED" && (
 
 //   <div className="border border-green-200 bg-green-50 rounded-2xl p-6 mt-8">
 
@@ -990,7 +509,8 @@
 
 //   </div>
 
-// )}
+// )} */}
+
 //     {project?.status === "TESTING" && project?.redirects && (
       
 //       <div className="mt-8 border border-gray-300 rounded-xl p-6 w-[500px]">
@@ -1139,663 +659,1078 @@
 // }
 
 
-
-import {useLocation} from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import socket from "../socket";
 
-export default function ProjectStatus(){
-   const { id } = useParams();
+export default function ProjectStatus() {
+  const { id, projectId, targetGroupId } = useParams();
+  const navigate = useNavigate();
 
-const base = import.meta.env.VITE_API_URL;
-const [test, setTest] = useState("");
-const [live, setLive] = useState("");
-const [file, setFile] = useState(null);
-const [messages, setMessages] = useState([]);
-const [message, setMessage] = useState("");
-const [offer, setOffer] = useState("");
-const [project, setProject] = useState(null);
+  /*
+  =====================================================
+  PROJECT ID
 
-useEffect(() => {
-  fetchProject();
-}, []);
-const group = project?.targetGroups?.[0];
-useEffect(() => {
+  Existing project status route:
+  /project/:id/status
 
-  socket.emit("join_project", id);
+  Target group status route:
+  /project/:projectId/target-group/:targetGroupId/status
+  =====================================================
+  */
 
-}, [id]);
+  const currentProjectId = projectId || id;
 
-useEffect(() => {
+  const [project, setProject] = useState(null);
+  const [group, setGroup] = useState(null);
 
-  socket.on("receive_message", (data) => {
+  const [test, setTest] = useState("");
+  const [live, setLive] = useState("");
 
-   setMessages((prev) => {
+  const [file, setFile] = useState(null);
 
-    const exists = prev.some(
-      (m) =>
-        m.message === data.message &&
-        m.sender === data.sender &&
-        m.proposedCpi === data.proposedCpi
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState("");
+  const [offer, setOffer] = useState("");
+
+  const base = (
+    import.meta.env.VITE_API_URL || ""
+  ).replace(/\/$/, "");
+
+  /*
+  =====================================================
+  FETCH PROJECT
+  =====================================================
+  */
+
+  const fetchProject = async () => {
+    try {
+      const res = await api.get(
+        `/projects/${currentProjectId}`
+      );
+
+      const projectData = res.data;
+
+      setProject(projectData);
+
+      setMessages(
+        projectData.negotiations || []
+      );
+
+      /*
+      =================================================
+      IMPORTANT
+
+      If targetGroupId exists, find THAT target group.
+
+      Do NOT use:
+
+      project.targetGroups[0]
+
+      =================================================
+      */
+
+      let selectedGroup = null;
+
+      if (targetGroupId) {
+        selectedGroup =
+          projectData.targetGroups?.find(
+            (g) =>
+              String(g._id) ===
+              String(targetGroupId)
+          );
+      } else {
+        /*
+        Backward compatibility for:
+        /project/:id/status
+
+        If no target group was supplied,
+        use first group.
+        */
+
+        selectedGroup =
+          projectData.targetGroups?.[0] || null;
+      }
+
+      setGroup(selectedGroup);
+
+      /*
+      =================================================
+      TARGET-GROUP SURVEY LINKS
+      =================================================
+      */
+
+      setTest(
+        selectedGroup?.surveyLinks?.test ||
+        ""
+      );
+
+      setLive(
+        selectedGroup?.surveyLinks?.live ||
+        ""
+      );
+
+    } catch (err) {
+      console.error(
+        "Failed to load project:",
+        err
+      );
+    }
+  };
+
+  useEffect(() => {
+    fetchProject();
+  }, [
+    currentProjectId,
+    targetGroupId,
+  ]);
+
+  /*
+  =====================================================
+  SOCKET
+  =====================================================
+  */
+
+  useEffect(() => {
+    socket.emit(
+      "join_project",
+      currentProjectId
     );
 
-    if (exists) return prev;
+    const handleMessage = (data) => {
+      setMessages((prev) => {
+        const exists = prev.some(
+          (m) =>
+            m.message === data.message &&
+            m.sender === data.sender &&
+            m.proposedCpi ===
+              data.proposedCpi
+        );
 
-    return [...prev, data];
-  });
+        if (exists) {
+          return prev;
+        }
 
+        return [...prev, data];
+      });
+    };
 
-  });
+    socket.on(
+      "receive_message",
+      handleMessage
+    );
 
-  return () => {
-    socket.off("receive_message");
+    return () => {
+      socket.off(
+        "receive_message",
+        handleMessage
+      );
+    };
+  }, [currentProjectId]);
+
+  /*
+  =====================================================
+  NEGOTIATION
+  =====================================================
+  */
+
+  const sendNegotiation = async () => {
+    try {
+      const data = {
+        projectId: currentProjectId,
+        sender: "BUSINESS",
+        message,
+        proposedCpi: offer,
+      };
+
+      await api.put(
+        `/admin/project/${currentProjectId}/negotiate`,
+        data
+      );
+
+      socket.emit(
+        "send_message",
+        data
+      );
+
+      setMessages((prev) => [
+        ...prev,
+        data,
+      ]);
+
+      setMessage("");
+      setOffer("");
+
+    } catch (err) {
+      console.error(
+        "Negotiation failed:",
+        err
+      );
+    }
   };
 
-}, []);
+  /*
+  =====================================================
+  SAVE TARGET GROUP SURVEY LINKS
 
-const sendNegotiation = async () => {
+  IMPORTANT:
+  Use target-group endpoint/data.
 
-  const data = {
-    projectId: id,
-    sender: "BUSINESS",
-    message: message,
-  proposedCpi: offer,
+  If your backend currently has only the project
+  survey-links endpoint, the backend must receive
+  targetGroupId so it updates the selected group.
+  =====================================================
+  */
+
+  const handleSave = async () => {
+    try {
+      if (!group?._id) {
+        alert(
+          "Target group not found"
+        );
+        return;
+      }
+
+      await api.put(
+        `/projects/${currentProjectId}/target-group/${group._id}/survey-links`,
+        {
+          test,
+          live,
+        }
+      );
+
+      alert(
+        "Target group survey links saved"
+      );
+
+      await fetchProject();
+
+    } catch (err) {
+      console.error(
+        "Failed to save survey links:",
+        err
+      );
+
+      alert(
+        err.response?.data?.message ||
+        "Failed to save survey links"
+      );
+    }
   };
 
-  await api.put(
-    `/admin/project/${id}/negotiate`,
-    data
-  );
+  /*
+  =====================================================
+  FILE UPLOAD
+  =====================================================
+  */
 
-  socket.emit("send_message", data);
+  const handleFile = (e) => {
+    setFile(
+      e.target.files?.[0] || null
+    );
+  };
 
-  setMessages((prev) => [...prev, data]);
+  const uploadFile = async () => {
+    try {
+      if (!file) {
+        alert("Please select a file");
+        return;
+      }
 
-  setMessage("");
-  setOffer("");
-};
-const fetchProject = async () => {
-  const res = await api.get(`/projects/${id}`);
-  setProject(res.data);
-  setMessages(res.data.negotiations || []);
-  setTest(res.data?.surveyLinks?.test || "");
-  setLive(res.data?.surveyLinks?.live || "");
-};
-    // const steps = [
-    //     "Project Created",
-    //     "Negotiation",
-    //     "Cost Accepted",
-    //     "Testing Setup",
-    //     "Live",
-    //     "Hold",
-    //     "Completed",
-    //     "Rejected",
-    // ];
+      const formData = new FormData();
 
-    // const getStep = () =>{
-    //     switch(project?.status){
-    //         case "DRAFT":
-    //             return 0;
-    //         case "LIVE":
-    //             return 1;
-    //         case "HOLD":
-    //             return 4;
-    //         case "CLOSED":
-    //             return 5;
-    //         default:
-    //             return 0;
-    //     }
-    // };
+      formData.append(
+        "file",
+        file
+      );
 
-// const getStep = () => {
-//   switch (project?.status) {
+      await api.put(
+        `/projects/${currentProjectId}/upload-keys`,
+        formData
+      );
 
-//     case "DRAFT":
-//       return 0;
+      alert("Uploaded");
 
-//     case "NEGOTIATION":
-//       return 1;
+      await fetchProject();
 
-//     case "ACCEPTED":
-//       return 2;
+    } catch (err) {
+      console.error(
+        "Upload failed:",
+        err
+      );
 
-//     case "TESTING":
-//       return 3;
+      alert(
+        err.response?.data?.message ||
+        "Upload failed"
+      );
+    }
+  };
 
-//     case "LIVE":
-//       return 4;
+  /*
+  =====================================================
+  LOADING
+  =====================================================
+  */
 
-//     case "HOLD":
-//       return 5;
+  if (!project) {
+    return (
+      <div className="p-8">
+        <p className="text-gray-500">
+          Loading project...
+        </p>
+      </div>
+    );
+  }
 
-//     case "COMPLETED":
-//       return 6;
+  /*
+  =====================================================
+  TARGET GROUP NOT FOUND
+  =====================================================
+  */
 
-//     default:
-//       return 0;
-//   }
-// };
-const handleSave = async () => {
-  await api.put(`/projects/${id}/survey-links`, { test, live });
-  alert("Saved");
+  if (
+    targetGroupId &&
+    !group
+  ) {
+    return (
+      <div className="p-8">
 
-  fetchProject(); 
-};
+        <h1 className="text-2xl font-bold">
+          Target Group Not Found
+        </h1>
 
-const handleFile = (e) => {
-  setFile(e.target.files[0]);
-};
+        <p className="text-gray-500 mt-2">
+          The selected target group does not
+          exist in this project.
+        </p>
 
-const uploadFile = async () => {
-  const formData = new FormData();
-  formData.append("file", file);
+        <button
+          onClick={() =>
+            navigate(
+              `/business/dashboard/project/${currentProjectId}`
+            )
+          }
+          className="
+            mt-6
+            bg-purple-700
+            text-white
+            px-5
+            py-3
+            rounded-lg
+          "
+        >
+          Back to Project
+        </button>
 
-  await api.put(`/projects/${id}/upload-keys`, formData);
-  alert("Uploaded");
-  fetchProject();
-};
-    // const activeStep = getStep();
-    if (!project) {
+      </div>
+    );
+  }
+
+  /*
+  =====================================================
+  TARGET GROUP STATUS
+
+  THIS is now the important status.
+  =====================================================
+  */
+
+  const groupStatus =
+    group?.status || "DRAFT";
+
+  const isTesting =
+    groupStatus === "TESTING";
+
+  const isLive =
+    groupStatus === "LIVE";
+
+  const isHold =
+    groupStatus === "HOLD";
+
+  /*
+  =====================================================
+  TARGET GROUP REDIRECTS
+  =====================================================
+  */
+
+  const redirects =
+    group?.redirects || {};
+
+  const startUrl =
+    redirects.start?.token
+      ? `${base}/redirect/start?tk=${redirects.start.token}`
+      : "";
+
+  const completeUrl =
+    redirects.complete?.token
+      ? `${base}/redirect/c?tk=${redirects.complete.token}&RID={RID}`
+      : "";
+
+  const disqualifiedUrl =
+    redirects.disqualified?.token
+      ? `${base}/redirect/dq?tk=${redirects.disqualified.token}&RID={RID}`
+      : "";
+
+  const quotaFullUrl =
+    redirects.quotaFull?.token
+      ? `${base}/redirect/qf?tk=${redirects.quotaFull.token}&RID={RID}`
+      : "";
+
+  /*
+  =====================================================
+  TARGET GROUP STATISTICS
+  =====================================================
+  */
+
+  const targetCompletes =
+    Number(
+      group?.targetCompletes
+    ) || 0;
+
+  const completes =
+    Number(
+      group?.completes
+    ) || 0;
+
+  const disqualified =
+    Number(
+      group?.disqualified
+    ) || 0;
+
+  const quotaFull =
+    Number(
+      group?.quotaFull
+    ) || 0;
+
+  const totalResponses =
+    Number(
+      group?.totalResponses
+    ) || 0;
+
+  const remaining =
+    Math.max(
+      targetCompletes -
+        completes,
+      0
+    );
+
+  /*
+  =====================================================
+  UI
+  =====================================================
+  */
+
   return (
     <div className="p-8">
-      <p className="text-gray-500">
-        Loading project...
-      </p>
-    </div>
-  );
-}
-    return (
-  <div className="p-8">
 
-  {/* HEADER */}
-<div className="flex items-start justify-between mb-8">
+      {/* =================================================
+          HEADER
+      ================================================= */}
 
-  <div>
-    <div className="flex items-center gap-3 mb-2">
+      <div className="mb-8">
 
-      {/* <h1 className="text-3xl font-bold text-gray-900">
+        <div className="flex items-center gap-3">
 
-        {project?.status === "LIVE"
-          ? "Project is Live"
-          : project?.status === "TESTING"
-          ? "Testing in Progress"
-          : project?.status === "DRAFT"
-          ? "Waiting for Approval"
-          : project?.status === "HOLD"
-          ? "Project On Hold"
-          : project?.status === "Rejected"
-          ? "project Rejected"
-          : "Project Completed"}
+          <h1 className="text-3xl font-bold">
+            {group?.name ||
+              "Target Group"}
+          </h1>
 
-      </h1> */}
-      
-      <h1 className="text-3xl font-bold text-gray-900">
-  {project.name}
-</h1>
+          <span
+            className={`
+              text-sm
+              px-3
+              py-1
+              rounded-full
+              font-medium
 
-
-      <span
-        className={`text-sm px-3 py-1 rounded-full capitalize font-medium
-        ${
-          project?.status === "LIVE"
-            ? "bg-green-100 text-green-700"
-            : project?.status === "TESTING"
-            ? "bg-yellow-100 text-yellow-700"
-            : project?.status === "HOLD"
-            ? "bg-gray-200 text-gray-700"
-            : project?.status === "COMPLETED"
-            ? "bg-blue-100 text-blue-700"
-            : "bg-gray-100 text-gray-600"
-        }`}
-      >
-        ● {project?.status?.toLowerCase()}
-      </span>
-
-    </div>
-
-    {/* <p className="text-gray-500">
-      Your project has been successfully sent for review.
-    </p> */}
-    <p className="text-gray-500">
-  Project Details
-</p>
-  </div>
-
-</div>
-
-
-
-{/* TIMELINE */}
-{/* <div className="border border-gray-200 rounded-2xl p-8 bg-white mb-10">
-
-  <div className="flex justify-between items-center mb-8">
-
-    <h3 className="text-xl font-semibold text-gray-900">
-      Project Lifecycle
-    </h3>
-
-    <span className="text-sm text-gray-500">
-      Step {activeStep + 1} of {steps.length}
-    </span>
-
-  </div>
-
-  <div className="flex items-center justify-between">
-
-    {steps.map((step, i) => (
-
-      <div
-        key={i}
-        className="flex items-center flex-1"
-      >
-
-        
-        <div className="flex flex-col items-center flex-1">
-
-          <div
-            className={`w-12 h-12 flex items-center justify-center rounded-full border-2 text-sm font-semibold transition-all duration-300
-
-            ${
-              i < activeStep
-                ? "bg-blue-600 border-blue-600 text-white"
-                : i === activeStep
-                ? "border-blue-600 text-blue-600 bg-blue-50"
-                : "border-gray-300 text-gray-400"
-            }`}
+              ${
+                groupStatus === "LIVE"
+                  ? "bg-green-100 text-green-700"
+                  : groupStatus === "TESTING"
+                  ? "bg-yellow-100 text-yellow-700"
+                  : groupStatus === "HOLD"
+                  ? "bg-gray-200 text-gray-700"
+                  : "bg-gray-100 text-gray-600"
+              }
+            `}
           >
+            ● {groupStatus.toLowerCase()}
+          </span>
 
-            {i < activeStep ? "✓" : i + 1}
+        </div>
+
+        <p className="text-gray-500 mt-1">
+          Project: {project.name}
+        </p>
+
+        <p className="text-gray-500">
+          Target Group ID:{" "}
+          {group?._id}
+        </p>
+
+      </div>
+
+      {/* =================================================
+          TARGET GROUP INFORMATION
+      ================================================= */}
+
+      <div className="
+        border
+        border-gray-200
+        rounded-2xl
+        overflow-hidden
+        mb-8
+        bg-white
+      ">
+
+        <div className="
+          px-6
+          py-5
+          border-b
+          border-gray-200
+        ">
+          <h3 className="
+            font-semibold
+            text-lg
+          ">
+            Target Group Information
+          </h3>
+        </div>
+
+        <div className="
+          grid
+          grid-cols-1
+          md:grid-cols-4
+          gap-6
+          px-6
+          py-6
+        ">
+
+          <div>
+            <p className="text-gray-500 text-sm">
+              Status
+            </p>
+
+            <p className="font-semibold mt-1">
+              {groupStatus}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-gray-500 text-sm">
+              Target Group ID
+            </p>
+
+            <p className="font-semibold mt-1 break-all">
+              {group?._id}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-gray-500 text-sm">
+              Target Completes
+            </p>
+
+            <p className="font-semibold mt-1">
+              {targetCompletes}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-gray-500 text-sm">
+              Completes
+            </p>
+
+            <p className="font-semibold mt-1">
+              {completes}
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* =================================================
+          TABS
+      ================================================= */}
+
+      <div className="
+        border
+        border-gray-200
+        rounded-2xl
+        overflow-hidden
+        bg-white
+        mb-8
+      ">
+
+        <div className="
+          flex
+          border-b
+          border-gray-200
+        ">
+
+          <button
+            className="
+              px-6
+              py-4
+              bg-blue-50
+              text-blue-600
+              font-medium
+            "
+          >
+            Vendor Links
+          </button>
+
+          <button
+            className="
+              px-6
+              py-4
+              text-gray-700
+            "
+          >
+            Business Redirects
+          </button>
+
+        </div>
+
+        <div className="p-6">
+
+          <h3 className="
+            font-semibold
+            text-lg
+            mb-2
+          ">
+            Target Group Survey Links
+          </h3>
+
+          <p className="
+            text-sm
+            text-gray-500
+            mb-5
+          ">
+            Survey links belonging specifically
+            to this target group.
+          </p>
+
+          <div className="space-y-4">
+
+            <LinkBox
+              label="Test Survey"
+              url={
+                group?.surveyLinks?.test ||
+                ""
+              }
+            />
+
+            <LinkBox
+              label="Live Survey"
+              url={
+                group?.surveyLinks?.live ||
+                ""
+              }
+            />
 
           </div>
 
-          <p
-            className={`text-sm mt-3 text-center max-w-[100px]
+        </div>
 
-            ${
-              i <= activeStep
-                ? "text-gray-900 font-medium"
-                : "text-gray-400"
-            }`}
+      </div>
+
+      {/* =================================================
+          BUSINESS REDIRECTS
+      ================================================= */}
+
+      <div className="
+        border
+        border-gray-200
+        rounded-2xl
+        overflow-hidden
+        bg-white
+        mb-8
+      ">
+
+        <div className="
+          px-6
+          py-5
+          border-b
+          border-gray-200
+        ">
+
+          <h3 className="
+            font-semibold
+            text-lg
+          ">
+            Business Generated Redirects
+          </h3>
+
+          <p className="
+            text-sm
+            text-gray-500
+            mt-1
+          ">
+            Redirect URLs generated specifically
+            for this target group.
+          </p>
+
+        </div>
+
+        <div className="p-6">
+
+          <div className="space-y-4">
+
+            <LinkBox
+              label="Start URL"
+              url={startUrl}
+            />
+
+            <LinkBox
+              label="Complete"
+              url={completeUrl}
+            />
+
+            <LinkBox
+              label="Disqualified"
+              url={disqualifiedUrl}
+            />
+
+            <LinkBox
+              label="Quota Full"
+              url={quotaFullUrl}
+            />
+
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* =================================================
+          TESTING
+      ================================================= */}
+
+      {isTesting && (
+        <div className="
+          mt-8
+          border
+          border-gray-300
+          rounded-xl
+          p-6
+          bg-white
+        ">
+
+          <h3 className="
+            font-semibold
+            text-lg
+            mb-4
+          ">
+            Configure Target Group Survey
+          </h3>
+
+          <label className="
+            text-sm
+            text-gray-600
+            block
+            mb-1
+          ">
+            Test Survey Link
+          </label>
+
+          <input
+            placeholder="Insert test link"
+            className="
+              border
+              border-gray-300
+              w-full
+              rounded-xl
+              mb-4
+              p-3
+            "
+            value={test}
+            onChange={(e) =>
+              setTest(e.target.value)
+            }
+          />
+
+          <label className="
+            text-sm
+            text-gray-600
+            block
+            mb-1
+          ">
+            Live Survey Link
+          </label>
+
+          <input
+            placeholder="Insert live link"
+            className="
+              border
+              border-gray-300
+              w-full
+              rounded-xl
+              mb-4
+              p-3
+            "
+            value={live}
+            onChange={(e) =>
+              setLive(e.target.value)
+            }
+          />
+
+          <button
+            onClick={handleSave}
+            className="
+              bg-blue-600
+              text-white
+              px-5
+              py-2
+              rounded-lg
+            "
           >
-            {step}
-          </p>
+            Save Survey Links
+          </button>
+
+          <div className="mt-6">
+
+            <input
+              type="file"
+              onChange={handleFile}
+            />
+
+            <button
+              onClick={uploadFile}
+              className="
+                bg-green-600
+                text-white
+                px-5
+                py-2
+                rounded-lg
+                mt-2
+                block
+              "
+            >
+              Upload Keys
+            </button>
+
+          </div>
 
         </div>
-
-
-        {i !== steps.length - 1 && (
-
-          <div
-            className={`h-[3px] flex-1 mx-3 rounded-full
-
-            ${
-              i < activeStep
-                ? "bg-blue-600"
-                : "bg-gray-200"
-            }`}
-          />
-
-        )}
-
-      </div>
-
-    ))}
-
-  </div>
-
-</div> */}
-
-    {/* <div className="border border-gray-300 rounded-2xl p-6 w-[350px]">
-      <h3 className="font-semibold mb-4">Summary</h3>
-
-      <div className="text-sm space-y-1">
-        <p>Sector – {project?.sector}</p>
-        <p>Market – {project?.market}</p>
-        <p>Age – {project?.ageFrom} to {project?.ageTo}</p>
-        <p>Gender – {project?.gender}</p>
-        <p>Completes – {project?.completes} / {project?.targetCompletes}</p>
-        <p>Incidence – {project?.incidence}%</p>
-        <p>LOI – {project?.loi} mins</p>
-        <p>Open Ended – {project?.openEnded}</p>
-        <p>
-          Devices – {Object.keys(project?.devices || {})
-            .filter(k => project.devices[k])
-            .join(", ")}
-        </p>
-        <p>Timeline – {project?.timeline} days</p>
-        <p>Budget – ${project?.budget}</p>
-      </div>
-    </div> */}
-
-<div className="border border-gray-200 rounded-2xl overflow-hidden mb-8 mt-8 bg-white">
-
-  <div className="px-6 py-5 border-b border-gray-200">
-    <h3 className="font-semibold text-lg">Summary</h3>
-  </div>
-
-  <div className="divide-y divide-gray-200 text-sm">
-
-    <div className="flex justify-between px-6 py-4">
-      <span className="text-gray-500">Sector</span>
-      <span className="font-semibold">{group?.sector}</span>
-    </div>
-
-    <div className="flex justify-between px-6 py-4">
-      <span className="text-gray-500">Market</span>
-      <span className="font-semibold">{group?.market}</span>
-    </div>
-
-    <div className="flex justify-between px-6 py-4">
-      <span className="text-gray-500">Age Range</span>
-      <span className="font-semibold">
-        {group.ageFrom} – {group?.ageTo}
-      </span>
-    </div>
-
-    <div className="flex justify-between px-6 py-4">
-      <span className="text-gray-500">Gender</span>
-      <span className="font-semibold">{group?.gender}</span>
-    </div>
-
-    <div className="flex justify-between px-6 py-4">
-      <span className="text-gray-500">Target Completes</span>
-      <span className="font-semibold">{group?.targetCompletes}</span>
-    </div>
-
-    <div className="flex justify-between px-6 py-4">
-      <span className="text-gray-500">Incidence</span>
-      <span className="font-semibold">{group?.incidence}%</span>
-    </div>
-
-    <div className="flex justify-between px-6 py-4">
-      <span className="text-gray-500">LOI</span>
-      <span className="font-semibold">{group?.loi} mins</span>
-    </div>
-
-    <div className="flex justify-between px-6 py-4">
-      <span className="text-gray-500">Budget</span>
-      <span className="font-semibold">${group?.totalCost}</span>
-    </div>
-
-    <div className="flex justify-between px-6 py-4">
-      <span className="text-gray-500">Created</span>
-      <span className="font-semibold">
-        {new Date(project.createdAt).toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        })}
-      </span>
-    </div>
-
-    <div className="flex justify-between px-6 py-4">
-  <span className="text-gray-500">PII</span>
-
-  <span className="font-semibold">
-    {group?.containsPII ? "Yes" : "No"}
-  </span>
-</div>
-
-    {/* <div className="flex justify-between px-6 py-4">
-      <span className="text-gray-500">Project ID</span>
-      <span className="font-semibold">
-        {project.projectId || project._id}
-      </span>
-    </div> */}
-
-  </div>
-</div>
-
-{/* {project.status === "NEGOTIATION" &&(
-  <div className="border border-gray-200 rounded-2xl bg-white mt-8">
-
-  <div className="px-6 py-5 border-b border-gray-200">
-    <h3 className="font-semibold text-lg">
-      Negotiation Chat
-    </h3>
-  </div>
-
- 
-  <div className="p-6 space-y-4 max-h-[400px] overflow-y-auto">
-
-    {messages.map((msg, i) => (
-
-      <div
-        key={i}
-        className={`max-w-[70%] p-4 rounded-2xl
-
-        ${
-          msg.sender === "ADMIN"
-            ? "bg-blue-600 text-white ml-auto"
-            : "bg-gray-100 text-gray-800"
-        }`}
-      >
-
-        <p className="text-xs font-semibold mb-1">
-          {msg.sender}
-        </p>
-
-        <p>{msg.message}</p>
-
-        {msg.proposedCpi  && (
-
-          <p className="mt-2 font-bold">
-            Offer: ₹{msg.proposedCpi}
-          </p>
-
-        )}
-
-      </div>
-
-    ))}
-
-  </div>
-
- 
-  <div className="border-t border-gray-200 p-4 flex gap-3">
-
-    <input
-      type="text"
-      placeholder="Type message..."
-      value={message}
-      onChange={(e) => setMessage(e.target.value)}
-      className="flex-1 border rounded-xl px-4 py-3"
-    />
-
-    <input
-      type="number"
-      placeholder="Offer"
-      value={offer}
-      onChange={(e) => setOffer(e.target.value)}
-      className="w-32 border rounded-xl px-4 py-3"
-    />
-
-    <button
-      onClick={sendNegotiation}
-      className="bg-blue-600 text-white px-6 rounded-xl"
-    >
-      Send
-    </button>
-
-  </div>
-
-</div>
-
-)} */}
-
-
-{/* {project.status === "ACCEPTED" && (
-
-  <div className="border border-green-200 bg-green-50 rounded-2xl p-6 mt-8">
-
-    <h3 className="text-lg font-semibold text-green-800 mb-4">
-      Cost Accepted
-    </h3>
-
-    <div className="space-y-3 text-sm">
-
-      <div className="flex justify-between">
-        <span className="text-gray-600">
-          Final Agreed CPI
-        </span>
-
-        <span className="font-bold text-green-700">
-          ₹{project.totalCost}
-        </span>
-      </div>
-
-
-    </div>
-
-  </div>
-
-)} */}
-
-    {project?.status === "TESTING" && project?.redirects && (
-      
-      <div className="mt-8 border border-gray-300 rounded-xl p-6 w-[500px]">
-
-        <h3 className="font-semibold mb-4">
-          Redirect Links
-        </h3>
-         
-        <div className="space-y-3">
-
-          <LinkBox
-            label="Complete"
-            url={`${base}/redirect/c?tk=${project.redirects.complete?.token}`}
-          />
-
-          <LinkBox
-            label="Disqualified"
-            url={`${base}/redirect/dq?tk=${project.redirects.disqualified?.token}`}
-          />
-
-          <LinkBox
-            label="Quota Full"
-            url={`${base}/redirect/qf?tk=${project.redirects.quotaFull?.token}`}
-          />
+      )}
+
+      {/* =================================================
+          LIVE
+      ================================================= */}
+
+      {isLive && (
+        <div className="
+          border
+          border-green-200
+          rounded-2xl
+          overflow-hidden
+          bg-white
+        ">
+
+          <div className="
+            px-6
+            py-5
+            border-b
+            border-green-200
+          ">
+
+            <h3 className="
+              font-semibold
+              text-lg
+              text-green-700
+            ">
+              Target Group Live Stats
+            </h3>
+
+          </div>
+
+          <div className="
+            grid
+            grid-cols-2
+            md:grid-cols-5
+            gap-4
+            p-6
+          ">
+
+            <StatBox
+              label="Target Completes"
+              value={targetCompletes}
+            />
+
+            <StatBox
+              label="Completes"
+              value={completes}
+            />
+
+            <StatBox
+              label="Remaining"
+              value={remaining}
+            />
+
+            <StatBox
+              label="DQ"
+              value={disqualified}
+            />
+
+            <StatBox
+              label="QF"
+              value={quotaFull}
+            />
+
+          </div>
+
+          <div className="px-6 pb-6">
+
+            <div className="
+              border
+              rounded-xl
+              p-4
+            ">
+
+              <p className="
+                text-gray-500
+                text-sm
+              ">
+                Total Responses
+              </p>
+
+              <p className="
+                text-2xl
+                font-bold
+                mt-1
+              ">
+                {totalResponses}
+              </p>
+
+            </div>
+
+          </div>
 
         </div>
-
-      </div>
-    )}
-{project.status === "TESTING" && (
-  <div className="mt-10 border border-gray-300 p-6 rounded-xl w-[500px]">
-
-  <h3 className="font-semibold mb-4">
-    Insert your Survey Link Below
-  </h3>
-
-  <input
-    placeholder="Insert test link"
-    className="border border-gray-300 w-full rounded-xl mb-3 p-2"
-    value={test}
-    onChange={(e) => setTest(e.target.value)}
-  />
-
-  <input
-    placeholder="Insert live link"
-    className="border border-gray-300 w-full rounded-xl mb-3 p-2"
-    value={live}
-    onChange={(e) => setLive(e.target.value)}
-  />
-
-  <button
-    onClick={handleSave}
-    className="bg-blue-600 text-white px-4 py-2 rounded"
-  >
-    Submit
-  </button>
-
-  <div className="mt-4">
-    <input type="file" onChange={handleFile} />
-    <button
-  onClick={uploadFile}
-  className="bg-green-600 text-white px-4 py-2 rounded mt-2"
->
-  Upload Keys
-</button>
-  </div>
-
-</div>
-)}
-{project.status === "LIVE" && (
-  <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white">
-
-    <div className="px-6 py-5 border-b border-gray-200">
-      <h3 className="font-semibold text-lg">
-        Live Stats
-      </h3>
-    </div>
-
-    <div className="divide-y divide-gray-200 text-sm">
-
-      <div className="flex justify-between px-6 py-4">
-        <span className="text-gray-500">Total Responses</span>
-        <span className="font-semibold">
-          {project.totalResponses}
-        </span>
-      </div>
-
-      <div className="flex justify-between px-6 py-4">
-        <span className="text-gray-500">Completes</span>
-        <span className="font-semibold">
-          {project.completes}
-        </span>
-      </div>
-
-      <div className="flex justify-between px-6 py-4">
-        <span className="text-gray-500">Disqualified</span>
-        <span className="font-semibold">
-          {project.disqualified}
-        </span>
-      </div>
-
-      <div className="flex justify-between px-6 py-4">
-        <span className="text-gray-500">Quota Full</span>
-        <span className="font-semibold">
-          {project.quotaFull}
-        </span>
-      </div>
+      )}
 
     </div>
-  </div>
-)}
-
-    
-
-  </div>
-);
+  );
 }
 
+/*
+=========================================================
+STAT BOX
+=========================================================
+*/
 
-function LinkBox({ label, url }) {
+function StatBox({
+  label,
+  value,
+}) {
+  return (
+    <div className="
+      border
+      border-gray-300
+      rounded-xl
+      p-4
+    ">
+
+      <p className="
+        text-xs
+        text-gray-500
+      ">
+        {label}
+      </p>
+
+      <p className="
+        text-xl
+        font-bold
+        mt-1
+      ">
+        {value}
+      </p>
+
+    </div>
+  );
+}
+
+/*
+=========================================================
+LINK BOX
+=========================================================
+*/
+
+function LinkBox({
+  label,
+  url,
+}) {
   const copy = () => {
+    if (!url) {
+      return;
+    }
+
     navigator.clipboard.writeText(url);
+
     alert("Copied!");
   };
 
   return (
-    <div className="flex justify-between items-center border p-2 rounded">
-      <span className="text-sm">{label}</span>
+    <div className="
+      flex
+      justify-between
+      items-center
+      gap-3
+      border
+      p-3
+      rounded-lg
+    ">
 
-      <div className="flex gap-2">
+      <span className="
+        text-sm
+        font-medium
+        min-w-[110px]
+      ">
+        {label}
+      </span>
+
+      <div className="
+        flex
+        gap-2
+        flex-1
+      ">
+
         <input
           value={url}
           readOnly
-          className="text-xs w-[260px] border px-2"
+          placeholder={`No ${label} configured`}
+          className="
+            text-xs
+            flex-1
+            border
+            px-3
+            py-2
+            rounded
+            bg-gray-50
+          "
         />
 
         <button
           onClick={copy}
-          className="bg-black text-white px-3 py-1 text-xs"
+          disabled={!url}
+          className="
+            bg-black
+            disabled:bg-gray-300
+            text-white
+            px-4
+            py-2
+            text-xs
+            rounded
+          "
         >
           Copy
         </button>
+
       </div>
+
     </div>
   );
 }

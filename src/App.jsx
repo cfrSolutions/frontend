@@ -208,6 +208,10 @@ export default function App() {
     element={<ProjectStatus />}
   />
   <Route path="project/:id/status" element={<ProjectStatus />} />
+  <Route
+  path="project/:projectId/target-group/:targetGroupId/status"
+  element={<ProjectStatus />}
+/>
   <Route path="live" element={<BusinessDashboard />} />
   <Route path="hold" element={<BusinessDashboard />} />
   <Route path="closed" element={<BusinessDashboard />} />
