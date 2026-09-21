@@ -600,15 +600,32 @@ const handleSubmit = async () => {
       );
     }
 
+    const savedTargetGroupId =
+  targetGroupId ||
+  response.data?.targetGroup?._id ||
+  response.data?._id;
+
+if (!savedTargetGroupId) {
+  setErrors({
+    general: "Target group was saved but ID was not returned.",
+  });
+  return;
+}
+
+navigate(
+  `/business/dashboard/project/${projectId}/target-group/${savedTargetGroupId}/status`
+);
+
     // Only navigate when backend accepts the request
-    navigate(
-      `/business/dashboard/project/${projectId}/status`
-    );
+    // navigate(
+    //   `/business/dashboard/project/${projectId}/status`
+    // );
+   
 
   } catch (err) {
     const data = err.response?.data;
 
-    console.log("VALIDATION RESPONSE:", data);
+   
 
     // Backend returned field-specific errors
     if (data?.errors) {
@@ -738,7 +755,7 @@ const handleSaveDraft = async () => {
       status: "DRAFT",
     };
 
-    console.log("SAVING TARGET GROUP DRAFT:", payload);
+    
 
     let response;
 

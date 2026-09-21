@@ -731,29 +731,40 @@ export default function ProjectStatus() {
       =================================================
       */
 
+      // let selectedGroup = null;
+
+      // if (targetGroupId) {
+      //   selectedGroup =
+      //     projectData.targetGroups?.find(
+      //       (g) =>
+      //         String(g._id) ===
+      //         String(targetGroupId)
+      //     );
+      // } else {
+      //   /*
+      //   Backward compatibility for:
+      //   /project/:id/status
+
+      //   If no target group was supplied,
+      //   use first group.
+      //   */
+
+      //   selectedGroup =
+      //     projectData.targetGroups?.[0] || null;
+      // }
+
+      // setGroup(selectedGroup);
+
       let selectedGroup = null;
 
-      if (targetGroupId) {
-        selectedGroup =
-          projectData.targetGroups?.find(
-            (g) =>
-              String(g._id) ===
-              String(targetGroupId)
-          );
-      } else {
-        /*
-        Backward compatibility for:
-        /project/:id/status
+if (targetGroupId) {
+  selectedGroup =
+    projectData.targetGroups?.find(
+      (g) => String(g._id) === String(targetGroupId)
+    ) || null;
+}
 
-        If no target group was supplied,
-        use first group.
-        */
-
-        selectedGroup =
-          projectData.targetGroups?.[0] || null;
-      }
-
-      setGroup(selectedGroup);
+setGroup(selectedGroup);
 
       /*
       =================================================
