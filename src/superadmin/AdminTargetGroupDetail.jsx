@@ -32,69 +32,229 @@ export default function AdminTargetGroupDetail() {
   const [activeTab, setActiveTab] =
     useState("vendor");
 
+  const [vendorLinks, setVendorLinks] = useState({
+  vendorName: "",
+  capture: "",
+  complete: "",
+  disqualified: "",
+  quotaFull: "",
+});
+
+const [saving, setSaving] = useState(false);
+
 
   // =====================================================
   // FETCH PROJECT
   // =====================================================
 
-  useEffect(() => {
+//   useEffect(() => {
 
-    const loadProject = async () => {
+//     const loadProject = async () => {
 
-      try {
+//       try {
 
-        setLoading(true);
+//         setLoading(true);
 
-        const res =
-          await api.get(
-            `/admin/project/${id}`,
-            {
-              withCredentials: true,
-            }
-          );
+//         const res =
+//           await api.get(
+//             `/admin/project/${id}`,
+//             {
+//               withCredentials: true,
+//             }
+//           );
 
-        const projectData =
-          res.data;
+//         const projectData =
+//           res.data;
 
-        setProject(
-          projectData
-        );
-
-
-        const foundGroup =
-          projectData.targetGroups?.find(
-            (item) =>
-              String(item._id) ===
-              String(targetGroupId)
-          );
+//         setProject(
+//           projectData
+//         );
 
 
-        setGroup(
-          foundGroup || null
-        );
+//       const foundGroup =
+//   projectData.targetGroups?.find(
+//     (item) =>
+//       String(item._id) ===
+//       String(targetGroupId)
+//   );
 
-      } catch (error) {
+// setGroup(foundGroup || null);
 
-        // console.error(
-        //   "FAILED TO LOAD TARGET GROUP:",
-        //   error
-        // );
+// if (foundGroup) {
+//   setVendorLinks({
+//     vendorName:
+//       foundGroup.vendorLinks?.vendorName || "",
 
-      } finally {
+//     capture:
+//       foundGroup.vendorLinks?.capture || "",
 
-        setLoading(false);
+//     complete:
+//       foundGroup.vendorLinks?.complete || "",
 
+//     disqualified:
+//       foundGroup.vendorLinks?.disqualified || "",
+
+//     quotaFull:
+//       foundGroup.vendorLinks?.quotaFull || "",
+//   });
+// }
+//       } catch (error) {
+
+//         // console.error(
+//         //   "FAILED TO LOAD TARGET GROUP:",
+//         //   error
+//         // );
+
+//       } finally {
+
+//         setLoading(false);
+
+//       }
+
+//     };
+
+//     loadProject();
+
+//   }, [
+//     id,
+//     targetGroupId,
+//   ]);
+
+
+// =====================================================
+// FETCH PROJECT
+// =====================================================
+
+const fetchProject = async () => {
+  try {
+    setLoading(true);
+
+    const res = await api.get(
+      `/admin/project/${id}`,
+      {
+        withCredentials: true,
       }
+    );
 
-    };
+    const projectData = res.data;
 
-    loadProject();
+    setProject(projectData);
 
-  }, [
-    id,
-    targetGroupId,
-  ]);
+    const foundGroup =
+      projectData.targetGroups?.find(
+        (item) =>
+          String(item._id) ===
+          String(targetGroupId)
+      );
 
+    setGroup(foundGroup || null);
+
+    if (foundGroup) {
+      setVendorLinks({
+        vendorName:
+          foundGroup.vendorLinks?.vendorName || "",
+
+        capture:
+          foundGroup.vendorLinks?.capture || "",
+
+        complete:
+          foundGroup.vendorLinks?.complete || "",
+
+        disqualified:
+          foundGroup.vendorLinks?.disqualified || "",
+
+        quotaFull:
+          foundGroup.vendorLinks?.quotaFull || "",
+      });
+    }
+
+  } catch (error) {
+    console.error(
+      "FAILED TO LOAD TARGET GROUP:",
+      error
+    );
+
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+// =====================================================
+// LOAD PROJECT
+// =====================================================
+
+useEffect(() => {
+  fetchProject();
+}, [id, targetGroupId]);
+
+
+  const saveVendorLinks = async () => {
+  try {
+    setSaving(true);
+
+    await api.put(
+      `/admin/project/${id}/target-group/${targetGroupId}/vendor-links`,
+      vendorLinks
+    );
+
+    alert(
+      "Target group vendor links saved successfully"
+    );
+
+    await fetchProject();
+
+  } catch (err) {
+    console.error(
+      "Failed to save target group vendor links:",
+      err
+    );
+
+    alert(
+      err.response?.data?.message ||
+      "Failed to save vendor links"
+    );
+
+  } finally {
+    setSaving(false);
+  }
+};
+
+const moveTesting = async () => {
+  try {
+    await api.put(
+      `/admin/project/${id}/target-group/${targetGroupId}/move-testing`
+    );
+
+    await fetchProject();
+
+  } catch (err) {
+    console.error(err);
+
+    alert(
+      err.response?.data?.message ||
+      "Failed to move target group to testing"
+    );
+  }
+};
+
+const moveLive = async () => {
+  try {
+    await api.put(
+      `/admin/project/${id}/target-group/${targetGroupId}/go-live`
+    );
+
+    await fetchProject();
+
+  } catch (err) {
+    console.error(err);
+
+    alert(
+      err.response?.data?.message ||
+      "Failed to move target group live"
+    );
+  }
+};
 
   // =====================================================
   // LOADING
@@ -400,56 +560,97 @@ const businessRedirects = {
             </p>
 
 
-            <div className="
-              space-y-4
-            ">
+           <div className="space-y-4">
 
-              <ReadOnlyField
-                label="Vendor Name"
-                value={
-                  group.vendorName ||
-                  project.vendorLinks?.[0]?.vendorName ||
-                  ""
-                }
-              />
+  {/* Vendor Name */}
+  <InputField
+    label="Vendor Name"
+    placeholder="Enter vendor name"
+    value={vendorLinks.vendorName}
+    onChange={(value) =>
+      setVendorLinks({
+        ...vendorLinks,
+        vendorName: value,
+      })
+    }
+  />
 
-              <ReadOnlyField
-                label="Capture URL"
-                value={
-                  group.captureUrl ||
-                  project.vendorLinks?.[0]?.capture ||
-                  ""
-                }
-              />
+  {/* Capture */}
+  <InputField
+    label="Capture URL"
+    placeholder="Enter vendor capture URL"
+    value={vendorLinks.capture}
+    onChange={(value) =>
+      setVendorLinks({
+        ...vendorLinks,
+        capture: value,
+      })
+    }
+  />
 
-              <ReadOnlyField
-                label="Complete URL"
-                value={
-                  group.completeUrl ||
-                  project.vendorLinks?.[0]?.complete ||
-                  ""
-                }
-              />
+  {/* Complete */}
+  <InputField
+    label="Complete URL"
+    placeholder="Enter vendor complete URL"
+    value={vendorLinks.complete}
+    onChange={(value) =>
+      setVendorLinks({
+        ...vendorLinks,
+        complete: value,
+      })
+    }
+  />
 
-              <ReadOnlyField
-                label="Disqualified URL"
-                value={
-                  group.disqualifiedUrl ||
-                  project.vendorLinks?.[0]?.disqualified ||
-                  ""
-                }
-              />
+  {/* Disqualified */}
+  <InputField
+    label="Disqualified URL"
+    placeholder="Enter vendor disqualified URL"
+    value={vendorLinks.disqualified}
+    onChange={(value) =>
+      setVendorLinks({
+        ...vendorLinks,
+        disqualified: value,
+      })
+    }
+  />
 
-              <ReadOnlyField
-                label="Quota Full URL"
-                value={
-                  group.quotaFullUrl ||
-                  project.vendorLinks?.[0]?.quotaFull ||
-                  ""
-                }
-              />
+  {/* Quota Full */}
+  <InputField
+    label="Quota Full URL"
+    placeholder="Enter vendor quota full URL"
+    value={vendorLinks.quotaFull}
+    onChange={(value) =>
+      setVendorLinks({
+        ...vendorLinks,
+        quotaFull: value,
+      })
+    }
+  />
 
-            </div>
+</div>
+
+<div className="mt-6">
+
+  <button
+    onClick={saveVendorLinks}
+    disabled={saving}
+    className="
+      bg-blue-600
+      hover:bg-blue-700
+      disabled:bg-blue-300
+      text-white
+      px-5
+      py-2.5
+      rounded-lg
+      font-medium
+    "
+  >
+    {saving
+      ? "Saving..."
+      : "Save Vendor Links"}
+  </button>
+
+</div>
 
           </div>
 
@@ -585,6 +786,62 @@ const businessRedirects = {
 
       </div>
 
+      {/* =====================================================
+    TARGET GROUP ACTIONS
+===================================================== */}
+
+<div className="flex flex-wrap gap-3 mt-6">
+
+  <button
+    onClick={saveVendorLinks}
+    disabled={saving}
+    className="
+      bg-blue-600
+      hover:bg-blue-700
+      disabled:bg-blue-300
+      text-white
+      px-5
+      py-3
+      rounded-lg
+      font-medium
+    "
+  >
+    {saving
+      ? "Saving..."
+      : "Save Vendor Links"}
+  </button>
+
+  <button
+    onClick={moveTesting}
+    className="
+      bg-yellow-500
+      hover:bg-yellow-600
+      text-white
+      px-5
+      py-3
+      rounded-lg
+      font-medium
+    "
+  >
+    Move To Testing
+  </button>
+
+  <button
+    onClick={moveLive}
+    className="
+      bg-green-600
+      hover:bg-green-700
+      text-white
+      px-5
+      py-3
+      rounded-lg
+      font-medium
+    "
+  >
+    Go Live
+  </button>
+
+</div>
 
       {/* =================================================
           TARGET GROUP STATISTICS
@@ -727,6 +984,48 @@ function ReadOnlyField({
   );
 }
 
+
+function InputField({
+  label,
+  placeholder,
+  value,
+  onChange,
+}) {
+  return (
+    <div>
+
+      <label className="
+        block
+        text-sm
+        font-medium
+        mb-2
+      ">
+        {label}
+      </label>
+
+      <input
+        type="text"
+        placeholder={placeholder}
+        value={value || ""}
+        onChange={(e) =>
+          onChange(e.target.value)
+        }
+        className="
+          w-full
+          border
+          rounded-lg
+          px-4
+          py-3
+          outline-none
+          focus:ring-2
+          focus:ring-blue-500
+          focus:border-blue-500
+        "
+      />
+
+    </div>
+  );
+}
 
 // =====================================================
 // STAT
