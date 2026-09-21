@@ -207,7 +207,7 @@ export default function App() {
     path="project/:id/status"
     element={<ProjectStatus />}
   />
-  <Route path="project/:id/status" element={<ProjectStatus />} />
+  {/* <Route path="project/:id/status" element={<ProjectStatus />} /> */}
   <Route
   path="project/:projectId/target-group/:targetGroupId/status"
   element={<ProjectStatus />}

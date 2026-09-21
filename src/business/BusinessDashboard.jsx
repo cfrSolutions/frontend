@@ -215,20 +215,21 @@ if (path.includes("/testing")) filter = "TESTING";
 function ProjectCard({ p }) {
   const navigate = useNavigate();
 
-  // Find the live target group
+  // Find the target group that is actually LIVE
   const liveGroup = p.targetGroups?.find(
     (group) => group.status === "LIVE"
   );
 
-  const group = liveGroup || p.targetGroups?.[0];
-
   const handleClick = () => {
-    if (group?._id) {
+    if (liveGroup?._id) {
       navigate(
-        `/business/dashboard/project/${p._id}/target-group/${group._id}/status`
+        `/business/dashboard/project/${p._id}/target-group/${liveGroup._id}/status`
       );
     } else {
-      navigate(`/business/dashboard/project/${p._id}/status`);
+      console.error(
+        "No LIVE target group found for project:",
+        p._id
+      );
     }
   };
 
@@ -238,32 +239,22 @@ function ProjectCard({ p }) {
       className="bg-white p-4 rounded-xl shadow mb-3 cursor-pointer hover:shadow-md transition"
     >
       <h3 className="font-semibold">
-        {group?.sector || p.sector || "-"}{" "}
+        {liveGroup?.sector || p.sector || "-"}{" "}
         -{" "}
-        {group?.market || p.market || "-"}
+        {liveGroup?.market || p.market || "-"}
       </h3>
 
       <p className="text-sm text-gray-500">
         Age:{" "}
-        {group?.ageFrom ?? p.ageFrom ?? "-"}{" "}
+        {liveGroup?.ageFrom ?? p.ageFrom ?? "-"}{" "}
         -{" "}
-        {group?.ageTo ?? p.ageTo ?? "-"}
+        {liveGroup?.ageTo ?? p.ageTo ?? "-"}
       </p>
 
       <p className="text-sm mt-1">
         Status:{" "}
-        <span
-          className={`font-semibold ${
-            p.status === "LIVE"
-              ? "text-green-600"
-              : p.status === "DRAFT"
-              ? "text-gray-500"
-              : p.status === "HOLD"
-              ? "text-yellow-500"
-              : "text-red-500"
-          }`}
-        >
-          {p.status}
+        <span className="font-semibold text-green-600">
+          LIVE
         </span>
       </p>
     </div>
