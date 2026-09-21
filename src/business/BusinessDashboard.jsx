@@ -610,11 +610,9 @@ export default function BusinessDashboard() {
     )
   ).length;
 
-  const closed = projects.filter((project) =>
-    (project.targetGroups || []).some(
-      (group) => group.status === "CLOSED"
-    )
-  ).length;
+  const closed = projects.filter(
+  (project) => project.status === "CLOSED"
+).length;
 
   // =====================================================
   // FILTER PROJECTS
@@ -623,38 +621,26 @@ export default function BusinessDashboard() {
   let filteredProjects = projects;
 
   if (
-    filter === "LIVE" ||
-    filter === "HOLD" ||
-    filter === "CLOSED" ||
-    filter === "DRAFT" ||
-    filter === "TESTING"
-  ) {
-    /*
-      IMPORTANT:
+  filter === "LIVE" ||
+  filter === "HOLD" ||
+  filter === "DRAFT" ||
+  filter === "TESTING"
+) {
+  filteredProjects = projects.filter((project) =>
+    (project.targetGroups || []).some(
+      (group) => group.status === filter
+    )
+  );
+}
 
-      Do NOT filter using:
+// CLOSED is PROJECT level
+if (filter === "CLOSED") {
+  filteredProjects = projects.filter(
+    (project) => project.status === "CLOSED"
+  );
+}
 
-      project.status
 
-      because target groups have their own lifecycle.
-
-      Instead, keep the project if it contains
-      at least one target group with this status.
-    */
-
-    filteredProjects = projects.filter((project) =>
-      (project.targetGroups || []).some(
-        (group) => group.status === filter
-      )
-    );
-  }
-
-  /*
-    These are still project-level statuses.
-
-    Keep project.status for these until you decide
-    to move them to target-group level as well.
-  */
 
   if (
     filter === "NEGOTIATION" ||
@@ -819,7 +805,6 @@ function ProjectCards({ project, filter }) {
   if (
     filter === "LIVE" ||
     filter === "HOLD" ||
-    filter === "CLOSED" ||
     filter === "DRAFT" ||
     filter === "TESTING"
   ) {
@@ -827,6 +812,10 @@ function ProjectCards({ project, filter }) {
       (group) => group.status === filter
     );
   }
+
+  if (filter === "CLOSED") {
+  matchingGroups = targetGroups;
+}
 
   /*
     For project-level statuses such as NEGOTIATION
