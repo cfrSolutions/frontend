@@ -199,6 +199,347 @@
 
 
 
+// import { useEffect, useState } from "react";
+// import api from "../services/api";
+// import { useLocation, useNavigate } from "react-router-dom";
+// import {
+//   CheckCircle,
+//   PauseCircle,
+//   Folder,
+// } from "lucide-react";
+
+// export default function BusinessDashboard() {
+//   const [projects, setProjects] = useState([]);
+//   const location = useLocation();
+
+//   const fetchProjects = async () => {
+//     try {
+//       const res = await api.get("/projects");
+//       setProjects(res.data);
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchProjects();
+//   }, [location.pathname]);
+
+//   const path = location.pathname;
+
+//   let filter = "ALL";
+
+//   if (path.includes("/live")) filter = "LIVE";
+//   if (path.includes("/hold")) filter = "HOLD";
+//   if (path.includes("/closed")) filter = "CLOSED";
+//   if (path.includes("/drafts")) filter = "DRAFT";
+//   if (path.includes("/negotiation")) filter = "NEGOTIATION";
+//   if (path.includes("/accepted")) filter = "ACCEPTED";
+//   if (path.includes("/testing")) filter = "TESTING";
+
+//   // =====================================================
+//   // PROJECT COUNTS
+//   // =====================================================
+
+//   const total = projects.length;
+
+//   const live = projects.filter(
+//     (p) => p.status === "LIVE"
+//   ).length;
+
+//   const hold = projects.filter(
+//     (p) => p.status === "HOLD"
+//   ).length;
+
+//   const closed = projects.filter(
+//     (p) => p.status === "CLOSED"
+//   ).length;
+
+//   // =====================================================
+//   // FILTER PROJECTS
+//   // =====================================================
+
+//   const filteredProjects =
+//     filter === "ALL"
+//       ? projects
+//       : projects.filter((p) => p.status === filter);
+
+//   // =====================================================
+//   // PAGE TITLE
+//   // =====================================================
+
+//   const getPageTitle = () => {
+//     switch (filter) {
+//       case "LIVE":
+//         return "Live Projects";
+
+//       case "DRAFT":
+//         return "Draft Projects";
+
+//       case "HOLD":
+//         return "Hold Projects";
+
+//       case "CLOSED":
+//         return "Closed Projects";
+
+//       case "NEGOTIATION":
+//         return "Negotiation Projects";
+
+//       case "ACCEPTED":
+//         return "Accepted Projects";
+
+//       case "TESTING":
+//         return "Testing Projects";
+
+//       default:
+//         return "All Projects";
+//     }
+//   };
+
+//   return (
+//     <div className="space-y-6">
+
+//       {/* =====================================================
+//           TOTAL PROJECTS
+//       ===================================================== */}
+
+//       <div>
+//         <h2 className="text-gray-500 text-sm">
+//           Total Projects
+//         </h2>
+
+//         <p className="text-4xl font-bold text-orange-500">
+//           {total}
+//         </p>
+//       </div>
+
+//       {/* =====================================================
+//           SUMMARY CARDS
+//       ===================================================== */}
+
+//       <div className="grid md:grid-cols-3 gap-6">
+
+//         {/* LIVE */}
+
+//         <div className="bg-white p-5 rounded-xl shadow flex justify-between">
+//           <div>
+//             <p className="text-sm text-gray-500">
+//               Live
+//             </p>
+
+//             <h3 className="text-2xl font-bold">
+//               {live}
+//             </h3>
+//           </div>
+
+//           <CheckCircle className="text-green-500" />
+//         </div>
+
+//         {/* HOLD */}
+
+//         <div className="bg-white p-5 rounded-xl shadow flex justify-between">
+//           <div>
+//             <p className="text-sm text-gray-500">
+//               Hold
+//             </p>
+
+//             <h3 className="text-2xl font-bold">
+//               {hold}
+//             </h3>
+//           </div>
+
+//           <PauseCircle className="text-yellow-500" />
+//         </div>
+
+//         {/* CLOSED */}
+
+//         <div className="bg-white p-5 rounded-xl shadow flex justify-between">
+//           <div>
+//             <p className="text-sm text-gray-500">
+//               Closed
+//             </p>
+
+//             <h3 className="text-2xl font-bold">
+//               {closed}
+//             </h3>
+//           </div>
+
+//           <Folder />
+//         </div>
+
+//       </div>
+
+//       {/* =====================================================
+//           PAGE TITLE
+//       ===================================================== */}
+
+//       <h2 className="text-lg font-semibold mt-6">
+//         {getPageTitle()}
+//       </h2>
+
+//       {/* =====================================================
+//           PROJECTS
+//       ===================================================== */}
+
+//       {filteredProjects.length === 0 ? (
+//         <p className="text-gray-400">
+//           No projects found
+//         </p>
+//       ) : (
+//         filteredProjects.map((project) => (
+//           <ProjectCards
+//             key={project._id}
+//             project={project}
+//             filter={filter}
+//           />
+//         ))
+//       )}
+
+//     </div>
+//   );
+// }
+
+
+// /* ============================================================
+//    PROJECT CARDS
+// ============================================================ */
+
+// function ProjectCards({ project, filter }) {
+//   const navigate = useNavigate();
+
+//   const targetGroups = project.targetGroups || [];
+
+//   // ==========================================================
+//   // GET ALL TARGET GROUPS MATCHING THE CURRENT FILTER
+//   // ==========================================================
+
+//   let matchingGroups = targetGroups;
+
+//   if (filter !== "ALL") {
+//     matchingGroups = targetGroups.filter(
+//       (group) => group.status === filter
+//     );
+//   }
+
+//   // ==========================================================
+//   // NO TARGET GROUP
+//   // ==========================================================
+
+//   if (matchingGroups.length === 0) {
+//     return null;
+//   }
+
+//   return (
+//     <div className="space-y-3">
+
+//       {matchingGroups.map((group) => (
+
+//         <div
+//           key={group._id}
+//           onClick={() => {
+//             navigate(
+//               `/business/dashboard/project/${project._id}/target-group/${group._id}/status`
+//             );
+//           }}
+//           className="bg-white p-4 rounded-xl shadow mb-3 cursor-pointer hover:shadow-md transition"
+//         >
+
+//           {/* ==================================================
+//               TOP
+//           ================================================== */}
+
+//           <div className="flex items-start justify-between">
+
+//             <div>
+
+//               {/* TARGET GROUP NAME */}
+
+//               <h3 className="font-semibold text-lg">
+//                 {group.name || "Target Group"}
+//               </h3>
+
+//               {/* SECTOR + MARKET */}
+
+//               <p className="text-sm text-gray-700 mt-1">
+//                 {group.sector ||
+//                   project.sector ||
+//                   "-"}{" "}
+//                 -{" "}
+//                 {group.market ||
+//                   project.market ||
+//                   "-"}
+//               </p>
+
+//               {/* AGE */}
+
+//               <p className="text-sm text-gray-500">
+//                 Age:{" "}
+//                 {group.ageFrom ??
+//                   project.ageFrom ??
+//                   "-"}{" "}
+//                 -{" "}
+//                 {group.ageTo ??
+//                   project.ageTo ??
+//                   "-"}
+//               </p>
+
+//             </div>
+
+//             {/* =================================================
+//                 STATUS
+//             ================================================= */}
+
+//             <span
+//               className={`font-semibold text-sm ${
+//                 group.status === "LIVE"
+//                   ? "text-green-600"
+//                   : group.status === "HOLD"
+//                   ? "text-yellow-500"
+//                   : group.status === "DRAFT"
+//                   ? "text-gray-500"
+//                   : "text-red-500"
+//               }`}
+//             >
+//               {group.status}
+//             </span>
+
+//           </div>
+
+//           {/* ==================================================
+//               BOTTOM INFO
+//           ================================================== */}
+
+//           <div className="flex items-center gap-6 mt-3 text-sm">
+
+//             <div>
+//               <span className="text-gray-500">
+//                 Target Completes:
+//               </span>{" "}
+//               <span className="font-semibold">
+//                 {group.targetCompletes ?? 0}
+//               </span>
+//             </div>
+
+//             <div>
+//               <span className="text-gray-500">
+//                 Completes:
+//               </span>{" "}
+//               <span className="font-semibold">
+//                 {group.completes ?? 0}
+//               </span>
+//             </div>
+
+//           </div>
+
+//         </div>
+
+//       ))}
+
+//     </div>
+//   );
+// }
+
+
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -238,31 +579,91 @@ export default function BusinessDashboard() {
   if (path.includes("/testing")) filter = "TESTING";
 
   // =====================================================
+  // TARGET GROUP HELPERS
+  // =====================================================
+
+  const getGroupsByStatus = (status) => {
+    return projects.flatMap((project) =>
+      (project.targetGroups || []).filter(
+        (group) => group.status === status
+      )
+    );
+  };
+
+  // =====================================================
   // PROJECT COUNTS
   // =====================================================
 
   const total = projects.length;
 
-  const live = projects.filter(
-    (p) => p.status === "LIVE"
+  // Count PROJECTS having at least one target group
+  // in the requested status.
+  const live = projects.filter((project) =>
+    (project.targetGroups || []).some(
+      (group) => group.status === "LIVE"
+    )
   ).length;
 
-  const hold = projects.filter(
-    (p) => p.status === "HOLD"
+  const hold = projects.filter((project) =>
+    (project.targetGroups || []).some(
+      (group) => group.status === "HOLD"
+    )
   ).length;
 
-  const closed = projects.filter(
-    (p) => p.status === "CLOSED"
+  const closed = projects.filter((project) =>
+    (project.targetGroups || []).some(
+      (group) => group.status === "CLOSED"
+    )
   ).length;
 
   // =====================================================
   // FILTER PROJECTS
   // =====================================================
 
-  const filteredProjects =
-    filter === "ALL"
-      ? projects
-      : projects.filter((p) => p.status === filter);
+  let filteredProjects = projects;
+
+  if (
+    filter === "LIVE" ||
+    filter === "HOLD" ||
+    filter === "CLOSED" ||
+    filter === "DRAFT" ||
+    filter === "TESTING"
+  ) {
+    /*
+      IMPORTANT:
+
+      Do NOT filter using:
+
+      project.status
+
+      because target groups have their own lifecycle.
+
+      Instead, keep the project if it contains
+      at least one target group with this status.
+    */
+
+    filteredProjects = projects.filter((project) =>
+      (project.targetGroups || []).some(
+        (group) => group.status === filter
+      )
+    );
+  }
+
+  /*
+    These are still project-level statuses.
+
+    Keep project.status for these until you decide
+    to move them to target-group level as well.
+  */
+
+  if (
+    filter === "NEGOTIATION" ||
+    filter === "ACCEPTED"
+  ) {
+    filteredProjects = projects.filter(
+      (project) => project.status === filter
+    );
+  }
 
   // =====================================================
   // PAGE TITLE
@@ -410,15 +811,33 @@ function ProjectCards({ project, filter }) {
   const targetGroups = project.targetGroups || [];
 
   // ==========================================================
-  // GET ALL TARGET GROUPS MATCHING THE CURRENT FILTER
+  // GET ALL TARGET GROUPS MATCHING CURRENT FILTER
   // ==========================================================
 
   let matchingGroups = targetGroups;
 
-  if (filter !== "ALL") {
+  if (
+    filter === "LIVE" ||
+    filter === "HOLD" ||
+    filter === "CLOSED" ||
+    filter === "DRAFT" ||
+    filter === "TESTING"
+  ) {
     matchingGroups = targetGroups.filter(
       (group) => group.status === filter
     );
+  }
+
+  /*
+    For project-level statuses such as NEGOTIATION
+    and ACCEPTED, show all target groups.
+  */
+
+  if (
+    filter === "NEGOTIATION" ||
+    filter === "ACCEPTED"
+  ) {
+    matchingGroups = targetGroups;
   }
 
   // ==========================================================
@@ -452,13 +871,9 @@ function ProjectCards({ project, filter }) {
 
             <div>
 
-              {/* TARGET GROUP NAME */}
-
               <h3 className="font-semibold text-lg">
                 {group.name || "Target Group"}
               </h3>
-
-              {/* SECTOR + MARKET */}
 
               <p className="text-sm text-gray-700 mt-1">
                 {group.sector ||
@@ -469,8 +884,6 @@ function ProjectCards({ project, filter }) {
                   project.market ||
                   "-"}
               </p>
-
-              {/* AGE */}
 
               <p className="text-sm text-gray-500">
                 Age:{" "}
@@ -497,7 +910,11 @@ function ProjectCards({ project, filter }) {
                   ? "text-yellow-500"
                   : group.status === "DRAFT"
                   ? "text-gray-500"
-                  : "text-red-500"
+                  : group.status === "TESTING"
+                  ? "text-yellow-600"
+                  : group.status === "CLOSED"
+                  ? "text-red-500"
+                  : "text-gray-500"
               }`}
             >
               {group.status}
