@@ -811,9 +811,193 @@ if (filter === "CLOSED") {
             key={project._id}
             project={project}
             filter={filter}
+            onViewInvoice={handleViewInvoice}
           />
         ))
       )}
+      {selectedInvoice && (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-6"
+        onClick={() => setSelectedInvoice(null)}
+      >
+        <div
+          className="max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-2xl bg-white shadow-2xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+
+          {/* HEADER */}
+
+          <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5">
+
+            <div>
+              <h2 className="text-xl font-semibold text-slate-900">
+                Invoice
+              </h2>
+
+              <p className="mt-1 text-sm text-slate-500">
+                {selectedInvoice.invoiceNumber}
+              </p>
+            </div>
+
+            <button
+              onClick={() => setSelectedInvoice(null)}
+              className="flex h-9 w-9 items-center justify-center rounded-lg hover:bg-slate-100"
+            >
+              <X size={20} />
+            </button>
+
+          </div>
+
+          {/* INVOICE CONTENT */}
+
+          <div className="max-h-[calc(90vh-80px)] overflow-y-auto p-6">
+
+            {/* Invoice Information */}
+
+            <div className="mb-6 grid grid-cols-3 gap-4">
+
+              <div>
+                <p className="text-xs text-slate-400">
+                  Invoice Number
+                </p>
+
+                <p className="mt-1 font-medium text-slate-900">
+                  {selectedInvoice.invoiceNumber}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xs text-slate-400">
+                  Issued On
+                </p>
+
+                <p className="mt-1 font-medium text-slate-900">
+                  {selectedInvoice.issuedAt
+                    ? new Date(
+                        selectedInvoice.issuedAt
+                      ).toLocaleDateString("en-IN")
+                    : "-"}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xs text-slate-400">
+                  Status
+                </p>
+
+                <span className="mt-1 inline-flex rounded-full bg-green-50 px-3 py-1 text-sm font-medium text-green-600">
+                  {selectedInvoice.status}
+                </span>
+              </div>
+
+            </div>
+
+            {/* TARGET GROUPS */}
+
+            <div className="overflow-hidden rounded-xl border border-slate-200">
+
+              <table className="w-full">
+
+                <thead>
+                  <tr className="bg-slate-50">
+
+                    <th className="px-5 py-4 text-left text-sm font-semibold text-slate-600">
+                      Target Group
+                    </th>
+
+                    <th className="px-5 py-4 text-right text-sm font-semibold text-slate-600">
+                      Target
+                    </th>
+
+                    <th className="px-5 py-4 text-right text-sm font-semibold text-slate-600">
+                      CPI
+                    </th>
+
+                    <th className="px-5 py-4 text-right text-sm font-semibold text-slate-600">
+                      Total
+                    </th>
+
+                  </tr>
+                </thead>
+
+                <tbody>
+
+                  {selectedInvoice.items?.map((item) => (
+                    <tr
+                      key={item.targetGroupId}
+                      className="border-t border-slate-100"
+                    >
+
+                      <td className="px-5 py-4 font-medium text-slate-900">
+                        {item.targetGroupName}
+                      </td>
+
+                      <td className="px-5 py-4 text-right text-slate-600">
+                        {item.targetCompletes}
+                      </td>
+
+                      <td className="px-5 py-4 text-right text-slate-600">
+                        ₹{Number(item.cpi || 0).toFixed(2)}
+                      </td>
+
+                      <td className="px-5 py-4 text-right font-medium text-slate-900">
+                        ₹{Number(item.totalCost || 0).toFixed(2)}
+                      </td>
+
+                    </tr>
+                  ))}
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+            {/* TOTAL */}
+
+            <div className="mt-6 flex justify-end">
+
+              <div className="w-full max-w-sm space-y-3">
+
+                <div className="flex justify-between text-sm text-slate-500">
+
+                  <span>
+                    Subtotal
+                  </span>
+
+                  <span>
+                    ₹
+                    {Number(
+                      selectedInvoice.subtotal || 0
+                    ).toFixed(2)}
+                  </span>
+
+                </div>
+
+                <div className="flex justify-between border-t border-slate-200 pt-4">
+
+                  <span className="text-lg font-semibold text-slate-900">
+                    Total
+                  </span>
+
+                  <span className="text-2xl font-bold text-orange-500">
+                    ₹
+                    {Number(
+                      selectedInvoice.total || 0
+                    ).toFixed(2)}
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    )}
 
     </div>
   );
@@ -824,7 +1008,7 @@ if (filter === "CLOSED") {
    PROJECT CARDS
 ============================================================ */
 
-function ProjectCards({ project, filter }) {
+function ProjectCards({ project, filter, onViewInvoice }) {
   const navigate = useNavigate();
 
   const targetGroups = project.targetGroups || [];
@@ -969,8 +1153,11 @@ function ProjectCards({ project, filter }) {
             </div>
 
           </div>
-          <button
-  onClick={() => handleViewInvoice(project._id)}
+         <button
+  onClick={(e) => {
+    e.stopPropagation();
+    onViewInvoice(project._id);
+  }}
   className="inline-flex items-center gap-2 rounded-lg border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-medium text-orange-600 transition hover:bg-orange-100"
 >
   <FileText size={16} />
@@ -981,154 +1168,7 @@ function ProjectCards({ project, filter }) {
       ))}
 
 
-{selectedInvoice && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-6">
-    <div className="max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-2xl bg-white shadow-2xl">
 
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5">
-        <div>
-          <h2 className="text-xl font-semibold text-slate-900">
-            Invoice
-          </h2>
-
-          <p className="mt-1 text-sm text-slate-500">
-            {selectedInvoice.invoiceNumber}
-          </p>
-        </div>
-
-        <button
-          onClick={() => setSelectedInvoice(null)}
-          className="flex h-9 w-9 items-center justify-center rounded-lg hover:bg-slate-100"
-        >
-          <X size={20} />
-        </button>
-      </div>
-
-      {/* Invoice details */}
-      <div className="max-h-[calc(90vh-80px)] overflow-y-auto p-6">
-
-        <div className="mb-6 grid grid-cols-3 gap-4">
-          <div>
-            <p className="text-xs text-slate-400">
-              Invoice Number
-            </p>
-
-            <p className="mt-1 font-medium text-slate-900">
-              {selectedInvoice.invoiceNumber}
-            </p>
-          </div>
-
-          <div>
-            <p className="text-xs text-slate-400">
-              Issued On
-            </p>
-
-            <p className="mt-1 font-medium text-slate-900">
-              {selectedInvoice.issuedAt
-                ? new Date(
-                    selectedInvoice.issuedAt
-                  ).toLocaleDateString("en-IN")
-                : "-"}
-            </p>
-          </div>
-
-          <div>
-            <p className="text-xs text-slate-400">
-              Status
-            </p>
-
-            <span className="mt-1 inline-flex rounded-full bg-green-50 px-3 py-1 text-sm font-medium text-green-600">
-              {selectedInvoice.status}
-            </span>
-          </div>
-        </div>
-
-        {/* Items */}
-        <div className="overflow-hidden rounded-xl border border-slate-200">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-slate-50">
-                <th className="px-5 py-4 text-left text-sm font-semibold text-slate-600">
-                  Target Group
-                </th>
-
-                <th className="px-5 py-4 text-right text-sm font-semibold text-slate-600">
-                  Target
-                </th>
-
-                <th className="px-5 py-4 text-right text-sm font-semibold text-slate-600">
-                  CPI
-                </th>
-
-                <th className="px-5 py-4 text-right text-sm font-semibold text-slate-600">
-                  Total
-                </th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {selectedInvoice.items?.map((item) => (
-                <tr
-                  key={item.targetGroupId}
-                  className="border-t border-slate-100"
-                >
-                  <td className="px-5 py-4 font-medium text-slate-900">
-                    {item.targetGroupName}
-                  </td>
-
-                  <td className="px-5 py-4 text-right text-slate-600">
-                    {item.targetCompletes}
-                  </td>
-
-                  <td className="px-5 py-4 text-right text-slate-600">
-                    ₹{Number(item.cpi).toFixed(2)}
-                  </td>
-
-                  <td className="px-5 py-4 text-right font-medium text-slate-900">
-                    ₹{Number(item.totalCost).toFixed(2)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Total */}
-        <div className="mt-6 flex justify-end">
-          <div className="w-full max-w-sm space-y-3">
-
-            <div className="flex justify-between text-sm text-slate-500">
-              <span>Subtotal</span>
-
-              <span>
-                ₹
-                {Number(
-                  selectedInvoice.subtotal || 0
-                ).toFixed(2)}
-              </span>
-            </div>
-
-            <div className="flex justify-between border-t border-slate-200 pt-4">
-              <span className="text-lg font-semibold text-slate-900">
-                Total
-              </span>
-
-              <span className="text-2xl font-bold text-orange-500">
-                ₹
-                {Number(
-                  selectedInvoice.total || 0
-                ).toFixed(2)}
-              </span>
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-)}
     </div>
     
   );
