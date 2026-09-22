@@ -618,7 +618,7 @@ const [invoiceLoading, setInvoiceLoading] = useState(false);
 
   const hold = projects.filter((project) =>
     (project.targetGroups || []).some(
-      (group) => group.status === "HOLD"
+      (group) => group.status === "TESTING"
     )
   ).length;
 
@@ -966,7 +966,7 @@ if (filter === "CLOSED") {
                   </span>
 
                   <span>
-                    ₹
+                    $
                     {Number(
                       selectedInvoice.subtotal || 0
                     ).toFixed(2)}
@@ -981,7 +981,7 @@ if (filter === "CLOSED") {
                   </span>
 
                   <span className="text-2xl font-bold text-orange-500">
-                    ₹
+                    $
                     {Number(
                       selectedInvoice.total || 0
                     ).toFixed(2)}
