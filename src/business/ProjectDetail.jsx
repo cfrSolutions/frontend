@@ -170,6 +170,41 @@ export default function ProjectDetail() {
     );
   };
 
+  const deleteTargetGroup = async (e, targetGroupId) => {
+  e.stopPropagation();
+
+  const confirmed = window.confirm(
+    "Are you sure you want to delete this target group?"
+  );
+
+  if (!confirmed) return;
+
+  try {
+    await api.delete(
+      `/projects/${project._id}/target-group/${targetGroupId}`
+    );
+
+    // Remove it immediately from UI
+    setProject((prev) => ({
+      ...prev,
+      targetGroups: prev.targetGroups.filter(
+        (group) => group._id !== targetGroupId
+      ),
+    }));
+
+  } catch (err) {
+    console.error(
+      "Failed to delete target group:",
+      err
+    );
+
+    alert(
+      err.response?.data?.message ||
+      "Failed to delete target group"
+    );
+  }
+};
+
   return (
     <div className="p-8">
 
@@ -243,7 +278,7 @@ export default function ProjectDetail() {
 
           <div className="
             grid
-            grid-cols-8
+            grid-cols-9
             px-6
             py-4
             border-b
@@ -260,6 +295,7 @@ export default function ProjectDetail() {
             <div>IR</div>
             <div>LOI</div>
             <div>DOR</div>
+            <div>Action</div>
           </div>
 
           {project.targetGroups.map((group) => (
@@ -273,7 +309,7 @@ export default function ProjectDetail() {
               }
               className="
                 grid
-                grid-cols-8
+                grid-cols-9
                 px-6
                 py-5
                 border-b
@@ -301,7 +337,7 @@ export default function ProjectDetail() {
               </div>
 
               <div>
-                0 / {group.targetCompletes || 0}
+                {group.completes || 0} / {group.targetCompletes || 0}
               </div>
 
               <div>
@@ -323,7 +359,29 @@ export default function ProjectDetail() {
               <div>
                 -
               </div>
-
+              <div className="flex items-center">
+  <button
+    onClick={(e) =>
+      deleteTargetGroup(
+        e,
+        group._id
+      )
+    }
+    className="
+      px-3
+      py-1.5
+      rounded-md
+      text-sm
+      font-medium
+      text-red-600
+      hover:bg-red-50
+      border
+      border-red-200
+    "
+  >
+    Delete
+  </button>
+</div>
             </div>
 
           ))}
