@@ -1008,13 +1008,291 @@ if (filter === "CLOSED") {
    PROJECT CARDS
 ============================================================ */
 
-function ProjectCards({ project, filter, onViewInvoice }) {
+// function ProjectCards({ project, filter, onViewInvoice }) {
+//   const navigate = useNavigate();
+
+//   const targetGroups = project.targetGroups || [];
+
+//   // ==========================================================
+//   // GET ALL TARGET GROUPS MATCHING CURRENT FILTER
+//   // ==========================================================
+
+//   let matchingGroups = targetGroups;
+
+//   if (
+//     filter === "LIVE" ||
+//     filter === "HOLD" ||
+//     filter === "DRAFT" ||
+//     filter === "TESTING"
+//   ) {
+//     matchingGroups = targetGroups.filter(
+//       (group) => group.status === filter
+//     );
+//   }
+
+//   if (filter === "CLOSED") {
+//   matchingGroups = targetGroups;
+// }
+
+//   /*
+//     For project-level statuses such as NEGOTIATION
+//     and ACCEPTED, show all target groups.
+//   */
+
+//   if (
+//     filter === "NEGOTIATION" ||
+//     filter === "ACCEPTED"
+//   ) {
+//     matchingGroups = targetGroups;
+//   }
+
+//   // ==========================================================
+//   // NO TARGET GROUP
+//   // ==========================================================
+
+//   if (matchingGroups.length === 0) {
+//     return null;
+//   }
+
+//   return (
+//     <div className="space-y-3">
+
+//       {matchingGroups.map((group) => (
+
+//         <div
+//           key={group._id}
+//           onClick={() => {
+//             navigate(
+//               `/business/dashboard/project/${project._id}/target-group/${group._id}/status`
+//             );
+//           }}
+//           className="bg-white p-4 rounded-xl shadow mb-3 cursor-pointer hover:shadow-md transition"
+//         >
+
+//           {/* ==================================================
+//               TOP
+//           ================================================== */}
+
+//           <div className="flex items-start justify-between">
+
+//             <div>
+
+//               <h3 className="font-semibold text-lg">
+//                 {group.name || "Target Group"}
+//               </h3>
+
+//               <p className="text-sm text-gray-700 mt-1">
+//                 {group.sector ||
+//                   project.sector ||
+//                   "-"}{" "}
+//                 -{" "}
+//                 {group.market ||
+//                   project.market ||
+//                   "-"}
+//               </p>
+
+//               <p className="text-sm text-gray-500">
+//                 Age:{" "}
+//                 {group.ageFrom ??
+//                   project.ageFrom ??
+//                   "-"}{" "}
+//                 -{" "}
+//                 {group.ageTo ??
+//                   project.ageTo ??
+//                   "-"}
+//               </p>
+
+//             </div>
+
+//             {/* =================================================
+//                 STATUS
+//             ================================================= */}
+
+//             <span
+//               className={`font-semibold text-sm ${
+//                 group.status === "LIVE"
+//                   ? "text-green-600"
+//                   : group.status === "HOLD"
+//                   ? "text-yellow-500"
+//                   : group.status === "DRAFT"
+//                   ? "text-gray-500"
+//                   : group.status === "TESTING"
+//                   ? "text-yellow-600"
+//                   : group.status === "CLOSED"
+//                   ? "text-red-500"
+//                   : "text-gray-500"
+//               }`}
+//             >
+//               {group.status}
+//             </span>
+
+//           </div>
+
+//           {/* ==================================================
+//               BOTTOM INFO
+//           ================================================== */}
+
+//           <div className="flex items-center gap-6 mt-3 text-sm">
+
+//             <div>
+//               <span className="text-gray-500">
+//                 Target Completes:
+//               </span>{" "}
+//               <span className="font-semibold">
+//                 {group.targetCompletes ?? 0}
+//               </span>
+//             </div>
+
+//             <div>
+//               <span className="text-gray-500">
+//                 Completes:
+//               </span>{" "}
+//               <span className="font-semibold">
+//                 {group.completes ?? 0}
+//               </span>
+//             </div>
+
+//           </div>
+//          <button
+//   onClick={(e) => {
+//     e.stopPropagation();
+//     onViewInvoice(project._id);
+//   }}
+//   className="inline-flex items-center gap-2 rounded-lg border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-medium text-orange-600 transition hover:bg-orange-100"
+// >
+//   <FileText size={16} />
+//   View Invoice
+// </button>
+//         </div>
+
+//       ))}
+
+
+
+//     </div>
+    
+//   );
+// }
+
+
+function ProjectCards({
+  project,
+  filter,
+  onViewInvoice,
+}) {
   const navigate = useNavigate();
 
   const targetGroups = project.targetGroups || [];
 
   // ==========================================================
-  // GET ALL TARGET GROUPS MATCHING CURRENT FILTER
+  // CLOSED PROJECT
+  // PROJECT-LEVEL CARD
+  // ==========================================================
+
+  if (filter === "CLOSED") {
+    return (
+      <div className="space-y-3">
+
+        <div
+          className="bg-white p-4 rounded-xl shadow mb-3"
+        >
+          {/* ==================================================
+              TOP
+          ================================================== */}
+
+          <div className="flex items-start justify-between">
+
+            <div>
+
+              <h3 className="font-semibold text-lg">
+                {project.name || "Project"}
+              </h3>
+
+              <p className="text-sm text-gray-700 mt-1">
+                {project.sector || "-"}{" "}
+                -{" "}
+                {project.market || "-"}
+              </p>
+
+              <p className="text-sm text-gray-500">
+                Age:{" "}
+                {project.ageFrom ?? "-"}{" "}
+                -{" "}
+                {project.ageTo ?? "-"}
+              </p>
+
+            </div>
+
+            {/* PROJECT STATUS */}
+
+            <span className="font-semibold text-sm text-red-500">
+              CLOSED
+            </span>
+
+          </div>
+
+          {/* ==================================================
+              PROJECT INFO
+          ================================================== */}
+
+          <div className="flex items-center gap-6 mt-3 text-sm">
+
+            <div>
+              <span className="text-gray-500">
+                Target Completes:
+              </span>{" "}
+
+              <span className="font-semibold">
+                {project.targetCompletes ?? 0}
+              </span>
+            </div>
+
+            <div>
+              <span className="text-gray-500">
+                Completes:
+              </span>{" "}
+
+              <span className="font-semibold">
+                {project.completes ?? 0}
+              </span>
+            </div>
+
+          </div>
+
+          {/* ==================================================
+              TARGET GROUP COUNT
+          ================================================== */}
+
+          <div className="mt-2 text-sm text-gray-500">
+            Target Groups:{" "}
+            <span className="font-semibold text-gray-700">
+              {targetGroups.length}
+            </span>
+          </div>
+
+          {/* ==================================================
+              INVOICE
+          ================================================== */}
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onViewInvoice(project._id);
+            }}
+            className="mt-3 inline-flex items-center gap-2 rounded-lg border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-medium text-orange-600 transition hover:bg-orange-100"
+          >
+            <FileText size={16} />
+            View Invoice
+          </button>
+
+        </div>
+
+      </div>
+    );
+  }
+
+  // ==========================================================
+  // OTHER PROJECT / TARGET GROUP PAGES
   // ==========================================================
 
   let matchingGroups = targetGroups;
@@ -1029,10 +1307,6 @@ function ProjectCards({ project, filter, onViewInvoice }) {
       (group) => group.status === filter
     );
   }
-
-  if (filter === "CLOSED") {
-  matchingGroups = targetGroups;
-}
 
   /*
     For project-level statuses such as NEGOTIATION
@@ -1054,6 +1328,10 @@ function ProjectCards({ project, filter, onViewInvoice }) {
     return null;
   }
 
+  // ==========================================================
+  // TARGET GROUP CARDS
+  // ==========================================================
+
   return (
     <div className="space-y-3">
 
@@ -1069,9 +1347,7 @@ function ProjectCards({ project, filter, onViewInvoice }) {
           className="bg-white p-4 rounded-xl shadow mb-3 cursor-pointer hover:shadow-md transition"
         >
 
-          {/* ==================================================
-              TOP
-          ================================================== */}
+          {/* TOP */}
 
           <div className="flex items-start justify-between">
 
@@ -1104,9 +1380,7 @@ function ProjectCards({ project, filter, onViewInvoice }) {
 
             </div>
 
-            {/* =================================================
-                STATUS
-            ================================================= */}
+            {/* STATUS */}
 
             <span
               className={`font-semibold text-sm ${
@@ -1118,8 +1392,6 @@ function ProjectCards({ project, filter, onViewInvoice }) {
                   ? "text-gray-500"
                   : group.status === "TESTING"
                   ? "text-yellow-600"
-                  : group.status === "CLOSED"
-                  ? "text-red-500"
                   : "text-gray-500"
               }`}
             >
@@ -1128,9 +1400,7 @@ function ProjectCards({ project, filter, onViewInvoice }) {
 
           </div>
 
-          {/* ==================================================
-              BOTTOM INFO
-          ================================================== */}
+          {/* BOTTOM INFO */}
 
           <div className="flex items-center gap-6 mt-3 text-sm">
 
@@ -1138,6 +1408,7 @@ function ProjectCards({ project, filter, onViewInvoice }) {
               <span className="text-gray-500">
                 Target Completes:
               </span>{" "}
+
               <span className="font-semibold">
                 {group.targetCompletes ?? 0}
               </span>
@@ -1147,29 +1418,18 @@ function ProjectCards({ project, filter, onViewInvoice }) {
               <span className="text-gray-500">
                 Completes:
               </span>{" "}
+
               <span className="font-semibold">
                 {group.completes ?? 0}
               </span>
             </div>
 
           </div>
-         <button
-  onClick={(e) => {
-    e.stopPropagation();
-    onViewInvoice(project._id);
-  }}
-  className="inline-flex items-center gap-2 rounded-lg border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-medium text-orange-600 transition hover:bg-orange-100"
->
-  <FileText size={16} />
-  View Invoice
-</button>
+
         </div>
 
       ))}
 
-
-
     </div>
-    
   );
 }
