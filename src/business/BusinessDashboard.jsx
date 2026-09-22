@@ -598,11 +598,19 @@ export default function BusinessDashboard() {
 
   // Count PROJECTS having at least one target group
   // in the requested status.
-  const live = projects.filter((project) =>
+  // const live = projects.filter((project) =>
+  //   (project.targetGroups || []).some(
+  //     (group) => group.status === "LIVE"
+  //   )
+  // ).length;
+
+  const live = projects.filter(
+  (project) =>
+    project.status !== "CLOSED" &&
     (project.targetGroups || []).some(
       (group) => group.status === "LIVE"
     )
-  ).length;
+).length;
 
   const hold = projects.filter((project) =>
     (project.targetGroups || []).some(
