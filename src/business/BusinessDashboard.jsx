@@ -969,14 +969,12 @@ function ProjectCards({ project, filter }) {
             </div>
 
           </div>
-         <button
+          <button
   onClick={() => handleViewInvoice(project._id)}
-  disabled={invoiceLoading}
-  className="inline-flex items-center gap-2 rounded-lg border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-medium text-orange-600 transition hover:bg-orange-100 disabled:opacity-50"
+  className="inline-flex items-center gap-2 rounded-lg border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-medium text-orange-600 transition hover:bg-orange-100"
 >
   <FileText size={16} />
-
-  {invoiceLoading ? "Loading..." : "View Invoice"}
+  View Invoice
 </button>
         </div>
 
