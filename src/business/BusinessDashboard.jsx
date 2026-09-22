@@ -937,11 +937,11 @@ if (filter === "CLOSED") {
                       </td>
 
                       <td className="px-5 py-4 text-right text-slate-600">
-                        ₹{Number(item.cpi || 0).toFixed(2)}
+                        ${Number(item.cpi || 0).toFixed(2)}
                       </td>
 
                       <td className="px-5 py-4 text-right font-medium text-slate-900">
-                        ₹{Number(item.totalCost || 0).toFixed(2)}
+                        ${Number(item.totalCost || 0).toFixed(2)}
                       </td>
 
                     </tr>
