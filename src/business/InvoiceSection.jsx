@@ -291,8 +291,8 @@ import {
 } from "lucide-react";
 
 import api from "../services/api";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+// import html2canvas from "html2canvas";
+// import jsPDF from "jspdf";
 
 export default function InvoiceSection({ project }) {
   const [invoice, setInvoice] = useState(null);
@@ -451,180 +451,116 @@ export default function InvoiceSection({ project }) {
     window.print();
   };
 
-  // =====================================================
-  // DOWNLOAD PDF
-  // =====================================================
+const handleDownloadPDF = async () => {
+  if (downloading) {
+    return;
+  }
 
-  const handleDownloadPDF = async () => {
-    if (downloading) {
-      return;
-    }
+  if (!projectId) {
+    console.error(
+      "Project ID is missing"
+    );
 
-    const invoiceElement =
-      document.getElementById("invoice");
+    return;
+  }
 
-    if (!invoiceElement) {
-      console.error(
-        "Invoice element not found"
-      );
+  try {
+    setDownloading(true);
 
-      return;
-    }
-
-    try {
-      setDownloading(true);
-
-      // Small delay so browser finishes rendering
-      // before canvas capture.
-      await new Promise((resolve) =>
-        setTimeout(resolve, 100)
-      );
-
-      const canvas = await html2canvas(
-        invoiceElement,
+    const response =
+      await api.get(
+        `/invoices/project/${projectId}/pdf`,
         {
-          scale: 2,
-          useCORS: true,
-          allowTaint: false,
-          backgroundColor: "#ffffff",
-          logging: false,
+          responseType: "blob",
         }
       );
 
-      const imgData =
-        canvas.toDataURL("image/png");
 
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-        compress: true,
-      });
+    /* =========================================
+       CREATE PDF BLOB
+    ========================================= */
 
-      // =================================================
-      // A4 DIMENSIONS
-      // =================================================
-
-      const pageWidth =
-        pdf.internal.pageSize.getWidth();
-
-      const pageHeight =
-        pdf.internal.pageSize.getHeight();
-
-      const margin = 5;
-
-      const usableWidth =
-        pageWidth - margin * 2;
-
-      const usableHeight =
-        pageHeight - margin * 2;
-
-      // Keep image aspect ratio
-      const imageHeight =
-        (canvas.height * usableWidth) /
-        canvas.width;
-
-      // =================================================
-      // ONE PAGE
-      // =================================================
-
-      if (imageHeight <= usableHeight) {
-        pdf.addImage(
-          imgData,
-          "PNG",
-          margin,
-          margin,
-          usableWidth,
-          imageHeight,
-          undefined,
-          "FAST"
-        );
-      }
-
-      // =================================================
-      // MULTIPLE PAGES
-      // =================================================
-
-      else {
-        let heightLeft = imageHeight;
-
-        let position = margin;
-
-        // -----------------------------
-        // FIRST PAGE
-        // -----------------------------
-
-        pdf.addImage(
-          imgData,
-          "PNG",
-          margin,
-          position,
-          usableWidth,
-          imageHeight,
-          undefined,
-          "FAST"
-        );
-
-        heightLeft -= usableHeight;
-
-        // -----------------------------
-        // NEXT PAGES
-        // -----------------------------
-
-        while (heightLeft > 0) {
-          pdf.addPage();
-
-          position =
-            margin -
-            (imageHeight - heightLeft);
-
-          pdf.addImage(
-            imgData,
-            "PNG",
-            margin,
-            position,
-            usableWidth,
-            imageHeight,
-            undefined,
-            "FAST"
-          );
-
-          heightLeft -= usableHeight;
+    const pdfBlob =
+      new Blob(
+        [response.data],
+        {
+          type: "application/pdf",
         }
-      }
-
-      // =================================================
-      // FILE NAME
-      // =================================================
-
-      const invoiceNumber =
-        invoice?.invoiceNumber ||
-        `invoice-${projectId}`;
-
-      const safeInvoiceNumber =
-        String(invoiceNumber)
-          .replace(/[^a-zA-Z0-9-_]/g, "_");
-
-      pdf.save(
-        `${safeInvoiceNumber}.pdf`
-      );
-    } catch (error) {
-      console.error(
-        "Failed to generate invoice PDF:",
-        error
       );
 
-      alert(
-        "Unable to download invoice PDF"
-      );
-    } finally {
-      setDownloading(false);
-    }
-  };
 
-  // =====================================================
-  // DATE
-  // =====================================================
+    /* =========================================
+       CREATE TEMPORARY URL
+    ========================================= */
+
+    const downloadUrl =
+      window.URL.createObjectURL(
+        pdfBlob
+      );
+
+
+    /* =========================================
+       FILE NAME
+    ========================================= */
+
+    const invoiceNumber =
+      invoice?.invoiceNumber ||
+      `invoice-${projectId}`;
+
+    const safeInvoiceNumber =
+      String(invoiceNumber)
+        .replace(
+          /[^a-zA-Z0-9-_]/g,
+          "_"
+        );
+
+
+    /* =========================================
+       DOWNLOAD
+    ========================================= */
+
+    const link =
+      document.createElement("a");
+
+    link.href =
+      downloadUrl;
+
+    link.download =
+      `${safeInvoiceNumber}.pdf`;
+
+    document.body.appendChild(
+      link
+    );
+
+    link.click();
+
+    link.remove();
+
+
+    /* =========================================
+       CLEAN MEMORY
+    ========================================= */
+
+    window.URL.revokeObjectURL(
+      downloadUrl
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Failed to download invoice PDF:",
+      error
+    );
+
+    alert(
+      "Unable to download invoice PDF"
+    );
+
+  } finally {
+
+    setDownloading(false);
+  }
+};
 
   const invoiceDate = invoice.issuedAt
     ? new Date(
