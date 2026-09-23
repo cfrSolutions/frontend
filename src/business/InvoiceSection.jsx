@@ -49,7 +49,7 @@
 //   // Project is not closed yet
 //   if (project?.status !== "CLOSED") {
 //     return (
-//       <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6">
+//       <section className="mt-8 rounded-2xl border border-[#E2E8F0] bg-white p-6">
 //         <div className="flex items-center gap-3">
 //           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100">
 //             <Receipt
@@ -59,7 +59,7 @@
 //           </div>
 
 //           <div>
-//             <h2 className="text-lg font-semibold text-slate-900">
+//             <h2 className="text-lg font-semibold text-[#0F172A]">
 //               Invoice
 //             </h2>
 
@@ -76,7 +76,7 @@
 //   // Project closed but invoice is still being generated
 //   if (loading && !invoice) {
 //     return (
-//       <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6">
+//       <section className="mt-8 rounded-2xl border border-[#E2E8F0] bg-white p-6">
 //         <div className="flex items-center gap-3">
 //           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100">
 //             <Loader2
@@ -86,7 +86,7 @@
 //           </div>
 
 //           <div>
-//             <h2 className="text-lg font-semibold text-slate-900">
+//             <h2 className="text-lg font-semibold text-[#0F172A]">
 //               Invoice
 //             </h2>
 
@@ -110,7 +110,7 @@
 //           />
 
 //           <div>
-//             <h2 className="text-lg font-semibold text-slate-900">
+//             <h2 className="text-lg font-semibold text-[#0F172A]">
 //               Invoice
 //             </h2>
 
@@ -124,9 +124,9 @@
 //   }
 
 //   return (
-//     <section className="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+//     <section className="mt-8 overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white">
 //       {/* Header */}
-//       <div className="border-b border-slate-200 px-6 py-5">
+//       <div className="border-b border-[#E2E8F0] px-6 py-5">
 //         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
 //           <div className="flex items-center gap-3">
 //             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50">
@@ -137,7 +137,7 @@
 //             </div>
 
 //             <div>
-//               <h2 className="text-lg font-semibold text-slate-900">
+//               <h2 className="text-lg font-semibold text-[#0F172A]">
 //                 Invoice
 //               </h2>
 
@@ -161,13 +161,13 @@
 //       </div>
 
 //       {/* Invoice information */}
-//       <div className="grid grid-cols-1 gap-4 border-b border-slate-200 bg-slate-50/60 px-6 py-5 sm:grid-cols-3">
+//       <div className="grid grid-cols-1 gap-4 border-b border-[#E2E8F0] bg-slate-50/60 px-6 py-5 sm:grid-cols-3">
 //         <div>
 //           <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
 //             Invoice Number
 //           </p>
 
-//           <p className="mt-1 font-medium text-slate-900">
+//           <p className="mt-1 font-medium text-[#0F172A]">
 //             {invoice.invoiceNumber}
 //           </p>
 //         </div>
@@ -177,7 +177,7 @@
 //             Issued On
 //           </p>
 
-//           <p className="mt-1 font-medium text-slate-900">
+//           <p className="mt-1 font-medium text-[#0F172A]">
 //             {invoice.issuedAt
 //               ? new Date(
 //                   invoice.issuedAt
@@ -195,7 +195,7 @@
 //             Currency
 //           </p>
 
-//           <p className="mt-1 font-medium text-slate-900">
+//           <p className="mt-1 font-medium text-[#0F172A]">
 //             {invoice.currency || "INR"}
 //           </p>
 //         </div>
@@ -205,7 +205,7 @@
 //       <div className="overflow-x-auto">
 //         <table className="w-full min-w-[700px]">
 //           <thead>
-//             <tr className="border-b border-slate-200 bg-white">
+//             <tr className="border-b border-[#E2E8F0] bg-white">
 //               <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-slate-400">
 //                 Target Group
 //               </th>
@@ -228,23 +228,23 @@
 //             {(invoice.items || []).map((item) => (
 //               <tr
 //                 key={item.targetGroupId}
-//                 className="border-b border-slate-100 last:border-0"
+//                 className="border-b border-[#F1F5F9] last:border-0"
 //               >
 //                 <td className="px-6 py-4">
-//                   <p className="font-medium text-slate-900">
+//                   <p className="font-medium text-[#0F172A]">
 //                     {item.targetGroupName}
 //                   </p>
 //                 </td>
 
-//                 <td className="px-6 py-4 text-right text-slate-700">
+//                 <td className="px-6 py-4 text-right text-[#334155]">
 //                   {item.targetCompletes}
 //                 </td>
 
-//                 <td className="px-6 py-4 text-right text-slate-700">
+//                 <td className="px-6 py-4 text-right text-[#334155]">
 //                   ₹{Number(item.cpi || 0).toFixed(2)}
 //                 </td>
 
-//                 <td className="px-6 py-4 text-right font-medium text-slate-900">
+//                 <td className="px-6 py-4 text-right font-medium text-[#0F172A]">
 //                   ₹{Number(item.totalCost || 0).toFixed(2)}
 //                 </td>
 //               </tr>
@@ -254,7 +254,7 @@
 //       </div>
 
 //       {/* Total */}
-//       <div className="flex justify-end border-t border-slate-200 bg-slate-50/60 px-6 py-5">
+//       <div className="flex justify-end border-t border-[#E2E8F0] bg-slate-50/60 px-6 py-5">
 //         <div className="w-full max-w-sm">
 //           <div className="flex items-center justify-between text-sm text-slate-500">
 //             <span>Subtotal</span>
@@ -264,12 +264,12 @@
 //             </span>
 //           </div>
 
-//           <div className="mt-3 flex items-center justify-between border-t border-slate-200 pt-3">
-//             <span className="text-base font-semibold text-slate-900">
+//           <div className="mt-3 flex items-center justify-between border-t border-[#E2E8F0] pt-3">
+//             <span className="text-base font-semibold text-[#0F172A]">
 //               Total
 //             </span>
 
-//             <span className="text-xl font-bold text-slate-900">
+//             <span className="text-xl font-bold text-[#0F172A]">
 //               ₹{Number(invoice.total || 0).toFixed(2)}
 //             </span>
 //           </div>
@@ -343,21 +343,21 @@ export default function InvoiceSection({ project }) {
 
   if (project?.status !== "CLOSED") {
     return (
-      <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6">
+      <section className="mt-8 rounded-2xl border border-[#E2E8F0] bg-white p-6">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100">
             <Receipt
               size={21}
-              className="text-slate-500"
+              className="text-[#64748B]"
             />
           </div>
 
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">
+            <h2 className="text-lg font-semibold text-[#0F172A]">
               Invoice
             </h2>
 
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-[#64748B]">
               Invoice will be generated when the project
               is closed.
             </p>
@@ -373,7 +373,7 @@ export default function InvoiceSection({ project }) {
 
   if (loading && !invoice) {
     return (
-      <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6">
+      <section className="mt-8 rounded-2xl border border-[#E2E8F0] bg-white p-6">
         <div className="flex items-center gap-3">
           <Loader2
             size={22}
@@ -381,11 +381,11 @@ export default function InvoiceSection({ project }) {
           />
 
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">
+            <h2 className="text-lg font-semibold text-[#0F172A]">
               Invoice
             </h2>
 
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-[#64748B]">
               Generating invoice...
             </p>
           </div>
@@ -408,7 +408,7 @@ export default function InvoiceSection({ project }) {
           />
 
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">
+            <h2 className="text-lg font-semibold text-[#0F172A]">
               Invoice
             </h2>
 
@@ -724,13 +724,13 @@ export default function InvoiceSection({ project }) {
             gap-2
             rounded-lg
             border
-            border-slate-200
+            border-[#E2E8F0]
             bg-white
             px-4
             py-2.5
             text-sm
             font-medium
-            text-slate-700
+            text-[#334155]
             transition
             hover:bg-slate-50
           "
@@ -823,7 +823,7 @@ export default function InvoiceSection({ project }) {
                 INPUTIFY
               </h1>
 
-              <p className="mt-2 text-xs font-medium text-slate-500">
+              <p className="mt-2 text-xs font-medium text-[#64748B]">
                 Survey & Research Platform
               </p>
 
@@ -845,7 +845,7 @@ export default function InvoiceSection({ project }) {
                 INVOICE
               </h2>
 
-              <p className="mt-1 text-xs text-slate-500">
+              <p className="mt-1 text-xs text-[#64748B]">
                 GSTIN: {invoice.gstin || "—"}
               </p>
 
@@ -876,11 +876,11 @@ export default function InvoiceSection({ project }) {
                 Bill To:
               </h3>
 
-              <p className="mt-1 text-sm font-semibold text-slate-800">
+              <p className="mt-1 text-sm font-semibold text-[#1E293B]">
                 {businessName}
               </p>
 
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-[#64748B]">
                 {businessAddress}
               </p>
 
@@ -902,20 +902,20 @@ export default function InvoiceSection({ project }) {
                 "
               >
 
-                <span className="text-slate-500">
+                <span className="text-[#64748B]">
                   Invoice Number
                 </span>
 
-                <span className="font-medium text-slate-800">
+                <span className="font-medium text-[#64748B]">
                   {invoice.invoiceNumber}
                 </span>
 
 
-                <span className="text-slate-500">
+                <span className="text-[#64748B]">
                   Invoice Date
                 </span>
 
-                <span className="font-medium text-slate-800">
+                <span className="font-medium text-[#64748B]">
                   {invoiceDate}
                 </span>
 
@@ -948,11 +948,11 @@ export default function InvoiceSection({ project }) {
                 Contact information
               </h3>
 
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="mt-1 text-sm text-[#475569]">
                 Email: {businessContact}
               </p>
 
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-[#475569]">
                 Phone: {businessPhone}
               </p>
 
@@ -967,12 +967,12 @@ export default function InvoiceSection({ project }) {
                 Payment information
               </h3>
 
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="mt-1 text-sm text-[#475569]">
                 Bank Name:{" "}
                 {invoice.bankName || "—"}
               </p>
 
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-[#475569]">
                 Account Number:{" "}
                 {invoice.accountNumber || "—"}
               </p>
@@ -994,19 +994,19 @@ export default function InvoiceSection({ project }) {
 
                 <tr className="border-y-2 border-[#164B84]">
 
-                  <th className="py-2.5 text-left text-xs font-semibold text-slate-700">
+                  <th className="py-2.5 text-left text-xs font-semibold text-[#334155]">
                     Item Description
                   </th>
 
-                  <th className="py-2.5 text-center text-xs font-semibold text-slate-700">
+                  <th className="py-2.5 text-center text-xs font-semibold text-[#334155]">
                     Quantity
                   </th>
 
-                  <th className="py-2.5 text-right text-xs font-semibold text-slate-700">
+                  <th className="py-2.5 text-right text-xs font-semibold text-[#334155]">
                     Rate
                   </th>
 
-                  <th className="py-2.5 text-right text-xs font-semibold text-slate-700">
+                  <th className="py-2.5 text-right text-xs font-semibold text-[#334155]">
                     Total
                   </th>
 
@@ -1043,13 +1043,13 @@ export default function InvoiceSection({ project }) {
                         }
                         className="
                           border-b
-                          border-slate-100
+                          border-[#F1F5F9]
                         "
                       >
 
-                        <td className="py-3 text-sm text-slate-700">
+                        <td className="py-3 text-sm text-[#334155]">
 
-                          <p className="font-medium text-slate-800">
+                          <p className="font-medium text-[#1E293B]">
                             {item.targetGroupName}
                           </p>
 
@@ -1060,17 +1060,17 @@ export default function InvoiceSection({ project }) {
                         </td>
 
 
-                        <td className="py-3 text-center text-sm text-slate-600">
+                        <td className="py-3 text-center text-sm text-[#475569]">
                           {quantity}
                         </td>
 
 
-                        <td className="py-3 text-right text-sm text-slate-600">
+                        <td className="py-3 text-right text-sm text-[#475569]">
                           ₹{rate.toFixed(2)}
                         </td>
 
 
-                        <td className="py-3 text-right text-sm font-medium text-slate-800">
+                        <td className="py-3 text-right text-sm font-medium text-[#1E293B]">
                           ₹{itemTotal.toFixed(2)}
                         </td>
 
@@ -1099,13 +1099,13 @@ export default function InvoiceSection({ project }) {
 
               {/* SUBTOTAL */}
 
-              <div className="flex justify-between text-sm text-slate-600">
+              <div className="flex justify-between text-sm text-[#475569]">
 
                 <span>
                   Subtotal:
                 </span>
 
-                <span className="font-medium text-slate-800">
+                <span className="font-medium text-[#1E293B]">
                   ₹{subtotal.toFixed(2)}
                 </span>
 
@@ -1114,13 +1114,13 @@ export default function InvoiceSection({ project }) {
 
               {/* GST */}
 
-              <div className="mt-2 flex justify-between text-sm text-slate-600">
+              <div className="mt-2 flex justify-between text-sm text-[#475569]">
 
                 <span>
                   GST ({gstRate}%):
                 </span>
 
-                <span className="font-medium text-slate-800">
+                <span className="font-medium text-[#1E293B]">
                   ₹{gstAmount.toFixed(2)}
                 </span>
 
@@ -1141,11 +1141,11 @@ export default function InvoiceSection({ project }) {
                 "
               >
 
-                <span className="font-semibold text-slate-800">
+                <span className="font-semibold text-[#1E293B]">
                   Total Amount Due:
                 </span>
 
-                <span className="text-lg font-bold text-slate-900">
+                <span className="text-lg font-bold text-[#0F172A]">
                   ₹{total.toFixed(2)}
                 </span>
 
@@ -1174,11 +1174,11 @@ export default function InvoiceSection({ project }) {
 
             <div>
 
-              <h3 className="text-sm font-semibold text-slate-700">
+              <h3 className="text-sm font-semibold text-[#334155]">
                 Terms and Conditions
               </h3>
 
-              <p className="mt-1 max-w-md text-xs leading-5 text-slate-500">
+              <p className="mt-1 max-w-md text-xs leading-5 text-[#64748B]">
                 Payment is due as per the agreed project
                 terms. Please contact Inputify for any
                 questions regarding this invoice.
@@ -1191,7 +1191,7 @@ export default function InvoiceSection({ project }) {
 
             <div className="flex flex-col items-start sm:items-end">
 
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#64748B]">
                 Authorized Signatory
               </p>
 
