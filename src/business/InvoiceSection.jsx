@@ -241,11 +241,11 @@
 //                 </td>
 
 //                 <td className="px-6 py-4 text-right text-[#334155]">
-//                   ₹{Number(item.cpi || 0).toFixed(2)}
+//                   ${Number(item.cpi || 0).toFixed(2)}
 //                 </td>
 
 //                 <td className="px-6 py-4 text-right font-medium text-[#0F172A]">
-//                   ₹{Number(item.totalCost || 0).toFixed(2)}
+//                   ${Number(item.totalCost || 0).toFixed(2)}
 //                 </td>
 //               </tr>
 //             ))}
@@ -260,7 +260,7 @@
 //             <span>Subtotal</span>
 
 //             <span>
-//               ₹{Number(invoice.subtotal || 0).toFixed(2)}
+//               ${Number(invoice.subtotal || 0).toFixed(2)}
 //             </span>
 //           </div>
 
@@ -270,7 +270,7 @@
 //             </span>
 
 //             <span className="text-xl font-bold text-[#0F172A]">
-//               ₹{Number(invoice.total || 0).toFixed(2)}
+//               ${Number(invoice.total || 0).toFixed(2)}
 //             </span>
 //           </div>
 //         </div>
@@ -1002,12 +1002,12 @@ const handleDownloadPDF = async () => {
 
 
                         <td className="py-3 text-right text-sm text-[#475569]">
-                          ₹{rate.toFixed(2)}
+                          ${rate.toFixed(2)}
                         </td>
 
 
                         <td className="py-3 text-right text-sm font-medium text-[#1E293B]">
-                          ₹{itemTotal.toFixed(2)}
+                          ${itemTotal.toFixed(2)}
                         </td>
 
                       </tr>
@@ -1042,7 +1042,7 @@ const handleDownloadPDF = async () => {
                 </span>
 
                 <span className="font-medium text-[#1E293B]">
-                  ₹{subtotal.toFixed(2)}
+                  ${subtotal.toFixed(2)}
                 </span>
 
               </div>
@@ -1057,7 +1057,7 @@ const handleDownloadPDF = async () => {
                 </span>
 
                 <span className="font-medium text-[#1E293B]">
-                  ₹{gstAmount.toFixed(2)}
+                  ${gstAmount.toFixed(2)}
                 </span>
 
               </div>
@@ -1082,7 +1082,7 @@ const handleDownloadPDF = async () => {
                 </span>
 
                 <span className="text-lg font-bold text-[#0F172A]">
-                  ₹{total.toFixed(2)}
+                  ${total.toFixed(2)}
                 </span>
 
               </div>
