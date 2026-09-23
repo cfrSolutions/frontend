@@ -1,3 +1,286 @@
+// import { useEffect, useState } from "react";
+// import {
+//   FileText,
+//   Loader2,
+//   Receipt,
+//   CheckCircle2,
+// } from "lucide-react";
+// import api from "../services/api";
+
+// export default function InvoiceSection({ project }) {
+//   const [invoice, setInvoice] = useState(null);
+//   const [loading, setLoading] = useState(false);
+
+//   const projectId = project?._id || project?.id;
+
+//   useEffect(() => {
+//     if (!projectId || project?.status !== "CLOSED") {
+//       setInvoice(null);
+//       return;
+//     }
+
+//     const fetchInvoice = async () => {
+//       try {
+//         setLoading(true);
+
+//         const response = await api.get(
+//           `/invoices/project/${projectId}`
+//         );
+
+//         setInvoice(response.data.invoice);
+//       } catch (error) {
+//         // Invoice may not exist immediately after project closes.
+//         if (error.response?.status !== 404) {
+//           console.error(
+//             "Failed to fetch invoice:",
+//             error
+//           );
+//         }
+
+//         setInvoice(null);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchInvoice();
+//   }, [projectId, project?.status]);
+
+//   // Project is not closed yet
+//   if (project?.status !== "CLOSED") {
+//     return (
+//       <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6">
+//         <div className="flex items-center gap-3">
+//           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100">
+//             <Receipt
+//               size={21}
+//               className="text-slate-500"
+//             />
+//           </div>
+
+//           <div>
+//             <h2 className="text-lg font-semibold text-slate-900">
+//               Invoice
+//             </h2>
+
+//             <p className="text-sm text-slate-500">
+//               Invoice will be generated when the project is
+//               closed.
+//             </p>
+//           </div>
+//         </div>
+//       </section>
+//     );
+//   }
+
+//   // Project closed but invoice is still being generated
+//   if (loading && !invoice) {
+//     return (
+//       <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6">
+//         <div className="flex items-center gap-3">
+//           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100">
+//             <Loader2
+//               size={21}
+//               className="animate-spin text-slate-500"
+//             />
+//           </div>
+
+//           <div>
+//             <h2 className="text-lg font-semibold text-slate-900">
+//               Invoice
+//             </h2>
+
+//             <p className="text-sm text-slate-500">
+//               Generating invoice...
+//             </p>
+//           </div>
+//         </div>
+//       </section>
+//     );
+//   }
+
+//   // Project closed but invoice not found
+//   if (!invoice) {
+//     return (
+//       <section className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-6">
+//         <div className="flex items-center gap-3">
+//           <Receipt
+//             size={21}
+//             className="text-amber-600"
+//           />
+
+//           <div>
+//             <h2 className="text-lg font-semibold text-slate-900">
+//               Invoice
+//             </h2>
+
+//             <p className="text-sm text-amber-700">
+//               Invoice has not been generated yet.
+//             </p>
+//           </div>
+//         </div>
+//       </section>
+//     );
+//   }
+
+//   return (
+//     <section className="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+//       {/* Header */}
+//       <div className="border-b border-slate-200 px-6 py-5">
+//         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+//           <div className="flex items-center gap-3">
+//             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50">
+//               <FileText
+//                 size={21}
+//                 className="text-blue-600"
+//               />
+//             </div>
+
+//             <div>
+//               <h2 className="text-lg font-semibold text-slate-900">
+//                 Invoice
+//               </h2>
+
+//               <p className="text-sm text-slate-500">
+//                 {invoice.invoiceNumber}
+//               </p>
+//             </div>
+//           </div>
+
+//           <div className="flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5">
+//             <CheckCircle2
+//               size={16}
+//               className="text-emerald-600"
+//             />
+
+//             <span className="text-sm font-medium text-emerald-700">
+//               {invoice.status}
+//             </span>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Invoice information */}
+//       <div className="grid grid-cols-1 gap-4 border-b border-slate-200 bg-slate-50/60 px-6 py-5 sm:grid-cols-3">
+//         <div>
+//           <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+//             Invoice Number
+//           </p>
+
+//           <p className="mt-1 font-medium text-slate-900">
+//             {invoice.invoiceNumber}
+//           </p>
+//         </div>
+
+//         <div>
+//           <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+//             Issued On
+//           </p>
+
+//           <p className="mt-1 font-medium text-slate-900">
+//             {invoice.issuedAt
+//               ? new Date(
+//                   invoice.issuedAt
+//                 ).toLocaleDateString("en-IN", {
+//                   day: "2-digit",
+//                   month: "short",
+//                   year: "numeric",
+//                 })
+//               : "-"}
+//           </p>
+//         </div>
+
+//         <div>
+//           <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+//             Currency
+//           </p>
+
+//           <p className="mt-1 font-medium text-slate-900">
+//             {invoice.currency || "INR"}
+//           </p>
+//         </div>
+//       </div>
+
+//       {/* Target group table */}
+//       <div className="overflow-x-auto">
+//         <table className="w-full min-w-[700px]">
+//           <thead>
+//             <tr className="border-b border-slate-200 bg-white">
+//               <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-slate-400">
+//                 Target Group
+//               </th>
+
+//               <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wide text-slate-400">
+//                 Target
+//               </th>
+
+//               <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wide text-slate-400">
+//                 CPI
+//               </th>
+
+//               <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wide text-slate-400">
+//                 Total
+//               </th>
+//             </tr>
+//           </thead>
+
+//           <tbody>
+//             {(invoice.items || []).map((item) => (
+//               <tr
+//                 key={item.targetGroupId}
+//                 className="border-b border-slate-100 last:border-0"
+//               >
+//                 <td className="px-6 py-4">
+//                   <p className="font-medium text-slate-900">
+//                     {item.targetGroupName}
+//                   </p>
+//                 </td>
+
+//                 <td className="px-6 py-4 text-right text-slate-700">
+//                   {item.targetCompletes}
+//                 </td>
+
+//                 <td className="px-6 py-4 text-right text-slate-700">
+//                   ₹{Number(item.cpi || 0).toFixed(2)}
+//                 </td>
+
+//                 <td className="px-6 py-4 text-right font-medium text-slate-900">
+//                   ₹{Number(item.totalCost || 0).toFixed(2)}
+//                 </td>
+//               </tr>
+//             ))}
+//           </tbody>
+//         </table>
+//       </div>
+
+//       {/* Total */}
+//       <div className="flex justify-end border-t border-slate-200 bg-slate-50/60 px-6 py-5">
+//         <div className="w-full max-w-sm">
+//           <div className="flex items-center justify-between text-sm text-slate-500">
+//             <span>Subtotal</span>
+
+//             <span>
+//               ₹{Number(invoice.subtotal || 0).toFixed(2)}
+//             </span>
+//           </div>
+
+//           <div className="mt-3 flex items-center justify-between border-t border-slate-200 pt-3">
+//             <span className="text-base font-semibold text-slate-900">
+//               Total
+//             </span>
+
+//             <span className="text-xl font-bold text-slate-900">
+//               ₹{Number(invoice.total || 0).toFixed(2)}
+//             </span>
+//           </div>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
+
+
+
 import { useEffect, useState } from "react";
 import {
   Loader2,
@@ -6,6 +289,7 @@ import {
   Printer,
   Download,
 } from "lucide-react";
+
 import api from "../services/api";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -13,8 +297,13 @@ import jsPDF from "jspdf";
 export default function InvoiceSection({ project }) {
   const [invoice, setInvoice] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   const projectId = project?._id || project?.id;
+
+  // =====================================================
+  // FETCH INVOICE
+  // =====================================================
 
   useEffect(() => {
     if (!projectId || project?.status !== "CLOSED") {
@@ -136,137 +425,215 @@ export default function InvoiceSection({ project }) {
   // CALCULATIONS
   // =====================================================
 
-  const subtotal = Number(invoice.subtotal || 0);
+  const subtotal = Number(
+    invoice.subtotal || 0
+  );
 
-  // Use backend GST if available.
-  // Otherwise GST defaults to 0.
-  const gstRate = Number(invoice.gstRate || 0);
+  const gstRate = Number(
+    invoice.gstRate || 0
+  );
 
   const gstAmount =
-    Number(invoice.gstAmount) ||
-    subtotal * (gstRate / 100);
+    invoice.gstAmount !== undefined
+      ? Number(invoice.gstAmount || 0)
+      : subtotal * (gstRate / 100);
 
   const total =
-    Number(invoice.total || 0) ||
-    subtotal + gstAmount;
+    invoice.total !== undefined
+      ? Number(invoice.total || 0)
+      : subtotal + gstAmount;
 
   // =====================================================
   // PRINT
   // =====================================================
 
   const handlePrint = () => {
-  window.print();
-};
+    window.print();
+  };
 
-const handleDownloadPDF = async () => {
-  const invoiceElement =
-    document.getElementById("invoice");
+  // =====================================================
+  // DOWNLOAD PDF
+  // =====================================================
 
-  if (!invoiceElement) {
-    console.error("Invoice element not found");
-    return;
-  }
-
-  try {
-    const canvas = await html2canvas(invoiceElement, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: "#ffffff",
-      logging: false,
-    });
-
-    const imgData = canvas.toDataURL("image/png");
-
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
-    });
-
-    const pageWidth =
-      pdf.internal.pageSize.getWidth();
-
-    const pageHeight =
-      pdf.internal.pageSize.getHeight();
-
-    const margin = 8;
-
-    const usableWidth =
-      pageWidth - margin * 2;
-
-    const imageHeight =
-      (canvas.height * usableWidth) /
-      canvas.width;
-
-    let heightLeft = imageHeight;
-    let position = margin;
-
-    // First page
-    pdf.addImage(
-      imgData,
-      "PNG",
-      margin,
-      position,
-      usableWidth,
-      imageHeight
-    );
-
-    heightLeft -=
-      pageHeight - margin * 2;
-
-    // Additional pages if invoice becomes longer
-    while (heightLeft > 0) {
-      position =
-        heightLeft -
-        imageHeight +
-        margin;
-
-      pdf.addPage();
-
-      pdf.addImage(
-        imgData,
-        "PNG",
-        margin,
-        position,
-        usableWidth,
-        imageHeight
-      );
-
-      heightLeft -=
-        pageHeight - margin * 2;
+  const handleDownloadPDF = async () => {
+    if (downloading) {
+      return;
     }
 
-    const invoiceNumber =
-      invoice?.invoiceNumber ||
-      "invoice";
+    const invoiceElement =
+      document.getElementById("invoice");
 
-    pdf.save(
-      `${invoiceNumber}.pdf`
-    );
-  } catch (error) {
-    console.error(
-      "Failed to generate invoice PDF:",
-      error
-    );
+    if (!invoiceElement) {
+      console.error(
+        "Invoice element not found"
+      );
 
-    alert(
-      "Unable to download invoice PDF"
-    );
-  }
-};
+      return;
+    }
+
+    try {
+      setDownloading(true);
+
+      // Small delay so browser finishes rendering
+      // before canvas capture.
+      await new Promise((resolve) =>
+        setTimeout(resolve, 100)
+      );
+
+      const canvas = await html2canvas(
+        invoiceElement,
+        {
+          scale: 2,
+          useCORS: true,
+          allowTaint: false,
+          backgroundColor: "#ffffff",
+          logging: false,
+        }
+      );
+
+      const imgData =
+        canvas.toDataURL("image/png");
+
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+        compress: true,
+      });
+
+      // =================================================
+      // A4 DIMENSIONS
+      // =================================================
+
+      const pageWidth =
+        pdf.internal.pageSize.getWidth();
+
+      const pageHeight =
+        pdf.internal.pageSize.getHeight();
+
+      const margin = 5;
+
+      const usableWidth =
+        pageWidth - margin * 2;
+
+      const usableHeight =
+        pageHeight - margin * 2;
+
+      // Keep image aspect ratio
+      const imageHeight =
+        (canvas.height * usableWidth) /
+        canvas.width;
+
+      // =================================================
+      // ONE PAGE
+      // =================================================
+
+      if (imageHeight <= usableHeight) {
+        pdf.addImage(
+          imgData,
+          "PNG",
+          margin,
+          margin,
+          usableWidth,
+          imageHeight,
+          undefined,
+          "FAST"
+        );
+      }
+
+      // =================================================
+      // MULTIPLE PAGES
+      // =================================================
+
+      else {
+        let heightLeft = imageHeight;
+
+        let position = margin;
+
+        // -----------------------------
+        // FIRST PAGE
+        // -----------------------------
+
+        pdf.addImage(
+          imgData,
+          "PNG",
+          margin,
+          position,
+          usableWidth,
+          imageHeight,
+          undefined,
+          "FAST"
+        );
+
+        heightLeft -= usableHeight;
+
+        // -----------------------------
+        // NEXT PAGES
+        // -----------------------------
+
+        while (heightLeft > 0) {
+          pdf.addPage();
+
+          position =
+            margin -
+            (imageHeight - heightLeft);
+
+          pdf.addImage(
+            imgData,
+            "PNG",
+            margin,
+            position,
+            usableWidth,
+            imageHeight,
+            undefined,
+            "FAST"
+          );
+
+          heightLeft -= usableHeight;
+        }
+      }
+
+      // =================================================
+      // FILE NAME
+      // =================================================
+
+      const invoiceNumber =
+        invoice?.invoiceNumber ||
+        `invoice-${projectId}`;
+
+      const safeInvoiceNumber =
+        String(invoiceNumber)
+          .replace(/[^a-zA-Z0-9-_]/g, "_");
+
+      pdf.save(
+        `${safeInvoiceNumber}.pdf`
+      );
+    } catch (error) {
+      console.error(
+        "Failed to generate invoice PDF:",
+        error
+      );
+
+      alert(
+        "Unable to download invoice PDF"
+      );
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   // =====================================================
   // DATE
   // =====================================================
 
   const invoiceDate = invoice.issuedAt
-    ? new Date(invoice.issuedAt).toLocaleDateString(
-        "en-IN",
-        {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-        }
-      )
+    ? new Date(
+        invoice.issuedAt
+      ).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
     : "-";
 
   // =====================================================
@@ -294,87 +661,110 @@ const handleDownloadPDF = async () => {
     project?.business?.address ||
     "-";
 
+  // =====================================================
+  // RENDER
+  // =====================================================
+
   return (
     <>
       {/* =================================================
-          PRINT BUTTON
+          ACTION BUTTONS
       ================================================= */}
 
-     <div className="mt-8 mb-4 flex justify-end gap-3 print:hidden">
+      <div className="mt-8 mb-4 flex justify-end gap-3 print:hidden">
 
-  {/* DOWNLOAD PDF */}
+        {/* DOWNLOAD PDF */}
 
-  <button
-    onClick={handleDownloadPDF}
-    className="
-      inline-flex
-      items-center
-      gap-2
-      rounded-lg
-      bg-[#164B84]
-      px-4
-      py-2.5
-      text-sm
-      font-medium
-      text-white
-      transition
-      hover:bg-[#123d6d]
-    "
-  >
-    <Download size={17} />
-    Download PDF
-  </button>
+        <button
+          onClick={handleDownloadPDF}
+          disabled={downloading}
+          className="
+            inline-flex
+            items-center
+            gap-2
+            rounded-lg
+            bg-[#164B84]
+            px-4
+            py-2.5
+            text-sm
+            font-medium
+            text-white
+            transition
+            hover:bg-[#123d6d]
+            disabled:cursor-not-allowed
+            disabled:opacity-60
+          "
+        >
+          {downloading ? (
+            <>
+              <Loader2
+                size={17}
+                className="animate-spin"
+              />
+
+              Generating PDF...
+            </>
+          ) : (
+            <>
+              <Download size={17} />
+
+              Download PDF
+            </>
+          )}
+        </button>
 
 
-  {/* PRINT */}
+        {/* PRINT */}
 
-  <button
-    onClick={handlePrint}
-    className="
-      inline-flex
-      items-center
-      gap-2
-      rounded-lg
-      border
-      border-slate-200
-      bg-white
-      px-4
-      py-2.5
-      text-sm
-      font-medium
-      text-slate-700
-      transition
-      hover:bg-slate-50
-    "
-  >
-    <Printer size={17} />
-    Print Invoice
-  </button>
+        <button
+          onClick={handlePrint}
+          className="
+            inline-flex
+            items-center
+            gap-2
+            rounded-lg
+            border
+            border-slate-200
+            bg-white
+            px-4
+            py-2.5
+            text-sm
+            font-medium
+            text-slate-700
+            transition
+            hover:bg-slate-50
+          "
+        >
+          <Printer size={17} />
 
-</div>
+          Print Invoice
+        </button>
+
+      </div>
+
 
       {/* =================================================
-          INVOICE WRAPPER
+          INVOICE
       ================================================= */}
 
       <section
-  id="invoice"
-  className="
-    mx-auto
-    mt-4
-    w-full
-    max-w-[794px]
-    overflow-hidden
-    rounded-[28px]
-    bg-white
-    shadow-xl
+        id="invoice"
+        className="
+          mx-auto
+          mt-4
+          w-full
+          max-w-[794px]
+          overflow-hidden
+          rounded-[28px]
+          bg-white
+          shadow-xl
 
-    print:mt-0
-    print:max-w-none
-    print:rounded-none
-    print:shadow-none
-  "
->
+          print:mt-0
+          print:max-w-none
+          print:rounded-none
+          print:shadow-none
+        "
+      >
 
         {/* =================================================
             TOP BLUE BAR
@@ -387,11 +777,29 @@ const handleDownloadPDF = async () => {
           "
         />
 
+
         {/* =================================================
             INVOICE CONTENT
+
+            A4-like minimum height.
+
+            If there are only a few target groups,
+            invoice stays approximately one page.
+
+            If there are many target groups,
+            content naturally grows.
         ================================================= */}
 
-        <div className="flex min-h-[1040px] flex-col px-8 py-8 sm:px-12">
+        <div
+          className="
+            flex
+            min-h-[1040px]
+            flex-col
+            px-8
+            py-8
+            sm:px-12
+          "
+        >
 
           {/* =================================================
               HEADER
@@ -402,6 +810,7 @@ const handleDownloadPDF = async () => {
             {/* BRAND */}
 
             <div>
+
               <h1
                 className="
                   text-2xl
@@ -417,10 +826,11 @@ const handleDownloadPDF = async () => {
               <p className="mt-2 text-xs font-medium text-slate-500">
                 Survey & Research Platform
               </p>
+
             </div>
 
 
-            {/* INVOICE */}
+            {/* INVOICE TITLE */}
 
             <div className="text-right">
 
@@ -481,7 +891,16 @@ const handleDownloadPDF = async () => {
 
             <div className="sm:text-right">
 
-              <div className="grid grid-cols-[110px_1fr] gap-x-3 gap-y-1 text-sm sm:grid-cols-[auto_auto]">
+              <div
+                className="
+                  grid
+                  grid-cols-[110px_1fr]
+                  gap-x-3
+                  gap-y-1
+                  text-sm
+                  sm:grid-cols-[auto_auto]
+                "
+              >
 
                 <span className="text-slate-500">
                   Invoice Number
@@ -490,6 +909,7 @@ const handleDownloadPDF = async () => {
                 <span className="font-medium text-slate-800">
                   {invoice.invoiceNumber}
                 </span>
+
 
                 <span className="text-slate-500">
                   Invoice Date
@@ -548,7 +968,8 @@ const handleDownloadPDF = async () => {
               </h3>
 
               <p className="mt-1 text-sm text-slate-600">
-                Bank Name: {invoice.bankName || "—"}
+                Bank Name:{" "}
+                {invoice.bankName || "—"}
               </p>
 
               <p className="text-sm text-slate-600">
@@ -571,12 +992,7 @@ const handleDownloadPDF = async () => {
 
               <thead>
 
-                <tr
-                  className="
-                    border-y-2
-                    border-[#164B84]
-                  "
-                >
+                <tr className="border-y-2 border-[#164B84]">
 
                   <th className="py-2.5 text-left text-xs font-semibold text-slate-700">
                     Item Description
@@ -610,10 +1026,14 @@ const handleDownloadPDF = async () => {
                       );
 
                     const rate =
-                      Number(item.cpi || 0);
+                      Number(
+                        item.cpi || 0
+                      );
 
                     const itemTotal =
-                      Number(item.totalCost || 0);
+                      Number(
+                        item.totalCost || 0
+                      );
 
                     return (
                       <tr
@@ -646,12 +1066,12 @@ const handleDownloadPDF = async () => {
 
 
                         <td className="py-3 text-right text-sm text-slate-600">
-                          ${rate.toFixed(2)}
+                          ₹{rate.toFixed(2)}
                         </td>
 
 
                         <td className="py-3 text-right text-sm font-medium text-slate-800">
-                          ${itemTotal.toFixed(2)}
+                          ₹{itemTotal.toFixed(2)}
                         </td>
 
                       </tr>
@@ -668,11 +1088,16 @@ const handleDownloadPDF = async () => {
 
           {/* =================================================
               TOTALS
+
+              mt-auto pushes this section toward the
+              bottom when there is available space.
           ================================================= */}
 
           <div className="mt-auto flex justify-end">
 
             <div className="w-full max-w-xs">
+
+              {/* SUBTOTAL */}
 
               <div className="flex justify-between text-sm text-slate-600">
 
@@ -681,11 +1106,13 @@ const handleDownloadPDF = async () => {
                 </span>
 
                 <span className="font-medium text-slate-800">
-                  ${subtotal.toFixed(2)}
+                  ₹{subtotal.toFixed(2)}
                 </span>
 
               </div>
 
+
+              {/* GST */}
 
               <div className="mt-2 flex justify-between text-sm text-slate-600">
 
@@ -694,11 +1121,13 @@ const handleDownloadPDF = async () => {
                 </span>
 
                 <span className="font-medium text-slate-800">
-                  ${gstAmount.toFixed(2)}
+                  ₹{gstAmount.toFixed(2)}
                 </span>
 
               </div>
 
+
+              {/* TOTAL */}
 
               <div
                 className="
@@ -717,7 +1146,7 @@ const handleDownloadPDF = async () => {
                 </span>
 
                 <span className="text-lg font-bold text-slate-900">
-                  ${total.toFixed(2)}
+                  ₹{total.toFixed(2)}
                 </span>
 
               </div>
