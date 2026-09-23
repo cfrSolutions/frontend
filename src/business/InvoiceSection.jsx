@@ -1066,12 +1066,12 @@ export default function InvoiceSection({ project }) {
 
 
                         <td className="py-3 text-right text-sm text-slate-600">
-                          ${rate.toFixed(2)}
+                          ₹{rate.toFixed(2)}
                         </td>
 
 
                         <td className="py-3 text-right text-sm font-medium text-slate-800">
-                          ${itemTotal.toFixed(2)}
+                          ₹{itemTotal.toFixed(2)}
                         </td>
 
                       </tr>
@@ -1106,7 +1106,7 @@ export default function InvoiceSection({ project }) {
                 </span>
 
                 <span className="font-medium text-slate-800">
-                  ${subtotal.toFixed(2)}
+                  ₹{subtotal.toFixed(2)}
                 </span>
 
               </div>
@@ -1121,7 +1121,7 @@ export default function InvoiceSection({ project }) {
                 </span>
 
                 <span className="font-medium text-slate-800">
-                  ${gstAmount.toFixed(2)}
+                  ₹{gstAmount.toFixed(2)}
                 </span>
 
               </div>
@@ -1146,7 +1146,7 @@ export default function InvoiceSection({ project }) {
                 </span>
 
                 <span className="text-lg font-bold text-slate-900">
-                  ${total.toFixed(2)}
+                  ₹{total.toFixed(2)}
                 </span>
 
               </div>
