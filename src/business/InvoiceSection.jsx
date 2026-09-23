@@ -289,7 +289,6 @@ import {
   Printer,
   Download,
 } from "lucide-react";
-
 import api from "../services/api";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -297,13 +296,8 @@ import jsPDF from "jspdf";
 export default function InvoiceSection({ project }) {
   const [invoice, setInvoice] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [downloading, setDownloading] = useState(false);
 
   const projectId = project?._id || project?.id;
-
-  // =====================================================
-  // FETCH INVOICE
-  // =====================================================
 
   useEffect(() => {
     if (!projectId || project?.status !== "CLOSED") {
@@ -425,215 +419,137 @@ export default function InvoiceSection({ project }) {
   // CALCULATIONS
   // =====================================================
 
-  const subtotal = Number(
-    invoice.subtotal || 0
-  );
+  const subtotal = Number(invoice.subtotal || 0);
 
-  const gstRate = Number(
-    invoice.gstRate || 0
-  );
+  // Use backend GST if available.
+  // Otherwise GST defaults to 0.
+  const gstRate = Number(invoice.gstRate || 0);
 
   const gstAmount =
-    invoice.gstAmount !== undefined
-      ? Number(invoice.gstAmount || 0)
-      : subtotal * (gstRate / 100);
+    Number(invoice.gstAmount) ||
+    subtotal * (gstRate / 100);
 
   const total =
-    invoice.total !== undefined
-      ? Number(invoice.total || 0)
-      : subtotal + gstAmount;
+    Number(invoice.total || 0) ||
+    subtotal + gstAmount;
 
   // =====================================================
   // PRINT
   // =====================================================
 
   const handlePrint = () => {
-    window.print();
-  };
+  window.print();
+};
 
-  // =====================================================
-  // DOWNLOAD PDF
-  // =====================================================
+const handleDownloadPDF = async () => {
+  const invoiceElement =
+    document.getElementById("invoice");
 
-  const handleDownloadPDF = async () => {
-    if (downloading) {
-      return;
-    }
+  if (!invoiceElement) {
+    console.error("Invoice element not found");
+    return;
+  }
 
-    const invoiceElement =
-      document.getElementById("invoice");
+  try {
+    const canvas = await html2canvas(invoiceElement, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff",
+      logging: false,
+    });
 
-    if (!invoiceElement) {
-      console.error(
-        "Invoice element not found"
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
+
+    const pageWidth =
+      pdf.internal.pageSize.getWidth();
+
+    const pageHeight =
+      pdf.internal.pageSize.getHeight();
+
+    const margin = 8;
+
+    const usableWidth =
+      pageWidth - margin * 2;
+
+    const imageHeight =
+      (canvas.height * usableWidth) /
+      canvas.width;
+
+    let heightLeft = imageHeight;
+    let position = margin;
+
+    // First page
+    pdf.addImage(
+      imgData,
+      "PNG",
+      margin,
+      position,
+      usableWidth,
+      imageHeight
+    );
+
+    heightLeft -=
+      pageHeight - margin * 2;
+
+    // Additional pages if invoice becomes longer
+    while (heightLeft > 0) {
+      position =
+        heightLeft -
+        imageHeight +
+        margin;
+
+      pdf.addPage();
+
+      pdf.addImage(
+        imgData,
+        "PNG",
+        margin,
+        position,
+        usableWidth,
+        imageHeight
       );
 
-      return;
-    }
-
-    try {
-      setDownloading(true);
-
-      // Small delay so browser finishes rendering
-      // before canvas capture.
-      await new Promise((resolve) =>
-        setTimeout(resolve, 100)
-      );
-
-      const canvas = await html2canvas(
-        invoiceElement,
-        {
-          scale: 2,
-          useCORS: true,
-          allowTaint: false,
-          backgroundColor: "#ffffff",
-          logging: false,
-        }
-      );
-
-      const imgData =
-        canvas.toDataURL("image/png");
-
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-        compress: true,
-      });
-
-      // =================================================
-      // A4 DIMENSIONS
-      // =================================================
-
-      const pageWidth =
-        pdf.internal.pageSize.getWidth();
-
-      const pageHeight =
-        pdf.internal.pageSize.getHeight();
-
-      const margin = 5;
-
-      const usableWidth =
-        pageWidth - margin * 2;
-
-      const usableHeight =
+      heightLeft -=
         pageHeight - margin * 2;
-
-      // Keep image aspect ratio
-      const imageHeight =
-        (canvas.height * usableWidth) /
-        canvas.width;
-
-      // =================================================
-      // ONE PAGE
-      // =================================================
-
-      if (imageHeight <= usableHeight) {
-        pdf.addImage(
-          imgData,
-          "PNG",
-          margin,
-          margin,
-          usableWidth,
-          imageHeight,
-          undefined,
-          "FAST"
-        );
-      }
-
-      // =================================================
-      // MULTIPLE PAGES
-      // =================================================
-
-      else {
-        let heightLeft = imageHeight;
-
-        let position = margin;
-
-        // -----------------------------
-        // FIRST PAGE
-        // -----------------------------
-
-        pdf.addImage(
-          imgData,
-          "PNG",
-          margin,
-          position,
-          usableWidth,
-          imageHeight,
-          undefined,
-          "FAST"
-        );
-
-        heightLeft -= usableHeight;
-
-        // -----------------------------
-        // NEXT PAGES
-        // -----------------------------
-
-        while (heightLeft > 0) {
-          pdf.addPage();
-
-          position =
-            margin -
-            (imageHeight - heightLeft);
-
-          pdf.addImage(
-            imgData,
-            "PNG",
-            margin,
-            position,
-            usableWidth,
-            imageHeight,
-            undefined,
-            "FAST"
-          );
-
-          heightLeft -= usableHeight;
-        }
-      }
-
-      // =================================================
-      // FILE NAME
-      // =================================================
-
-      const invoiceNumber =
-        invoice?.invoiceNumber ||
-        `invoice-${projectId}`;
-
-      const safeInvoiceNumber =
-        String(invoiceNumber)
-          .replace(/[^a-zA-Z0-9-_]/g, "_");
-
-      pdf.save(
-        `${safeInvoiceNumber}.pdf`
-      );
-    } catch (error) {
-      console.error(
-        "Failed to generate invoice PDF:",
-        error
-      );
-
-      alert(
-        "Unable to download invoice PDF"
-      );
-    } finally {
-      setDownloading(false);
     }
-  };
 
+    const invoiceNumber =
+      invoice?.invoiceNumber ||
+      "invoice";
+
+    pdf.save(
+      `${invoiceNumber}.pdf`
+    );
+  } catch (error) {
+    console.error(
+      "Failed to generate invoice PDF:",
+      error
+    );
+
+    alert(
+      "Unable to download invoice PDF"
+    );
+  }
+};
   // =====================================================
   // DATE
   // =====================================================
 
   const invoiceDate = invoice.issuedAt
-    ? new Date(
-        invoice.issuedAt
-      ).toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      })
+    ? new Date(invoice.issuedAt).toLocaleDateString(
+        "en-IN",
+        {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        }
+      )
     : "-";
 
   // =====================================================
@@ -661,110 +577,87 @@ export default function InvoiceSection({ project }) {
     project?.business?.address ||
     "-";
 
-  // =====================================================
-  // RENDER
-  // =====================================================
-
   return (
     <>
       {/* =================================================
-          ACTION BUTTONS
+          PRINT BUTTON
       ================================================= */}
 
-      <div className="mt-8 mb-4 flex justify-end gap-3 print:hidden">
+     <div className="mt-8 mb-4 flex justify-end gap-3 print:hidden">
 
-        {/* DOWNLOAD PDF */}
+  {/* DOWNLOAD PDF */}
 
-        <button
-          onClick={handleDownloadPDF}
-          disabled={downloading}
-          className="
-            inline-flex
-            items-center
-            gap-2
-            rounded-lg
-            bg-[#164B84]
-            px-4
-            py-2.5
-            text-sm
-            font-medium
-            text-white
-            transition
-            hover:bg-[#123d6d]
-            disabled:cursor-not-allowed
-            disabled:opacity-60
-          "
-        >
-          {downloading ? (
-            <>
-              <Loader2
-                size={17}
-                className="animate-spin"
-              />
-
-              Generating PDF...
-            </>
-          ) : (
-            <>
-              <Download size={17} />
-
-              Download PDF
-            </>
-          )}
-        </button>
+  <button
+    onClick={handleDownloadPDF}
+    className="
+      inline-flex
+      items-center
+      gap-2
+      rounded-lg
+      bg-[#164B84]
+      px-4
+      py-2.5
+      text-sm
+      font-medium
+      text-white
+      transition
+      hover:bg-[#123d6d]
+    "
+  >
+    <Download size={17} />
+    Download PDF
+  </button>
 
 
-        {/* PRINT */}
+  {/* PRINT */}
 
-        <button
-          onClick={handlePrint}
-          className="
-            inline-flex
-            items-center
-            gap-2
-            rounded-lg
-            border
-            border-slate-200
-            bg-white
-            px-4
-            py-2.5
-            text-sm
-            font-medium
-            text-slate-700
-            transition
-            hover:bg-slate-50
-          "
-        >
-          <Printer size={17} />
+  <button
+    onClick={handlePrint}
+    className="
+      inline-flex
+      items-center
+      gap-2
+      rounded-lg
+      border
+      border-slate-200
+      bg-white
+      px-4
+      py-2.5
+      text-sm
+      font-medium
+      text-slate-700
+      transition
+      hover:bg-slate-50
+    "
+  >
+    <Printer size={17} />
+    Print Invoice
+  </button>
 
-          Print Invoice
-        </button>
-
-      </div>
-
+</div>
 
       {/* =================================================
-          INVOICE
+          INVOICE WRAPPER
       ================================================= */}
 
       <section
-        id="invoice"
-        className="
-          mx-auto
-          mt-4
-          w-full
-          max-w-[794px]
-          overflow-hidden
-          rounded-[28px]
-          bg-white
-          shadow-xl
+  id="invoice"
+  className="
+    mx-auto
+    mt-4
+    w-full
+    max-w-[794px]
+    overflow-hidden
+    rounded-[28px]
+    bg-white
+    shadow-xl
 
-          print:mt-0
-          print:max-w-none
-          print:rounded-none
-          print:shadow-none
-        "
-      >
+    print:mt-0
+    print:max-w-none
+    print:rounded-none
+    print:shadow-none
+  "
+>
 
         {/* =================================================
             TOP BLUE BAR
@@ -777,29 +670,11 @@ export default function InvoiceSection({ project }) {
           "
         />
 
-
         {/* =================================================
             INVOICE CONTENT
-
-            A4-like minimum height.
-
-            If there are only a few target groups,
-            invoice stays approximately one page.
-
-            If there are many target groups,
-            content naturally grows.
         ================================================= */}
 
-        <div
-          className="
-            flex
-            min-h-[1040px]
-            flex-col
-            px-8
-            py-8
-            sm:px-12
-          "
-        >
+        <div className="flex min-h-[1040px] flex-col px-8 py-8 sm:px-12">
 
           {/* =================================================
               HEADER
@@ -810,7 +685,6 @@ export default function InvoiceSection({ project }) {
             {/* BRAND */}
 
             <div>
-
               <h1
                 className="
                   text-2xl
@@ -826,11 +700,10 @@ export default function InvoiceSection({ project }) {
               <p className="mt-2 text-xs font-medium text-slate-500">
                 Survey & Research Platform
               </p>
-
             </div>
 
 
-            {/* INVOICE TITLE */}
+            {/* INVOICE */}
 
             <div className="text-right">
 
@@ -891,16 +764,7 @@ export default function InvoiceSection({ project }) {
 
             <div className="sm:text-right">
 
-              <div
-                className="
-                  grid
-                  grid-cols-[110px_1fr]
-                  gap-x-3
-                  gap-y-1
-                  text-sm
-                  sm:grid-cols-[auto_auto]
-                "
-              >
+              <div className="grid grid-cols-[110px_1fr] gap-x-3 gap-y-1 text-sm sm:grid-cols-[auto_auto]">
 
                 <span className="text-slate-500">
                   Invoice Number
@@ -909,7 +773,6 @@ export default function InvoiceSection({ project }) {
                 <span className="font-medium text-slate-800">
                   {invoice.invoiceNumber}
                 </span>
-
 
                 <span className="text-slate-500">
                   Invoice Date
@@ -968,8 +831,7 @@ export default function InvoiceSection({ project }) {
               </h3>
 
               <p className="mt-1 text-sm text-slate-600">
-                Bank Name:{" "}
-                {invoice.bankName || "—"}
+                Bank Name: {invoice.bankName || "—"}
               </p>
 
               <p className="text-sm text-slate-600">
@@ -992,7 +854,12 @@ export default function InvoiceSection({ project }) {
 
               <thead>
 
-                <tr className="border-y-2 border-[#164B84]">
+                <tr
+                  className="
+                    border-y-2
+                    border-[#164B84]
+                  "
+                >
 
                   <th className="py-2.5 text-left text-xs font-semibold text-slate-700">
                     Item Description
@@ -1026,14 +893,10 @@ export default function InvoiceSection({ project }) {
                       );
 
                     const rate =
-                      Number(
-                        item.cpi || 0
-                      );
+                      Number(item.cpi || 0);
 
                     const itemTotal =
-                      Number(
-                        item.totalCost || 0
-                      );
+                      Number(item.totalCost || 0);
 
                     return (
                       <tr
@@ -1066,12 +929,12 @@ export default function InvoiceSection({ project }) {
 
 
                         <td className="py-3 text-right text-sm text-slate-600">
-                          ₹{rate.toFixed(2)}
+                          ${rate.toFixed(2)}
                         </td>
 
 
                         <td className="py-3 text-right text-sm font-medium text-slate-800">
-                          ₹{itemTotal.toFixed(2)}
+                          ${itemTotal.toFixed(2)}
                         </td>
 
                       </tr>
@@ -1088,16 +951,11 @@ export default function InvoiceSection({ project }) {
 
           {/* =================================================
               TOTALS
-
-              mt-auto pushes this section toward the
-              bottom when there is available space.
           ================================================= */}
 
           <div className="mt-auto flex justify-end">
 
             <div className="w-full max-w-xs">
-
-              {/* SUBTOTAL */}
 
               <div className="flex justify-between text-sm text-slate-600">
 
@@ -1106,13 +964,11 @@ export default function InvoiceSection({ project }) {
                 </span>
 
                 <span className="font-medium text-slate-800">
-                  ₹{subtotal.toFixed(2)}
+                  ${subtotal.toFixed(2)}
                 </span>
 
               </div>
 
-
-              {/* GST */}
 
               <div className="mt-2 flex justify-between text-sm text-slate-600">
 
@@ -1121,13 +977,11 @@ export default function InvoiceSection({ project }) {
                 </span>
 
                 <span className="font-medium text-slate-800">
-                  ₹{gstAmount.toFixed(2)}
+                  ${gstAmount.toFixed(2)}
                 </span>
 
               </div>
 
-
-              {/* TOTAL */}
 
               <div
                 className="
@@ -1146,7 +1000,7 @@ export default function InvoiceSection({ project }) {
                 </span>
 
                 <span className="text-lg font-bold text-slate-900">
-                  ₹{total.toFixed(2)}
+                  ${total.toFixed(2)}
                 </span>
 
               </div>
