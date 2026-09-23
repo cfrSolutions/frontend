@@ -298,6 +298,7 @@ export default function InvoiceSection({ project }) {
   const [invoice, setInvoice] = useState(null);
   const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [business, setBusiness] = useState(null);
 
   const projectId = project?._id || project?.id;
 
@@ -308,6 +309,7 @@ export default function InvoiceSection({ project }) {
   useEffect(() => {
     if (!projectId || project?.status !== "CLOSED") {
       setInvoice(null);
+      setBusiness(null);
       return;
     }
 
@@ -320,6 +322,7 @@ export default function InvoiceSection({ project }) {
         );
 
         setInvoice(response.data.invoice);
+        setBusiness(response.data.business);
       } catch (error) {
         if (error.response?.status !== 404) {
           console.error(
@@ -329,6 +332,7 @@ export default function InvoiceSection({ project }) {
         }
 
         setInvoice(null);
+        setBusiness(null);
       } finally {
         setLoading(false);
       }
@@ -576,27 +580,28 @@ const handleDownloadPDF = async () => {
   // BUSINESS INFORMATION
   // =====================================================
 
-  const businessName =
-    project?.business?.company ||
-    project?.business?.name ||
-    project?.company ||
-    "Business Name";
+ const businessName =
+  business?.company ||
+  business?.name ||
+  "Business Name";
 
-  const businessContact =
-    project?.business?.email ||
-    project?.business?.emailAddress ||
-    "-";
+const businessContact =
+  business?.email ||
+  "-";
 
-  const businessPhone =
-    project?.business?.phone ||
-    project?.business?.phoneNumber ||
-    "-";
+const businessPhone =
+  business?.phone ||
+  "-";
 
-  const businessAddress =
-    project?.business?.location ||
-    project?.business?.address ||
-    "-";
-
+const businessAddress =
+  [
+    business?.location,
+    business?.country,
+    business?.postalCode,
+  ]
+    .filter(Boolean)
+    .join(", ") ||
+  "-";
   // =====================================================
   // RENDER
   // =====================================================
