@@ -558,6 +558,8 @@ export default function BusinessDashboard() {
   const [paidInvoices, setPaidInvoices] = useState([]);
   const location = useLocation();
   const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedInvoiceId, setSelectedInvoiceId] =
+  useState(null);
 
   const fetchProjects = async () => {
     try {
@@ -760,8 +762,12 @@ if (filter === "CLOSED") {
 //     setInvoiceLoading(false);
 //   }
 // };
-const handleViewInvoice = (project) => {
+const handleViewInvoice = (
+  project,
+  invoiceId
+) => {
   setSelectedProject(project);
+  setSelectedInvoiceId(invoiceId);
 };
 
   return (
@@ -849,20 +855,50 @@ const handleViewInvoice = (project) => {
           PROJECTS
       ===================================================== */}
 
-      {filteredProjects.length === 0 ? (
-        <p className="text-gray-400">
-          No projects found
-        </p>
-      ) : (
-        filteredProjects.map((project) => (
-          <ProjectCards
-            key={project._id}
-            project={project}
-            filter={filter}
-            onViewInvoice={handleViewInvoice}
-          />
-        ))
-      )}
+     {filter === "CLOSED" ? (
+  outstandingInvoices.length === 0 ? (
+    <p className="text-gray-400">
+      No outstanding invoices found
+    </p>
+  ) : (
+    outstandingInvoices.map((invoice) => {
+      const project =
+        projects.find(
+          (item) =>
+            item._id === invoice.project?._id
+        ) || invoice.project;
+
+      if (!project) {
+        return null;
+      }
+
+      return (
+        <ProjectCards
+          key={invoice._id}
+          project={project}
+          invoice={invoice}
+          filter={filter}
+          onViewInvoice={
+            handleViewInvoice
+          }
+        />
+      );
+    })
+  )
+) : filteredProjects.length === 0 ? (
+  <p className="text-gray-400">
+    No projects found
+  </p>
+) : (
+  filteredProjects.map((project) => (
+    <ProjectCards
+      key={project._id}
+      project={project}
+      filter={filter}
+      onViewInvoice={handleViewInvoice}
+    />
+  ))
+)}
 
       {filter === "CLOSED" && (
   <div className="mt-10">
@@ -1010,7 +1046,10 @@ const handleViewInvoice = (project) => {
       p-4
       sm:p-8
     "
-    onClick={() => setSelectedProject(null)}
+    onClick={() => {
+  setSelectedProject(null);
+  setSelectedInvoiceId(null);
+}}
   >
     <div
       className="
@@ -1025,7 +1064,10 @@ const handleViewInvoice = (project) => {
 
       <div className="mb-4 flex justify-end">
         <button
-          onClick={() => setSelectedProject(null)}
+          onClick={() =>{
+  setSelectedProject(null);
+  setSelectedInvoiceId(null);
+}}
           className="
             flex
             h-10
@@ -1048,6 +1090,7 @@ const handleViewInvoice = (project) => {
 
       <InvoiceSection
         project={selectedProject}
+        invoiceId={selectedInvoiceId}
       />
 
     </div>
@@ -1060,6 +1103,7 @@ const handleViewInvoice = (project) => {
 
 function ProjectCards({
   project,
+  invoice,
   filter,
   onViewInvoice,
 }) {
@@ -1160,7 +1204,7 @@ function ProjectCards({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              onViewInvoice(project);
+              onViewInvoice(project, invoice._id);
             }}
             className="mt-3 inline-flex items-center gap-2 rounded-lg border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-medium text-orange-600 transition hover:bg-orange-100"
           >

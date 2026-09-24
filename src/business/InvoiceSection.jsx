@@ -295,7 +295,7 @@ import api from "../services/api";
 // import html2canvas from "html2canvas";
 // import jsPDF from "jspdf";
 
-export default function InvoiceSection({ project }) {
+export default function InvoiceSection({ project, invoiceId = null, }) {
   const [invoice, setInvoice] = useState(null);
   const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
@@ -323,9 +323,11 @@ export default function InvoiceSection({ project }) {
       try {
         setLoading(true);
 
-        const response = await api.get(
-          `/invoices/project/${projectId}`
-        );
+       const response = await api.get(
+  invoiceId
+    ? `/invoices/${invoiceId}`
+    : `/invoices/project/${projectId}`
+);
 
         setInvoice(response.data.invoice);
         setBusiness(response.data.business);
@@ -345,7 +347,7 @@ export default function InvoiceSection({ project }) {
     };
 
     fetchInvoice();
-  }, [projectId, project?.status]);
+  }, [projectId, project?.status, invoiceId,]);
 
   // =====================================================
   // PROJECT NOT CLOSED
