@@ -453,45 +453,109 @@ export default function InvoiceSection({ project }) {
       ? Number(invoice.total || 0)
       : subtotal + gstAmount;
 
+  const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    if (window.Razorpay) {
+      resolve(true);
+      return;
+    }
 
-  const handleTestPayment = async () => {
-  if (!projectId || creatingPayment) {
-    return;
-  }
+    const script = document.createElement("script");
+
+    script.src =
+      "https://checkout.razorpay.com/v1/checkout.js";
+
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+
+    document.body.appendChild(script);
+  });
+};
+
+ const handleTestPayment = async () => {
+  if (!projectId || creatingPayment) return;
 
   try {
     setCreatingPayment(true);
     setPaymentMessage("");
 
+    // 1. Load Razorpay Checkout
+    const loaded = await loadRazorpayScript();
+
+    if (!loaded) {
+      throw new Error(
+        "Unable to load payment checkout"
+      );
+    }
+
+    // 2. Create order securely from backend
     const response = await api.post(
       `/payments/invoice/${projectId}/order`
     );
 
-    console.log(
-      "Razorpay test order:",
-      response.data
-    );
+    const { order, keyId } = response.data;
 
-    const order = response.data?.order;
-
-    if (!order?.id) {
+    if (!order?.id || !keyId) {
       throw new Error(
-        "Razorpay order was not returned"
+        "Payment order could not be created"
       );
     }
 
-    setPaymentMessage(
-      `Test order created: ${order.id}`
+    // 3. Razorpay Checkout options
+    const options = {
+      key: keyId,
+
+      amount: order.amount,
+
+      currency: order.currency,
+
+      order_id: order.id,
+
+      name: "Inputify",
+
+      description: `Invoice ${invoice.invoiceNumber}`,
+
+      handler: function (response) {
+        console.log(
+          "Razorpay payment response:",
+          response
+        );
+
+        setPaymentMessage(
+          "Payment received. Verifying payment..."
+        );
+      },
+
+      modal: {
+        ondismiss: function () {
+          setPaymentMessage(
+            "Payment checkout was closed."
+          );
+        },
+      },
+
+      theme: {
+        color: "#059669",
+      },
+    };
+
+    // 4. Open Razorpay
+    const razorpay = new window.Razorpay(
+      options
     );
+
+    razorpay.open();
+
   } catch (error) {
     console.error(
-      "Failed to create Razorpay order:",
+      "Failed to start payment:",
       error
     );
 
     setPaymentMessage(
       error.response?.data?.message ||
-        "Failed to create payment order"
+        error.message ||
+        "Failed to start payment"
     );
   } finally {
     setCreatingPayment(false);
