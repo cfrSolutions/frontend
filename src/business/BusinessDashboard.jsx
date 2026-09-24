@@ -554,6 +554,8 @@ import InvoiceSection from "./InvoiceSection";
 
 export default function BusinessDashboard() {
   const [projects, setProjects] = useState([]);
+  const [outstandingInvoices, setOutstandingInvoices] = useState([]);
+  const [paidInvoices, setPaidInvoices] = useState([]);
   const location = useLocation();
   const [selectedProject, setSelectedProject] = useState(null);
 
@@ -566,8 +568,33 @@ export default function BusinessDashboard() {
     }
   };
 
+  const fetchInvoices = async () => {
+  try {
+    const res = await api.get(
+      "/invoices/business"
+    );
+
+    setOutstandingInvoices(
+      res.data.outstanding || []
+    );
+
+    setPaidInvoices(
+      res.data.paid || []
+    );
+  } catch (err) {
+    console.error(
+      "Failed to fetch invoices:",
+      err
+    );
+
+    setOutstandingInvoices([]);
+    setPaidInvoices([]);
+  }
+};
+
   useEffect(() => {
     fetchProjects();
+    fetchInvoices();
   }, [location.pathname]);
 
   const path = location.pathname;
@@ -622,9 +649,15 @@ export default function BusinessDashboard() {
     )
   ).length;
 
-  const closed = projects.filter(
-  (project) => project.status === "CLOSED"
-).length;
+//   const closed = projects.filter(
+//   (project) => project.status === "CLOSED"
+// ).length;
+
+const closed = new Set(
+  outstandingInvoices
+    .map((invoice) => invoice.project?._id)
+    .filter(Boolean)
+).size;
 
   // =====================================================
   // FILTER PROJECTS
@@ -646,13 +679,25 @@ export default function BusinessDashboard() {
 }
 
 // CLOSED is PROJECT level
+// if (filter === "CLOSED") {
+//   filteredProjects = projects.filter(
+//     (project) => project.status === "CLOSED"
+//   );
+// }
+
 if (filter === "CLOSED") {
+  const outstandingProjectIds = new Set(
+    outstandingInvoices
+      .map((invoice) => invoice.project?._id)
+      .filter(Boolean)
+  );
+
   filteredProjects = projects.filter(
-    (project) => project.status === "CLOSED"
+    (project) =>
+      project.status === "CLOSED" &&
+      outstandingProjectIds.has(project._id)
   );
 }
-
-
 
   if (
     filter === "NEGOTIATION" ||
@@ -818,6 +863,141 @@ const handleViewInvoice = (project) => {
           />
         ))
       )}
+
+      {filter === "CLOSED" && (
+  <div className="mt-10">
+    <div className="mb-4 flex items-center justify-between">
+      <div>
+        <h2 className="text-lg font-semibold text-slate-900">
+          Payment Done
+        </h2>
+
+        <p className="mt-1 text-sm text-slate-500">
+          Successfully paid invoices
+        </p>
+      </div>
+
+      <span className="rounded-full bg-green-50 px-3 py-1 text-sm font-semibold text-green-600">
+        {paidInvoices.length}
+      </span>
+    </div>
+
+    {paidInvoices.length === 0 ? (
+      <div className="rounded-xl border border-slate-200 bg-white p-6">
+        <p className="text-sm text-slate-400">
+          No paid invoices found
+        </p>
+      </div>
+    ) : (
+      <div className="space-y-3">
+        {paidInvoices.map((invoice) => {
+          const invoiceProject =
+            projects.find(
+              (project) =>
+                project._id === invoice.project?._id
+            ) || invoice.project;
+
+          return (
+            <div
+              key={invoice._id}
+              className="
+                rounded-xl
+                border
+                border-green-100
+                bg-white
+                p-5
+                shadow-sm
+              "
+            >
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle
+                      size={18}
+                      className="text-green-500"
+                    />
+
+                    <h3 className="font-semibold text-slate-900">
+                      {invoiceProject?.name ||
+                        "Project"}
+                    </h3>
+                  </div>
+
+                  <p className="mt-2 text-sm text-slate-500">
+                    Invoice:{" "}
+                    <span className="font-medium text-slate-700">
+                      {invoice.invoiceNumber}
+                    </span>
+                  </p>
+
+                  <p className="mt-1 text-sm text-slate-500">
+                    Target Groups:{" "}
+                    <span className="font-medium text-slate-700">
+                      {invoice.items?.length || 0}
+                    </span>
+                  </p>
+
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {(invoice.items || []).map(
+                      (item) => (
+                        <span
+                          key={item.targetGroupId}
+                          className="
+                            rounded-full
+                            bg-slate-100
+                            px-2.5
+                            py-1
+                            text-xs
+                            font-medium
+                            text-slate-600
+                          "
+                        >
+                          {item.targetGroupName}
+                        </span>
+                      )
+                    )}
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <span
+                    className="
+                      inline-flex
+                      rounded-full
+                      bg-green-50
+                      px-3
+                      py-1
+                      text-xs
+                      font-semibold
+                      text-green-600
+                    "
+                  >
+                    PAID
+                  </span>
+
+                  <p className="mt-3 text-xl font-bold text-slate-900">
+                    $
+                    {Number(
+                      invoice.total || 0
+                    ).toFixed(2)}
+                  </p>
+
+                  <p className="mt-1 text-xs text-slate-400">
+                    {invoice.issuedAt
+                      ? new Date(
+                          invoice.issuedAt
+                        ).toLocaleDateString()
+                      : "-"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    )}
+  </div>
+)}
     
 {selectedProject && (
   <div
