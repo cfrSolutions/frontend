@@ -289,7 +289,8 @@ import {
   Printer,
   Download,
 } from "lucide-react";
-import inputifyLogo from "../assets/inputify.png";
+
+import inputifyLogo from "./inputify.png";
 
 import api from "../services/api";
 // import html2canvas from "html2canvas";
@@ -754,7 +755,7 @@ const businessAddress =
             <div>
 
              <img
-  src={inputifyLogo}
+  src="/HomeImage/inputify.png"
   alt="Inputify"
   className="h-10 w-auto object-contain"
 />
