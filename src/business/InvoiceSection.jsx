@@ -515,16 +515,50 @@ export default function InvoiceSection({ project }) {
 
       description: `Invoice ${invoice.invoiceNumber}`,
 
-      handler: function (response) {
-        console.log(
-          "Razorpay payment response:",
-          response
-        );
+     handler: async function (response) {
+  try {
+    setPaymentMessage(
+      "Payment received. Verifying payment..."
+    );
 
-        setPaymentMessage(
-          "Payment received. Verifying payment..."
-        );
-      },
+    const verifyResponse = await api.post(
+      `/payments/invoice/${projectId}/verify`,
+      {
+        razorpay_order_id:
+          response.razorpay_order_id,
+
+        razorpay_payment_id:
+          response.razorpay_payment_id,
+
+        razorpay_signature:
+          response.razorpay_signature,
+      }
+    );
+
+    if (!verifyResponse.data?.success) {
+      throw new Error(
+        "Payment verification failed"
+      );
+    }
+
+    // Update invoice immediately
+    setInvoice((currentInvoice) => ({
+      ...currentInvoice,
+      status: "PAID",
+    }));
+
+    setPaymentMessage(
+      "Payment completed successfully."
+    );
+
+  } catch (error) {
+   
+    setPaymentMessage(
+      error.response?.data?.message ||
+        "Payment was received but could not be verified. Please contact support."
+    );
+  }
+},
 
       modal: {
         ondismiss: function () {
