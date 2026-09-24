@@ -290,7 +290,6 @@ import {
   Download,
 } from "lucide-react";
 
-import inputifyLogo from "./inputify.png";
 
 import api from "../services/api";
 // import html2canvas from "html2canvas";
