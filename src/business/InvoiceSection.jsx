@@ -300,6 +300,11 @@ export default function InvoiceSection({ project }) {
   const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [business, setBusiness] = useState(null);
+  const [creatingPayment, setCreatingPayment] =
+  useState(false);
+
+  const [paymentMessage, setPaymentMessage] =
+  useState("");
 
   const projectId = project?._id || project?.id;
 
@@ -448,6 +453,50 @@ export default function InvoiceSection({ project }) {
       ? Number(invoice.total || 0)
       : subtotal + gstAmount;
 
+
+  const handleTestPayment = async () => {
+  if (!projectId || creatingPayment) {
+    return;
+  }
+
+  try {
+    setCreatingPayment(true);
+    setPaymentMessage("");
+
+    const response = await api.post(
+      `/payments/invoice/${projectId}/order`
+    );
+
+    console.log(
+      "Razorpay test order:",
+      response.data
+    );
+
+    const order = response.data?.order;
+
+    if (!order?.id) {
+      throw new Error(
+        "Razorpay order was not returned"
+      );
+    }
+
+    setPaymentMessage(
+      `Test order created: ${order.id}`
+    );
+  } catch (error) {
+    console.error(
+      "Failed to create Razorpay order:",
+      error
+    );
+
+    setPaymentMessage(
+      error.response?.data?.message ||
+        "Failed to create payment order"
+    );
+  } finally {
+    setCreatingPayment(false);
+  }
+};
   // =====================================================
   // PRINT
   // =====================================================
@@ -614,6 +663,46 @@ const businessAddress =
       ================================================= */}
 
       <div className="mt-8 mb-4 flex justify-end gap-3 print:hidden">
+        <button
+  onClick={handleTestPayment}
+  disabled={
+    creatingPayment ||
+    invoice.status === "PAID"
+  }
+  className="
+    inline-flex
+    items-center
+    gap-2
+    rounded-lg
+    bg-emerald-600
+    px-4
+    py-2.5
+    text-sm
+    font-medium
+    text-white
+    transition
+    hover:bg-emerald-700
+    disabled:cursor-not-allowed
+    disabled:opacity-60
+  "
+>
+  {creatingPayment ? (
+    <>
+      <Loader2
+        size={17}
+        className="animate-spin"
+      />
+      Creating Order...
+    </>
+  ) : invoice.status === "PAID" ? (
+    <>
+      <CheckCircle2 size={17} />
+      Paid
+    </>
+  ) : (
+    "Pay Now"
+  )}
+</button>
 
         {/* DOWNLOAD PDF */}
 
@@ -683,7 +772,11 @@ const businessAddress =
         </button>
 
       </div>
-
+      {paymentMessage && (
+  <div className="mx-auto mb-4 max-w-[794px] rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
+    {paymentMessage}
+  </div>
+)}
 
       {/* =================================================
           INVOICE
