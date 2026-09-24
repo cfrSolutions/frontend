@@ -490,7 +490,7 @@ export default function InvoiceSection({ project }) {
 
     // 2. Create order securely from backend
     const response = await api.post(
-      `/payments/invoice/${projectId}/order`
+      `/payments/invoice/${invoice._id}/order`
     );
 
     const { order, keyId } = response.data;
@@ -522,7 +522,7 @@ export default function InvoiceSection({ project }) {
     );
 
     const verifyResponse = await api.post(
-      `/payments/invoice/${projectId}/verify`,
+      `/payments/invoice/${invoice._id}/verify`,
       {
         razorpay_order_id:
           response.razorpay_order_id,
