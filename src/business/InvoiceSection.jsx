@@ -289,6 +289,7 @@ import {
   Printer,
   Download,
 } from "lucide-react";
+import inputifyLogo from "../assets/inputify-logo.png";
 
 import api from "../services/api";
 // import html2canvas from "html2canvas";
@@ -752,17 +753,11 @@ const businessAddress =
 
             <div>
 
-              <h1
-                className="
-                  text-2xl
-                  font-extrabold
-                  leading-[0.95]
-                  tracking-tight
-                  text-[#164B84]
-                "
-              >
-                INPUTIFY
-              </h1>
+             <img
+  src={inputifyLogo}
+  alt="Inputify"
+  className="h-10 w-auto object-contain"
+/>
 
               <p className="mt-2 text-xs font-medium text-[#64748B]">
                 Survey & Research Platform
@@ -1188,7 +1183,7 @@ const businessAddress =
               </span>
 
               <span>
-                Phone: {businessPhone}
+                Phone: 7506966099
               </span>
 
             </div>
