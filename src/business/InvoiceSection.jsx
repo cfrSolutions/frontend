@@ -610,7 +610,7 @@ const handleDownloadPDF = async () => {
     return;
   }
 
-  if (!projectId) {
+  if (!invoice?._id) {
     console.error(
       "Project ID is missing"
     );
@@ -623,7 +623,7 @@ const handleDownloadPDF = async () => {
 
     const response =
       await api.get(
-        `/invoices/project/${projectId}/pdf`,
+        `/invoices/${invoice._id}/pdf`,
         {
           responseType: "blob",
         }
@@ -658,8 +658,8 @@ const handleDownloadPDF = async () => {
     ========================================= */
 
     const invoiceNumber =
-      invoice?.invoiceNumber ||
-      `invoice-${projectId}`;
+  invoice?.invoiceNumber ||
+  `invoice-${invoice._id}`;
 
     const safeInvoiceNumber =
       String(invoiceNumber)
