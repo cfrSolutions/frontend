@@ -1079,7 +1079,7 @@ const businessAddress =
                 "
               >
 
-                <span className="text-[#64748B]">
+                <span className="font-semibold text-[#64748B]">
                   Invoice Number
                 </span>
 
@@ -1088,7 +1088,7 @@ const businessAddress =
                 </span>
 
 
-                <span className="text-[#64748B]">
+                <span className="font-semibold text-[#64748B]">
                   Invoice Date
                 </span>
 
@@ -1125,11 +1125,11 @@ const businessAddress =
                 Contact information
               </h3>
 
-              <p className="mt-1 text-sm text-[#475569]">
+              <p className="mt-1 text-sm font-semibold text-[#475569]">
                 Email: {businessContact}
               </p>
 
-              <p className="text-sm text-[#475569]">
+              <p className="text-sm font-semibold text-[#475569]">
                 Phone: {businessPhone}
               </p>
 
@@ -1144,12 +1144,12 @@ const businessAddress =
                 Payment information
               </h3>
 
-              <p className="mt-1 text-sm text-[#475569]">
+              <p className="mt-1 text-sm font-semibold text-[#475569]">
                 Bank Name:{" "}
                 {invoice.bankName || "—"}
               </p>
 
-              <p className="text-sm text-[#475569]">
+              <p className="text-sm font-semibold text-[#475569]">
                 Account Number:{" "}
                 {invoice.accountNumber || "—"}
               </p>
@@ -1408,7 +1408,7 @@ const businessAddress =
                 flex-col
                 gap-2
                 text-xs
-                text-[#00000]
+                text-[#FE8a00]
                 sm:flex-row
                 sm:items-center
                 sm:justify-between
