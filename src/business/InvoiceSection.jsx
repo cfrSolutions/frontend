@@ -1378,7 +1378,7 @@ const businessAddress =
                   font-serif
                   text-xl
                   italic
-                  text-[#164B84]
+                  text-[#FE8a00]
                 "
               >
                 Inputify
@@ -1408,7 +1408,7 @@ const businessAddress =
                 flex-col
                 gap-2
                 text-xs
-                text-[#FE8a00]
+                text-[#00000]
                 sm:flex-row
                 sm:items-center
                 sm:justify-between
