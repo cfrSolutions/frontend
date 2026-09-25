@@ -1079,20 +1079,20 @@ const businessAddress =
                 "
               >
 
-                <span className="font-semibold text-[#64748B]">
+                <span className="font-semibold text-[#475569]">
                   Invoice Number
                 </span>
 
-                <span className="font-medium text-[#64748B]">
+                <span className="font-medium text-[#475569]">
                   {invoice.invoiceNumber}
                 </span>
 
 
-                <span className="font-semibold text-[#64748B]">
+                <span className="font-semibold text-[#475569]">
                   Invoice Date
                 </span>
 
-                <span className="font-medium text-[#64748B]">
+                <span className="font-medium text-[#475569]">
                   {invoiceDate}
                 </span>
 
