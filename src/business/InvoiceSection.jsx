@@ -601,9 +601,57 @@ export default function InvoiceSection({ project, invoiceId = null, }) {
   // PRINT
   // =====================================================
 
-  const handlePrint = () => {
-    window.print();
-  };
+  const handlePrint = async () => {
+  if (!invoice?._id) {
+    console.error("Invoice ID is missing");
+    return;
+  }
+
+  try {
+    const response = await api.get(
+      `/invoices/${invoice._id}/pdf`,
+      {
+        responseType: "blob",
+      }
+    );
+
+    const pdfBlob = new Blob(
+      [response.data],
+      {
+        type: "application/pdf",
+      }
+    );
+
+    const pdfUrl =
+      window.URL.createObjectURL(pdfBlob);
+
+    const printWindow =
+      window.open(pdfUrl, "_blank");
+
+    if (!printWindow) {
+      window.URL.revokeObjectURL(pdfUrl);
+      return;
+    }
+
+    printWindow.onload = () => {
+      printWindow.focus();
+      printWindow.print();
+    };
+
+    // Don't revoke immediately because
+    // the new tab still needs the blob URL.
+    setTimeout(() => {
+      window.URL.revokeObjectURL(pdfUrl);
+    }, 60000);
+  } catch (error) {
+    console.error(
+      "Failed to print invoice:",
+      error
+    );
+
+    alert("Unable to print invoice");
+  }
+};
 
 const handleDownloadPDF = async () => {
   if (downloading) {
