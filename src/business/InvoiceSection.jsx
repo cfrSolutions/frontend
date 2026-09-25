@@ -365,7 +365,7 @@ export default function InvoiceSection({ project, invoiceId = null, }) {
           </div>
 
           <div>
-            <h2 className="text-lg font-semibold text-[#0F172A]">
+            <h2 className="text-lg font-semibold text-[#FE8a00]">
               Invoice
             </h2>
 
@@ -393,7 +393,7 @@ export default function InvoiceSection({ project, invoiceId = null, }) {
           />
 
           <div>
-            <h2 className="text-lg font-semibold text-[#0F172A]">
+            <h2 className="text-lg font-semibold text-[#FE8a00]">
               Invoice
             </h2>
 
@@ -420,7 +420,7 @@ export default function InvoiceSection({ project, invoiceId = null, }) {
           />
 
           <div>
-            <h2 className="text-lg font-semibold text-[#0F172A]">
+            <h2 className="text-lg font-semibold text-[#FF8A00]">
               Invoice
             </h2>
 
@@ -956,7 +956,7 @@ const businessAddress =
         <div
           className="
             h-10
-            bg-[#164B84]
+            bg-[#FE8a00]
           "
         />
 
@@ -997,7 +997,7 @@ const businessAddress =
              <img
   src="/HomeImage/inputify.png"
   alt="Inputify"
-  className="h-10 w-auto object-contain"
+  className="h-20 w-auto object-contain"
 />
 
               <p className="mt-2 text-xs font-medium text-[#64748B]">
@@ -1016,7 +1016,7 @@ const businessAddress =
                   text-3xl
                   font-extrabold
                   tracking-tight
-                  text-[#164B84]
+                  text-[#FE8a00]
                 "
               >
                 INVOICE
@@ -1049,7 +1049,7 @@ const businessAddress =
 
             <div>
 
-              <h3 className="text-sm font-semibold text-[#164B84]">
+              <h3 className="text-sm font-semibold text-[#FE8a00]">
                 Bill To:
               </h3>
 
@@ -1121,7 +1121,7 @@ const businessAddress =
 
             <div>
 
-              <h3 className="text-sm font-semibold text-[#164B84]">
+              <h3 className="text-sm font-semibold text-[#FE8a00]">
                 Contact information
               </h3>
 
@@ -1140,7 +1140,7 @@ const businessAddress =
 
             <div>
 
-              <h3 className="text-sm font-semibold text-[#164B84]">
+              <h3 className="text-sm font-semibold text-[#FE8a00]">
                 Payment information
               </h3>
 
@@ -1169,7 +1169,7 @@ const businessAddress =
 
               <thead>
 
-                <tr className="border-y-2 border-[#164B84]">
+                <tr className="border-y-2 border-[#FE8a00]">
 
                   <th className="py-2.5 text-left text-xs font-semibold text-[#334155]">
                     Item Description
@@ -1220,7 +1220,7 @@ const businessAddress =
                         }
                         className="
                           border-b
-                          border-[#F1F5F9]
+                          border-[#FE8a00]
                         "
                       >
 
@@ -1313,7 +1313,7 @@ const businessAddress =
                   items-center
                   justify-between
                   border-y-2
-                  border-[#164B84]
+                  border-[#FE8a00]
                   py-2
                 "
               >
@@ -1408,7 +1408,7 @@ const businessAddress =
                 flex-col
                 gap-2
                 text-xs
-                text-[#164B84]
+                text-[#FE8a00]
                 sm:flex-row
                 sm:items-center
                 sm:justify-between
@@ -1441,7 +1441,7 @@ const businessAddress =
         <div
           className="
             h-10
-            bg-[#164B84]
+            bg-[#FE8a00]
           "
         />
 
