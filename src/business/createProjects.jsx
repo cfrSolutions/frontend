@@ -87,9 +87,10 @@ useEffect(() => {
   };
 }, []);
 
-useEffect(() => {
-  fetchProjects();
-}, []);
+// useEffect(() => {
+//   fetchProjects();
+// }, []);
+
 const [expanded, setExpanded] = useState(null);
 
 const toggleProject = (projectId) => {
