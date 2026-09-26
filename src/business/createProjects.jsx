@@ -42,55 +42,14 @@ const createProject = async () => {
 
 const [projects, setProjects] = useState([]);
 
-// const fetchProjects = async () => {
-//   const res = await api.get("/projects");
-//   setProjects(res.data);
-// };
+const fetchProjects = async () => {
+  const res = await api.get("/projects");
+  setProjects(res.data);
+};
 
 useEffect(() => {
-  let active = true;
-  let loading = false;
-
-  const fetchProjects = async () => {
-    if (loading || document.hidden) return;
-
-    loading = true;
-    try {
-      const res = await api.get("/projects");
-      if (active) setProjects(res.data);
-    } catch (err) {
-      console.error("Failed to refresh projects:", err);
-    } finally {
-      loading = false;
-    }
-  };
-
-  // Fetch even if the page initially opens in a background tab.
-  const initialFetch = async () => {
-    try {
-      const res = await api.get("/projects");
-      if (active) setProjects(res.data);
-    } catch (err) {
-      console.error("Failed to load projects:", err);
-    }
-  };
-
-  initialFetch();
-
-  const interval = window.setInterval(fetchProjects, 5000);
-  document.addEventListener("visibilitychange", fetchProjects);
-
-  return () => {
-    active = false;
-    window.clearInterval(interval);
-    document.removeEventListener("visibilitychange", fetchProjects);
-  };
+  fetchProjects();
 }, []);
-
-// useEffect(() => {
-//   fetchProjects();
-// }, []);
-
 const [expanded, setExpanded] = useState(null);
 
 const toggleProject = (projectId) => {
