@@ -42,50 +42,10 @@ const createProject = async () => {
 
 const [projects, setProjects] = useState([]);
 
-// const fetchProjects = async () => {
-//   const res = await api.get("/projects");
-//   setProjects(res.data);
-// };
-
-useEffect(() => {
-  let active = true;
-  let loading = false;
-
-  const fetchProjects = async () => {
-    if (loading || document.hidden) return;
-
-    loading = true;
-    try {
-      const res = await api.get("/projects");
-      if (active) setProjects(res.data);
-    } catch (err) {
-      console.error("Failed to refresh projects:", err);
-    } finally {
-      loading = false;
-    }
-  };
-
-  // Fetch even if the page initially opens in a background tab.
-  const initialFetch = async () => {
-    try {
-      const res = await api.get("/projects");
-      if (active) setProjects(res.data);
-    } catch (err) {
-      console.error("Failed to load projects:", err);
-    }
-  };
-
-  initialFetch();
-
-  const interval = window.setInterval(fetchProjects, 5000);
-  document.addEventListener("visibilitychange", fetchProjects);
-
-  return () => {
-    active = false;
-    window.clearInterval(interval);
-    document.removeEventListener("visibilitychange", fetchProjects);
-  };
-}, []);
+const fetchProjects = async () => {
+  const res = await api.get("/projects");
+  setProjects(res.data);
+};
 
 useEffect(() => {
   fetchProjects();
@@ -359,17 +319,8 @@ return(
             <div
               className="h-2 bg-purple-700 rounded-full"
               style={{
-  width: `${
-    project.targetCompletes > 0
-      ? Math.min(
-          100,
-          (Number(project.completes || 0) /
-            Number(project.targetCompletes)) *
-            100
-        )
-      : 0
-  }%`,
-}}
+                width: "0%",
+              }}
             />
           </div>
 
